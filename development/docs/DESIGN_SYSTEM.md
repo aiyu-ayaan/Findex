@@ -47,12 +47,15 @@ signal: every tile also has its icon and label.
 | Category | Hue | Icon | Shape |
 |----------|-----|------|-------|
 | Photos | Teal | `Image` | `Cookie9Sided` |
-| Videos | Orange | `Movie` | `Clover4Leaf` |
+| Videos | Orange | `Movie` | `Cookie7Sided` |
 | Audio | Purple | `MusicNote` | `Sunny` |
-| Documents | Blue | `Description` | `Square` (rounded) |
-| Downloads | Green | `Download` | `Pill`-like `Arch` |
-| Archives | Amber | `FolderZip` | `Gem` |
-| APKs | Lime | `Android` | `Cookie6Sided` |
+| Documents | Blue | `Description` | `Cookie6Sided` |
+| Downloads | Green | `Download` | `Cookie4Sided` |
+| Archives | Amber | `FolderZip` | `Clover4Leaf` |
+| APKs | Lime | `Android` | `SoftBurst` |
+
+All category shapes come from one scalloped family so tiles share the same visual weight;
+pressing a tile morphs its shape into a circle.
 
 ---
 
@@ -107,9 +110,11 @@ corners (16dp) on the first/last row and small inner corners (4dp), with 2dp gap
 | Color / alpha | `defaultEffectsSpec()` (no overshoot) |
 | Forward navigation | Shared axis X: slide 10% + fade, enter from right |
 | Back / predictive back | Reverse shared axis; predictive back scales the outgoing screen to 0.9 with rounded corners while the gesture is in progress |
-| Folder change inside a tab | Shared axis X (deeper = from right, up = from left) |
+| Folder change inside a tab | Shared axis X (deeper = from right, up = from left). Content switches only when the new listing is ready, so there is no empty flash |
+| Back to parent folder | `PredictiveBackHandler`: folder scales to 0.92, slides 32dp toward the swipe edge and fades 30% while dragging; commits on release |
 | Tab switch | Fade-through |
 | List first load | Staggered fade + rise, 30ms per item, max 10 items staggered |
+| Slow folder (> 200 ms) | `LoadingIndicator` overlay; faster loads show no spinner |
 | Sheets / dialogs | Platform defaults (slide up / scale-fade from center) |
 | Progress | `LinearWavyProgressIndicator` for storage + operations, `LoadingIndicator` for loading screens |
 

@@ -45,7 +45,19 @@ import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.model.ThemeMode
 import com.aiyu.findex.ui.components.FindexDrawerSheet
 import com.aiyu.findex.ui.di.failureRes
+import com.aiyu.findex.ui.explorer.ExplorerScreen
 import com.aiyu.findex.ui.home.HomeScreen
+import com.aiyu.findex.ui.navigation.AnalyzerRoute
+import com.aiyu.findex.ui.navigation.CategoryRoute
+import com.aiyu.findex.ui.navigation.CleanerRoute
+import com.aiyu.findex.ui.navigation.ExplorerRoute
+import com.aiyu.findex.ui.navigation.SettingsRoute
+import com.aiyu.findex.ui.navigation.WhatsAppRoute
+import com.aiyu.findex.ui.category.CategoryScreen
+import com.aiyu.findex.ui.settings.SettingsScreen
+import com.aiyu.findex.ui.tools.AnalyzerScreen
+import com.aiyu.findex.ui.tools.CleanerScreen
+import com.aiyu.findex.ui.tools.WhatsAppScreen
 import com.aiyu.findex.ui.navigation.HomeRoute
 import com.aiyu.findex.ui.navigation.OnboardingRoute
 import com.aiyu.findex.ui.onboarding.OnboardingScreen
@@ -144,6 +156,14 @@ private fun FindexNavigation() {
 
 /** Feature destinations; each milestone registers its screens here. */
 private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: NavHostController) {
+    val back: () -> Unit = { navController.popBackStack() }
+    val openFolder: (String) -> Unit = { navController.navigate(ExplorerRoute(it)) }
+    composable<ExplorerRoute> { ExplorerScreen(onBack = back) }
+    composable<CategoryRoute> { CategoryScreen(onBack = back, onOpenFolder = openFolder) }
+    composable<AnalyzerRoute> { AnalyzerScreen(onBack = back, onOpenFolder = openFolder) }
+    composable<CleanerRoute> { CleanerScreen(onBack = back) }
+    composable<WhatsAppRoute> { WhatsAppScreen(onBack = back) }
+    composable<SettingsRoute> { SettingsScreen(onBack = back) }
 }
 
 private fun AnimatedContentTransitionScope<NavBackStackEntry>.sharedAxisEnter(

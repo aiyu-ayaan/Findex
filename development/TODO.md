@@ -49,31 +49,39 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] Adaptive launcher icon (themed/monochrome), splash screen, FileProvider
 
 ### M4 — Home
-- [ ] Storage hero card with wavy progress
-- [ ] Category tiles in `MaterialShapes`
-- [ ] Bookmarks + recent files rows
-- [ ] Quick tools cards, active-operation banner
+- [x] Storage hero card with wavy progress
+- [x] Category tiles in `MaterialShapes`
+- [x] Bookmarks + recent files rows
+- [x] Quick tools cards, active-operation banner
 
 ### M5 — Explorer
-- [ ] Multi-tab browsing (add / close / switch)
-- [ ] Breadcrumbs, list / grid, sort sheet
-- [ ] Long-press + drag-to-select range, tap toggle in selection mode
-- [ ] Floating selection toolbar
-- [ ] Item action bottom sheet
-- [ ] Dialogs: rename, new folder, details, compress (format + password), extract, delete
-- [ ] Cut / copy / paste across tabs
-- [ ] Predictive back: selection → parent folder → previous screen
+- [x] Multi-tab browsing (add / close / switch)
+- [x] Breadcrumbs, list / grid, sort sheet
+- [x] Long-press + drag-to-select range, tap toggle in selection mode
+- [x] Floating selection toolbar
+- [x] Item action bottom sheet
+- [x] Dialogs: rename, new folder, details, compress (format + password), extract, delete
+- [x] Cut / copy / paste across tabs
+- [x] Predictive back: selection → parent folder (animated preview) → previous screen
+- [x] Listing cache + delayed spinner + per-folder scroll restore (instant back navigation)
 
 ### M6 — Categories
-- [ ] Category screen (MediaStore) with thumbnails (Coil)
+- [x] Category screen (MediaStore) with thumbnails (Coil)
 
 ### M7 — Tools
-- [ ] Storage Analyzer (donut chart + largest files)
-- [ ] Storage Cleaner (junk scan + clean via FGS)
-- [ ] WhatsApp Cleaner (per media type)
+- [x] Storage Analyzer (donut chart + largest files)
+- [x] Storage Cleaner (junk scan + clean via FGS)
+- [x] WhatsApp Cleaner (per media type)
 
 ### M8 — Settings
-- [ ] Theme mode, dynamic color, hidden files, default view
+- [x] Theme mode, dynamic color, hidden files, default view
+
+---
+
+### MVP polish (feedback)
+- [x] Unified scalloped category shapes
+- [ ] Verify drag-to-select on a physical device
+- [ ] Large-screen (tablet) layout pass
 
 ---
 

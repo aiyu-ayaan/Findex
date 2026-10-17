@@ -176,3 +176,39 @@ For developers without Android Studio installed, `run.sh` provides a complete he
 5. Executes `./gradlew :app:installDebug`.
 6. Launches `com.aiyu.findex.debug/com.aiyu.findex.MainActivity` with `am start`.
 7. Supports `--logs` / `-l` for continuous logcat streaming.
+
+---
+
+## 5. Explorer State & Listing Cache
+
+```mermaid
+flowchart TD
+    Nav[ExplorerRoute path] --> VM[ExplorerViewModel]
+    VM -- tabs: ExplorerTab id/root/path --> State[ExplorerUiState]
+    VM --> Load{load}
+    Load -- cache hit --> Publish[publish items + itemsPath]
+    Load -- always --> Repo[StorageRepository.getFilesInDirectory]
+    Repo --> Cache[(LRU listing cache<br/>48 folders, key = path+hidden+sort)]
+    Cache --> Publish
+    Load -- slower than 200ms --> Spinner[isLoading = true]
+    Publish --> UI[AnimatedContent keyed on tab + itemsPath]
+    UI --> ScrollMap[(LazyListState per path)]
+    Ops[OperationManager.results] -- refresh without spinner --> Load
+    Back[PredictiveBackHandler] -- progress --> Preview[scale / slide / fade preview]
+    Back -- commit --> Up[goUp → load parent from cache]
+```
+
+- **Selection** lives in `ExplorerUiState.selection` (paths). Long-press + drag selects a range
+  (`dragToSelect` in `ExplorerContent.kt`) with edge auto-scroll; tap toggles while selecting.
+- **Clipboard** is app-wide (`FileClipboard`), so copy in one tab and paste in another.
+
+## 6. Tools
+
+| Screen | ViewModel | Data |
+| :--- | :--- | :--- |
+| Storage Analyzer | `AnalyzerViewModel` | `StorageRepository.getCategoryStats()` + `StorageScanner.largestFiles()` |
+| Storage Cleaner | `CleanerViewModel : CleanViewModel<JunkType>` | `StorageScanner.scanJunk()` → `FileOperation.Clean` via FGS |
+| WhatsApp Cleaner | `WhatsAppViewModel : CleanViewModel<WhatsAppMediaType>` | `StorageScanner.scanWhatsApp()` → `FileOperation.Clean` via FGS |
+
+`StorageScanner` skips `Android/data` and `Android/obb` and never offers top-level standard
+folders (DCIM, Music…) as "empty folders".

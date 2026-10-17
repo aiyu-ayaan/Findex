@@ -41,6 +41,20 @@
     <string name="storage_no_network_drives">No network drives connected. Tap + to connect via SMB / WebDAV / FTP.</string>
     <string name="storage_add_network">Add Network Drive</string>
 
+    <string name="storage_used_label">used</string>
+
+    <!-- Home -->
+    <string name="home_subtitle">Your files, organised</string>
+    <string name="section_categories">Categories</string>
+    <string name="section_bookmarks">Bookmarks</string>
+    <string name="section_recents">Recent files</string>
+    <string name="cd_open_drawer">Open navigation drawer</string>
+    <string name="cd_browse_drive">Browse storage</string>
+    <plurals name="item_count">
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
+
     <!-- File Categories -->
     <string name="category_photos">Photos</string>
     <string name="category_videos">Videos</string>
@@ -77,15 +91,131 @@
     <string name="action_new_tab">New Tab</string>
     <string name="action_close_tab">Close Tab</string>
 
+    <string name="action_open">Open</string>
+    <string name="action_create">Create</string>
+    <string name="action_bookmark">Add bookmark</string>
+    <string name="action_remove_bookmark">Remove bookmark</string>
+    <string name="bookmark_added">Bookmark added</string>
+    <string name="bookmark_removed">Bookmark removed</string>
+
+    <!-- Explorer -->
+    <string name="cd_back">Back</string>
+    <string name="cd_more_options">More options</string>
+    <string name="cd_more_actions">More actions for %1$s</string>
+    <string name="cd_grid_view">Grid view</string>
+    <string name="cd_list_view">List view</string>
+    <string name="cd_clear_selection">Clear selection</string>
+    <string name="cd_clear_clipboard">Clear clipboard</string>
+    <string name="cd_create_menu">Create</string>
+    <string name="cd_show_password">Show password</string>
+    <string name="cd_hide_password">Hide password</string>
+    <string name="empty_folder_title">This folder is empty</string>
+    <string name="empty_folder_body">Paste files here or create a new folder.</string>
+    <string name="label_name">Name</string>
+    <string name="label_archive_name">Archive name</string>
+    <string name="error_invalid_name">Names can\'t contain “/”</string>
+    <string name="error_rename">Couldn\'t rename — the name may already exist</string>
+    <string name="error_new_folder">Couldn\'t create folder — the name may already exist</string>
+    <string name="sort_title">Sort &amp; view</string>
+    <string name="sort_name">Name</string>
+    <string name="sort_date">Date modified</string>
+    <string name="sort_size">Size</string>
+    <string name="sort_type">Type</string>
+    <string name="sort_ascending">Ascending</string>
+    <string name="sort_descending">Descending</string>
+    <string name="show_hidden_files">Show hidden files</string>
+    <string name="details_path">Location</string>
+    <string name="details_modified">Modified</string>
+    <string name="details_type">Type</string>
+    <string name="details_size">Size</string>
+    <string name="details_contains">Contains</string>
+    <string name="delete_body">This can\'t be undone.</string>
+    <plurals name="delete_title">
+        <item quantity="one">Delete %d item?</item>
+        <item quantity="other">Delete %d items?</item>
+    </plurals>
+    <plurals name="file_count">
+        <item quantity="one">%d file</item>
+        <item quantity="other">%d files</item>
+    </plurals>
+    <plurals name="folder_count">
+        <item quantity="one">%d folder</item>
+        <item quantity="other">%d folders</item>
+    </plurals>
+    <plurals name="paste_here">
+        <item quantity="one">Paste %d item</item>
+        <item quantity="other">Paste %d items</item>
+    </plurals>
+    <plurals name="move_here">
+        <item quantity="one">Move %d item here</item>
+        <item quantity="other">Move %d items here</item>
+    </plurals>
+
+    <string name="action_show_in_folder">Show in folder</string>
+    <string name="category_empty">Nothing here yet</string>
+
+    <!-- Tools -->
+    <string name="scanning">Scanning storage…</string>
+    <string name="tool_can_free">can be freed</string>
+    <string name="tool_selected_of">%1$s selected of %2$s</string>
+    <string name="tool_all_clean_title">All clean</string>
+    <string name="tool_all_clean_body">Nothing to remove right now.</string>
+    <string name="tool_clean_confirm_title">Clean %1$s?</string>
+    <string name="tool_clean_confirm_body">Selected files will be permanently deleted.</string>
+    <string name="tool_clean_button">Clean %1$s</string>
+    <string name="tool_rescan">Scan again</string>
+    <string name="junk_thumbnails">Thumbnail caches</string>
+    <string name="junk_thumbnails_desc">Preview images apps rebuild automatically</string>
+    <string name="junk_temp">Temporary &amp; log files</string>
+    <string name="junk_temp_desc">.tmp, .log, .bak and unfinished downloads</string>
+    <string name="junk_apks">Installation files</string>
+    <string name="junk_apks_desc">APK files of apps you may have installed</string>
+    <string name="junk_empty">Empty folders</string>
+    <string name="junk_empty_desc">Folders with nothing inside</string>
+    <string name="wa_images">Images</string>
+    <string name="wa_videos">Videos</string>
+    <string name="wa_audio">Audio</string>
+    <string name="wa_voice">Voice notes</string>
+    <string name="wa_documents">Documents</string>
+    <string name="wa_stickers">Stickers</string>
+    <string name="wa_gifs">GIFs</string>
+    <string name="wa_backups">Backups &amp; databases</string>
+    <string name="wa_not_found">WhatsApp media not found on this device.</string>
+    <string name="wa_hint">Received and sent media, including private folders.</string>
+    <string name="analyzer_used">Used</string>
+    <string name="analyzer_other">Other files &amp; apps</string>
+    <string name="analyzer_free">Free</string>
+    <string name="analyzer_breakdown">Breakdown</string>
+    <string name="analyzer_largest">Largest files</string>
+    <string name="analyzer_chart_desc">Storage chart: %1$s used of %2$s</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_dynamic_color">Dynamic color</string>
+    <string name="settings_dynamic_color_desc">Match colors to your wallpaper</string>
+    <string name="settings_files">Files</string>
+    <string name="settings_show_hidden_desc">Show files and folders starting with a dot</string>
+    <string name="settings_grid">Grid view by default</string>
+    <string name="settings_grid_desc">Show folders as a grid of thumbnails</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">Version</string>
+
     <!-- Compression & Extraction -->
     <string name="compress_dialog_title">Create Archive</string>
     <string name="compress_format_zip">ZIP</string>
     <string name="compress_format_7z">7-Zip (7z)</string>
     <string name="compress_format_tar">TAR</string>
     <string name="compress_password_hint">Password (optional)</string>
+    <string name="compress_password_help">With a password the archive is encrypted with AES-256.</string>
+    <string name="extract_password_hint">Password (if protected)</string>
+    <string name="extract_dialog_body">Extract “%1$s” into a new folder next to it.</string>
     <string name="compress_button">Compress</string>
     <string name="extract_dialog_title">Extract Archive</string>
-    <string name="extract_button">Extract Here</string>
+    <string name="extract_button">Extract</string>
 
     <!-- Multitasking & Selection -->
     <string name="selected_count">%1$d selected</string>
