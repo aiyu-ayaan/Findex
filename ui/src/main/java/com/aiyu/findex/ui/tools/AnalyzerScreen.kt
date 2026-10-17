@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -95,6 +96,11 @@ fun AnalyzerScreen(
             )
         }
     ) { padding ->
+        // Wait for the drive: inserting the chart above an already-shown list would leave it pre-scrolled.
+        if (drive == null) {
+            Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) { LoadingIndicator() }
+            return@Scaffold
+        }
         LazyColumn(
             contentPadding = PaddingValues(
                 start = Dimens.gutter, end = Dimens.gutter,

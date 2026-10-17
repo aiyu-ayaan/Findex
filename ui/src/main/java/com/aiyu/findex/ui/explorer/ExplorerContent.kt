@@ -2,6 +2,7 @@ package com.aiyu.findex.ui.explorer
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +42,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -185,6 +187,7 @@ fun FileList(
                 inSelection = inSelection,
                 shape = groupedShape(index, items.size),
                 onClick = { onClick(item) },
+                onLongClick = { onSelectionChange(selection + item.path) },
                 onMore = { onMore(item) },
                 modifier = Modifier.animateItem()
             )
@@ -219,6 +222,7 @@ fun FileGrid(
                 item = item,
                 selected = item.path in selection,
                 onClick = { onClick(item) },
+                onLongClick = { onSelectionChange(selection + item.path) },
                 modifier = Modifier.animateItem()
             )
         }
@@ -232,6 +236,7 @@ private fun FileRow(
     inSelection: Boolean,
     shape: androidx.compose.ui.graphics.Shape,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
     onMore: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -241,11 +246,13 @@ private fun FileRow(
         label = "rowColor"
     )
     Surface(
-        onClick = onClick,
         shape = shape,
         color = container,
         modifier = modifier
             .fillMaxWidth()
+            .clip(shape)
+            // onLongClick stops the release after a long-press from also firing onClick (which would deselect).
+            .combinedClickable(onClick = onClick, onLongClick = onLongClick)
             .semantics { this.selected = selected }
     ) {
         Row(
@@ -307,6 +314,7 @@ private fun FileCell(
     item: StorageItem,
     selected: Boolean,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val container by animateColorAsState(
@@ -315,10 +323,12 @@ private fun FileCell(
         label = "cellColor"
     )
     Surface(
-        onClick = onClick,
         shape = MaterialTheme.shapes.large,
         color = container,
-        modifier = modifier.semantics { this.selected = selected }
+        modifier = modifier
+            .clip(MaterialTheme.shapes.large)
+            .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+            .semantics { this.selected = selected }
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(Dimens.sm)) {
             Box(contentAlignment = Alignment.Center) {
