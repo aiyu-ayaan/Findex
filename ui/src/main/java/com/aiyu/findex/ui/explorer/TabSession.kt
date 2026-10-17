@@ -1,0 +1,79 @@
+package com.aiyu.findex.ui.explorer
+
+import com.aiyu.findex.core.repository.StorageRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
+import java.io.File
+import java.util.concurrent.atomic.AtomicLong
+import javax.inject.Inject
+import javax.inject.Singleton
+
+data class TabsState(val tabs: List<ExplorerTab> = emptyList(), val active: Int = 0) {
+    val tab: ExplorerTab? get() = tabs.getOrNull(active)
+}
+
+/**
+ * Open explorer tabs, shared by every Explorer screen, the Tabs overview and the drawer badge.
+ * shortcut: in memory only, lost on process death; persist to Room for the "Tab session persistence" item.
+ */
+@Singleton
+class TabSession @Inject constructor(
+    private val storageRepository: StorageRepository
+) {
+    private val _state = MutableStateFlow(TabsState())
+    val state: StateFlow<TabsState> = _state.asStateFlow()
+
+    private val nextId = AtomicLong()
+
+    /** Focuses a tab already showing [path], otherwise opens a new one there. */
+    suspend fun open(path: String) {
+        val existing = _state.value.tabs.indexOfFirst { it.path == path }
+        if (existing >= 0) select(existing) else newTab(path)
+    }
+
+    /** Always opens a new tab, even if another one shows [path]. */
+    suspend fun newTab(path: String) {
+        val tab = createTab(path)
+        _state.update { s -> TabsState(s.tabs + tab, s.tabs.size) }
+    }
+
+    /** Opens a copy of the active tab next to it (the Explorer's "New tab"). */
+    fun duplicateActive() = _state.update { s ->
+        val current = s.tab ?: return@update s
+        val tabs = s.tabs.toMutableList().apply { add(s.active + 1, current.copy(id = nextId.getAndIncrement())) }
+        TabsState(tabs, s.active + 1)
+    }
+
+    fun select(index: Int) = _state.update { s -> if (index in s.tabs.indices) s.copy(active = index) else s }
+
+    fun close(index: Int) = _state.update { s ->
+        if (index !in s.tabs.indices) return@update s
+        val tabs = s.tabs.toMutableList().apply { removeAt(index) }
+        val active = when {
+            index < s.active -> s.active - 1
+            else -> s.active.coerceAtMost((tabs.size - 1).coerceAtLeast(0))
+        }
+        TabsState(tabs, active)
+    }
+
+    fun closeAll() = _state.update { TabsState() }
+
+    fun setActivePath(path: String) = _state.update { s ->
+        val current = s.tab ?: return@update s
+        s.copy(tabs = s.tabs.toMutableList().apply { set(s.active, current.copy(path = path)) })
+    }
+
+    /** The storage volume [path] lives on becomes the tab's root; up-navigation stops there. */
+    private suspend fun createTab(path: String): ExplorerTab {
+        val drive = storageRepository.getStorageDrives().first().filter { path.startsWith(it.path) }.maxByOrNull { it.path.length }
+        return ExplorerTab(
+            id = nextId.getAndIncrement(),
+            root = drive?.path ?: path,
+            rootName = drive?.name ?: File(path).name,
+            path = path
+        )
+    }
+}

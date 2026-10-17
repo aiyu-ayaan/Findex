@@ -24,6 +24,7 @@ import androidx.compose.material.icons.rounded.FolderZip
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.RestoreFromTrash
 import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material.icons.rounded.Tab
 import androidx.compose.material.icons.rounded.Unarchive
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
@@ -81,7 +82,7 @@ import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.util.formatDate
 import com.aiyu.findex.ui.util.formatSize
 
-enum class ItemAction { OPEN, SHARE, SHOW_IN_FOLDER, RESTORE, COPY, CUT, RENAME, COMPRESS, EXTRACT, BOOKMARK, DETAILS, DELETE }
+enum class ItemAction { OPEN, OPEN_IN_NEW_TAB, SHARE, SHOW_IN_FOLDER, RESTORE, COPY, CUT, RENAME, COMPRESS, EXTRACT, BOOKMARK, DETAILS, DELETE }
 
 val ExplorerItemActions = ItemAction.entries.toSet() - ItemAction.SHOW_IN_FOLDER - ItemAction.RESTORE
 
@@ -107,6 +108,7 @@ fun ItemActionSheet(
             )
             HorizontalDivider(Modifier.padding(horizontal = Dimens.xl, vertical = Dimens.sm))
             if (!item.isDirectory) row(ItemAction.OPEN, Icons.AutoMirrored.Rounded.OpenInNew, R.string.action_open)
+            if (item.isDirectory) row(ItemAction.OPEN_IN_NEW_TAB, Icons.Rounded.Tab, R.string.action_open_in_new_tab)
             if (!item.isDirectory) row(ItemAction.SHARE, Icons.Rounded.Share, R.string.action_share)
             row(ItemAction.SHOW_IN_FOLDER, Icons.Rounded.FolderOpen, R.string.action_show_in_folder)
             row(ItemAction.RESTORE, Icons.Rounded.RestoreFromTrash, R.string.action_restore)

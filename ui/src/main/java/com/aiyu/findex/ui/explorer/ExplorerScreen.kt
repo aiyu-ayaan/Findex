@@ -1,5 +1,9 @@
 package com.aiyu.findex.ui.explorer
 
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.BorderStroke
 import androidx.activity.BackEventCompat
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.animation.core.animateFloatAsState
@@ -94,7 +98,14 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.selected
+import androidx.compose.foundation.border
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.Surface
+import androidx.compose.material.icons.rounded.Unarchive
+import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.semantics.isTraversalGroup
@@ -128,6 +139,7 @@ private sealed interface ExplorerModal {
 @Composable
 fun ExplorerScreen(
     onBack: () -> Unit,
+    onOpenTabs: () -> Unit,
     viewModel: ExplorerViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -210,6 +222,8 @@ fun ExplorerScreen(
                             onSort = { modal = ExplorerModal.Sort },
                             onNewTab = viewModel::addTab,
                             onNewFolder = { modal = ExplorerModal.NewFolder },
+                            tabCount = state.tabs.size,
+                            onOpenTabs = onOpenTabs,
                             scrollBehavior = scrollBehavior
                         )
                     }
@@ -323,6 +337,8 @@ fun ExplorerScreen(
                 onShare = { context.shareFiles(state.selection.toList()) },
                 onRename = { state.selectedItems.singleOrNull()?.let { modal = ExplorerModal.Rename(it) } },
                 onDetails = { state.selectedItems.singleOrNull()?.let { modal = ExplorerModal.Details(it) } },
+                onOpenInNewTab = { state.selectedItems.singleOrNull()?.let { viewModel.openInNewTab(it.path) } },
+                onExtract = { state.selectedItems.singleOrNull()?.let { viewModel.clearSelection(); modal = ExplorerModal.Extract(it) } },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .navigationBarsPadding()
@@ -342,6 +358,7 @@ fun ExplorerScreen(
                 when (action) {
                     ItemAction.OPEN -> open(item)
                     ItemAction.SHOW_IN_FOLDER, ItemAction.RESTORE -> Unit
+                    ItemAction.OPEN_IN_NEW_TAB -> viewModel.openInNewTab(item.path)
                     ItemAction.SHARE -> context.shareFiles(listOf(item.path))
                     ItemAction.COPY -> viewModel.copySelection(listOf(item.path))
                     ItemAction.CUT -> viewModel.cutSelection(listOf(item.path))
@@ -405,6 +422,8 @@ private fun BrowseTopBar(
     onSort: () -> Unit,
     onNewTab: () -> Unit,
     onNewFolder: () -> Unit,
+    tabCount: Int,
+    onOpenTabs: () -> Unit,
     scrollBehavior: androidx.compose.material3.TopAppBarScrollBehavior
 ) {
     var menu by remember { mutableStateOf(false) }
@@ -416,6 +435,7 @@ private fun BrowseTopBar(
             }
         },
         actions = {
+            TabCountButton(tabCount, onOpenTabs)
             IconButton(onClick = onBookmark) {
                 Icon(
                     if (isBookmarked) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
@@ -477,33 +497,47 @@ private fun SelectionTopBar(count: Int, onClose: () -> Unit, onSelectAll: () -> 
     )
 }
 
+/** Pill tabs: the active one is filled and outlined, a new tab slides in and is scrolled into view. */
 @Composable
 private fun TabStrip(tabs: List<ExplorerTab>, active: Int, onSelect: (Int) -> Unit, onClose: (Int) -> Unit) {
-    PrimaryScrollableTabRow(selectedTabIndex = active, edgePadding = Dimens.lg, containerColor = MaterialTheme.colorScheme.surface) {
-        tabs.forEachIndexed { index, tab ->
-            Tab(
-                selected = index == active,
+    val listState = rememberLazyListState()
+    LaunchedEffect(active, tabs.size) { if (active in tabs.indices) listState.animateScrollToItem(active) }
+    val colors = MaterialTheme.colorScheme
+    LazyRow(
+        state = listState,
+        contentPadding = PaddingValues(horizontal = Dimens.gutter, vertical = Dimens.xs),
+        horizontalArrangement = Arrangement.spacedBy(Dimens.sm)
+    ) {
+        itemsIndexed(tabs, key = { _, tab -> tab.id }) { index, tab ->
+            val selected = index == active
+            val name = if (tab.path == tab.root) tab.rootName else File(tab.path).name
+            Surface(
                 onClick = { onSelect(index) },
-                text = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            if (tab.path == tab.root) tab.rootName else File(tab.path).name,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        if (index == active) {
-                            Icon(
-                                Icons.Rounded.Close,
-                                contentDescription = stringResource(R.string.action_close_tab),
-                                modifier = Modifier
-                                    .padding(start = Dimens.xs)
-                                    .size(18.dp)
-                                    .clickable { onClose(index) }
-                            )
-                        }
+                shape = MaterialTheme.shapes.extraLarge,
+                color = if (selected) colors.secondaryContainer else colors.surfaceContainerHigh,
+                contentColor = if (selected) colors.onSecondaryContainer else colors.onSurfaceVariant,
+                border = if (selected) BorderStroke(1.5.dp, colors.primary) else null,
+                modifier = Modifier
+                    .animateItem()
+                    .heightIn(min = 40.dp)
+                    .semantics { this.selected = selected }
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = Dimens.md)) {
+                    Icon(Icons.Rounded.Folder, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(Dimens.sm))
+                    Text(
+                        name,
+                        style = if (selected) MaterialTheme.typography.labelLargeEmphasized else MaterialTheme.typography.labelLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.widthIn(max = 160.dp)
+                    )
+                    // Close sits inside the pill; the Tabs screen offers a full-size alternative.
+                    IconButton(onClick = { onClose(index) }, modifier = Modifier.size(40.dp)) {
+                        Icon(Icons.Rounded.Close, contentDescription = stringResource(R.string.cd_close_tab, name), modifier = Modifier.size(16.dp))
                     }
                 }
-            )
+            }
         }
     }
 }
@@ -631,6 +665,8 @@ private fun SelectionToolbar(
     onShare: () -> Unit,
     onRename: () -> Unit,
     onDetails: () -> Unit,
+    onOpenInNewTab: () -> Unit,
+    onExtract: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     AnimatedVisibility(
@@ -652,6 +688,20 @@ private fun SelectionToolbar(
             Box {
                 IconButton(onClick = { more = true }) { Icon(Icons.Rounded.MoreVert, stringResource(R.string.cd_more_options)) }
                 DropdownMenu(expanded = more, onDismissRequest = { more = false }, shape = MaterialTheme.shapes.large) {
+                    if (singleSelected?.isDirectory == true) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.action_open_in_new_tab)) },
+                            leadingIcon = { Icon(Icons.Rounded.Tab, null) },
+                            onClick = { more = false; onOpenInNewTab() }
+                        )
+                    }
+                    if (singleSelected?.isArchive == true) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.action_extract)) },
+                            leadingIcon = { Icon(Icons.Rounded.Unarchive, null) },
+                            onClick = { more = false; onExtract() }
+                        )
+                    }
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.action_rename)) },
                         leadingIcon = { Icon(Icons.Rounded.DriveFileRenameOutline, null) },
@@ -665,6 +715,24 @@ private fun SelectionToolbar(
                         onClick = { more = false; onDetails() }
                     )
                 }
+            }
+        }
+    }
+}
+
+/** Browser-style tab counter: a rounded square with the number of open tabs; opens the Tabs overview. */
+@Composable
+private fun TabCountButton(count: Int, onClick: () -> Unit) {
+    val label = pluralStringResource(R.plurals.tabs_open_count, count, count)
+    IconButton(onClick = onClick, modifier = Modifier.semantics { contentDescription = label }) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(22.dp)
+                .border(2.dp, LocalContentColor.current, MaterialTheme.shapes.extraSmall)
+        ) {
+            AnimatedContent(targetState = count.coerceAtMost(99), label = "tabCount") { c ->
+                Text(c.toString(), style = MaterialTheme.typography.labelMedium, maxLines = 1)
             }
         }
     }

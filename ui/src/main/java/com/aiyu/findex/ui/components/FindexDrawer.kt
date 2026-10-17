@@ -19,6 +19,7 @@ import androidx.compose.material.icons.rounded.Forum
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.PieChart
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.Tab
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialShapes
@@ -37,6 +38,7 @@ import com.aiyu.findex.ui.navigation.CleanerRoute
 import com.aiyu.findex.ui.navigation.HomeRoute
 import com.aiyu.findex.ui.navigation.RecycleBinRoute
 import com.aiyu.findex.ui.navigation.SettingsRoute
+import com.aiyu.findex.ui.navigation.TabsRoute
 import com.aiyu.findex.ui.navigation.WhatsAppRoute
 import com.aiyu.findex.ui.theme.Dimens
 
@@ -53,6 +55,7 @@ private val mainEntries = listOf(
 @Composable
 fun FindexDrawerSheet(
     onNavigate: (Any) -> Unit,
+    tabCount: Int,
     modifier: Modifier = Modifier
 ) {
     // Plain column: PushDrawer already supplies the surface behind it.
@@ -96,6 +99,14 @@ fun FindexDrawerSheet(
 
             HorizontalDivider(Modifier.padding(horizontal = Dimens.xxl, vertical = Dimens.sm))
 
+            NavigationDrawerItem(
+                icon = { Icon(Icons.Rounded.Tab, contentDescription = null) },
+                label = { Text(stringResource(R.string.nav_tabs)) },
+                badge = { if (tabCount > 0) Text(tabCount.toString(), style = MaterialTheme.typography.labelLarge) },
+                selected = false,
+                onClick = { onNavigate(TabsRoute) },
+                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+            )
             // Explain unavailable destinations instead of hiding them.
             NavigationDrawerItem(
                 icon = { Icon(Icons.Rounded.CloudQueue, contentDescription = null) },

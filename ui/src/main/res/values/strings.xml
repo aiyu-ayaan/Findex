@@ -14,6 +14,16 @@
     <string name="nav_network_storage">Network Storage</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_recycle_bin">Recycle bin</string>
+    <string name="nav_tabs">Tabs</string>
+    <plurals name="tabs_open_count">
+        <item quantity="one">%d open tab</item>
+        <item quantity="other">%d open tabs</item>
+    </plurals>
+    <string name="tabs_close_all">Close all tabs</string>
+    <string name="tabs_empty_title">No open tabs</string>
+    <string name="tabs_empty_body">Start a new tab to browse your files</string>
+    <string name="tabs_current">Current tab</string>
+    <string name="cd_close_tab">Close tab %1$s</string>
 
     <string name="badge_soon">Soon</string>
 
@@ -99,6 +109,7 @@
     <string name="action_new_folder">New Folder</string>
     <string name="action_new_tab">New Tab</string>
     <string name="action_close_tab">Close Tab</string>
+    <string name="action_open_in_new_tab">Open in new tab</string>
 
     <string name="action_open">Open</string>
     <string name="action_create">Create</string>

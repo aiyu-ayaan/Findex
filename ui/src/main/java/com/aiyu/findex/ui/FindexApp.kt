@@ -64,6 +64,8 @@ import com.aiyu.findex.ui.tools.WhatsAppScreen
 import com.aiyu.findex.ui.navigation.HomeRoute
 import com.aiyu.findex.ui.navigation.OnboardingRoute
 import com.aiyu.findex.ui.navigation.RecycleBinRoute
+import com.aiyu.findex.ui.navigation.TabsRoute
+import com.aiyu.findex.ui.tabs.TabsScreen
 import com.aiyu.findex.ui.trash.RecycleBinScreen
 import com.aiyu.findex.ui.onboarding.OnboardingScreen
 import com.aiyu.findex.ui.theme.FindexTheme
@@ -112,7 +114,8 @@ fun FindexApp(onReady: () -> Unit = {}, viewModel: AppViewModel = hiltViewModel(
         }
         CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
             Box(Modifier.fillMaxSize()) {
-                FindexNavigation(onboardingDone = current.onboardingDone, onOnboardingFinished = viewModel::completeOnboarding)
+                val tabCount by viewModel.tabCount.collectAsStateWithLifecycle()
+                FindexNavigation(onboardingDone = current.onboardingDone, onOnboardingFinished = viewModel::completeOnboarding, tabCount = tabCount)
                 SnackbarHost(
                     hostState = snackbarHostState,
                     modifier = Modifier
@@ -126,7 +129,7 @@ fun FindexApp(onReady: () -> Unit = {}, viewModel: AppViewModel = hiltViewModel(
 }
 
 @Composable
-private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -> Unit) {
+private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -> Unit, tabCount: Int) {
     val navController = rememberNavController()
     val drawerState = rememberPushDrawerState()
     val scope = rememberCoroutineScope()
@@ -143,6 +146,7 @@ private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -
         gesturesEnabled = onHome || drawerState.isOpen,
         drawerContent = {
             FindexDrawerSheet(
+                tabCount = tabCount,
                 onNavigate = { route ->
                     scope.launch { drawerState.close() }
                     if (route != HomeRoute) navController.navigate(route) { launchSingleTop = true }
@@ -183,13 +187,21 @@ private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -
 private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: NavHostController) {
     val back: () -> Unit = { navController.popBackStack() }
     val openFolder: (String) -> Unit = { navController.navigate(ExplorerRoute(it)) }
-    composable<ExplorerRoute> { ExplorerScreen(onBack = back) }
+    composable<ExplorerRoute> { ExplorerScreen(onBack = back, onOpenTabs = { navController.navigate(TabsRoute) { launchSingleTop = true } }) }
     composable<CategoryRoute> { CategoryScreen(onBack = back, onOpenFolder = openFolder) }
     composable<AnalyzerRoute> { AnalyzerScreen(onBack = back, onOpenFolder = openFolder) }
     composable<CleanerRoute> { CleanerScreen(onBack = back) }
     composable<WhatsAppRoute> { WhatsAppScreen(onBack = back) }
     composable<SettingsRoute> { SettingsScreen(onBack = back) }
     composable<RecycleBinRoute> { RecycleBinScreen(onBack = back) }
+    composable<TabsRoute> {
+        TabsScreen(onBack = back, onOpenExplorer = {
+            // Opened from an explorer: go back to it (it follows the shared session).
+            // Opened from the drawer: replace the overview so Back from the explorer returns Home.
+            if (navController.previousBackStackEntry?.destination?.hasRoute(ExplorerRoute::class) == true) navController.popBackStack()
+            else navController.navigate(ExplorerRoute()) { popUpTo<TabsRoute> { inclusive = true } }
+        })
+    }
 }
 
 private fun AnimatedContentTransitionScope<NavBackStackEntry>.sharedAxisEnter(

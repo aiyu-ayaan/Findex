@@ -11,7 +11,6 @@ import com.aiyu.findex.core.model.ArchiveFormat
 import com.aiyu.findex.core.model.FileOperation
 import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.model.SortSpec
-import com.aiyu.findex.core.model.StorageDrive
 import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.core.model.sortedBy
 import com.aiyu.findex.core.operation.FileClipboard
@@ -42,7 +41,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
-/** One browsing tab. [root] is the storage volume the tab lives on; up-navigation stops there. */
+/** One browsing tab, owned by [TabSession]. [root] is the storage volume the tab lives on; up-navigation stops there. */
 data class ExplorerTab(val id: Long, val root: String, val rootName: String, val path: String)
 
 data class ExplorerUiState(
@@ -76,10 +75,11 @@ class ExplorerViewModel @Inject constructor(
     private val libraryRepository: LibraryRepository,
     private val settingsRepository: SettingsRepository,
     private val clipboard: FileClipboard,
-    private val operationManager: OperationManager
+    private val operationManager: OperationManager,
+    private val tabSession: TabSession
 ) : ViewModel() {
 
-    private val startPath = savedStateHandle.toRoute<ExplorerRoute>().path
+    private val startPath: String? = savedStateHandle.toRoute<ExplorerRoute>().path
 
     private val _uiState = MutableStateFlow(ExplorerUiState())
     val uiState: StateFlow<ExplorerUiState> = _uiState.asStateFlow()
@@ -88,8 +88,6 @@ class ExplorerViewModel @Inject constructor(
     /** One-shot snackbar messages (string resource ids). */
     val messages = _messages.receiveAsFlow()
 
-    private var drives: List<StorageDrive> = emptyList()
-    private var nextTabId = 0L
     private var loadJob: Job? = null
 
     // Recently visited listings: going back or switching tabs renders instantly, then refreshes.
@@ -99,10 +97,27 @@ class ExplorerViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            drives = storageRepository.getStorageDrives().first()
             val initialSettings = settingsRepository.settings.first()
-            _uiState.update { it.copy(tabs = listOf(newTab(startPath)), settings = initialSettings) }
-            load()
+            _uiState.update { it.copy(settings = initialSettings) }
+            // A path opens (or focuses) a tab; no path resumes the open tabs, starting fresh if there are none.
+            when {
+                startPath != null -> tabSession.open(startPath)
+                tabSession.state.value.tabs.isEmpty() -> tabSession.newTab(storageRepository.getStorageDrives().first().first().path)
+            }
+            launch {
+                tabSession.state.collect { tabs ->
+                    // Every tab was closed from the Tabs screen while this explorer sat underneath.
+                    if (tabs.tabs.isEmpty()) {
+                        tabSession.newTab(storageRepository.getStorageDrives().first().first().path)
+                        return@collect
+                    }
+                    val previous = _uiState.value.tab
+                    _uiState.update { it.copy(tabs = tabs.tabs, activeTab = tabs.active) }
+                    val now = tabs.tab
+                    if (now?.id != previous?.id) _uiState.update { it.copy(selection = emptySet()) }
+                    if (now?.id != previous?.id || now?.path != previous?.path) load()
+                }
+            }
             settingsRepository.settings.collect { settings ->
                 val reload = settings.showHidden != _uiState.value.settings.showHidden || settings.sort != _uiState.value.settings.sort
                 _uiState.update { it.copy(settings = settings) }
@@ -119,16 +134,6 @@ class ExplorerViewModel @Inject constructor(
                 .flatMapLatest { path -> libraryRepository.isBookmarked(path ?: "") }
                 .collect { b -> _uiState.update { it.copy(isBookmarked = b) } }
         }
-    }
-
-    private fun newTab(path: String): ExplorerTab {
-        val drive = drives.filter { path.startsWith(it.path) }.maxByOrNull { it.path.length }
-        return ExplorerTab(
-            id = nextTabId++,
-            root = drive?.path ?: path,
-            rootName = drive?.name ?: File(path).name,
-            path = path
-        )
     }
 
     fun load(showLoading: Boolean = true) {
@@ -161,12 +166,8 @@ class ExplorerViewModel @Inject constructor(
     // region Navigation
 
     private fun setPath(path: String, forward: Boolean) {
-        _uiState.update { s ->
-            val tabs = s.tabs.toMutableList()
-            tabs[s.activeTab] = tabs[s.activeTab].copy(path = path)
-            s.copy(tabs = tabs, selection = emptySet(), forward = forward)
-        }
-        load()
+        _uiState.update { it.copy(selection = emptySet(), forward = forward) }
+        tabSession.setActivePath(path) // the session collector reloads
     }
 
     fun openFolder(path: String) = setPath(path, forward = true)
@@ -193,29 +194,19 @@ class ExplorerViewModel @Inject constructor(
 
     // region Tabs
 
-    fun addTab() {
-        val tab = _uiState.value.tab ?: return
-        _uiState.update { s -> s.copy(tabs = s.tabs + newTab(tab.path).copy(root = tab.root, rootName = tab.rootName), activeTab = s.tabs.size, selection = emptySet()) }
-        load()
+    fun addTab() = tabSession.duplicateActive()
+
+    /** Opens [path] in a new tab and switches to it; the tab strip shows where it went. */
+    fun openInNewTab(path: String) {
+        clearSelection()
+        viewModelScope.launch { tabSession.newTab(path) }
     }
 
-    fun selectTab(index: Int) {
-        if (index == _uiState.value.activeTab) return
-        _uiState.update { it.copy(activeTab = index, selection = emptySet()) }
-        load()
-    }
+    fun selectTab(index: Int) = tabSession.select(index)
 
+    /** The Explorer keeps its last tab; closing everything is done from the Tabs screen. */
     fun closeTab(index: Int) {
-        val s = _uiState.value
-        if (s.tabs.size <= 1) return
-        val tabs = s.tabs.toMutableList().apply { removeAt(index) }
-        val active = when {
-            index < s.activeTab -> s.activeTab - 1
-            index == s.activeTab -> (s.activeTab).coerceAtMost(tabs.lastIndex)
-            else -> s.activeTab
-        }
-        _uiState.update { it.copy(tabs = tabs, activeTab = active, selection = emptySet()) }
-        load()
+        if (_uiState.value.tabs.size > 1) tabSession.close(index)
     }
 
     // endregion

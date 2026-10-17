@@ -6,6 +6,8 @@ import com.aiyu.findex.core.model.AppSettings
 import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.operation.OperationManager
 import com.aiyu.findex.core.repository.TrashRepository
+import com.aiyu.findex.ui.explorer.TabSession
+import kotlinx.coroutines.flow.map
 import com.aiyu.findex.core.settings.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharedFlow
@@ -19,8 +21,11 @@ import javax.inject.Inject
 class AppViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     operationManager: OperationManager,
-    private val trashRepository: TrashRepository
+    private val trashRepository: TrashRepository,
+    tabSession: TabSession
 ) : ViewModel() {
+    val tabCount: StateFlow<Int> = tabSession.state.map { it.tabs.size }.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
+
     /** Null until DataStore has been read, so the first frame never flashes the wrong theme. */
     val settings: StateFlow<AppSettings?> = settingsRepository.settings
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
