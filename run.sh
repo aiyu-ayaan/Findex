@@ -15,21 +15,24 @@ ACTIVITY_NAME="com.aiyu.findex.MainActivity"
 LOGS=0
 DO_CLEAN=0
 TARGET_AVD=""
+RESET_DISPLAY=0
 
 show_help() {
     cat << EOF
 Usage: ./run.sh [OPTIONS]
 
 Options:
-  --logs, -l        Stream app logcat after launching
-  --clean, -c       Clean build before assembling
-  --avd <name>      Specify an Android Virtual Device (AVD) to launch if none is running
-  --help, -h        Show this help message
+  --logs, -l            Stream app logcat after launching
+  --clean, -c           Clean build before assembling
+  --reset-display, -r   Reset emulator display size and density to physical defaults
+  --avd <name>          Specify an Android Virtual Device (AVD) to launch if none is running
+  --help, -h            Show this help message
 
 Examples:
   ./run.sh                  Build, install, and launch on connected emulator or device
   ./run.sh --logs           Build, launch, and follow logcat output
   ./run.sh --clean --logs   Clean build and run with logs
+  ./run.sh --reset-display  Reset emulator resolution/DPI and run
 EOF
 }
 
@@ -41,6 +44,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --clean|-c)
             DO_CLEAN=1
+            shift
+            ;;
+        --reset-display|-r)
+            RESET_DISPLAY=1
             shift
             ;;
         --avd)
@@ -132,23 +139,37 @@ else
     echo "✅ Connected device detected: $ACTIVE_DEVICE"
 fi
 
-# 3. Clean if requested
+# 3. Check for display overrides / reset if requested
+OVERRIDE_SIZE=$(adb shell wm size 2>/dev/null | grep -i "Override" || true)
+OVERRIDE_DENSITY=$(adb shell wm density 2>/dev/null | grep -i "Override" || true)
+
+if [ "$RESET_DISPLAY" -eq 1 ] || [ -n "$OVERRIDE_SIZE" ] || [ -n "$OVERRIDE_DENSITY" ]; then
+    if [ -n "$OVERRIDE_SIZE" ] || [ -n "$OVERRIDE_DENSITY" ]; then
+        echo "⚠️  Detected display override ($OVERRIDE_SIZE $OVERRIDE_DENSITY)."
+    fi
+    echo "🖥️  Resetting display size and density to physical defaults..."
+    adb shell wm size reset
+    adb shell wm density reset
+    echo "✅ Display restored: $(adb shell wm size | tr -d '\r') @ $(adb shell wm density | tr -d '\r')"
+fi
+
+# 4. Clean if requested
 if [ "$DO_CLEAN" -eq 1 ]; then
     echo "🧹 Cleaning previous build artifacts..."
     ./gradlew clean
 fi
 
-# 4. Build and install debug APK
+# 5. Build and install debug APK
 echo "📦 Building and installing Findex debug APK (:app:installDebug)..."
 ./gradlew :app:installDebug
 
-# 5. Launch the MainActivity
+# 6. Launch the MainActivity
 echo "⚡ Launching $PACKAGE_NAME..."
 adb shell am start -n "$PACKAGE_NAME/$ACTIVITY_NAME" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
 
 echo "🎉 Findex launched successfully on device!"
 
-# 6. Stream logcat if requested
+# 7. Stream logcat if requested
 if [ "$LOGS" -eq 1 ]; then
     echo "📋 Streaming logs for $PACKAGE_NAME (Ctrl+C to stop)..."
     sleep 1
