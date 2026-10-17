@@ -979,7 +979,7 @@ fun GenericPreviewCard(
 
 // endregion
 
-private fun formatDuration(durationMs: Long): String {
+internal fun formatDuration(durationMs: Long): String {
     val totalSeconds = (durationMs / 1000).toInt()
     val minutes = totalSeconds / 60
     val seconds = totalSeconds % 60

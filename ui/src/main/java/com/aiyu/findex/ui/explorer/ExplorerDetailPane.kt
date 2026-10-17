@@ -1,9 +1,11 @@
 package com.aiyu.findex.ui.explorer
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +16,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,54 +24,45 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.InsertDriveFile
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
-import androidx.compose.material.icons.rounded.Android
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.ContentCut
 import androidx.compose.material.icons.rounded.CreateNewFolder
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.Description
 import androidx.compose.material.icons.rounded.DriveFileRenameOutline
-import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.FolderZip
-import androidx.compose.material.icons.rounded.MusicNote
-import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.Numbers
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Unarchive
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
-import com.aiyu.findex.core.model.FileCategory
 import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.ui.LocalSnackbarHostState
 import com.aiyu.findex.ui.R
@@ -82,10 +74,9 @@ import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.theme.tone
 import com.aiyu.findex.ui.util.formatDate
 import com.aiyu.findex.ui.util.formatSize
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.Locale
 
 /** Width of the list pane when the explorer shows list-detail (MD3 canonical layout for file browsers). */
 val ExplorerListPaneWidth = 390.dp
@@ -110,12 +101,13 @@ class DetailActions(
     val onExtract: () -> Unit,
     val onDelete: () -> Unit,
     val onClose: () -> Unit,
-    val onNewFolder: (() -> Unit)? = null
+    val onNewFolder: (() -> Unit)? = null,
+    val onOpenFolder: ((String) -> Unit)? = null
 )
 
 /**
- * Expanded-width detail pane: large responsive preview, metadata, and expressive actions.
- * Empty state displays folder information until a file is focused.
+ * Expanded-width detail pane: modern responsive inspector with rich hero previews,
+ * metadata property cards, on-demand checksums, and expressive action bar.
  */
 @Composable
 fun ExplorerDetailPane(
@@ -130,6 +122,7 @@ fun ExplorerDetailPane(
     Surface(
         shape = MaterialTheme.shapes.extraLarge,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f)),
         modifier = modifier
     ) {
         AnimatedContent(
@@ -161,10 +154,10 @@ private fun EmptyDetail(folderName: String, count: Int, onNewFolder: (() -> Unit
             shape = CategoryShape,
             container = MaterialTheme.colorScheme.primaryContainer,
             content = MaterialTheme.colorScheme.onPrimaryContainer,
-            size = 96.dp,
-            iconSize = 44.dp
+            size = 88.dp,
+            iconSize = 40.dp
         )
-        Spacer(Modifier.height(Dimens.xl))
+        Spacer(Modifier.height(Dimens.lg))
         Text(
             text = folderName,
             style = MaterialTheme.typography.titleLargeEmphasized,
@@ -179,12 +172,18 @@ private fun EmptyDetail(folderName: String, count: Int, onNewFolder: (() -> Unit
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(Modifier.height(Dimens.md))
-        Text(
-            text = stringResource(R.string.detail_empty_hint),
-            style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        Surface(
+            shape = MaterialTheme.shapes.medium,
+            color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.6f)
+        ) {
+            Text(
+                text = stringResource(R.string.detail_empty_hint),
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = Dimens.lg, vertical = Dimens.sm)
+            )
+        }
         if (onNewFolder != null) {
             Spacer(Modifier.height(Dimens.xl))
             FilledTonalButton(onClick = onNewFolder) {
@@ -214,14 +213,26 @@ private fun ItemDetail(
     val context = LocalContext.current
     val snackbar = LocalSnackbarHostState.current
     val scope = rememberCoroutineScope()
+    val file = remember(item.path) { File(item.path) }
+
+    // Media metadata extraction
+    val imageMeta by produceState<ImageMeta?>(null, item.path) {
+        if (isImg) value = FileInspector.inspectImage(file)
+    }
+    val videoMeta by produceState<VideoMeta?>(null, item.path) {
+        if (isVid) value = FileInspector.inspectVideo(file)
+    }
+    val audioMeta by produceState<AudioMeta?>(null, item.path) {
+        if (isAud) value = FileInspector.inspectAudio(file)
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(Dimens.xl)
+            .padding(horizontal = Dimens.xl, vertical = Dimens.lg)
     ) {
-        // Top header row: Category badge + dismiss
+        // 1. Top Header Row: Category Badge + Dismiss/Share Actions
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -229,7 +240,7 @@ private fun ItemDetail(
         ) {
             Surface(
                 shape = MaterialTheme.shapes.small,
-                color = categoryTone?.container ?: MaterialTheme.colorScheme.surfaceContainerHigh
+                color = categoryTone?.container ?: MaterialTheme.colorScheme.secondaryContainer
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -239,13 +250,18 @@ private fun ItemDetail(
                         category?.icon ?: Icons.AutoMirrored.Rounded.InsertDriveFile,
                         contentDescription = null,
                         modifier = Modifier.size(16.dp),
-                        tint = categoryTone?.onContainer ?: MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = categoryTone?.onContainer ?: MaterialTheme.colorScheme.onSecondaryContainer
                     )
                     Spacer(Modifier.width(Dimens.xs))
+                    val categoryLabel = if (item.isDirectory) {
+                        stringResource(R.string.details_type).uppercase()
+                    } else {
+                        category?.name ?: ext.uppercase().ifEmpty { stringResource(R.string.preview_file) }
+                    }
                     Text(
-                        text = if (item.isDirectory) stringResource(R.string.details_type).uppercase() else ext.uppercase().ifEmpty { stringResource(R.string.preview_file) },
+                        text = categoryLabel,
                         style = MaterialTheme.typography.labelSmall,
-                        color = categoryTone?.onContainer ?: MaterialTheme.colorScheme.onSurfaceVariant
+                        color = categoryTone?.onContainer ?: MaterialTheme.colorScheme.onSecondaryContainer
                     )
                 }
             }
@@ -262,262 +278,46 @@ private fun ItemDetail(
 
         Spacer(Modifier.height(Dimens.md))
 
-        // Hero Preview section
+        // 2. Hero Preview Section
         when {
-            isImg -> {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 220.dp, max = 360.dp)
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-                        .clickable(onClick = actions.onOpen)
-                ) {
-                    AsyncImage(
-                        model = File(item.path),
-                        contentDescription = item.name,
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(Dimens.xs)
-                    )
-                    Surface(
-                        shape = MaterialTheme.shapes.small,
-                        color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f),
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(Dimens.sm)
-                    ) {
-                        Text(
-                            text = formatSize(item.size),
-                            style = MaterialTheme.typography.labelSmall,
-                            modifier = Modifier.padding(horizontal = Dimens.sm, vertical = Dimens.xs)
-                        )
-                    }
-                }
-            }
-            isVid -> {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 220.dp, max = 320.dp)
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-                        .clickable(onClick = actions.onOpen)
-                ) {
-                    AsyncImage(
-                        model = File(item.path),
-                        contentDescription = item.name,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.35f))
-                    )
-                    FilledIconButton(
-                        onClick = actions.onOpen,
-                        modifier = Modifier.size(56.dp),
-                        colors = IconButtonDefaults.filledIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                        )
-                    ) {
-                        Icon(
-                            Icons.Rounded.PlayArrow,
-                            contentDescription = stringResource(R.string.preview_play_video),
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
-                }
-            }
-            isAud -> {
-                val tone = categoryTone ?: FileCategory.AUDIO.tone
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 180.dp, max = 220.dp)
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .background(tone.container)
-                        .clickable(onClick = actions.onOpen)
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        ShapeIcon(
-                            icon = Icons.Rounded.MusicNote,
-                            shape = MaterialShapes.Cookie9Sided,
-                            container = tone.accent,
-                            content = tone.onContainer,
-                            size = 64.dp,
-                            iconSize = 32.dp
-                        )
-                        Spacer(Modifier.height(Dimens.md))
-                        FilledTonalButton(
-                            onClick = actions.onOpen,
-                            colors = ButtonDefaults.filledTonalButtonColors(
-                                containerColor = tone.accent,
-                                contentColor = tone.onContainer
-                            )
-                        ) {
-                            Icon(Icons.Rounded.PlayArrow, null, modifier = Modifier.size(18.dp))
-                            Spacer(Modifier.width(Dimens.xs))
-                            Text(stringResource(R.string.preview_play_audio))
-                        }
-                    }
-                }
-            }
-            isTxt -> {
-                val textSnippet by produceState<String?>(null, item.path) {
-                    value = withContext(Dispatchers.IO) {
-                        try {
-                            val f = File(item.path)
-                            if (f.exists() && f.length() in 1..(10 * 1024 * 1024)) {
-                                f.bufferedReader().use { reader ->
-                                    val buf = CharArray(2048)
-                                    val n = reader.read(buf)
-                                    if (n > 0) String(buf, 0, n) else ""
-                                }
-                            } else null
-                        } catch (_: Exception) {
-                            null
-                        }
-                    }
-                }
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 180.dp, max = 280.dp)
-                        .clip(MaterialTheme.shapes.large)
-                        .background(MaterialTheme.colorScheme.surfaceContainer)
-                        .padding(Dimens.md)
-                ) {
-                    val snippet = textSnippet
-                    if (snippet == null) {
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            ShapeIcon(
-                                icon = Icons.Rounded.Description,
-                                shape = MaterialShapes.Cookie6Sided,
-                                container = MaterialTheme.colorScheme.secondaryContainer,
-                                content = MaterialTheme.colorScheme.onSecondaryContainer,
-                                size = 56.dp,
-                                iconSize = 28.dp
-                            )
-                        }
-                    } else if (snippet.isEmpty()) {
-                        Text(
-                            text = stringResource(R.string.preview_empty_file),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    } else {
-                        Text(
-                            text = snippet,
-                            style = TextStyle(
-                                fontFamily = FontFamily.Monospace,
-                                fontSize = 12.sp,
-                                lineHeight = 16.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            ),
-                            maxLines = 14,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                }
-            }
-            item.isArchive -> {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 180.dp, max = 220.dp)
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        ShapeIcon(
-                            icon = Icons.Rounded.FolderZip,
-                            shape = MaterialShapes.Cookie9Sided,
-                            container = MaterialTheme.colorScheme.tertiaryContainer,
-                            content = MaterialTheme.colorScheme.onTertiaryContainer,
-                            size = 72.dp,
-                            iconSize = 36.dp
-                        )
-                    }
-                }
-            }
-            item.isDirectory -> {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 160.dp, max = 200.dp)
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        ShapeIcon(
-                            icon = Icons.Rounded.Folder,
-                            shape = MaterialShapes.Square,
-                            container = MaterialTheme.colorScheme.primaryContainer,
-                            content = MaterialTheme.colorScheme.onPrimaryContainer,
-                            size = 64.dp,
-                            iconSize = 32.dp
-                        )
-                    }
-                }
-            }
-            ext == "apk" -> {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 160.dp, max = 200.dp)
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                ) {
-                    ShapeIcon(
-                        icon = Icons.Rounded.Android,
-                        shape = MaterialShapes.SoftBurst,
-                        container = MaterialTheme.colorScheme.primaryContainer,
-                        content = MaterialTheme.colorScheme.onPrimaryContainer,
-                        size = 64.dp,
-                        iconSize = 32.dp
-                    )
-                }
-            }
-            else -> {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 160.dp, max = 200.dp)
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                ) {
-                    ShapeIcon(
-                        icon = Icons.AutoMirrored.Rounded.InsertDriveFile,
-                        shape = MaterialShapes.Square,
-                        container = MaterialTheme.colorScheme.surfaceContainerHighest,
-                        content = MaterialTheme.colorScheme.onSurfaceVariant,
-                        size = 64.dp,
-                        iconSize = 32.dp
-                    )
-                }
-            }
+            isImg -> ImagePreviewCard(
+                item = item,
+                onOpenExternal = actions.onOpen
+            )
+            isVid -> VideoPreviewCard(
+                item = item,
+                onPlay = actions.onOpen
+            )
+            isAud -> AudioPreviewCard(
+                item = item,
+                onOpenExternal = actions.onOpen
+            )
+            isTxt -> TextPreviewCard(
+                item = item,
+                onOpenExternal = actions.onOpen
+            )
+            item.isArchive -> ArchivePreviewCard(
+                item = item,
+                onExtract = actions.onExtract
+            )
+            item.isDirectory -> FolderPreviewCard(
+                item = item,
+                details = details,
+                onOpenFolder = { actions.onOpenFolder?.invoke(item.path) ?: actions.onOpen() }
+            )
+            ext == "apk" -> ApkPreviewCard(
+                item = item,
+                onInstall = actions.onOpen
+            )
+            else -> GenericPreviewCard(
+                item = item,
+                onOpen = actions.onOpen
+            )
         }
 
         Spacer(Modifier.height(Dimens.lg))
 
-        // Title & metadata chips
+        // 3. File Identity Section
         Text(
             text = item.name,
             style = MaterialTheme.typography.titleLargeEmphasized,
@@ -525,15 +325,22 @@ private fun ItemDetail(
             overflow = TextOverflow.Ellipsis
         )
         Spacer(Modifier.height(Dimens.xs))
-        Text(
-            text = formatSize(item.size) + " · " + formatDate(item.lastModified),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = formatSize(item.size),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Text(
+                text = " · ${formatDate(item.lastModified)}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
 
         Spacer(Modifier.height(Dimens.lg))
 
-        // Action Buttons Row
+        // 4. Action Buttons Section
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(Dimens.sm)
@@ -571,7 +378,7 @@ private fun ItemDetail(
 
         Spacer(Modifier.height(Dimens.sm))
 
-        // Secondary Icon Actions Row
+        // 5. Secondary Quick Actions Toolbar
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -601,67 +408,37 @@ private fun ItemDetail(
 
         Spacer(Modifier.height(Dimens.xl))
 
-        // Properties Card
+        // 6. Sectioned Information Cards
+        // Card A: Properties & Technical Specs
         Surface(
             shape = MaterialTheme.shapes.large,
             color = MaterialTheme.colorScheme.surfaceContainer,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(Modifier.padding(Dimens.lg)) {
-                // Location row with copy button
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(Modifier.weight(1f)) {
-                        Text(
-                            stringResource(R.string.details_path),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        Spacer(Modifier.height(Dimens.xxs))
-                        Text(
-                            item.path,
-                            style = MaterialTheme.typography.bodyMedium,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                    IconButton(
-                        onClick = {
-                            val cm = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager
-                            cm?.setPrimaryClip(android.content.ClipData.newPlainText("path", item.path))
-                            scope.launch {
-                                snackbar.showSnackbar(context.getString(R.string.path_copied))
-                            }
-                        }
-                    ) {
-                        Icon(
-                            Icons.Rounded.ContentCopy,
-                            contentDescription = stringResource(R.string.action_copy_path),
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                }
-
-                HorizontalDivider(
-                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
-                    modifier = Modifier.padding(vertical = Dimens.md)
+                Text(
+                    text = stringResource(R.string.details_overview),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.primary
                 )
+                Spacer(Modifier.height(Dimens.md))
 
-                // Property grid
+                // Row 1: Size & Exact Bytes
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    val total = details?.totalBytes ?: item.size
                     DetailProp(
                         label = stringResource(R.string.details_size),
-                        value = formatSize(details?.totalBytes ?: item.size),
+                        value = "${formatSize(total)} (${String.format(Locale.ROOT, "%,d", total)} B)",
                         modifier = Modifier.weight(1f)
                     )
                     DetailProp(
                         label = stringResource(R.string.details_type),
-                        value = item.mimeType ?: item.extension.uppercase().ifEmpty { "-" },
+                        value = item.mimeType ?: ext.uppercase().ifEmpty { "-" },
                         modifier = Modifier.weight(1f)
                     )
                 }
+
+                // Row 2: Modified date & Media Specs (Dimensions / Duration / Counts)
                 Spacer(Modifier.height(Dimens.md))
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     DetailProp(
@@ -669,23 +446,193 @@ private fun ItemDetail(
                         value = formatDate(item.lastModified),
                         modifier = Modifier.weight(1f)
                     )
-                    if (item.isDirectory) {
-                        val d = details
-                        if (d != null) {
+
+                    when {
+                        imageMeta != null -> {
+                            val im = imageMeta!!
                             DetailProp(
-                                label = stringResource(R.string.details_contains),
-                                value = pluralStringResource(R.plurals.file_count, d.fileCount, d.fileCount) + ", " +
-                                    pluralStringResource(R.plurals.folder_count, d.folderCount, d.folderCount),
+                                label = stringResource(R.string.details_dimensions),
+                                value = "${im.width} × ${im.height} (${String.format(Locale.ROOT, "%.1f MP", im.megapixels)})",
                                 modifier = Modifier.weight(1f)
                             )
-                        } else {
-                            Spacer(Modifier.weight(1f))
                         }
-                    } else {
-                        Spacer(Modifier.weight(1f))
+                        videoMeta != null -> {
+                            val vm = videoMeta!!
+                            val dur = formatDuration(vm.durationMs)
+                            val res = if (vm.width > 0 && vm.height > 0) " · ${vm.width}×${vm.height}" else ""
+                            DetailProp(
+                                label = stringResource(R.string.details_duration),
+                                value = "$dur$res",
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                        audioMeta != null -> {
+                            val am = audioMeta!!
+                            DetailProp(
+                                label = stringResource(R.string.details_duration),
+                                value = formatDuration(am.durationMs),
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                        item.isDirectory -> {
+                            val d = details
+                            if (d != null) {
+                                DetailProp(
+                                    label = stringResource(R.string.details_contains),
+                                    value = pluralStringResource(R.plurals.file_count, d.fileCount, d.fileCount) + ", " +
+                                        pluralStringResource(R.plurals.folder_count, d.folderCount, d.folderCount),
+                                    modifier = Modifier.weight(1f)
+                                )
+                            } else {
+                                Spacer(Modifier.weight(1f))
+                            }
+                        }
+                        else -> Spacer(Modifier.weight(1f))
                     }
                 }
             }
+        }
+
+        Spacer(Modifier.height(Dimens.md))
+
+        // Card B: Location Card with Copy Button
+        Surface(
+            shape = MaterialTheme.shapes.large,
+            color = MaterialTheme.colorScheme.surfaceContainer,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(Dimens.lg)
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        stringResource(R.string.details_path),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(Modifier.height(Dimens.xxs))
+                    Text(
+                        item.path,
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                IconButton(
+                    onClick = {
+                        val cm = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager
+                        cm?.setPrimaryClip(android.content.ClipData.newPlainText("path", item.path))
+                        scope.launch {
+                            snackbar.showSnackbar(context.getString(R.string.path_copied))
+                        }
+                    }
+                ) {
+                    Icon(
+                        Icons.Rounded.ContentCopy,
+                        contentDescription = stringResource(R.string.action_copy_path),
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
+        }
+
+        if (!item.isDirectory) {
+            Spacer(Modifier.height(Dimens.md))
+
+            // Card C: On-Demand Checksums (MD5 & SHA-256)
+            var checksums by remember(item.path) { mutableStateOf<FileChecksums?>(null) }
+            var isCalculating by remember(item.path) { mutableStateOf(false) }
+
+            Surface(
+                shape = MaterialTheme.shapes.large,
+                color = MaterialTheme.colorScheme.surfaceContainer,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(Modifier.padding(Dimens.lg)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                Icons.Rounded.Numbers,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp),
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(Modifier.width(Dimens.xs))
+                            Text(
+                                text = stringResource(R.string.details_checksums),
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        if (checksums == null) {
+                            if (isCalculating) {
+                                CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                            } else {
+                                FilledTonalButton(
+                                    onClick = {
+                                        isCalculating = true
+                                        scope.launch {
+                                            checksums = FileInspector.calculateChecksums(file)
+                                            isCalculating = false
+                                        }
+                                    },
+                                    contentPadding = ButtonDefaults.TextButtonContentPadding
+                                ) {
+                                    Text(stringResource(R.string.details_calculate_hash), style = MaterialTheme.typography.labelSmall)
+                                }
+                            }
+                        }
+                    }
+
+                    checksums?.let { chk ->
+                        Spacer(Modifier.height(Dimens.md))
+                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                        Spacer(Modifier.height(Dimens.sm))
+
+                        HashRow("MD5", chk.md5) {
+                            val cm = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager
+                            cm?.setPrimaryClip(android.content.ClipData.newPlainText("MD5", chk.md5))
+                            scope.launch { snackbar.showSnackbar(context.getString(R.string.details_copied_hash)) }
+                        }
+
+                        Spacer(Modifier.height(Dimens.xs))
+
+                        HashRow("SHA-256", chk.sha256) {
+                            val cm = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager
+                            cm?.setPrimaryClip(android.content.ClipData.newPlainText("SHA-256", chk.sha256))
+                            scope.launch { snackbar.showSnackbar(context.getString(R.string.details_copied_hash)) }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HashRow(algorithm: String, hash: String, onCopy: () -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onCopy)
+            .padding(vertical = Dimens.xs)
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(algorithm, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.outline)
+            Text(hash, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        }
+        IconButton(onClick = onCopy, modifier = Modifier.size(28.dp)) {
+            Icon(Icons.Rounded.ContentCopy, contentDescription = "Copy $algorithm", modifier = Modifier.size(16.dp))
         }
     }
 }
