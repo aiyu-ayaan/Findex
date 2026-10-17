@@ -26,10 +26,10 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] TODO restructure, CLAUDE.md conventions
 
 ### M1 — Design tokens
-- [ ] Full light/dark schemes incl. surface container ladder (seed teal `#0D9488`)
-- [ ] Expressive shapes + `MotionScheme.expressive()`
-- [ ] Full type scale with emphasized roles
-- [ ] Spacing tokens (`Dimens`) and harmonized category tones
+- [x] Full light/dark schemes incl. surface container ladder (seed teal `#0D9488`)
+- [x] Expressive shapes + `MotionScheme.expressive()`
+- [x] Full type scale with emphasized roles
+- [x] Spacing tokens (`Dimens`) and category tones (`FileCategory.tone`)
 
 ### M2 — Core engine
 - [ ] File listing with sort + hidden-file filter

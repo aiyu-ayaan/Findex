@@ -1,58 +1,86 @@
 package com.aiyu.findex.ui.theme
 
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-// Expressive M3 Palette
-val PrimaryLight = Color(0xFF006492)
-val OnPrimaryLight = Color(0xFFFFFFFF)
-val PrimaryContainerLight = Color(0xFFC8E6FF)
-val OnPrimaryContainerLight = Color(0xFF001E2F)
+// Generated with material-color-utilities (SchemeTonalSpot), seed #0D9488, tertiary hue from #EA580C.
+// Used when dynamic color is off or unavailable (< Android 12).
 
-val SecondaryLight = Color(0xFF50606E)
-val OnSecondaryLight = Color(0xFFFFFFFF)
-val SecondaryContainerLight = Color(0xFFD3E4F5)
-val OnSecondaryContainerLight = Color(0xFF0C1D29)
+val FindexLightColorScheme = lightColorScheme(
+    primary = Color(0xFF1E6A62),
+    onPrimary = Color(0xFFE2FFF9),
+    primaryContainer = Color(0xFFA9F0E5),
+    onPrimaryContainer = Color(0xFF065C54),
+    inversePrimary = Color(0xFFB1F9EE),
+    secondary = Color(0xFF4B6460),
+    onSecondary = Color(0xFFE3FFF9),
+    secondaryContainer = Color(0xFFCCE8E3),
+    onSecondaryContainer = Color(0xFF3D5653),
+    tertiary = Color(0xFF9B4622),
+    onTertiary = Color(0xFFFFF7F5),
+    tertiaryContainer = Color(0xFFF68C62),
+    onTertiaryContainer = Color(0xFF4F1700),
+    background = Color(0xFFF6FAF8),
+    onBackground = Color(0xFF2A3433),
+    surface = Color(0xFFF6FAF8),
+    onSurface = Color(0xFF2A3433),
+    surfaceVariant = Color(0xFFD9E5E2),
+    onSurfaceVariant = Color(0xFF56615F),
+    surfaceTint = Color(0xFF1E6A62),
+    inverseSurface = Color(0xFF0A0F0E),
+    inverseOnSurface = Color(0xFF999E9C),
+    error = Color(0xFFA83836),
+    onError = Color(0xFFFFF7F6),
+    errorContainer = Color(0xFFFA746F),
+    onErrorContainer = Color(0xFF6E0A12),
+    outline = Color(0xFF727D7B),
+    outlineVariant = Color(0xFFA9B4B1),
+    scrim = Color(0xFF000000),
+    surfaceBright = Color(0xFFF6FAF8),
+    surfaceContainer = Color(0xFFE7F0ED),
+    surfaceContainerHigh = Color(0xFFE1EAE7),
+    surfaceContainerHighest = Color(0xFFD9E5E2),
+    surfaceContainerLow = Color(0xFFEEF5F3),
+    surfaceContainerLowest = Color(0xFFFFFFFF),
+    surfaceDim = Color(0xFFD1DCD9),
+)
 
-val TertiaryLight = Color(0xFF65587B)
-val OnTertiaryLight = Color(0xFFFFFFFF)
-val TertiaryContainerLight = Color(0xFFEBDDFB)
-val OnTertiaryContainerLight = Color(0xFF201634)
-
-val BackgroundLight = Color(0xFFFCFCFF)
-val OnBackgroundLight = Color(0xFF191C1E)
-val SurfaceLight = Color(0xFFFCFCFF)
-val OnSurfaceLight = Color(0xFF191C1E)
-val SurfaceVariantLight = Color(0xFFDEE3EA)
-val OnSurfaceVariantLight = Color(0xFF41474D)
-
-// Dark Theme
-val PrimaryDark = Color(0xFF88CEFF)
-val OnPrimaryDark = Color(0xFF00344F)
-val PrimaryContainerDark = Color(0xFF004B6F)
-val OnPrimaryContainerDark = Color(0xFFC8E6FF)
-
-val SecondaryDark = Color(0xFFB7C8D8)
-val OnSecondaryDark = Color(0xFF22323F)
-val SecondaryContainerDark = Color(0xFF384956)
-val OnSecondaryContainerDark = Color(0xFFD3E4F5)
-
-val TertiaryDark = Color(0xFFCFBCDE)
-val OnTertiaryDark = Color(0xFF362B4A)
-val TertiaryContainerDark = Color(0xFF4D4162)
-val OnTertiaryContainerDark = Color(0xFFEBDDFB)
-
-val BackgroundDark = Color(0xFF111416)
-val OnBackgroundDark = Color(0xFFE1E2E5)
-val SurfaceDark = Color(0xFF111416)
-val OnSurfaceDark = Color(0xFFE1E2E5)
-val SurfaceVariantDark = Color(0xFF41474D)
-val OnSurfaceVariantDark = Color(0xFFC1C7CE)
-
-// Functional Category Accents
-val AccentPhotos = Color(0xFF00897B)
-val AccentVideos = Color(0xFFE65100)
-val AccentAudio = Color(0xFF8E24AA)
-val AccentDocuments = Color(0xFF1E88E5)
-val AccentDownloads = Color(0xFF43A047)
-val AccentArchives = Color(0xFFFB8C00)
-val AccentClean = Color(0xFF00ACC1)
+val FindexDarkColorScheme = darkColorScheme(
+    primary = Color(0xFF9CD1C8),
+    onPrimary = Color(0xFF0F4842),
+    primaryContainer = Color(0xFF275B54),
+    onPrimaryContainer = Color(0xFFB8EEE5),
+    inversePrimary = Color(0xFF346861),
+    secondary = Color(0xFFB1CCC7),
+    onSecondary = Color(0xFF2C4541),
+    secondaryContainer = Color(0xFF27403C),
+    onSecondaryContainer = Color(0xFFA9C5C0),
+    tertiary = Color(0xFFFF9D76),
+    onTertiary = Color(0xFF611F00),
+    tertiaryContainer = Color(0xFFF68C62),
+    onTertiaryContainer = Color(0xFF4F1700),
+    background = Color(0xFF0A0F0E),
+    onBackground = Color(0xFFDCE8E5),
+    surface = Color(0xFF0A0F0E),
+    onSurface = Color(0xFFDCE8E5),
+    surfaceVariant = Color(0xFF1E2826),
+    onSurfaceVariant = Color(0xFFA2ADAB),
+    surfaceTint = Color(0xFF9CD1C8),
+    inverseSurface = Color(0xFFF6FAF8),
+    inverseOnSurface = Color(0xFF515655),
+    error = Color(0xFFFA746F),
+    onError = Color(0xFF490006),
+    errorContainer = Color(0xFF871F21),
+    onErrorContainer = Color(0xFFFF9993),
+    outline = Color(0xFF6D7875),
+    outlineVariant = Color(0xFF3F4A48),
+    scrim = Color(0xFF000000),
+    surfaceBright = Color(0xFF242E2C),
+    surfaceContainer = Color(0xFF131B1A),
+    surfaceContainerHigh = Color(0xFF192120),
+    surfaceContainerHighest = Color(0xFF1E2826),
+    surfaceContainerLow = Color(0xFF0E1514),
+    surfaceContainerLowest = Color(0xFF000000),
+    surfaceDim = Color(0xFF0A0F0E),
+)

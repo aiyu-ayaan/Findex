@@ -29,34 +29,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.aiyu.findex.core.model.FileCategory
 import com.aiyu.findex.ui.R
-import com.aiyu.findex.ui.theme.AccentArchives
-import com.aiyu.findex.ui.theme.AccentAudio
-import com.aiyu.findex.ui.theme.AccentDocuments
-import com.aiyu.findex.ui.theme.AccentDownloads
-import com.aiyu.findex.ui.theme.AccentPhotos
-import com.aiyu.findex.ui.theme.AccentVideos
+import com.aiyu.findex.ui.theme.tone
 
 data class CategoryItem(
     val category: FileCategory,
     val titleRes: Int,
-    val icon: ImageVector,
-    val color: Color
+    val icon: ImageVector
 )
 
 val Categories = listOf(
-    CategoryItem(FileCategory.PHOTOS, R.string.category_photos, Icons.Rounded.Image, AccentPhotos),
-    CategoryItem(FileCategory.VIDEOS, R.string.category_videos, Icons.Rounded.VideoLibrary, AccentVideos),
-    CategoryItem(FileCategory.AUDIO, R.string.category_audio, Icons.Rounded.Audiotrack, AccentAudio),
-    CategoryItem(FileCategory.DOCUMENTS, R.string.category_documents, Icons.Rounded.Description, AccentDocuments),
-    CategoryItem(FileCategory.DOWNLOADS, R.string.category_downloads, Icons.Rounded.Download, AccentDownloads),
-    CategoryItem(FileCategory.ARCHIVES, R.string.category_archives, Icons.Rounded.FolderZip, AccentArchives),
+    CategoryItem(FileCategory.PHOTOS, R.string.category_photos, Icons.Rounded.Image),
+    CategoryItem(FileCategory.VIDEOS, R.string.category_videos, Icons.Rounded.VideoLibrary),
+    CategoryItem(FileCategory.AUDIO, R.string.category_audio, Icons.Rounded.Audiotrack),
+    CategoryItem(FileCategory.DOCUMENTS, R.string.category_documents, Icons.Rounded.Description),
+    CategoryItem(FileCategory.DOWNLOADS, R.string.category_downloads, Icons.Rounded.Download),
+    CategoryItem(FileCategory.ARCHIVES, R.string.category_archives, Icons.Rounded.FolderZip),
 )
 
 @Composable
@@ -111,13 +104,13 @@ fun CategoryTile(
                 modifier = Modifier
                     .size(46.dp)
                     .clip(CircleShape)
-                    .background(item.color.copy(alpha = 0.15f)),
+                    .background(item.category.tone.container),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = item.icon,
                     contentDescription = stringResource(item.titleRes),
-                    tint = item.color,
+                    tint = item.category.tone.onContainer,
                     modifier = Modifier.size(24.dp)
                 )
             }

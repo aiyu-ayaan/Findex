@@ -40,8 +40,8 @@ flat, tonal, icon-forward style with a teal primary and an orange action accent.
 ### Category tones
 
 Category icons need distinct hues that still follow the theme. Each category maps to a
-fixed hue that is **harmonized toward `primary`** at runtime and rendered as a
-container/on-container pair (light: tone 90/10, dark: tone 30/90). Color is never the only
+fixed hue rendered as a container/on-container tone pair (light: tone 90/30,
+dark: tone 30/90), generated with material-color-utilities and exposed as `FileCategory.tone`. Color is never the only
 signal: every tile also has its icon and label.
 
 | Category | Hue | Icon | Shape |
