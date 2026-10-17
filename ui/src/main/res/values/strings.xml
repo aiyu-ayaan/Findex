@@ -1,0 +1,90 @@
+<resources>
+    <!-- App & Branding -->
+    <string name="app_name">Findex</string>
+    <string name="app_tagline">Material 3 Expressive File Explorer</string>
+
+    <!-- Navigation Drawer -->
+    <string name="drawer_title">Findex</string>
+    <string name="drawer_subtitle">Files &amp; Cloud Storage</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_storage_graph">Storage Graph</string>
+    <string name="nav_storage_cleaner">Storage Cleaner</string>
+    <string name="nav_whatsapp_cleaner">WhatsApp Cleaner</string>
+    <string name="nav_archive_manager">Archive Manager</string>
+    <string name="nav_network_storage">Network Storage</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Tabs -->
+    <string name="tab_device">Device</string>
+    <string name="tab_network">Network</string>
+
+    <!-- Storage Drives -->
+    <string name="storage_internal">Internal Storage</string>
+    <string name="storage_sdcard">SD Card</string>
+    <string name="storage_network">Network Storage</string>
+    <string name="storage_usb">USB Drive</string>
+    <string name="storage_used_of">%1$s used of %2$s</string>
+    <string name="storage_free_space">%1$s free</string>
+    <string name="storage_scanning">Scanning storage…</string>
+    <string name="storage_no_network_drives">No network drives connected. Tap + to connect via SMB / WebDAV / FTP.</string>
+    <string name="storage_add_network">Add Network Drive</string>
+
+    <!-- File Categories -->
+    <string name="category_photos">Photos</string>
+    <string name="category_videos">Videos</string>
+    <string name="category_audio">Audio</string>
+    <string name="category_documents">Documents</string>
+    <string name="category_downloads">Downloads</string>
+    <string name="category_archives">Archives</string>
+    <string name="category_apks">APKs</string>
+
+    <!-- Quick Suggestions & Tools -->
+    <string name="section_suggestions">Quick Tools</string>
+    <string name="cleaner_title">Storage Cleaner</string>
+    <string name="cleaner_desc">Free up space by clearing junk and temporary cache</string>
+    <string name="whatsapp_cleaner_title">WhatsApp Cleaner</string>
+    <string name="whatsapp_cleaner_desc">Clean sent media, voice notes, stickers and backups</string>
+    <string name="storage_graph_title">Storage Analyzer</string>
+    <string name="storage_graph_desc">Visualize large files and folder space distribution</string>
+
+    <!-- File Actions -->
+    <string name="action_cut">Cut</string>
+    <string name="action_copy">Copy</string>
+    <string name="action_paste">Paste</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_rename">Rename</string>
+    <string name="action_details">Details</string>
+    <string name="action_compress">Compress</string>
+    <string name="action_extract">Extract</string>
+    <string name="action_share">Share</string>
+    <string name="action_select_all">Select All</string>
+    <string name="action_deselect_all">Deselect</string>
+    <string name="action_search">Search files</string>
+    <string name="action_clean">Clean Now</string>
+    <string name="action_new_folder">New Folder</string>
+    <string name="action_new_tab">New Tab</string>
+    <string name="action_close_tab">Close Tab</string>
+
+    <!-- Compression & Extraction -->
+    <string name="compress_dialog_title">Create Archive</string>
+    <string name="compress_format_zip">ZIP</string>
+    <string name="compress_format_7z">7-Zip (7z)</string>
+    <string name="compress_format_tar">TAR</string>
+    <string name="compress_password_hint">Password (optional)</string>
+    <string name="compress_button">Compress</string>
+    <string name="extract_dialog_title">Extract Archive</string>
+    <string name="extract_button">Extract Here</string>
+
+    <!-- Multitasking & Selection -->
+    <string name="selected_count">%1$d selected</string>
+    <string name="tabs_header">Tabs</string>
+
+    <!-- Notifications & Services -->
+    <string name="notification_channel_name">File Operations</string>
+    <string name="notification_channel_description">Active background file operations progress</string>
+    <string name="operation_in_progress">Operation in progress…</string>
+    <string name="operation_completed">Operation completed</string>
+    <string name="operation_failed">Operation failed</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+</resources>
