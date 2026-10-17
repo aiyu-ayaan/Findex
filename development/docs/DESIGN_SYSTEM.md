@@ -172,3 +172,19 @@ Every gesture has a button alternative (select all, per-row checkbox).
 - Icon buttons have `contentDescription`; decorative icons next to text use `null`.
 - Selection state exposed via `Modifier.toggleable` / `selected` semantics.
 - Dynamic text: rows wrap to two lines, no fixed heights on text containers.
+
+---
+
+## 10. Large-Screen & Tablet Design
+
+- **Navigation**:
+  - Modal push drawer for compact widths (< 600dp).
+  - Navigation Rail (`surfaceContainerLow`, 80dp) for medium widths (600dp–1200dp).
+  - Permanent Navigation Drawer (`surfaceContainerLow`, 280dp) for expanded widths (>= 1200dp).
+- **Two-Pane Explorer**:
+  - Activated when available content width is >= 720dp.
+  - List pane: `ExplorerListPaneWidth = 390.dp`, housing file list/grid with its own anchored FAB at bottom-end.
+  - Detail pane: `surfaceContainerLow` surface with 28dp corners, 16dp margins, and internal 24dp padding.
+  - Media previews: Photos use `ContentScale.Fit` with full width and `heightIn(min = 220.dp, max = 360.dp)`; videos feature a 56dp centered Play button with a scrim overlay; audio features `Cookie9Sided` shape icon with CategoryTone background; code/text files (< 10 MB) display a monospace syntax-like snippet of the first 2 KB.
+  - Expressive Action row: Primary full-width CTA (Open/Extract) paired with Share, followed by a secondary row of tonal action icon buttons and an error-container Delete button.
+

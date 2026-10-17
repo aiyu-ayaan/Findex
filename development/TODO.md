@@ -85,7 +85,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] Discord-style push drawer + modern menu icon
 - [x] Unified scalloped category shapes
 - [ ] Verify drag-to-select on a physical device
-- [ ] Large-screen (tablet) layout pass
+- [x] Large-screen (tablet) layout pass
 
 ---
 
@@ -105,4 +105,4 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [ ] Global search with index
 - [ ] Duplicate finder
 - [ ] Tab session persistence
-- [ ] Tablet two-pane explorer
+- [x] Tablet two-pane explorer

@@ -257,3 +257,42 @@ flowchart LR
 - Every entry path goes through `ArchiveCodecs.safeTarget` (zip-slip guard). Tar symlinks and hard links are skipped.
 - A failed or cancelled extract deletes the new destination folder, and a failed compress deletes the partial archive.
 - `uniqueTarget` keeps multi-part suffixes whole: `a (1).tar.gz`.
+
+---
+
+## 9. Adaptive Large-Screen & Tablet Architecture
+
+Findex dynamically adapts between compact phones, foldable devices, and expanded tablets:
+
+```mermaid
+flowchart TD
+    WindowWidth{"Window Width"}
+    WindowWidth -->|"< 600dp (Compact)"| CompactLayout["PushDrawer + Single Pane + Scaffold FAB"]
+    WindowWidth -->|"600dp - 1200dp (Medium)"| MediumLayout["NavigationRail + Responsive Gutters"]
+    WindowWidth -->|">= 1200dp (Expanded)"| ExpandedLayout["Permanent Drawer 280dp + Full Navigation"]
+
+    subgraph TwoPaneExplorer ["Two-Pane Explorer (content width >= 720dp)"]
+        ListPane["List Pane 390dp<br/>LazyList / LazyGrid<br/>Anchored FAB in list Box<br/>Selection Toolbar"]
+        DetailPane["ExplorerDetailPane<br/>Hero Media Preview Fit<br/>Live Text Monospace Snippet<br/>Expressive Action Row<br/>Properties Card + Copy Path"]
+        ListPane -->|"tap file: focus(path)"| DetailPane
+        DetailPane -->|"onOpen / onShare / onDelete"| Ops["Operations / External Intent"]
+    end
+
+    MediumLayout --> TwoPane{"Content width >= 720dp?"}
+    ExpandedLayout --> TwoPane
+    TwoPane -->|Yes| ListPane
+    TwoPane -->|Yes| DetailPane
+    TwoPane -->|No| SinglePane["Single Pane Explorer"]
+```
+
+### Architectural Highlights
+1. **Window-Size-Aware Navigation**:
+   - `< 600dp`: Push drawer (Discord-style off-canvas sheet).
+   - `600dp - 1200dp`: Persistent `NavigationRail` (`FindexNavRail`) saving horizontal space.
+   - `>= 1200dp`: Permanent full navigation drawer (`FindexDrawerSheet`).
+2. **Two-Pane List-Detail Layout**:
+   - Left pane (`ExplorerListPaneWidth = 390.dp`): List or Grid of items. The Floating Action Button is anchored to the bottom-end of this pane, completely avoiding collision with the detail view.
+   - Right pane (`ExplorerDetailPane`): Responsive preview surface with category-aware rich media (images with `ContentScale.Fit`, video frame with Play overlay, audio cards, and async live text snippets for code/text files), quick actions, and structured metadata properties with one-tap path copy.
+3. **Readable Gutters**:
+   - `readableGutter()` automatically centers content with standard margins on extra-wide screens up to `Dimens.contentMaxWidth = 840.dp`.
+
