@@ -46,6 +46,8 @@ import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.model.ThemeMode
 import com.aiyu.findex.ui.components.FindexDrawerSheet
 import com.aiyu.findex.ui.components.PushDrawer
+import com.aiyu.findex.ui.components.FindexNavRail
+import com.aiyu.findex.ui.components.windowWidth
 import com.aiyu.findex.ui.components.rememberPushDrawerState
 import com.aiyu.findex.ui.di.failureRes
 import com.aiyu.findex.ui.explorer.ExplorerScreen
@@ -141,16 +143,28 @@ private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -
         if (context.hasStorageAccess() && (onboardingDone || context.hasNotificationAccess())) HomeRoute else OnboardingRoute
     }
 
+    // MD3 navigation by window width: modal drawer < 600dp, rail < 1200dp, standard drawer beyond.
+    val width = windowWidth()
+    val showNav = backStackEntry?.destination?.hasRoute(OnboardingRoute::class) != true
+    val useRail = showNav && width >= 600.dp && width < 1200.dp
+    val permanentDrawer = showNav && width >= 1200.dp
+    val isCurrent: (Any) -> Boolean = { route -> backStackEntry?.destination?.hasRoute(route::class) == true }
+    val navigate: (Any) -> Unit = { route ->
+        scope.launch { drawerState.close() }
+        // Home is the root: go back to it instead of stacking another copy.
+        if (route == HomeRoute) navController.popBackStack(HomeRoute, inclusive = false)
+        else navController.navigate(route) { launchSingleTop = true; popUpTo<HomeRoute>() }
+    }
     PushDrawer(
         state = drawerState,
+        permanent = permanentDrawer,
+        rail = if (useRail) ({ FindexNavRail(onNavigate = navigate, tabCount = tabCount, isCurrent = isCurrent) }) else null,
         gesturesEnabled = onHome || drawerState.isOpen,
         drawerContent = {
             FindexDrawerSheet(
                 tabCount = tabCount,
-                onNavigate = { route ->
-                    scope.launch { drawerState.close() }
-                    if (route != HomeRoute) navController.navigate(route) { launchSingleTop = true }
-                }
+                isCurrent = isCurrent,
+                onNavigate = navigate
             )
         }
     ) {
@@ -173,7 +187,8 @@ private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -
             }
             composable<HomeRoute> {
                 HomeScreen(
-                    onOpenDrawer = { scope.launch { drawerState.open() } },
+                    // A permanent drawer or rail is always visible, so Home has no menu button then.
+                    onOpenDrawer = if (permanentDrawer || useRail) null else ({ scope.launch { drawerState.open() } }),
                     drawerProgress = { drawerState.fraction },
                     onNavigate = { navController.navigate(it) }
                 )

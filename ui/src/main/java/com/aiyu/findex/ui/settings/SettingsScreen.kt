@@ -52,6 +52,7 @@ import com.aiyu.findex.core.model.AppSettings
 import com.aiyu.findex.core.model.ThemeMode
 import com.aiyu.findex.core.settings.SettingsRepository
 import com.aiyu.findex.ui.R
+import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.components.SectionHeader
 import com.aiyu.findex.ui.components.groupedShape
 import com.aiyu.findex.ui.theme.Dimens
@@ -90,7 +91,7 @@ fun SettingsScreen(onBack: () -> Unit, viewModel: SettingsViewModel = hiltViewMo
     ) { padding ->
         LazyColumn(
             contentPadding = PaddingValues(
-                start = Dimens.gutter, end = Dimens.gutter,
+                start = readableGutter(), end = readableGutter(),
                 top = padding.calculateTopPadding(), bottom = padding.calculateBottomPadding() + Dimens.xxl
             ),
             verticalArrangement = Arrangement.spacedBy(Dimens.xxs)

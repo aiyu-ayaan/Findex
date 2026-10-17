@@ -68,6 +68,7 @@ import com.aiyu.findex.core.scanner.JunkType
 import com.aiyu.findex.core.scanner.ScanGroup
 import com.aiyu.findex.core.scanner.WhatsAppMediaType
 import com.aiyu.findex.ui.R
+import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.components.MorphingShapeIcon
 import com.aiyu.findex.ui.components.ShapeIcon
 import com.aiyu.findex.ui.components.groupedShape
@@ -203,7 +204,7 @@ private fun <T> CleanScaffold(
 
         LazyColumn(
             contentPadding = PaddingValues(
-                start = Dimens.gutter, end = Dimens.gutter,
+                start = readableGutter(), end = readableGutter(),
                 top = padding.calculateTopPadding() + Dimens.sm,
                 bottom = padding.calculateBottomPadding() + 120.dp
             ),

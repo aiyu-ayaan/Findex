@@ -14,6 +14,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -42,6 +43,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import kotlinx.coroutines.launch
+
+private val PermanentDrawerWidth = 300.dp
 
 internal enum class DrawerAnchor { Closed, Open }
 
@@ -80,8 +83,28 @@ fun PushDrawer(
     drawerContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     gesturesEnabled: Boolean = true,
+    permanent: Boolean = false,
+    rail: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
+    if (rail != null) {
+        // Medium/expanded windows: a navigation rail replaces the drawer (MD3 navigation by window size).
+        Row(modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)) {
+            rail()
+            ProvideContentWidth(Modifier.weight(1f).fillMaxHeight()) { content() }
+        }
+        return
+    }
+    if (permanent) {
+        // Expanded windows: the drawer is a fixed side panel and the content keeps its own surface.
+        Row(modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Box(Modifier.width(PermanentDrawerWidth).fillMaxHeight()) {
+                CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) { drawerContent() }
+            }
+            ProvideContentWidth(Modifier.weight(1f).fillMaxHeight()) { content() }
+        }
+        return
+    }
     val scope = rememberCoroutineScope()
     val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val cardShape = MaterialTheme.shapes.extraLarge

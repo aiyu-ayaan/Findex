@@ -56,6 +56,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aiyu.findex.core.model.FileCategory
 import com.aiyu.findex.ui.R
+import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.components.FileThumbnail
 import com.aiyu.findex.ui.components.SectionHeader
 import com.aiyu.findex.ui.components.ShapeIcon
@@ -103,7 +104,7 @@ fun AnalyzerScreen(
         }
         LazyColumn(
             contentPadding = PaddingValues(
-                start = Dimens.gutter, end = Dimens.gutter,
+                start = readableGutter(), end = readableGutter(),
                 top = padding.calculateTopPadding() + Dimens.sm,
                 bottom = padding.calculateBottomPadding() + Dimens.xxl
             ),

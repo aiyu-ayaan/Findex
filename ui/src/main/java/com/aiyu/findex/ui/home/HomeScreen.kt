@@ -88,6 +88,7 @@ import com.aiyu.findex.core.model.DriveType
 import com.aiyu.findex.core.model.FileCategory
 import com.aiyu.findex.core.model.StorageDrive
 import com.aiyu.findex.ui.R
+import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.components.FileThumbnail
 import com.aiyu.findex.ui.components.MorphingShapeIcon
 import com.aiyu.findex.ui.components.OperationBanner
@@ -113,7 +114,7 @@ import java.io.File
 
 @Composable
 fun HomeScreen(
-    onOpenDrawer: () -> Unit,
+    onOpenDrawer: (() -> Unit)?,
     onNavigate: (Any) -> Unit,
     modifier: Modifier = Modifier,
     drawerProgress: () -> Float = { 0f },
@@ -133,7 +134,7 @@ fun HomeScreen(
                 title = { Text(stringResource(R.string.app_name)) },
                 subtitle = { Text(stringResource(R.string.home_subtitle)) },
                 navigationIcon = {
-                    IconButton(onClick = onOpenDrawer) {
+                    if (onOpenDrawer != null) IconButton(onClick = onOpenDrawer) {
                         MenuIcon(drawerProgress, Modifier.semantics { contentDescription = context.getString(R.string.cd_open_drawer) })
                     }
                 },
@@ -149,7 +150,7 @@ fun HomeScreen(
         // No full-screen spinner: drives load in a few ms, and a spinner would only flash between splash and content.
         LazyColumn(
             contentPadding = PaddingValues(
-                start = Dimens.gutter, end = Dimens.gutter,
+                start = readableGutter(), end = readableGutter(),
                 top = innerPadding.calculateTopPadding() + Dimens.xs,
                 bottom = innerPadding.calculateBottomPadding() + Dimens.xxl
             ),

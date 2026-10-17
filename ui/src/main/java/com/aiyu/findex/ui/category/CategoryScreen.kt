@@ -50,6 +50,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.ui.R
+import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.components.ShapeIcon
 import com.aiyu.findex.ui.components.icon
 import com.aiyu.findex.ui.components.CategoryShape
@@ -130,7 +131,7 @@ fun CategoryScreen(
         }
     ) { padding ->
         val contentPadding = PaddingValues(
-            start = Dimens.gutter, end = Dimens.gutter,
+            start = readableGutter(), end = readableGutter(),
             top = padding.calculateTopPadding() + Dimens.sm,
             bottom = padding.calculateBottomPadding() + Dimens.xxl
         )

@@ -1,5 +1,9 @@
 package com.aiyu.findex.ui.components
 
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.NavigationRail
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -56,6 +60,7 @@ private val mainEntries = listOf(
 fun FindexDrawerSheet(
     onNavigate: (Any) -> Unit,
     tabCount: Int,
+    isCurrent: (Any) -> Boolean,
     modifier: Modifier = Modifier
 ) {
     // Plain column: PushDrawer already supplies the surface behind it.
@@ -91,7 +96,7 @@ fun FindexDrawerSheet(
                 NavigationDrawerItem(
                     icon = { Icon(entry.icon, contentDescription = null) },
                     label = { Text(stringResource(entry.titleRes)) },
-                    selected = entry.route == HomeRoute,
+                    selected = isCurrent(entry.route),
                     onClick = { onNavigate(entry.route) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
@@ -103,7 +108,7 @@ fun FindexDrawerSheet(
                 icon = { Icon(Icons.Rounded.Tab, contentDescription = null) },
                 label = { Text(stringResource(R.string.nav_tabs)) },
                 badge = { if (tabCount > 0) Text(tabCount.toString(), style = MaterialTheme.typography.labelLarge) },
-                selected = false,
+                selected = isCurrent(TabsRoute),
                 onClick = { onNavigate(TabsRoute) },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
             )
@@ -125,11 +130,63 @@ fun FindexDrawerSheet(
             NavigationDrawerItem(
                 icon = { Icon(Icons.Rounded.Settings, contentDescription = null) },
                 label = { Text(stringResource(R.string.nav_settings)) },
-                selected = false,
+                selected = isCurrent(SettingsRoute),
                 onClick = { onNavigate(SettingsRoute) },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
             )
             Spacer(Modifier.height(Dimens.lg))
+        }
+    }
+}
+
+private data class RailEntry(val labelRes: Int, val icon: ImageVector, val route: Any)
+
+private val railEntries = listOf(
+    RailEntry(R.string.nav_home, Icons.Rounded.Home, HomeRoute),
+    RailEntry(R.string.rail_graph, Icons.Rounded.PieChart, AnalyzerRoute),
+    RailEntry(R.string.rail_cleaner, Icons.Rounded.CleaningServices, CleanerRoute),
+    RailEntry(R.string.rail_whatsapp, Icons.Rounded.Forum, WhatsAppRoute),
+    RailEntry(R.string.rail_bin, Icons.Rounded.Delete, RecycleBinRoute),
+    RailEntry(R.string.nav_tabs, Icons.Rounded.Tab, TabsRoute),
+    RailEntry(R.string.nav_settings, Icons.Rounded.Settings, SettingsRoute),
+)
+
+/** Medium and expanded windows: the same destinations as the drawer, as an always-visible rail (MD3: 3–7 items). */
+@Composable
+fun FindexNavRail(
+    onNavigate: (Any) -> Unit,
+    tabCount: Int,
+    isCurrent: (Any) -> Boolean,
+    modifier: Modifier = Modifier
+) {
+    NavigationRail(
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        header = {
+            ShapeIcon(
+                icon = Icons.Rounded.Folder,
+                shape = MaterialShapes.Cookie9Sided,
+                container = MaterialTheme.colorScheme.primaryContainer,
+                content = MaterialTheme.colorScheme.onPrimaryContainer,
+                size = Dimens.xxxl,
+                iconSize = Dimens.xl,
+                modifier = Modifier.padding(vertical = Dimens.md)
+            )
+        },
+        modifier = modifier
+    ) {
+        railEntries.forEach { entry ->
+            NavigationRailItem(
+                selected = isCurrent(entry.route),
+                onClick = { onNavigate(entry.route) },
+                icon = {
+                    if (entry.route == TabsRoute && tabCount > 0) {
+                        BadgedBox(badge = { Badge { Text(tabCount.toString()) } }) { Icon(entry.icon, contentDescription = null) }
+                    } else {
+                        Icon(entry.icon, contentDescription = null)
+                    }
+                },
+                label = { Text(stringResource(entry.labelRes), maxLines = 1) }
+            )
         }
     }
 }
