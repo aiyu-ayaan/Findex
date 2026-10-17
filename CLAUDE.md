@@ -46,3 +46,20 @@ on one item and then click items individuall both will do the same  select proce
 - Always use `codegraph` to scan the code. 
 - For achitecture always or any changes make sure always add a achitecture diagram in docs.
 - This app targets the most efficient home automaction solution.
+
+## Working Docs (read before UI or architecture work)
+
+- `development/docs/MVP_PLAN.md` — MVP scope, milestones (M0–M8), key decisions, post-MVP list.
+- `development/docs/DESIGN_SYSTEM.md` — colors, shapes, motion, spacing, selection gestures. All UI must follow it.
+- `development/docs/ARCHITECTURE.md` — module + flow diagrams. Update the diagrams with every structural change.
+- `development/TODO.md` — tick items as milestones land.
+
+## Conventions
+
+- Compose only, `androidx.compose.material3` 1.5 alpha (Expressive APIs; opt-ins are set in Gradle).
+- Colors only through `MaterialTheme.colorScheme` roles; category colors through `CategoryTones`. No raw `Color(0x…)` in screens.
+- Spacing through `Dimens`; shapes through `MaterialTheme.shapes` / `MaterialShapes`.
+- Motion through `MaterialTheme.motionScheme` specs, never ad-hoc `tween` durations.
+- Long file work goes through `OperationManager` → `FileOperationForegroundService`. Never run copy/move/delete/zip on a ViewModel scope directly.
+- Commit at each milestone: `scope(Change) : Message`, e.g. `ui(Explorer) : Add drag-to-select`.
+- Build check: `./gradlew :app:assembleDebug`. Run on emulator: `./run.sh`.

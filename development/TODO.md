@@ -1,75 +1,93 @@
 # Findex Development Roadmap & Tasks
 
 Track progress and implementation milestones for Findex file explorer.
+MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md).
 
 ---
 
-## Phase 1: Project Initialization & Core Architecture
+## Phase 1: Project Initialization & Core Architecture ✅
 - [x] Multi-module Gradle configuration (`app`, `core`, `ui`)
-- [x] Kotlin 2.4 + AGP 9.4 with Java 17/21 compatibility
+- [x] Kotlin 2.4 + AGP 9.4 with Java 17 compatibility
 - [x] Hilt dependency injection setup across all modules
-- [x] Material 3 Expressive theme (`FindexTheme`, dynamic color, typography, expressive tokens)
-- [x] Centralized localization strategy (`ui/src/main/res/values/strings.xml` as single source; no strings in `app` or `core`)
-- [x] Storage models (`StorageDrive`, `StorageItem`, `DriveType`, `FileCategory`, `FileOperation`)
-- [x] Foreground Service skeleton (`FileOperationForegroundService`) for background tasks
-- [x] Home screen UI:
-  - [x] Storage drive cards (Internal & SD Card with animated progress)
-  - [x] Dynamic tab section (Device / Network; Network tab conditionally visible)
-  - [x] Quick category tiles (Photos, Videos, Audio, Documents, Downloads, Archives)
-  - [x] Quick tools & suggestions cards (Storage Cleaner, WhatsApp Cleaner, Storage Graph)
-  - [x] Modal navigation drawer with navigation routes
-- [x] Standalone `run.sh` runner script (emulator auto-boot, install, launch, logcat streaming)
-- [x] Verified build and execution on Android 17 emulator
+- [x] Material 3 Expressive theme skeleton
+- [x] Centralized localization (`ui/src/main/res/values/strings.xml` only)
+- [x] Storage models and repository skeleton
+- [x] Foreground Service skeleton
+- [x] First home screen
+- [x] `run.sh` runner script
 
 ---
 
-## Phase 2: File Browser & Directory Navigation
-- [ ] Directory content listing with thumbnail loading
-- [ ] Breadcrumb navigation and path jump
-- [ ] File sorting (Name, Date, Size, Type) and view modes (List / Grid)
-- [ ] Predictive back-gesture support and navigation transitions
+## MVP
+
+### M0 — Plan & design
+- [x] MVP plan (`docs/MVP_PLAN.md`)
+- [x] Design system (`docs/DESIGN_SYSTEM.md`)
+- [x] TODO restructure, CLAUDE.md conventions
+
+### M1 — Design tokens
+- [ ] Full light/dark schemes incl. surface container ladder (seed teal `#0D9488`)
+- [ ] Expressive shapes + `MotionScheme.expressive()`
+- [ ] Full type scale with emphasized roles
+- [ ] Spacing tokens (`Dimens`) and harmonized category tones
+
+### M2 — Core engine
+- [ ] File listing with sort + hidden-file filter
+- [ ] Rename, new folder, delete, copy, move with progress
+- [ ] ZIP compress (AES password) & extract via zip4j
+- [ ] `OperationManager` queue + foreground service notification progress + cancel
+- [ ] `FileClipboard` shared across tabs
+- [ ] MediaStore category queries
+- [ ] Settings repository (DataStore)
+
+### M3 — App shell
+- [ ] Type-safe Navigation Compose host with shared-axis transitions
+- [ ] Predictive back enabled (`enableOnBackInvokedCallback`)
+- [ ] All-files-access onboarding screen
+- [ ] Drawer routes wired
+
+### M4 — Home
+- [ ] Storage hero card with wavy progress
+- [ ] Category tiles in `MaterialShapes`
+- [ ] Quick tools cards, active-operation banner
+
+### M5 — Explorer
+- [ ] Multi-tab browsing (add / close / switch)
+- [ ] Breadcrumbs, list / grid, sort sheet
+- [ ] Long-press + drag-to-select range, tap toggle in selection mode
+- [ ] Floating selection toolbar
+- [ ] Item action bottom sheet
+- [ ] Dialogs: rename, new folder, details, compress (format + password), extract, delete
+- [ ] Cut / copy / paste across tabs
+- [ ] Predictive back: selection → parent folder → previous screen
+
+### M6 — Categories
+- [ ] Category screen (MediaStore) with thumbnails (Coil)
+
+### M7 — Tools
+- [ ] Storage Analyzer (donut chart + largest files)
+- [ ] Storage Cleaner (junk scan + clean via FGS)
+- [ ] WhatsApp Cleaner (per media type)
+
+### M8 — Settings
+- [ ] Theme mode, dynamic color, hidden files, default view
 
 ---
 
-## Phase 3: File Operations & Foreground Task Engine
-- [ ] File copy & move with chunked background streaming
-- [ ] Safe batch deletion with trash / recycle bin support
-- [ ] File rename and directory creation
-- [ ] Real-time notification progress reporting in `FileOperationForegroundService`
+## Post-MVP
 
----
+### Archives+
+- [ ] 7z / RAR / TAR extraction and creation
+- [ ] In-archive preview without full extraction
 
-## Phase 4: Archive Management
-- [ ] Multi-format extraction (ZIP, 7z, RAR)
-- [ ] Archive creation (ZIP, 7z, TAR)
-- [ ] Password-protected archives encryption/decryption
-- [ ] In-archive file preview without full extraction
+### Network Storage
+- [ ] Windows Network Share (SMB) client
+- [ ] WebDAV and FTP / SFTP
+- [ ] Credential manager & bookmarks
 
----
-
-## Phase 5: Storage Analytics & Cleaners
-- [ ] Storage Graph visualization (pie chart / breakdown of space consumption)
-- [ ] System cache & junk file scanner
-- [ ] WhatsApp Cleaner (sent media, voice notes, stickers, database backups)
-- [ ] Duplicate file finder and large file scanner
-
----
-
-## Phase 6: Multitasking & Multi-Tab Support
-- [ ] Tab strip for concurrent directory browsing
-- [ ] Drag-and-drop / cross-tab copy & paste
+### Quality of life
+- [ ] Recycle bin + undo delete
+- [ ] Global search with index
+- [ ] Duplicate finder
 - [ ] Tab session persistence
-
----
-
-## Phase 7: Network Storage
-- [ ] Windows Network Share (SMB / Samba) client
-- [ ] WebDAV and FTP / SFTP protocol connections
-- [ ] Network drive credential manager & bookmarking
-
----
-
-## Phase 8: Gestures & Multi-Selection
-- [ ] 3D touch / Long-press select mode
-- [ ] Drag-to-select range (Google Photos-like swipe selection)
-- [ ] Contextual floating action toolbar for selected items
+- [ ] Tablet two-pane explorer
