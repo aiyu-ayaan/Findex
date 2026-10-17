@@ -1,13 +1,15 @@
 package com.aiyu.findex.ui.components
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.AnchoredDraggableDefaults
+import androidx.compose.foundation.gestures.AnchoredDraggableState
+import androidx.compose.foundation.gestures.DraggableAnchors
+import androidx.compose.foundation.gestures.anchoredDraggable
+import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -20,7 +22,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -36,20 +42,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import kotlinx.coroutines.launch
 
-/** Open fraction of a [PushDrawer]: 0 closed, 1 open. */
+internal enum class DrawerAnchor { Closed, Open }
+
+/** Open/closed state of a [PushDrawer]; always settles on an anchor, never mid-way. */
 @Stable
-class PushDrawerState internal constructor(private val spec: FiniteAnimationSpec<Float>) {
-    internal val progress = Animatable(0f)
+class PushDrawerState internal constructor(internal val spec: AnimationSpec<Float>) {
+    internal val anchored = AnchoredDraggableState(DrawerAnchor.Closed)
+    internal var widthPx by mutableFloatStateOf(0f)
 
-    val fraction: Float get() = progress.value
-    val isOpen: Boolean get() = progress.targetValue > 0.5f
+    /** 0 closed, 1 open; slightly above 1 while the spring overshoots. */
+    val fraction: Float
+        get() {
+            val offset = anchored.offset
+            return if (offset.isNaN() || widthPx == 0f) 0f else (offset / widthPx).coerceIn(0f, 1.1f)
+        }
+    val isOpen: Boolean get() = anchored.targetValue == DrawerAnchor.Open
 
-    suspend fun open() = progress.animateTo(1f, spec)
-    suspend fun close() = progress.animateTo(0f, spec)
+    suspend fun open() = anchored.animateTo(DrawerAnchor.Open, spec)
+    suspend fun close() = anchored.animateTo(DrawerAnchor.Closed, spec)
 }
 
 @Composable
 fun rememberPushDrawerState(): PushDrawerState {
+    // Expressive spatial spring: overshoots a little, so the card lands with an elastic bounce.
     val spec = MaterialTheme.motionScheme.defaultSpatialSpec<Float>()
     return remember { PushDrawerState(spec) }
 }
@@ -86,14 +101,25 @@ fun PushDrawer(
         val hidden = if (state.fraction == 0f) Modifier.clearAndSetSemantics {} else Modifier
         Box(Modifier.width(drawerWidth).fillMaxHeight().then(hidden)) { drawerContent() }
 
-        val dragState = rememberDraggableState { delta ->
-            scope.launch { state.progress.snapTo((state.progress.value + sign * delta / widthPx).coerceIn(0f, 1f)) }
+        SideEffect {
+            if (state.widthPx != widthPx) {
+                state.widthPx = widthPx
+                state.anchored.updateAnchors(DraggableAnchors {
+                    DrawerAnchor.Closed at 0f
+                    DrawerAnchor.Open at widthPx
+                })
+            }
         }
+        val fling = AnchoredDraggableDefaults.flingBehavior(
+            state = state.anchored,
+            positionalThreshold = { distance -> distance * 0.4f },
+            animationSpec = state.spec
+        )
         Box(
             Modifier
                 .fillMaxSize()
                 .graphicsLayer {
-                    val p = state.progress.value
+                    val p = state.fraction
                     translationX = sign * p * widthPx
                     scaleX = 1f - 0.08f * p
                     scaleY = 1f - 0.08f * p
@@ -102,15 +128,12 @@ fun PushDrawer(
                     shape = if (p > 0f) cardShape else RoundedCornerShape(0.dp)
                     clip = p > 0f
                 }
-                .draggable(
-                    state = dragState,
+                .anchoredDraggable(
+                    state = state.anchored,
+                    reverseDirection = rtl,
                     orientation = Orientation.Horizontal,
                     enabled = gesturesEnabled || state.isOpen,
-                    onDragStopped = { velocity ->
-                        val v = sign * velocity
-                        val open = if (kotlin.math.abs(v) > 800f) v > 0 else state.progress.value > 0.5f
-                        if (open) state.open() else state.close()
-                    }
+                    flingBehavior = fling
                 )
         ) {
             content()
@@ -137,7 +160,7 @@ fun PushDrawer(
 fun MenuIcon(progress: () -> Float, modifier: Modifier = Modifier) {
     val color = LocalContentColor.current
     Canvas(modifier.size(24.dp)) {
-        val p = progress()
+        val p = progress().coerceIn(0f, 1f)
         val stroke = 2.5.dp.toPx()
         val left = 3.dp.toPx()
         val long = 18.dp.toPx()
