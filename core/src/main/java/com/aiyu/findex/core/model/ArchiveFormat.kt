@@ -37,3 +37,37 @@ enum class ArchiveFormat(val extension: String, val writable: Boolean, val passw
         }
     }
 }
+
+/** One entry inside an archive; [path] uses '/' and has no leading slash. */
+data class ArchiveEntry(val path: String, val isDirectory: Boolean, val size: Long, val modified: Long)
+
+/**
+ * Archive contents are browsed through virtual paths: `<archive file>!` is the archive root and
+ * `<archive file>!/dir/file` an entry inside it, like `jar:` URLs.
+ */
+object ArchivePath {
+    const val MARKER = "!"
+
+    fun root(archive: String) = archive + MARKER
+
+    /** Splits a virtual path into (archive file, inner path), or null for a normal file system path. */
+    fun parse(path: String): Pair<String, String>? {
+        var index = path.indexOf(MARKER)
+        while (index >= 0) {
+            val archive = path.substring(0, index)
+            val rest = path.substring(index + MARKER.length)
+            if ((rest.isEmpty() || rest.startsWith("/")) && ArchiveFormat.of(archive) != null) return archive to rest.trim('/')
+            index = path.indexOf(MARKER, index + 1)
+        }
+        return null
+    }
+
+    fun of(archive: String, inner: String) = if (inner.isEmpty()) root(archive) else "${root(archive)}/$inner"
+
+    /** Parent of a path that may be inside an archive; the archive root's parent is the archive's folder. */
+    fun parent(path: String): String? {
+        val (archive, inner) = parse(path) ?: return java.io.File(path).parent
+        if (inner.isEmpty()) return java.io.File(archive).parent
+        return of(archive, inner.substringBeforeLast('/', ""))
+    }
+}

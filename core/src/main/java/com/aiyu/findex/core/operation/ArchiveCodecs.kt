@@ -1,5 +1,6 @@
 package com.aiyu.findex.core.operation
 
+import com.aiyu.findex.core.model.ArchiveEntry
 import com.aiyu.findex.core.model.ArchiveFormat
 import com.aiyu.findex.core.model.FailureReason
 import com.aiyu.findex.core.model.FileOperationException
@@ -16,6 +17,7 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 import net.sf.sevenzipjbinding.ExtractOperationResult
+import net.sf.sevenzipjbinding.IInArchive
 import net.sf.sevenzipjbinding.SevenZip
 import net.sf.sevenzipjbinding.SevenZipException
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream
@@ -200,6 +202,97 @@ internal object ArchiveCodecs {
             }
         }
     }
+
+    // region Browse
+
+    /** Lists every entry without extracting; directories implied by entry paths are added. */
+    fun list(format: ArchiveFormat, archive: File): List<ArchiveEntry> {
+        val entries = when (format) {
+            ArchiveFormat.TAR_GZ, ArchiveFormat.TAR_XZ, ArchiveFormat.TAR_BZ2 -> openTar(format, archive).use { tar ->
+                generateSequence { tar.nextEntry }
+                    .filterNot { it.isSymbolicLink || it.isLink }
+                    .map { ArchiveEntry(it.name.trim('/'), it.isDirectory, it.size, it.modTime.time) }
+                    .toList()
+            }
+            else -> openNative(archive, null).use { inArchive ->
+                inArchive.simpleInterface.archiveItems.map {
+                    ArchiveEntry(it.path.replace('\\', '/').trim('/'), it.isFolder, it.size ?: 0L, it.lastWriteTime?.time ?: 0L)
+                }
+            }
+        }
+        val known = entries.mapTo(HashSet()) { it.path }
+        val implied = entries.flatMap { e ->
+            generateSequence(e.path.substringBeforeLast('/', "")) { it.substringBeforeLast('/', "").ifEmpty { null } }
+                .takeWhile { it.isNotEmpty() }
+                .filter { it !in known }
+                .toList()
+        }.toSet().map { ArchiveEntry(it, isDirectory = true, size = 0, modified = 0) }
+        return (entries + implied).filter { it.path.isNotEmpty() }
+    }
+
+    /** Extracts one file entry to [target] (used to open a file straight from an archive). */
+    suspend fun extractEntry(format: ArchiveFormat, archive: File, entryPath: String, target: File, password: String?) {
+        target.parentFile?.mkdirs()
+        when (format) {
+            ArchiveFormat.TAR_GZ, ArchiveFormat.TAR_XZ, ArchiveFormat.TAR_BZ2 -> openTar(format, archive).use { tar ->
+                while (true) {
+                    val entry = tar.nextEntry ?: throw FileOperationException(FailureReason.UNKNOWN)
+                    if (entry.name.trim('/') != entryPath) continue
+                    target.outputStream().use { out -> copy(tar, entry.name, { _, _ -> }) { b, n -> out.write(b, 0, n) } }
+                    return
+                }
+            }
+            else -> {
+                val job = currentCoroutineContext()[Job]
+                openNative(archive, password).use { inArchive ->
+                    val item = inArchive.simpleInterface.archiveItems.firstOrNull { it.path.replace('\\', '/').trim('/') == entryPath }
+                        ?: throw FileOperationException(FailureReason.UNKNOWN)
+                    if (item.isEncrypted && password == null) throw FileOperationException(FailureReason.WRONG_PASSWORD)
+                    val result = target.outputStream().buffered().use { out ->
+                        item.extractSlow({ data ->
+                            if (job?.isActive == false) throw SevenZipException("cancelled")
+                            out.write(data)
+                            data.size
+                        }, password)
+                    }
+                    currentCoroutineContext().ensureActive()
+                    if (result != ExtractOperationResult.OK) {
+                        throw FileOperationException(if (item.isEncrypted || result == ExtractOperationResult.WRONG_PASSWORD) FailureReason.WRONG_PASSWORD else FailureReason.UNKNOWN)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun openTar(format: ArchiveFormat, archive: File): TarArchiveInputStream {
+        val raw = archive.inputStream().buffered()
+        return TarArchiveInputStream(
+            when (format) {
+                ArchiveFormat.TAR_GZ -> GzipCompressorInputStream(raw, true)
+                ArchiveFormat.TAR_XZ -> XZCompressorInputStream(raw)
+                ArchiveFormat.TAR_BZ2 -> BZip2CompressorInputStream(raw)
+                else -> raw
+            }
+        )
+    }
+
+    /** Opens with native 7-Zip; the returned archive also closes its file when closed. */
+    private fun openNative(archive: File, password: String?): IInArchive {
+        val raf = RandomAccessFile(archive, "r")
+        val inArchive = try {
+            SevenZip.openInArchive(null, RandomAccessFileInStream(raf), password)
+        } catch (e: SevenZipException) {
+            raf.close()
+            throw FileOperationException(if (password != null) FailureReason.WRONG_PASSWORD else FailureReason.UNSUPPORTED_ARCHIVE, e)
+        }
+        return object : IInArchive by inArchive {
+            override fun close() {
+                try { inArchive.close() } finally { raf.close() }
+            }
+        }
+    }
+
+    // endregion
 
     /** Rejects entries like `../../x` that would land outside [dest] ("zip slip"). */
     internal fun safeTarget(dest: File, entryName: String): File {
