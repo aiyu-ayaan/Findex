@@ -26,9 +26,9 @@ class LibraryRepository @Inject constructor(
 
     fun isBookmarked(path: String): Flow<Boolean> = bookmarkDao.observeIsBookmarked(path)
 
-    suspend fun toggleBookmark(path: String, bookmarked: Boolean) {
+    suspend fun toggleBookmark(path: String, name: String, bookmarked: Boolean) {
         if (bookmarked) bookmarkDao.delete(path)
-        else bookmarkDao.insert(BookmarkEntity(path = path, name = File(path).name))
+        else bookmarkDao.insert(BookmarkEntity(path = path, name = name))
     }
 
     suspend fun removeBookmark(path: String) = bookmarkDao.delete(path)

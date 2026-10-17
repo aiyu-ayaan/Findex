@@ -94,7 +94,7 @@ import com.aiyu.findex.ui.components.SectionHeader
 import com.aiyu.findex.ui.components.ShapeIcon
 import com.aiyu.findex.ui.components.groupedShape
 import com.aiyu.findex.ui.components.icon
-import com.aiyu.findex.ui.components.polygon
+import com.aiyu.findex.ui.components.CategoryShape
 import com.aiyu.findex.ui.components.rememberStaggerState
 import com.aiyu.findex.ui.components.staggeredEnter
 import com.aiyu.findex.ui.components.titleRes
@@ -433,7 +433,7 @@ private fun CategoryTile(category: FileCategory, stat: CategoryStat?, onClick: (
             // Press morphs the category's signature shape into a circle.
             MorphingShapeIcon(
                 icon = category.icon,
-                from = category.polygon,
+                from = CategoryShape,
                 to = MaterialShapes.Circle,
                 morphed = pressed,
                 container = tone.container,
@@ -448,13 +448,12 @@ private fun CategoryTile(category: FileCategory, stat: CategoryStat?, onClick: (
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            if (stat != null) {
-                Text(
-                    pluralStringResource(R.plurals.item_count, stat.count, stat.count),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            // Always present (empty for Downloads) so every tile has the same height.
+            Text(
+                stat?.let { pluralStringResource(R.plurals.item_count, it.count, it.count) }.orEmpty(),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }

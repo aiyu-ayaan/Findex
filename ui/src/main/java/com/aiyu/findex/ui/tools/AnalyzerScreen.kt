@@ -61,7 +61,7 @@ import com.aiyu.findex.ui.components.SectionHeader
 import com.aiyu.findex.ui.components.ShapeIcon
 import com.aiyu.findex.ui.components.groupedShape
 import com.aiyu.findex.ui.components.icon
-import com.aiyu.findex.ui.components.polygon
+import com.aiyu.findex.ui.components.CategoryShape
 import com.aiyu.findex.ui.components.titleRes
 import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.theme.tone
@@ -137,7 +137,7 @@ fun AnalyzerScreen(
                 itemsIndexed(rows, key = { _, c -> c.name }) { index, c ->
                     val bytes = state.stats[c]?.bytes ?: 0
                     BreakdownRow(
-                        leading = { ShapeIcon(c.icon, c.polygon, c.tone.container, c.tone.onContainer, size = 40.dp, iconSize = 20.dp) },
+                        leading = { ShapeIcon(c.icon, CategoryShape, c.tone.container, c.tone.onContainer, size = 40.dp, iconSize = 20.dp) },
                         title = stringResource(c.titleRes),
                         bytes = bytes,
                         fraction = bytes.toFloat() / drive.usedBytes.coerceAtLeast(1),

@@ -44,18 +44,18 @@ fixed hue rendered as a container/on-container tone pair (light: tone 90/30,
 dark: tone 30/90), generated with material-color-utilities and exposed as `FileCategory.tone`. Color is never the only
 signal: every tile also has its icon and label.
 
-| Category | Hue | Icon | Shape |
-|----------|-----|------|-------|
-| Photos | Teal | `Image` | `Cookie9Sided` |
-| Videos | Orange | `Movie` | `Cookie7Sided` |
-| Audio | Purple | `MusicNote` | `Sunny` |
-| Documents | Blue | `Description` | `Cookie6Sided` |
-| Downloads | Green | `Download` | `Cookie4Sided` |
-| Archives | Amber | `FolderZip` | `Clover4Leaf` |
-| APKs | Lime | `Android` | `SoftBurst` |
+| Category | Hue | Icon |
+|----------|-----|------|
+| Photos  |  Teal  |  `Image` |
+| Videos  |  Orange  |  `Movie` |
+| Audio  |  Purple  |  `MusicNote` |
+| Documents  |  Blue  |  `Description` |
+| Downloads  |  Green  |  `Download` |
+| Archives  |  Amber  |  `FolderZip` |
+| APKs  |  Lime  |  `Android` |
 
-All category shapes come from one scalloped family so tiles share the same visual weight;
-pressing a tile morphs its shape into a circle.
+Every category uses the same `Cookie9Sided` container (`CategoryShape`) so the set reads evenly;
+color and glyph tell categories apart. Pressing a tile morphs the shape into a circle.
 
 ---
 

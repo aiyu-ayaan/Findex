@@ -52,7 +52,7 @@ import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.components.ShapeIcon
 import com.aiyu.findex.ui.components.icon
-import com.aiyu.findex.ui.components.polygon
+import com.aiyu.findex.ui.components.CategoryShape
 import com.aiyu.findex.ui.components.titleRes
 import com.aiyu.findex.ui.explorer.DeleteDialog
 import com.aiyu.findex.ui.explorer.FileGrid
@@ -143,7 +143,7 @@ fun CategoryScreen(
             ) {
                 ShapeIcon(
                     icon = state.category.icon,
-                    shape = state.category.polygon,
+                    shape = CategoryShape,
                     container = state.category.tone.container,
                     content = state.category.tone.onContainer,
                     size = 120.dp,

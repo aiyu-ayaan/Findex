@@ -58,18 +58,8 @@ val FileCategory.icon: ImageVector
         FileCategory.APKS -> Icons.Rounded.Android
     }
 
-/** Expressive container shape per category — see DESIGN_SYSTEM.md §2. */
-val FileCategory.polygon: RoundedPolygon
-    get() = when (this) {
-        // One scalloped family so every tile has the same visual weight.
-        FileCategory.PHOTOS -> MaterialShapes.Cookie9Sided
-        FileCategory.VIDEOS -> MaterialShapes.Cookie7Sided
-        FileCategory.AUDIO -> MaterialShapes.Sunny
-        FileCategory.DOCUMENTS -> MaterialShapes.Cookie6Sided
-        FileCategory.DOWNLOADS -> MaterialShapes.Cookie4Sided
-        FileCategory.ARCHIVES -> MaterialShapes.Clover4Leaf
-        FileCategory.APKS -> MaterialShapes.SoftBurst
-    }
+/** One shape for every category so the tiles read as an even set; color and glyph tell them apart. */
+val CategoryShape: RoundedPolygon = MaterialShapes.Cookie9Sided
 
 val FileCategory.titleRes: Int
     get() = when (this) {

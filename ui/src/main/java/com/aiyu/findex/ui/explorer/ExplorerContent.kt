@@ -3,7 +3,10 @@ package com.aiyu.findex.ui.explorer
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.changedToUp
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -114,21 +117,33 @@ private fun Modifier.dragToSelect(
         }
     }
 
+    // Reads the Initial pass (before the rows) so that, once a long-press starts a selection,
+    // the rest of the gesture is consumed: rows never see a click and the list doesn't scroll.
     return pointerInput(Unit) {
-        detectDragGesturesAfterLongPress(
-            onDragStart = { offset ->
-                state.viewportHeight = size.height.toFloat()
-                val index = indexAt(offset)
-                if (index >= 0) {
-                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                    state.anchor = index
-                    state.base = currentSelection
-                    state.pointer = offset
-                    onSelectionChange(currentSelection + currentItems[index].path)
-                }
-            },
-            onDrag = { change, _ ->
-                if (state.anchor < 0) return@detectDragGesturesAfterLongPress
+        awaitEachGesture {
+            val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+            // Non-null when the finger lifts or moves past touch slop before the long-press timeout.
+            val endedEarly = withTimeoutOrNull(viewConfiguration.longPressTimeoutMillis) {
+                do {
+                    val change = awaitPointerEvent(PointerEventPass.Initial).changes.firstOrNull { it.id == down.id }
+                } while (change != null && !change.changedToUp() &&
+                    (change.position - down.position).getDistance() <= viewConfiguration.touchSlop)
+            }
+            if (endedEarly != null) return@awaitEachGesture // a tap or a scroll: leave it to the rows / list
+
+            val index = indexAt(down.position)
+            if (index < 0) return@awaitEachGesture
+            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+            state.viewportHeight = size.height.toFloat()
+            state.anchor = index
+            state.base = currentSelection
+            state.pointer = down.position
+            onSelectionChange(currentSelection + currentItems[index].path)
+
+            while (true) {
+                val change = awaitPointerEvent(PointerEventPass.Initial).changes.firstOrNull { it.id == down.id } ?: break
+                change.consume()
+                if (change.changedToUp()) break
                 state.pointer = change.position
                 val y = change.position.y
                 state.speed = when {
@@ -137,10 +152,10 @@ private fun Modifier.dragToSelect(
                     else -> 0f
                 }
                 applyRange()
-            },
-            onDragEnd = { state.anchor = -1; state.speed = 0f },
-            onDragCancel = { state.anchor = -1; state.speed = 0f }
-        )
+            }
+            state.anchor = -1
+            state.speed = 0f
+        }
     }
 }
 

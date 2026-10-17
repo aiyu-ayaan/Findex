@@ -291,13 +291,15 @@ class ExplorerViewModel @Inject constructor(
 
     /** Toggles the current folder's bookmark. */
     fun toggleBookmark() {
-        val path = _uiState.value.tab?.path ?: return
-        toggleBookmark(path, _uiState.value.isBookmarked)
+        val tab = _uiState.value.tab ?: return
+        toggleBookmark(tab.path, _uiState.value.isBookmarked)
     }
 
     fun toggleBookmark(path: String, bookmarked: Boolean) {
+        // A volume root is named after the drive ("Internal storage"), not its mount folder ("0").
+        val name = _uiState.value.tabs.firstOrNull { it.root == path }?.rootName ?: File(path).name
         viewModelScope.launch {
-            libraryRepository.toggleBookmark(path, bookmarked)
+            libraryRepository.toggleBookmark(path, name, bookmarked)
             _messages.send(if (bookmarked) R.string.bookmark_removed else R.string.bookmark_added)
         }
     }
