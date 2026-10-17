@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__codegraph__*"
+    ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "codegraph prompt-hook"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "material-3@material-3-skill": true,
+    "ponytail@ponytail": true,
+    "superpowers@superpowers-marketplace": true
+  }
+}
