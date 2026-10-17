@@ -346,7 +346,7 @@ fun ExplorerScreen(
                     ItemAction.COPY -> viewModel.copySelection(listOf(item.path))
                     ItemAction.CUT -> viewModel.cutSelection(listOf(item.path))
                     ItemAction.RENAME -> modal = ExplorerModal.Rename(item)
-                    ItemAction.COMPRESS -> modal = ExplorerModal.Compress(listOf(item.path), item.name.substringBeforeLast('.'))
+                    ItemAction.COMPRESS -> modal = ExplorerModal.Compress(listOf(item.path), if (item.isDirectory) item.name else item.name.substringBeforeLast('.'))
                     ItemAction.EXTRACT -> modal = ExplorerModal.Extract(item)
                     ItemAction.BOOKMARK -> viewModel.toggleBookmark(item.path, bookmarked = false)
                     ItemAction.DETAILS -> modal = ExplorerModal.Details(item)
@@ -370,7 +370,7 @@ fun ExplorerScreen(
         )
         is ExplorerModal.Compress -> CompressDialog(
             defaultName = m.defaultName,
-            onConfirm = { name, password -> viewModel.compress(m.paths, name, password); modal = null },
+            onConfirm = { name, password, format -> viewModel.compress(m.paths, name, password, format); modal = null },
             onDismiss = { modal = null }
         )
         is ExplorerModal.Extract -> ExtractDialog(

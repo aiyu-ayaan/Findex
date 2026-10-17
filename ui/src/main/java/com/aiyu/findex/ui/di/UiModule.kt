@@ -62,6 +62,7 @@ fun failureRes(reason: FailureReason): Int = when (reason) {
     FailureReason.NO_SPACE -> R.string.error_no_space
     FailureReason.INTO_ITSELF -> R.string.error_into_itself
     FailureReason.ACCESS_DENIED -> R.string.error_access_denied
+    FailureReason.UNSUPPORTED_ARCHIVE -> R.string.error_unsupported_archive
     FailureReason.UNKNOWN -> R.string.operation_failed
 }
 

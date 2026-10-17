@@ -38,6 +38,7 @@ sealed interface FileOperation {
         val targets: List<String>,
         val destinationArchive: String,
         val password: String? = null,
+        val format: ArchiveFormat = ArchiveFormat.ZIP,
         override val id: String = UUID.randomUUID().toString()
     ) : FileOperation
 
@@ -82,7 +83,7 @@ sealed interface OperationResult {
     data class Failed(override val operation: FileOperation, val reason: FailureReason) : OperationResult
 }
 
-enum class FailureReason { WRONG_PASSWORD, NO_SPACE, INTO_ITSELF, ACCESS_DENIED, UNKNOWN }
+enum class FailureReason { WRONG_PASSWORD, NO_SPACE, INTO_ITSELF, ACCESS_DENIED, UNSUPPORTED_ARCHIVE, UNKNOWN }
 
 class FileOperationException(val reason: FailureReason, cause: Throwable? = null) :
     Exception(reason.name, cause)

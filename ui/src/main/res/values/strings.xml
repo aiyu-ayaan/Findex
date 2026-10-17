@@ -208,8 +208,11 @@
     <!-- Compression & Extraction -->
     <string name="compress_dialog_title">Create Archive</string>
     <string name="compress_format_zip">ZIP</string>
-    <string name="compress_format_7z">7-Zip (7z)</string>
+    <string name="compress_format_7z">7Z</string>
     <string name="compress_format_tar">TAR</string>
+    <string name="compress_format_tar_gz">TAR.GZ</string>
+    <string name="compress_format_label">Format</string>
+    <string name="compress_password_zip_only">Password protection is available for ZIP only.</string>
     <string name="compress_password_hint">Password (optional)</string>
     <string name="compress_password_help">With a password the archive is encrypted with AES-256.</string>
     <string name="extract_password_hint">Password (if protected)</string>
@@ -243,6 +246,7 @@
     <string name="op_title_compress">Compressing to %1$s</string>
     <string name="op_title_extract">Extracting %1$s</string>
     <string name="error_wrong_password">Wrong or missing password</string>
+    <string name="error_unsupported_archive">This archive format or version isn\'t supported</string>
     <string name="error_no_space">Not enough storage space</string>
     <string name="error_into_itself">A folder can\'t be copied into itself</string>
     <string name="error_access_denied">Permission denied for this location</string>

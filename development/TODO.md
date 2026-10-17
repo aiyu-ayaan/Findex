@@ -90,7 +90,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 ## Post-MVP
 
 ### Archives+
-- [ ] 7z / RAR / TAR extraction and creation
+- [x] 7z / RAR / TAR extraction and creation (Commons Compress + xz + junrar; RAR4 extract-only, RAR5 reports unsupported)
 - [ ] In-archive preview without full extraction
 
 ### Network Storage

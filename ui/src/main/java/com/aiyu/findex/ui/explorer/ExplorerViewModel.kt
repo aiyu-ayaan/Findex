@@ -7,6 +7,7 @@ import androidx.navigation.toRoute
 import com.aiyu.findex.core.model.ActiveOperation
 import com.aiyu.findex.core.model.AppSettings
 import com.aiyu.findex.core.model.ClipboardContent
+import com.aiyu.findex.core.model.ArchiveFormat
 import com.aiyu.findex.core.model.FileOperation
 import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.model.SortSpec
@@ -257,17 +258,17 @@ class ExplorerViewModel @Inject constructor(
         clearSelection()
     }
 
-    fun compress(paths: Collection<String>, archiveName: String, password: String?) {
+    fun compress(paths: Collection<String>, archiveName: String, password: String?, format: ArchiveFormat) {
         val tab = _uiState.value.tab ?: return
-        val name = archiveName.trim().removeSuffix(".zip").ifEmpty { return }
-        val target = uniqueTarget(File(tab.path), "$name.zip")
-        operationManager.enqueue(FileOperation.Compress(paths.toList(), target.absolutePath, password))
+        val name = archiveName.trim().removeSuffix(".${format.extension}").ifEmpty { return }
+        val target = uniqueTarget(File(tab.path), "$name.${format.extension}")
+        operationManager.enqueue(FileOperation.Compress(paths.toList(), target.absolutePath, password, format))
         clearSelection()
     }
 
     fun extract(archivePath: String, password: String?) {
         val archive = File(archivePath)
-        val dest = uniqueTarget(archive.parentFile ?: return, archive.nameWithoutExtension)
+        val dest = uniqueTarget(archive.parentFile ?: return, ArchiveFormat.baseName(archive.name))
         operationManager.enqueue(FileOperation.Extract(archivePath, dest.absolutePath, password))
     }
 

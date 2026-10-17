@@ -21,7 +21,7 @@ data class StorageItem(
     val itemCount: Int = 0
 ) {
     val isHidden: Boolean get() = name.startsWith(".")
-    val isArchive: Boolean get() = extension == "zip"
+    val isArchive: Boolean get() = !isDirectory && ArchiveFormat.of(name) != null
 }
 
 enum class SortBy { NAME, DATE, SIZE, TYPE }

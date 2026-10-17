@@ -233,3 +233,27 @@ flowchart LR
 - Deleting something that is already inside `.FindexTrash` is always permanent.
 - `RecycleBinViewModel` drops rows whose file vanished outside the app.
 - Room schema v2 adds `trash` through `AutoMigration(1, 2)`.
+
+## 8. Archives
+
+`ArchiveFormat` (core/model) detects formats by suffix (`.tar.gz`, `.tgz`, … before plain extensions) and says which can be written or take a password.
+
+```mermaid
+flowchart LR
+    Exec[FileOperationExecutor] -->|ZIP| Zip4j[zip4j<br/>AES-256 write/read]
+    Exec -->|7z / tar / tar.gz| Codecs[ArchiveCodecs]
+    Codecs --> CC[Commons Compress<br/>+ xz for LZMA]
+    Codecs -->|rar, read only| Junrar[junrar<br/>RAR4]
+```
+
+| Format | Create | Extract | Password |
+|--------|--------|---------|----------|
+| ZIP | yes | yes | write + read (AES-256) |
+| 7z | yes | yes | read only |
+| TAR, TAR.GZ | yes | yes | — |
+| TAR.XZ, TAR.BZ2 | — | yes | — |
+| RAR (v4) | — | yes | read; RAR5 → `UNSUPPORTED_ARCHIVE` |
+
+- Every entry path goes through `ArchiveCodecs.safeTarget` (zip-slip guard). Tar symlinks and hard links are skipped.
+- A failed or cancelled extract deletes the new destination folder, and a failed compress deletes the partial archive.
+- `uniqueTarget` keeps multi-part suffixes whole: `a (1).tar.gz`.

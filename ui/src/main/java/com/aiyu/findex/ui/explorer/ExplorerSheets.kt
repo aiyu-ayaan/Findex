@@ -2,6 +2,7 @@ package com.aiyu.findex.ui.explorer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -72,6 +73,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.selection.selectable
 import com.aiyu.findex.core.model.SortBy
 import com.aiyu.findex.core.model.SortSpec
+import com.aiyu.findex.core.model.ArchiveFormat
 import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.components.FileThumbnail
@@ -277,10 +279,11 @@ fun NameDialog(
 @Composable
 fun CompressDialog(
     defaultName: String,
-    onConfirm: (name: String, password: String?) -> Unit,
+    onConfirm: (name: String, password: String?, format: ArchiveFormat) -> Unit,
     onDismiss: () -> Unit
 ) {
     var name by rememberSaveable { mutableStateOf(defaultName) }
+    var format by rememberSaveable { mutableStateOf(ArchiveFormat.ZIP) }
     var password by rememberSaveable { mutableStateOf("") }
     var showPassword by rememberSaveable { mutableStateOf(false) }
     AlertDialog(
@@ -293,18 +296,37 @@ fun CompressDialog(
                     onValueChange = { name = it },
                     singleLine = true,
                     label = { Text(stringResource(R.string.label_archive_name)) },
-                    suffix = { Text(".zip") }
+                    suffix = { Text(".${format.extension}") }
                 )
-                PasswordField(password, { password = it }, showPassword, { showPassword = it }, R.string.compress_password_hint)
+                Text(stringResource(R.string.compress_format_label), style = MaterialTheme.typography.labelLarge)
+                Row(horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween), modifier = Modifier.fillMaxWidth()) {
+                    val formats = ArchiveFormat.Writable
+                    formats.forEachIndexed { index, option ->
+                        ToggleButton(
+                            checked = format == option,
+                            onCheckedChange = { format = option },
+                            shapes = when (index) {
+                                0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+                                formats.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                                else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+                            },
+                            contentPadding = PaddingValues(horizontal = Dimens.xs),
+                            modifier = Modifier.weight(1f)
+                        ) { Text(stringResource(option.labelRes), maxLines = 1) }
+                    }
+                }
+                if (format.passwordOnWrite) {
+                    PasswordField(password, { password = it }, showPassword, { showPassword = it }, R.string.compress_password_hint)
+                }
                 Text(
-                    stringResource(R.string.compress_password_help),
+                    stringResource(if (format.passwordOnWrite) R.string.compress_password_help else R.string.compress_password_zip_only),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         },
         confirmButton = {
-            TextButton(onClick = { onConfirm(name, password.ifEmpty { null }) }, enabled = name.isNotBlank() && '/' !in name) {
+            TextButton(onClick = { onConfirm(name, password.takeIf { format.passwordOnWrite && it.isNotEmpty() }, format) }, enabled = name.isNotBlank() && '/' !in name) {
                 Text(stringResource(R.string.compress_button))
             }
         },
@@ -326,7 +348,9 @@ fun ExtractDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(Dimens.md)) {
                 Text(stringResource(R.string.extract_dialog_body, archiveName), style = MaterialTheme.typography.bodyMedium)
-                PasswordField(password, { password = it }, showPassword, { showPassword = it }, R.string.extract_password_hint)
+                if (ArchiveFormat.of(archiveName)?.passwordOnRead != false) {
+                    PasswordField(password, { password = it }, showPassword, { showPassword = it }, R.string.extract_password_hint)
+                }
             }
         },
         confirmButton = { TextButton(onClick = { onConfirm(password.ifEmpty { null }) }) { Text(stringResource(R.string.extract_button)) } },
@@ -395,3 +419,11 @@ fun DeleteDialog(count: Int, onConfirm: (permanent: Boolean) -> Unit, onDismiss:
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
     )
 }
+
+private val ArchiveFormat.labelRes: Int
+    get() = when (this) {
+        ArchiveFormat.ZIP -> R.string.compress_format_zip
+        ArchiveFormat.SEVEN_Z -> R.string.compress_format_7z
+        ArchiveFormat.TAR -> R.string.compress_format_tar
+        else -> R.string.compress_format_tar_gz
+    }

@@ -3,6 +3,7 @@ package com.aiyu.findex.core.operation
 import android.content.Context
 import com.aiyu.findex.core.db.TrashDao
 import com.aiyu.findex.core.db.TrashEntity
+import com.aiyu.findex.core.model.ArchiveFormat
 import com.aiyu.findex.core.model.FailureReason
 import com.aiyu.findex.core.model.FileOperation
 import com.aiyu.findex.core.model.FileOperationException
@@ -241,6 +242,25 @@ class FileOperationExecutor @Inject constructor(
     // region Archives
 
     private suspend fun compress(op: FileOperation.Compress, report: (OperationProgress) -> Unit) {
+        if (op.format == ArchiveFormat.ZIP) return compressZip(op, report)
+        val archive = File(op.destinationArchive)
+        val sources = op.targets.map(::File).filter { it.exists() }
+        val tracker = ProgressTracker(op.id, totalBytes = sources.sumOf { it.totalSize() }, totalItems = 0, report)
+        try {
+            when (op.format) {
+                ArchiveFormat.SEVEN_Z -> ArchiveCodecs.write7z(sources, archive, tracker::addBytes)
+                ArchiveFormat.TAR -> ArchiveCodecs.writeTar(sources, archive, gzip = false, tracker::addBytes)
+                ArchiveFormat.TAR_GZ -> ArchiveCodecs.writeTar(sources, archive, gzip = true, tracker::addBytes)
+                else -> throw FileOperationException(FailureReason.UNSUPPORTED_ARCHIVE)
+            }
+        } catch (e: Throwable) {
+            archive.delete() // never leave a half-written archive behind
+            throw e
+        }
+        tracker.finish()
+    }
+
+    private suspend fun compressZip(op: FileOperation.Compress, report: (OperationProgress) -> Unit) {
         val archive = File(op.destinationArchive)
         val password = op.password?.takeIf { it.isNotEmpty() }
         val zip = ZipFile(archive, password?.toCharArray()).apply { isRunInThread = true }
@@ -273,6 +293,23 @@ class FileOperationExecutor @Inject constructor(
     }
 
     private suspend fun extract(op: FileOperation.Extract, report: (OperationProgress) -> Unit) {
+        val archive = File(op.archivePath)
+        val dest = File(op.destinationDir)
+        val created = !dest.exists()
+        val format = ArchiveFormat.of(archive.name) ?: throw FileOperationException(FailureReason.UNSUPPORTED_ARCHIVE)
+        try {
+            if (format == ArchiveFormat.ZIP) return extractZip(op, report)
+            dest.mkdirs()
+            val tracker = ProgressTracker(op.id, totalBytes = 0, totalItems = 0, report)
+            ArchiveCodecs.read(format, archive, dest, op.password, onTotal = { tracker.totalBytes = it }, onBytes = tracker::addBytes)
+            tracker.finish()
+        } catch (e: Throwable) {
+            if (created) dest.deleteRecursively() // no half-extracted folder left behind
+            throw e
+        }
+    }
+
+    private suspend fun extractZip(op: FileOperation.Extract, report: (OperationProgress) -> Unit) {
         val zip = ZipFile(File(op.archivePath), op.password?.toCharArray()).apply { isRunInThread = true }
         zip.use {
             try {
@@ -319,7 +356,7 @@ class FileOperationExecutor @Inject constructor(
 
     private class ProgressTracker(
         private val id: String,
-        private val totalBytes: Long,
+        var totalBytes: Long,
         private val totalItems: Int,
         private val report: (OperationProgress) -> Unit
     ) {
@@ -355,8 +392,11 @@ class FileOperationExecutor @Inject constructor(
 fun uniqueTarget(dir: File, name: String): File {
     var candidate = File(dir, name)
     if (!candidate.exists()) return candidate
-    val base = name.substringBeforeLast('.', name)
-    val ext = name.substringAfterLast('.', "").let { if (it.isEmpty() || it == name) "" else ".$it" }
+    // Keep multi-part archive suffixes whole: `a (1).tar.gz`, not `a.tar (1).gz`.
+    val archiveBase = if (ArchiveFormat.of(name) != null) ArchiveFormat.baseName(name) else null
+    val base = archiveBase ?: name.substringBeforeLast('.', name)
+    val ext = if (archiveBase != null) name.substring(archiveBase.length)
+    else name.substringAfterLast('.', "").let { if (it.isEmpty() || it == name) "" else ".$it" }
     var i = 1
     while (candidate.exists()) candidate = File(dir, "$base (${i++})$ext")
     return candidate
