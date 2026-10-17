@@ -23,7 +23,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearWavyProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LoadingIndicator
@@ -82,7 +82,7 @@ fun AnalyzerScreen(
     val categories = FileCategory.entries.filter { it != FileCategory.DOWNLOADS }
     val slices = categories.mapNotNull { c ->
         state.stats[c]?.takeIf { it.bytes > 0 }?.let { Slice(stringResource(c.titleRes), it.bytes, c.tone.accent) }
-    } + Slice(stringResource(R.string.analyzer_other), state.otherBytes, MaterialTheme.colorScheme.outline)
+    } + Slice(stringResource(R.string.analyzer_other), state.otherBytes, MaterialTheme.colorScheme.secondary)
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -147,7 +147,7 @@ fun AnalyzerScreen(
                         title = stringResource(R.string.analyzer_other),
                         bytes = state.otherBytes,
                         fraction = state.otherBytes.toFloat() / drive.usedBytes.coerceAtLeast(1),
-                        color = MaterialTheme.colorScheme.outline,
+                        color = MaterialTheme.colorScheme.secondary,
                         shape = groupedShape(rows.size, rows.size + 1)
                     )
                 }
@@ -165,7 +165,11 @@ fun AnalyzerScreen(
                 itemsIndexed(state.largest, key = { _, f -> f.path }) { index, file ->
                     ListItem(
                         headlineContent = { Text(file.name, maxLines = 1, overflow = TextOverflow.MiddleEllipsis) },
-                        supportingContent = { Text(File(file.path).parent?.removePrefix(drive?.path ?: "")?.ifEmpty { "/" } ?: "", maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        supportingContent = {
+                            val parent = File(file.path).parentFile
+                            val folder = if (parent?.absolutePath == drive?.path) drive?.name else parent?.name
+                            Text(folder.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        },
                         leadingContent = { FileThumbnail(file.path, false, file.extension) },
                         trailingContent = { Text(formatSize(file.size), style = MaterialTheme.typography.labelLarge) },
                         colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
@@ -193,7 +197,12 @@ private fun BreakdownRow(
         supportingContent = {
             Column {
                 Spacer(Modifier.height(Dimens.xs))
-                LinearWavyProgressIndicator(progress = { fraction.coerceIn(0f, 1f) }, color = color, modifier = Modifier.fillMaxWidth())
+                LinearProgressIndicator(
+                    progress = { fraction.coerceIn(0f, 1f) },
+                    color = color,
+                    trackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    modifier = Modifier.fillMaxWidth().height(8.dp)
+                )
             }
         },
         leadingContent = leading,
@@ -203,7 +212,7 @@ private fun BreakdownRow(
     )
 }
 
-/** Donut with rounded slice caps and small gaps, sweeping in on first show. */
+/** Segmented donut with small gaps, sweeping in on first show. */
 @Composable
 private fun Donut(slices: List<Slice>, total: Long, track: Color, modifier: Modifier = Modifier) {
     val sweep = remember { Animatable(0f) }
@@ -215,13 +224,19 @@ private fun Donut(slices: List<Slice>, total: Long, track: Color, modifier: Modi
         val arcSize = Size(size.width - strokeWidth, size.height - strokeWidth)
         val topLeft = Offset(inset, inset)
         drawArc(track, 0f, 360f, false, topLeft, arcSize, style = Stroke(strokeWidth))
-        val gap = 4f
+        val gap = 2f
         var start = -90f
-        val totalF = total.coerceAtLeast(1).toFloat()
-        slices.filter { it.bytes > 0 }.forEach { slice ->
-            val angle = 360f * slice.bytes / totalF * sweep.value
+        val visible = slices.filter { it.bytes > 0 }
+        val usedAngle = 360f * visible.sumOf { it.bytes } / total.coerceAtLeast(1).toFloat()
+        // Small categories still get a visible arc; the space is taken proportionally from the larger ones.
+        val minAngle = 6f
+        val raw = visible.map { usedAngle * it.bytes / visible.sumOf { s -> s.bytes }.coerceAtLeast(1) }
+        val boosted = raw.map { maxOf(it, minAngle) }
+        val scale = usedAngle / boosted.sum().coerceAtLeast(1f)
+        visible.forEachIndexed { i, slice ->
+            val angle = boosted[i] * minOf(1f, scale).let { if (raw[i] < minAngle) 1f else it } * sweep.value
             if (angle > gap) {
-                drawArc(slice.color, start + gap / 2, angle - gap, false, topLeft, arcSize, style = Stroke(strokeWidth, cap = StrokeCap.Round))
+                drawArc(slice.color, start + gap / 2, angle - gap, false, topLeft, arcSize, style = Stroke(strokeWidth, cap = StrokeCap.Butt))
             }
             start += angle
         }
