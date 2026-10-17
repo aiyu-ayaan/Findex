@@ -45,8 +45,7 @@ class HomeViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         drives = all.filter { d -> d.type != DriveType.NETWORK },
-                        networkDrives = all.filter { d -> d.type == DriveType.NETWORK },
-                        isLoading = false
+                        networkDrives = all.filter { d -> d.type == DriveType.NETWORK }
                     )
                 }
             }

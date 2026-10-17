@@ -54,7 +54,6 @@ import androidx.compose.material3.LargeFlexibleTopAppBar
 import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -147,13 +146,7 @@ fun HomeScreen(
             )
         }
     ) { innerPadding ->
-        if (uiState.isLoading) {
-            Box(Modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
-                LoadingIndicator()
-            }
-            return@Scaffold
-        }
-
+        // No full-screen spinner: drives load in a few ms, and a spinner would only flash between splash and content.
         LazyColumn(
             contentPadding = PaddingValues(
                 start = Dimens.gutter, end = Dimens.gutter,

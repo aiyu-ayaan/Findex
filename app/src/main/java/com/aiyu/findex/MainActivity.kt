@@ -10,10 +10,14 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    // Read on the main thread only, by the splash screen's pre-draw check.
+    private var contentReady = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        // Hold the system splash until real content is ready, instead of flashing an empty surface.
+        installSplashScreen().setKeepOnScreenCondition { !contentReady }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent { FindexApp() }
+        setContent { FindexApp(onReady = { contentReady = true }) }
     }
 }

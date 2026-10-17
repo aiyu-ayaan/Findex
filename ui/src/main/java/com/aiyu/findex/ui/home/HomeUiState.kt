@@ -15,7 +15,6 @@ data class HomeUiState(
     val recents: List<RecentFile> = emptyList(),
     val activeOperation: ActiveOperation? = null,
     val selectedTabIndex: Int = 0,
-    val isLoading: Boolean = true
 ) {
     val hasNetworkDrives: Boolean get() = networkDrives.isNotEmpty()
 }

@@ -22,6 +22,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -66,6 +67,7 @@ import com.aiyu.findex.ui.navigation.RecycleBinRoute
 import com.aiyu.findex.ui.trash.RecycleBinScreen
 import com.aiyu.findex.ui.onboarding.OnboardingScreen
 import com.aiyu.findex.ui.theme.FindexTheme
+import com.aiyu.findex.ui.util.hasNotificationAccess
 import com.aiyu.findex.ui.util.hasStorageAccess
 import kotlinx.coroutines.launch
 
@@ -73,9 +75,10 @@ import kotlinx.coroutines.launch
 val LocalSnackbarHostState = staticCompositionLocalOf { SnackbarHostState() }
 
 @Composable
-fun FindexApp(viewModel: AppViewModel = hiltViewModel()) {
+fun FindexApp(onReady: () -> Unit = {}, viewModel: AppViewModel = hiltViewModel()) {
     val settings by viewModel.settings.collectAsStateWithLifecycle()
-    val current = settings ?: return // keep the splash screen until settings are known
+    val current = settings ?: return // the splash stays up until settings are known
+    SideEffect(onReady)
 
     val dark = when (current.themeMode) {
         ThemeMode.SYSTEM -> isSystemInDarkTheme()
@@ -109,7 +112,7 @@ fun FindexApp(viewModel: AppViewModel = hiltViewModel()) {
         }
         CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
             Box(Modifier.fillMaxSize()) {
-                FindexNavigation()
+                FindexNavigation(onboardingDone = current.onboardingDone, onOnboardingFinished = viewModel::completeOnboarding)
                 SnackbarHost(
                     hostState = snackbarHostState,
                     modifier = Modifier
@@ -123,13 +126,17 @@ fun FindexApp(viewModel: AppViewModel = hiltViewModel()) {
 }
 
 @Composable
-private fun FindexNavigation() {
+private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -> Unit) {
     val navController = rememberNavController()
     val drawerState = rememberPushDrawerState()
     val scope = rememberCoroutineScope()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val onHome = backStackEntry?.destination?.hasRoute(HomeRoute::class) == true
-    val startDestination: Any = remember { if (navController.context.hasStorageAccess()) HomeRoute else OnboardingRoute }
+    // Onboarding is the only place permissions are asked: storage is required, notifications once.
+    val startDestination: Any = remember {
+        val context = navController.context
+        if (context.hasStorageAccess() && (onboardingDone || context.hasNotificationAccess())) HomeRoute else OnboardingRoute
+    }
 
     PushDrawer(
         state = drawerState,
@@ -155,7 +162,8 @@ private fun FindexNavigation() {
             popExitTransition = { scaleOut(targetScale = 0.9f, animationSpec = effects) + fadeOut(effects) },
         ) {
             composable<OnboardingRoute> {
-                OnboardingScreen(onGranted = {
+                OnboardingScreen(onFinished = {
+                    onOnboardingFinished()
                     navController.navigate(HomeRoute) { popUpTo<OnboardingRoute> { inclusive = true } }
                 })
             }

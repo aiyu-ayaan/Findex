@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -99,7 +100,10 @@ fun PushDrawer(
 
         // Hidden from accessibility while the card covers it.
         val hidden = if (state.fraction == 0f) Modifier.clearAndSetSemantics {} else Modifier
-        Box(Modifier.width(drawerWidth).fillMaxHeight().then(hidden)) { drawerContent() }
+        Box(Modifier.width(drawerWidth).fillMaxHeight().then(hidden)) {
+            // No Surface here, so set the content color a drawer sheet would have provided.
+            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) { drawerContent() }
+        }
 
         SideEffect {
             if (state.widthPx != widthPx) {
