@@ -57,8 +57,11 @@ data class ExplorerUiState(
     val activeOperation: ActiveOperation? = null,
     val isBookmarked: Boolean = false,
     /** Direction of the last folder change, for the shared-axis animation. */
-    val forward: Boolean = true
+    val forward: Boolean = true,
+    /** File shown in the list-detail pane on wide windows. */
+    val focused: String? = null
 ) {
+    val focusedItem: StorageItem? get() = focused?.let { f -> items.firstOrNull { it.path == f } }
     val tab: ExplorerTab? get() = tabs.getOrNull(activeTab)
     val inSelection: Boolean get() = selection.isNotEmpty()
     val canGoUp: Boolean get() = tab?.let { it.path != it.root } ?: false
@@ -166,7 +169,7 @@ class ExplorerViewModel @Inject constructor(
     // region Navigation
 
     private fun setPath(path: String, forward: Boolean) {
-        _uiState.update { it.copy(selection = emptySet(), forward = forward) }
+        _uiState.update { it.copy(selection = emptySet(), forward = forward, focused = null) }
         tabSession.setActivePath(path) // the session collector reloads
     }
 
@@ -195,6 +198,8 @@ class ExplorerViewModel @Inject constructor(
     // region Tabs
 
     fun addTab() = tabSession.duplicateActive()
+
+    fun focus(path: String?) = _uiState.update { it.copy(focused = path) }
 
     /** Opens [path] in a new tab and switches to it; the tab strip shows where it went. */
     fun openInNewTab(path: String) {

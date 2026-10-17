@@ -233,7 +233,7 @@ fun DetailsSheet(item: StorageItem, load: suspend (StorageItem) -> FileDetails, 
 }
 
 @Composable
-private fun DetailLine(labelRes: Int, value: String) {
+internal fun DetailLine(labelRes: Int, value: String) {
     Column(Modifier.padding(vertical = Dimens.sm)) {
         Text(stringResource(labelRes), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
         Text(value, style = MaterialTheme.typography.bodyLarge)

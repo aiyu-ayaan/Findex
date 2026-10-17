@@ -183,7 +183,8 @@ fun FileList(
     onMore: (StorageItem) -> Unit,
     onSelectionChange: (Set<String>) -> Unit,
     header: @Composable () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    focused: String? = null
 ) {
     val inSelection = selection.isNotEmpty()
     LazyColumn(
@@ -199,6 +200,7 @@ fun FileList(
             FileRow(
                 item = item,
                 selected = item.path in selection,
+                focused = item.path == focused,
                 inSelection = inSelection,
                 shape = groupedShape(index, items.size),
                 onClick = { onClick(item) },
@@ -219,7 +221,8 @@ fun FileGrid(
     onClick: (StorageItem) -> Unit,
     onSelectionChange: (Set<String>) -> Unit,
     header: @Composable () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    focused: String? = null
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(104.dp),
@@ -236,6 +239,7 @@ fun FileGrid(
             FileCell(
                 item = item,
                 selected = item.path in selection,
+                focused = item.path == focused,
                 onClick = { onClick(item) },
                 onLongClick = { onSelectionChange(selection + item.path) },
                 modifier = Modifier.animateItem()
@@ -250,13 +254,18 @@ private fun FileRow(
     selected: Boolean,
     inSelection: Boolean,
     shape: androidx.compose.ui.graphics.Shape,
+    focused: Boolean = false,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onMore: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val container by animateColorAsState(
-        if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerLow,
+        when {
+            selected -> MaterialTheme.colorScheme.primaryContainer
+            focused -> MaterialTheme.colorScheme.secondaryContainer
+            else -> MaterialTheme.colorScheme.surfaceContainerLow
+        },
         MaterialTheme.motionScheme.defaultEffectsSpec(),
         label = "rowColor"
     )
@@ -330,10 +339,15 @@ private fun FileCell(
     selected: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    focused: Boolean = false
 ) {
     val container by animateColorAsState(
-        if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerLow,
+        when {
+            selected -> MaterialTheme.colorScheme.primaryContainer
+            focused -> MaterialTheme.colorScheme.secondaryContainer
+            else -> MaterialTheme.colorScheme.surfaceContainerLow
+        },
         MaterialTheme.motionScheme.defaultEffectsSpec(),
         label = "cellColor"
     )
