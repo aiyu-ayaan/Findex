@@ -42,10 +42,11 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] Settings repository (DataStore — config only)
 
 ### M3 — App shell
-- [ ] Type-safe Navigation Compose host with shared-axis transitions
-- [ ] Predictive back enabled (`enableOnBackInvokedCallback`)
-- [ ] All-files-access onboarding screen
-- [ ] Drawer routes wired
+- [x] Type-safe Navigation Compose host with shared-axis transitions
+- [x] Predictive back enabled (`enableOnBackInvokedCallback`)
+- [x] All-files-access onboarding screen
+- [x] Drawer routes wired
+- [x] Adaptive launcher icon (themed/monochrome), splash screen, FileProvider
 
 ### M4 — Home
 - [ ] Storage hero card with wavy progress

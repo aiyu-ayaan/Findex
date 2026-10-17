@@ -11,3 +11,7 @@ data class AppSettings(
 )
 
 data class ClipboardContent(val paths: List<String>, val isCut: Boolean)
+
+data class Bookmark(val path: String, val name: String)
+
+data class RecentFile(val path: String, val name: String, val size: Long, val openedAt: Long)

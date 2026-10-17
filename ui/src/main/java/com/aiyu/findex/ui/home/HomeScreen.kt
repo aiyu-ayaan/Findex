@@ -57,24 +57,13 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    onOpenDrawer: () -> Unit,
+    onNavigate: (Any) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val coroutineScope = rememberCoroutineScope()
-
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            FindexDrawerSheet(
-                selectedRoute = "home",
-                onItemClick = {
-                    coroutineScope.launch { drawerState.close() }
-                }
-            )
-        }
-    ) {
+    run {
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -86,7 +75,7 @@ fun HomeScreen(
                         )
                     },
                     navigationIcon = {
-                        IconButton(onClick = { coroutineScope.launch { drawerState.open() } }) {
+                        IconButton(onClick = onOpenDrawer) {
                             Icon(
                                 imageVector = Icons.Rounded.Menu,
                                 contentDescription = stringResource(R.string.drawer_title)
