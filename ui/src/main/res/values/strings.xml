@@ -303,4 +303,29 @@
     </plurals>
     <string name="recycle_bin_hint">Items are deleted forever after 30 days</string>
     <string name="recycle_bin_empty">Recycle bin is empty</string>
+
+    <!-- File Inspector & Preview -->
+    <string name="details_dimensions">Dimensions</string>
+    <string name="details_resolution">Resolution</string>
+    <string name="details_duration">Duration</string>
+    <string name="details_megapixels">%1$.1f MP</string>
+    <string name="details_artist">Artist</string>
+    <string name="details_album">Album</string>
+    <string name="details_package">Package</string>
+    <string name="details_version">Version</string>
+    <string name="details_checksums">Checksums</string>
+    <string name="details_calculate_hash">Calculate checksums</string>
+    <string name="details_calculating">Calculating…</string>
+    <string name="details_copied_hash">Checksum copied to clipboard</string>
+    <string name="preview_fullscreen">Fullscreen</string>
+    <string name="preview_zoom_hint">Pinch to zoom</string>
+    <string name="preview_copy_text">Copy content</string>
+    <string name="preview_text_copied">Content copied to clipboard</string>
+    <string name="preview_lines_count">%1$d lines</string>
+    <string name="action_install">Install</string>
+    <string name="action_play">Play</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_open_folder">Open folder</string>
+    <string name="details_overview">Overview</string>
+    <string name="details_exact_bytes">%1$s bytes</string>
 </resources>
