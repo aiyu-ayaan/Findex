@@ -23,8 +23,16 @@
     <string name="onboarding_point_access">Browse every folder, SD card and USB drive</string>
     <string name="onboarding_point_fast">Copy, move and zip in the background</string>
     <string name="onboarding_point_private">Everything stays on your device</string>
-    <string name="onboarding_point_notify">Get progress updates in notifications</string>
-    <string name="onboarding_grant">Allow access</string>
+    <string name="onboarding_permissions">Permissions</string>
+    <string name="onboarding_storage_title">All files access</string>
+    <string name="onboarding_storage_body">Required to browse and manage your files</string>
+    <string name="onboarding_notify_title">Notifications</string>
+    <string name="onboarding_notify_body">Shows progress of copy, move, compress and clean while you use other apps</string>
+    <string name="onboarding_allow">Allow</string>
+    <string name="onboarding_granted">Granted</string>
+    <string name="onboarding_continue">Continue</string>
+    <string name="onboarding_storage_required">Allow all files access to continue</string>
+    <string name="onboarding_notify_hint">Without notifications, progress shows only inside Findex</string>
     <string name="error_no_app">No app can open this file</string>
 
     <!-- Tabs -->

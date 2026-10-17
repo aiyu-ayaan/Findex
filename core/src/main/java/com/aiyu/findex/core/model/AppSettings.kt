@@ -7,7 +7,9 @@ data class AppSettings(
     val dynamicColor: Boolean = true,
     val showHidden: Boolean = false,
     val gridView: Boolean = false,
-    val sort: SortSpec = SortSpec()
+    val sort: SortSpec = SortSpec(),
+    /** Set once the user leaves onboarding, so a declined notification prompt isn't shown again. */
+    val onboardingDone: Boolean = false
 )
 
 data class ClipboardContent(val paths: List<String>, val isCut: Boolean)

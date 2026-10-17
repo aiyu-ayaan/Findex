@@ -29,6 +29,7 @@ class SettingsRepository @Inject constructor(
         val gridView = booleanPreferencesKey("grid_view")
         val sortBy = stringPreferencesKey("sort_by")
         val sortAscending = booleanPreferencesKey("sort_ascending")
+        val onboardingDone = booleanPreferencesKey("onboarding_done")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -37,7 +38,8 @@ class SettingsRepository @Inject constructor(
             dynamicColor = p[Keys.dynamicColor] ?: true,
             showHidden = p[Keys.showHidden] ?: false,
             gridView = p[Keys.gridView] ?: false,
-            sort = SortSpec(p[Keys.sortBy].toEnum(SortBy.NAME), p[Keys.sortAscending] ?: true)
+            sort = SortSpec(p[Keys.sortBy].toEnum(SortBy.NAME), p[Keys.sortAscending] ?: true),
+            onboardingDone = p[Keys.onboardingDone] ?: false
         )
     }
 
@@ -45,6 +47,7 @@ class SettingsRepository @Inject constructor(
     suspend fun setDynamicColor(enabled: Boolean) = edit { it[Keys.dynamicColor] = enabled }
     suspend fun setShowHidden(enabled: Boolean) = edit { it[Keys.showHidden] = enabled }
     suspend fun setGridView(enabled: Boolean) = edit { it[Keys.gridView] = enabled }
+    suspend fun setOnboardingDone() = edit { it[Keys.onboardingDone] = true }
     suspend fun setSort(sort: SortSpec) = edit {
         it[Keys.sortBy] = sort.by.name
         it[Keys.sortAscending] = sort.ascending

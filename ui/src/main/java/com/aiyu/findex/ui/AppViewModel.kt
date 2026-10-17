@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AppViewModel @Inject constructor(
-    settingsRepository: SettingsRepository,
+    private val settingsRepository: SettingsRepository,
     operationManager: OperationManager,
     private val trashRepository: TrashRepository
 ) : ViewModel() {
@@ -29,6 +29,10 @@ class AppViewModel @Inject constructor(
 
     init {
         viewModelScope.launch { trashRepository.purgeExpired() }
+    }
+
+    fun completeOnboarding() {
+        viewModelScope.launch { settingsRepository.setOnboardingDone() }
     }
 
     fun undoTrash(trashOperationId: String) {
