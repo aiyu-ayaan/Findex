@@ -2,6 +2,7 @@ package com.aiyu.findex.ui.explorer
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -9,6 +10,7 @@ import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.changedToUp
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -269,9 +271,13 @@ private fun FileRow(
         MaterialTheme.motionScheme.defaultEffectsSpec(),
         label = "rowColor"
     )
+    val border = if (focused && !selected) {
+        BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.7f))
+    } else null
     Surface(
         shape = shape,
         color = container,
+        border = border,
         modifier = modifier
             .fillMaxWidth()
             .clip(shape)
@@ -351,9 +357,13 @@ private fun FileCell(
         MaterialTheme.motionScheme.defaultEffectsSpec(),
         label = "cellColor"
     )
+    val border = if (focused && !selected) {
+        BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.7f))
+    } else null
     Surface(
         shape = MaterialTheme.shapes.large,
         color = container,
+        border = border,
         modifier = modifier
             .clip(MaterialTheme.shapes.large)
             .combinedClickable(onClick = onClick, onLongClick = onLongClick)

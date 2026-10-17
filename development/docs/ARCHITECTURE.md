@@ -269,12 +269,14 @@ flowchart TD
     WindowWidth{"Window Width"}
     WindowWidth -->|"< 600dp (Compact)"| CompactLayout["PushDrawer + Single Pane + Scaffold FAB"]
     WindowWidth -->|"600dp - 1200dp (Medium)"| MediumLayout["NavigationRail + Responsive Gutters"]
-    WindowWidth -->|">= 1200dp (Expanded)"| ExpandedLayout["Permanent Drawer 280dp + Full Navigation"]
+    WindowWidth -->|">= 1200dp (Expanded)"| ExpandedLayout["Permanent Drawer 300dp + Full Navigation"]
 
-    subgraph TwoPaneExplorer ["Two-Pane Explorer (content width >= 720dp)"]
-        ListPane["List Pane 390dp<br/>LazyList / LazyGrid<br/>Anchored FAB in list Box<br/>Selection Toolbar"]
-        DetailPane["ExplorerDetailPane<br/>Hero Media Preview Fit<br/>Live Text Monospace Snippet<br/>Expressive Action Row<br/>Properties Card + Copy Path"]
+    subgraph TwoPaneExplorer ["Two-Pane Master-Detail Explorer (content width >= 720dp)"]
+        ListPane["List Pane 390dp<br/>LazyList / LazyGrid<br/>Primary focus border indicator<br/>Centered Bottom FAB<br/>Selection Toolbar"]
+        Divider["VerticalDivider"]
+        DetailPane["ExplorerDetailPane (Inspector)<br/>Image / Video / Audio / Text Heroes<br/>Fullscreen Zoomable Lightbox<br/>In-line Audio Player<br/>Action Toolbar<br/>Properties Card + Checksums"]
         ListPane -->|"tap file: focus(path)"| DetailPane
+        ListPane --- Divider --- DetailPane
         DetailPane -->|"onOpen / onShare / onDelete"| Ops["Operations / External Intent"]
     end
 
@@ -290,9 +292,11 @@ flowchart TD
    - `< 600dp`: Push drawer (Discord-style off-canvas sheet).
    - `600dp - 1200dp`: Persistent `NavigationRail` (`FindexNavRail`) saving horizontal space.
    - `>= 1200dp`: Permanent full navigation drawer (`FindexDrawerSheet`).
-2. **Two-Pane List-Detail Layout**:
-   - Left pane (`ExplorerListPaneWidth = 390.dp`): List or Grid of items. The Floating Action Button is anchored to the bottom-end of this pane, completely avoiding collision with the detail view.
-   - Right pane (`ExplorerDetailPane`): Responsive preview surface with category-aware rich media (images with `ContentScale.Fit`, video frame with Play overlay, audio cards, and async live text snippets for code/text files), quick actions, and structured metadata properties with one-tap path copy.
+2. **Two-Pane Master-Detail Layout & Inspector**:
+   - Left pane (`ExplorerListPaneWidth = 390.dp`): List or Grid of items. The Floating Action Button is centered at the bottom of the list pane with clear vertical margin, completely avoiding collision with the detail view or border. The active/focused item features an expressive tinted container and a 1.5dp primary border.
+   - Middle divider: Clean `VerticalDivider` providing structural separation between panes.
+   - Right pane (`ExplorerDetailPane`): Inspector surface with adaptive media heroes (`PreviewComponents`), interactive fullscreen zoom lightbox, in-line audio playback, syntax text reader with line numbers, structured specifications (dimensions, duration, exact byte size), location card with one-tap copy, and on-demand MD5 / SHA-256 checksum calculator.
 3. **Readable Gutters**:
    - `readableGutter()` automatically centers content with standard margins on extra-wide screens up to `Dimens.contentMaxWidth = 840.dp`.
+
 

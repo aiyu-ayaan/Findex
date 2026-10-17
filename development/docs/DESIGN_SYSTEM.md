@@ -180,11 +180,24 @@ Every gesture has a button alternative (select all, per-row checkbox).
 - **Navigation**:
   - Modal push drawer for compact widths (< 600dp).
   - Navigation Rail (`surfaceContainerLow`, 80dp) for medium widths (600dp–1200dp).
-  - Permanent Navigation Drawer (`surfaceContainerLow`, 280dp) for expanded widths (>= 1200dp).
-- **Two-Pane Explorer**:
+  - Permanent Navigation Drawer (`surfaceContainerLow`, 300dp) for expanded widths (>= 1200dp).
+- **Two-Pane Explorer & Inspector**:
   - Activated when available content width is >= 720dp.
-  - List pane: `ExplorerListPaneWidth = 390.dp`, housing file list/grid with its own anchored FAB at bottom-end.
-  - Detail pane: `surfaceContainerLow` surface with 28dp corners, 16dp margins, and internal 24dp padding.
-  - Media previews: Photos use `ContentScale.Fit` with full width and `heightIn(min = 220.dp, max = 360.dp)`; videos feature a 56dp centered Play button with a scrim overlay; audio features `Cookie9Sided` shape icon with CategoryTone background; code/text files (< 10 MB) display a monospace syntax-like snippet of the first 2 KB.
-  - Expressive Action row: Primary full-width CTA (Open/Extract) paired with Share, followed by a secondary row of tonal action icon buttons and an error-container Delete button.
+  - List pane: `ExplorerListPaneWidth = 390.dp`, with centered bottom FAB for paste/create actions and subtle `VerticalDivider` separating panes.
+  - Focused item in list/grid is highlighted with `secondaryContainer` and a 1.5dp primary accent border.
+  - Detail pane: `surfaceContainerLow` surface with 28dp corners, 1dp subtle border, and structured scrollable sections.
+  - Media hero previews (`PreviewComponents`):
+    - **Photos**: Adaptive framing with resolution (`1920 × 1080 · 2.1 MP`) and size chips, fullscreen button, and interactive Fullscreen Lightbox Dialog featuring pinch-to-zoom and pan gestures.
+    - **Videos**: 16:9 responsive card with video frame thumbnail, gradient scrim, duration chip, and centered play button.
+    - **Audio**: In-line player with real-time playback control, track slider, metadata (title, artist, album), and expressive category tone vinyl styling.
+    - **Code/Text**: Code card with line numbers gutter, copy content action, and monospace syntax styling.
+    - **APKs**: Application icon, label, package name, version, and Install action.
+    - **Archives**: Format badge (ZIP/7Z/RAR), size, and Extract action.
+    - **Folders**: Subfolder/file count, total computed size, and direct Open Folder navigation.
+  - **Action Toolbar & Properties**:
+    - Primary CTA (Open/Extract/Install) paired with Share, followed by a secondary tonal icon strip (Copy, Cut, Rename, Compress/Extract, Delete).
+    - Technical Specifications card: Formatted size + exact bytes, MIME type, modified timestamp, dimensions, duration.
+    - Location card: Folder path with copy-to-clipboard action.
+    - Checksum card: On-demand MD5 and SHA-256 calculator with one-tap copy.
+
 

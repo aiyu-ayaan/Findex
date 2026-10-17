@@ -91,6 +91,7 @@ import androidx.compose.material3.ToggleFloatingActionButton
 import androidx.compose.material3.ToggleFloatingActionButtonDefaults.animateIcon
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.animateFloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -350,8 +351,8 @@ fun ExplorerScreen(
                     onNewFolder = { fabMenuOpen = false; modal = ExplorerModal.NewFolder },
                     onNewTab = { fabMenuOpen = false; viewModel.addTab() },
                     modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(end = Dimens.lg, bottom = Dimens.xxl)
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = Dimens.xl)
                 )
             }
 
@@ -378,6 +379,12 @@ fun ExplorerScreen(
         }
       }
         if (listDetail) {
+            VerticalDivider(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(vertical = Dimens.sm),
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+            )
             val focusedItem = state.focusedItem
             ExplorerDetailPane(
                 item = focusedItem,
@@ -394,12 +401,13 @@ fun ExplorerScreen(
                     onExtract = { focusedItem?.let { modal = ExplorerModal.Extract(it) } },
                     onDelete = { focusedItem?.let { modal = ExplorerModal.Delete(listOf(it.path)) } },
                     onClose = { viewModel.focus(null) },
-                    onNewFolder = { modal = ExplorerModal.NewFolder }
+                    onNewFolder = { modal = ExplorerModal.NewFolder },
+                    onOpenFolder = { viewModel.openFolder(it) }
                 ),
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-                    .padding(start = Dimens.sm, end = Dimens.lg, top = Dimens.sm, bottom = Dimens.lg)
+                    .padding(start = Dimens.md, end = Dimens.lg, top = Dimens.sm, bottom = Dimens.lg)
             )
         }
       }
