@@ -1,10 +1,14 @@
 package com.aiyu.findex.core.repository
 
 import android.content.Context
+import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.storage.StorageManager
-import android.os.storage.StorageVolume
+import android.provider.MediaStore
+import android.webkit.MimeTypeMap
+import com.aiyu.findex.core.model.CategoryStat
 import com.aiyu.findex.core.model.DriveType
 import com.aiyu.findex.core.model.FileCategory
 import com.aiyu.findex.core.model.StorageDrive
@@ -24,93 +28,189 @@ class StorageRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : StorageRepository {
 
+    override val downloadsPath: String =
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+
     override fun getStorageDrives(): Flow<List<StorageDrive>> = flow {
         val drives = mutableListOf<StorageDrive>()
         val storageManager = context.getSystemService(Context.STORAGE_SERVICE) as? StorageManager
 
-        if (storageManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val volumes: List<StorageVolume> = storageManager.storageVolumes
-            for (volume in volumes) {
-                val directory = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    volume.directory
-                } else {
-                    null
-                }
-                val path = directory?.absolutePath ?: Environment.getExternalStorageDirectory().absolutePath
-                val file = File(path)
-                val totalSpace = if (file.exists()) file.totalSpace else 0L
-                val freeSpace = if (file.exists()) file.freeSpace else 0L
+        storageManager?.storageVolumes?.forEach { volume ->
+            val directory = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) volume.directory else null
+            val path = directory?.absolutePath
+                ?: if (volume.isPrimary) Environment.getExternalStorageDirectory().absolutePath else return@forEach
+            val file = File(path)
+            if (!file.exists()) return@forEach
 
-                val isPrimary = volume.isPrimary
-                val isRemovable = volume.isRemovable
-                val driveType = when {
-                    isPrimary -> DriveType.INTERNAL
-                    isRemovable -> DriveType.SD_CARD
-                    else -> DriveType.USB
-                }
+            val driveType = when {
+                volume.isPrimary -> DriveType.INTERNAL
+                volume.isRemovable -> DriveType.SD_CARD
+                else -> DriveType.USB
+            }
+            drives.add(
+                StorageDrive(
+                    id = volume.uuid ?: "primary",
+                    name = volume.getDescription(context),
+                    path = path,
+                    totalBytes = file.totalSpace,
+                    freeBytes = file.freeSpace,
+                    type = driveType,
+                    isPrimary = volume.isPrimary,
+                    isRemovable = volume.isRemovable
+                )
+            )
+        }
 
-                val driveName = volume.getDescription(context).ifBlank {
-                    if (isPrimary) "Internal Storage" else "External Storage"
-                }
+        if (drives.isEmpty()) {
+            val primary = Environment.getExternalStorageDirectory()
+            drives.add(
+                StorageDrive(
+                    id = "primary",
+                    name = "",
+                    path = primary.absolutePath,
+                    totalBytes = primary.totalSpace,
+                    freeBytes = primary.freeSpace,
+                    type = DriveType.INTERNAL,
+                    isPrimary = true
+                )
+            )
+        }
+        emit(drives.sortedByDescending { it.isPrimary })
+    }.flowOn(Dispatchers.IO)
 
-                drives.add(
-                    StorageDrive(
-                        id = volume.uuid ?: "primary",
-                        name = driveName,
-                        path = path,
-                        totalBytes = totalSpace,
-                        freeBytes = freeSpace,
-                        type = driveType,
-                        isPrimary = isPrimary,
-                        isRemovable = isRemovable
-                    )
+    override suspend fun getFilesInDirectory(directoryPath: String, showHidden: Boolean): List<StorageItem> =
+        withContext(Dispatchers.IO) {
+            val files = File(directoryPath).listFiles() ?: return@withContext emptyList()
+            files.asSequence()
+                .filter { showHidden || !it.isHidden }
+                .map { it.toStorageItem() }
+                .toList()
+        }
+
+    override suspend fun getItem(path: String): StorageItem? = withContext(Dispatchers.IO) {
+        File(path).takeIf { it.exists() }?.toStorageItem()
+    }
+
+    override suspend fun getCategoryFiles(category: FileCategory): List<StorageItem> = withContext(Dispatchers.IO) {
+        if (category == FileCategory.DOWNLOADS) {
+            return@withContext File(downloadsPath).walkTopDown().filter { it.isFile }.map { it.toStorageItem() }
+                .sortedByDescending { it.lastModified }.toList()
+        }
+        val query = category.mediaQuery()
+        val projection = arrayOf(
+            MediaStore.MediaColumns.DATA,
+            MediaStore.MediaColumns.DISPLAY_NAME,
+            MediaStore.MediaColumns.SIZE,
+            MediaStore.MediaColumns.DATE_MODIFIED,
+            MediaStore.MediaColumns.MIME_TYPE
+        )
+        val items = mutableListOf<StorageItem>()
+        context.contentResolver.query(
+            query.uri, projection, query.selection, query.args,
+            "${MediaStore.MediaColumns.DATE_MODIFIED} DESC"
+        )?.use { c ->
+            val data = c.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
+            val name = c.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
+            val size = c.getColumnIndexOrThrow(MediaStore.MediaColumns.SIZE)
+            val modified = c.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_MODIFIED)
+            val mime = c.getColumnIndexOrThrow(MediaStore.MediaColumns.MIME_TYPE)
+            while (c.moveToNext()) {
+                val path = c.getString(data) ?: continue
+                val displayName = c.getString(name) ?: path.substringAfterLast('/')
+                items += StorageItem(
+                    path = path,
+                    name = displayName,
+                    size = c.getLong(size),
+                    lastModified = c.getLong(modified) * 1000,
+                    extension = displayName.substringAfterLast('.', "").lowercase(),
+                    mimeType = c.getString(mime)
                 )
             }
         }
+        items
+    }
 
-        // Fallback if no volumes obtained
-        if (drives.isEmpty()) {
-            val primaryFile = Environment.getExternalStorageDirectory()
-            val total = primaryFile.totalSpace
-            val free = primaryFile.freeSpace
-            drives.add(
-                StorageDrive(
-                    id = "internal_primary",
-                    name = "Internal Storage",
-                    path = primaryFile.absolutePath,
-                    totalBytes = total,
-                    freeBytes = free,
-                    type = DriveType.INTERNAL,
-                    isPrimary = true,
-                    isRemovable = false
-                )
-            )
+    override suspend fun getCategoryStats(): Map<FileCategory, CategoryStat> = withContext(Dispatchers.IO) {
+        FileCategory.entries.filter { it != FileCategory.DOWNLOADS }.associateWith { category ->
+            val query = category.mediaQuery()
+            var count = 0
+            var bytes = 0L
+            context.contentResolver.query(
+                query.uri, arrayOf(MediaStore.MediaColumns.SIZE), query.selection, query.args, null
+            )?.use { c ->
+                while (c.moveToNext()) {
+                    count++
+                    bytes += c.getLong(0)
+                }
+            }
+            CategoryStat(count, bytes)
         }
-
-        emit(drives)
-    }.flowOn(Dispatchers.IO)
-
-    override suspend fun getFilesInDirectory(directoryPath: String): List<StorageItem> = withContext(Dispatchers.IO) {
-        val dir = File(directoryPath)
-        if (!dir.exists() || !dir.isDirectory) return@withContext emptyList()
-
-        val files = dir.listFiles() ?: return@withContext emptyList()
-        files.map { file ->
-            val isDir = file.isDirectory
-            StorageItem(
-                path = file.absolutePath,
-                name = file.name,
-                size = if (isDir) 0L else file.length(),
-                lastModified = file.lastModified(),
-                isDirectory = isDir,
-                extension = file.extension.lowercase(),
-                itemCount = if (isDir) (file.list()?.size ?: 0) else 0
-            )
-        }.sortedWith(compareByDescending<StorageItem> { it.isDirectory }.thenBy { it.name.lowercase() })
     }
 
-    override suspend fun getCategoryCount(category: FileCategory): Int = withContext(Dispatchers.IO) {
-        // Placeholder for category file counting logic
-        0
+    override suspend fun rename(path: String, newName: String): StorageItem? = withContext(Dispatchers.IO) {
+        val name = newName.trim()
+        if (!isValidName(name)) return@withContext null
+        val src = File(path)
+        val target = File(src.parentFile, name)
+        if (target.exists() || !src.renameTo(target)) return@withContext null
+        scan(src, target)
+        target.toStorageItem()
     }
+
+    override suspend fun createFolder(parentPath: String, name: String): StorageItem? = withContext(Dispatchers.IO) {
+        val trimmed = name.trim()
+        if (!isValidName(trimmed)) return@withContext null
+        val dir = File(parentPath, trimmed)
+        if (dir.exists() || !dir.mkdir()) return@withContext null
+        dir.toStorageItem()
+    }
+
+    private fun isValidName(name: String) =
+        name.isNotEmpty() && name != "." && name != ".." && name.none { it == '/' || it == '\u0000' }
+
+    /** Keeps MediaStore (gallery, category screens) in sync after a rename. */
+    private fun scan(vararg files: File) {
+        MediaScannerConnection.scanFile(context, files.map { it.absolutePath }.toTypedArray(), null, null)
+    }
+
+    private class MediaQuery(val uri: Uri, val selection: String?, val args: Array<String>?)
+
+    private fun FileCategory.mediaQuery(): MediaQuery {
+        val files = MediaStore.Files.getContentUri("external")
+        return when (this) {
+            FileCategory.PHOTOS -> MediaQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null)
+            FileCategory.VIDEOS -> MediaQuery(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null, null)
+            FileCategory.AUDIO -> MediaQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null)
+            FileCategory.DOCUMENTS -> extensionQuery(files, DOCUMENT_EXTENSIONS)
+            FileCategory.ARCHIVES -> extensionQuery(files, ARCHIVE_EXTENSIONS)
+            FileCategory.APKS -> extensionQuery(files, listOf("apk"))
+            FileCategory.DOWNLOADS -> MediaQuery(files, null, null)
+        }
+    }
+
+    private fun extensionQuery(uri: Uri, extensions: List<String>) = MediaQuery(
+        uri,
+        extensions.joinToString(" OR ") { "${MediaStore.MediaColumns.DISPLAY_NAME} LIKE ?" },
+        extensions.map { "%.$it" }.toTypedArray()
+    )
+
+    private companion object {
+        val DOCUMENT_EXTENSIONS = listOf("pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "rtf", "csv", "odt", "ods", "odp", "md", "epub")
+        val ARCHIVE_EXTENSIONS = listOf("zip", "7z", "rar", "tar", "gz", "tgz", "bz2", "xz")
+    }
+}
+
+fun File.toStorageItem(): StorageItem {
+    val isDir = isDirectory
+    val ext = if (isDir) "" else extension.lowercase()
+    return StorageItem(
+        path = absolutePath,
+        name = name,
+        size = if (isDir) 0L else length(),
+        lastModified = lastModified(),
+        isDirectory = isDir,
+        extension = ext,
+        mimeType = if (isDir) null else MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext),
+        itemCount = if (isDir) (list()?.size ?: 0) else 0
+    )
 }

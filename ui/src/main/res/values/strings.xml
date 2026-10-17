@@ -85,6 +85,22 @@
     <string name="operation_in_progress">Operation in progress…</string>
     <string name="operation_completed">Operation completed</string>
     <string name="operation_failed">Operation failed</string>
+    <string name="operation_cancelled">Operation cancelled</string>
+    <string name="operation_progress">%1$d%% · %2$s</string>
+    <plurals name="operation_queued">
+        <item quantity="one">%1$s · %2$d more queued</item>
+        <item quantity="other">%1$s · %2$d more queued</item>
+    </plurals>
+    <string name="op_title_copy">Copying %1$s item(s)</string>
+    <string name="op_title_move">Moving %1$s item(s)</string>
+    <string name="op_title_delete">Deleting %1$s item(s)</string>
+    <string name="op_title_clean">Cleaning %1$s item(s)</string>
+    <string name="op_title_compress">Compressing to %1$s</string>
+    <string name="op_title_extract">Extracting %1$s</string>
+    <string name="error_wrong_password">Wrong or missing password</string>
+    <string name="error_no_space">Not enough storage space</string>
+    <string name="error_into_itself">A folder can\'t be copied into itself</string>
+    <string name="error_access_denied">Permission denied for this location</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
 </resources>

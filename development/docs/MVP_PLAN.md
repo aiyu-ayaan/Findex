@@ -15,9 +15,9 @@ Network storage and exotic archive formats come right after MVP (see "Post-MVP")
 |---|-----------|-----------|-----------|
 | M0 | Plan & design | This plan, `DESIGN_SYSTEM.md`, updated architecture, TODO | docs |
 | M1 | Design tokens | Complete light/dark schemes (all surface containers), expressive shapes, `MotionScheme.expressive()`, spacing tokens, category tones | `ui` |
-| M2 | Core engine | File listing (sort, hidden files), rename, new folder, delete, copy, move, ZIP compress (AES password) & extract, MediaStore category queries, operation queue + foreground service with live notification, clipboard, settings (DataStore) | `core` |
+| M2 | Core engine | File listing (sort, hidden files), rename, new folder, delete, copy, move, ZIP compress (AES password) & extract, MediaStore category queries, operation queue + foreground service with live notification, clipboard, Room database (bookmarks, recents), settings (DataStore) | `core` |
 | M3 | App shell | Type-safe Navigation Compose, shared-axis transitions, predictive back, all-files-access onboarding, drawer routing | `ui`, `app` |
-| M4 | Home | Storage hero card with wavy progress, Device / Network tabs, category tiles in `MaterialShapes`, quick tools, active-operation banner | `ui` |
+| M4 | Home | Storage hero card with wavy progress, Device / Network tabs, category tiles in `MaterialShapes`, bookmarks and recent files rows, quick tools, active-operation banner | `ui` |
 | M5 | Explorer | Multi-tab browsing, breadcrumbs, list / grid, sort sheet, long-press + drag-to-select (Google Photos style), floating selection toolbar, item action sheet, rename / new folder / details / compress / extract / delete dialogs, cut-copy-paste across tabs | `ui` |
 | M6 | Categories | Photos, Videos, Audio, Documents, Downloads, Archives, APKs via MediaStore with thumbnails | `core`, `ui` |
 | M7 | Tools | Storage Analyzer (category breakdown + largest files), Storage Cleaner (junk scan), WhatsApp Cleaner (per-media-type cleanup) | `core`, `ui` |
@@ -42,7 +42,7 @@ Network storage and exotic archive formats come right after MVP (see "Post-MVP")
 | Long work | `FileOperationForegroundService` driven by `OperationManager` | CLAUDE.md rule: every long task is a foreground service. The service consumes a queue; UI observes one `StateFlow`. |
 | Archives | `zip4j` | Small, pure-Java, supports AES password create + extract. |
 | Thumbnails | Coil 3 (+ video frames) | Async decode, memory cache; not worth hand-rolling. |
-| Settings | DataStore Preferences | Already in the version catalog. |
+| Persistence | **SQLite via Room** for app data (bookmarks, recent files, later network drives); **DataStore Preferences only for config** (theme, view, sort, hidden files) | Relational data needs queries and migrations; config is small key-value. |
 | Clipboard | In-memory singleton `FileClipboard` | Shared across tabs = multitasking copy/paste. |
 
 ---

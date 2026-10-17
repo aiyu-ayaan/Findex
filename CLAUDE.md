@@ -60,6 +60,7 @@ on one item and then click items individuall both will do the same  select proce
 - Colors only through `MaterialTheme.colorScheme` roles; category colors through `CategoryTones`. No raw `Color(0x…)` in screens.
 - Spacing through `Dimens`; shapes through `MaterialTheme.shapes` / `MaterialShapes`.
 - Motion through `MaterialTheme.motionScheme` specs, never ad-hoc `tween` durations.
+- Persistence: app data in SQLite through Room (`core/db`). DataStore is only for config/settings. Never store lists or records in DataStore.
 - Long file work goes through `OperationManager` → `FileOperationForegroundService`. Never run copy/move/delete/zip on a ViewModel scope directly.
 - Commit at each milestone: `scope(Change) : Message`, e.g. `ui(Explorer) : Add drag-to-select`.
 - Build check: `./gradlew :app:assembleDebug`. Run on emulator: `./run.sh`.

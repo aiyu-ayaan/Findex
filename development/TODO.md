@@ -32,13 +32,14 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] Spacing tokens (`Dimens`) and category tones (`FileCategory.tone`)
 
 ### M2 — Core engine
-- [ ] File listing with sort + hidden-file filter
-- [ ] Rename, new folder, delete, copy, move with progress
-- [ ] ZIP compress (AES password) & extract via zip4j
-- [ ] `OperationManager` queue + foreground service notification progress + cancel
-- [ ] `FileClipboard` shared across tabs
-- [ ] MediaStore category queries
-- [ ] Settings repository (DataStore)
+- [x] File listing with sort + hidden-file filter
+- [x] Rename, new folder, delete, copy, move with progress
+- [x] ZIP compress (AES password) & extract via zip4j
+- [x] `OperationManager` queue + foreground service notification progress + cancel
+- [x] `FileClipboard` shared across tabs
+- [x] MediaStore category queries
+- [x] Room (SQLite) database: `bookmarks`, `recent_files`
+- [x] Settings repository (DataStore — config only)
 
 ### M3 — App shell
 - [ ] Type-safe Navigation Compose host with shared-axis transitions
@@ -49,6 +50,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 ### M4 — Home
 - [ ] Storage hero card with wavy progress
 - [ ] Category tiles in `MaterialShapes`
+- [ ] Bookmarks + recent files rows
 - [ ] Quick tools cards, active-operation banner
 
 ### M5 — Explorer

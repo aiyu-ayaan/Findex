@@ -11,37 +11,43 @@ The application is structured into three distinct Gradle modules adhering to cle
 ```mermaid
 graph TD
     subgraph ":app"
-        App[FindexApp Application]
+        App[FindexApp @HiltAndroidApp]
         MainAct[MainActivity]
-        AppNav[App Navigation Entry]
     end
 
     subgraph ":ui"
-        UIStrings[res/values/strings.xml<br/>Single Source of Truth]
-        Theme[Material 3 Expressive Theme]
-        Screens[HomeScreen, Explorer, Cleaners]
-        Components[StorageCard, CategoryGrid, Drawer, Dialogs]
-        VMs[HomeViewModel, ExplorerViewModel]
+        UIStrings[res/values/strings.xml<br/>single source of strings]
+        Theme[FindexTheme<br/>MaterialExpressiveTheme]
+        Nav[FindexNavHost]
+        Screens[Home · Explorer · Category · Tools · Settings]
+        VMs[ViewModels]
+        OpStrings[ResourceOperationStrings]
     end
 
     subgraph ":core"
-        Repo[StorageRepository & FileRepository]
-        Models[StorageDrive, StorageItem, FileCategory, FileOperation]
+        StorageRepo[StorageRepository<br/>File + MediaStore]
+        LibraryRepo[LibraryRepository]
+        DB[(Room / SQLite<br/>bookmarks · recent_files)]
+        Settings[(DataStore<br/>config only)]
+        OpMgr[OperationManager]
+        Clip[FileClipboard]
+        Exec[FileOperationExecutor<br/>copy · move · delete · zip4j]
         FGS[FileOperationForegroundService]
-        DI[CoreModule / Hilt DI]
+        OpStringsIf[[OperationStrings interface]]
     end
 
-    App --> UIStrings
-    App --> Theme
-    App --> Screens
-    App --> Repo
-    App --> FGS
-    Screens --> VMs
-    VMs --> Repo
-    Screens --> Components
-    Components --> Models
-    Repo --> Models
-    FGS --> Models
+    App --> MainAct --> Theme --> Nav --> Screens --> VMs
+    VMs --> StorageRepo
+    VMs --> LibraryRepo --> DB
+    VMs --> Settings
+    VMs --> Clip --> OpMgr
+    VMs --> OpMgr
+    OpMgr -- startForegroundService --> FGS
+    FGS -- poll queue --> OpMgr
+    FGS --> Exec
+    FGS --> OpStringsIf
+    OpStrings -. Hilt @Binds .-> OpStringsIf
+    OpStrings --> UIStrings
 ```
 
 ### Module Responsibilities
@@ -50,41 +56,61 @@ graph TD
 | :--- | :--- | :--- | :--- |
 | `:app` | `com.android.application` | Application entry point (`FindexApp` with `@HiltAndroidApp`), `MainActivity`, Android Manifest, system permissions. | **NO `strings.xml`** (pulls merged resources from `:ui`). |
 | `:ui` | `com.android.library` | Compose UI components, Material 3 Expressive theming, navigation drawer, screen layouts, ViewModels. | **Centralized `strings.xml`** holding all app strings for future localization. |
-| `:core` | `com.android.library` | Models, repositories, storage queries, foreground services for background tasks, Hilt bindings. | **NO `strings.xml`**. |
+| `:core` | `com.android.library` | Models, repositories, Room database, DataStore settings, operation queue, foreground service, Hilt bindings. | **NO `strings.xml`**. Notification texts come from `OperationStrings`, implemented in `:ui`. |
+
+### Persistence rule
+
+| Store | Holds | Never holds |
+| :--- | :--- | :--- |
+| Room (SQLite) `findex.db` | Bookmarks, recent files, (post-MVP) network drives | Settings |
+| DataStore `settings` | Theme mode, dynamic color, hidden files, grid view, sort | Lists / records |
 
 ---
 
 ## 2. Foreground Service & Long Operations Architecture
 
-Long-running tasks such as batch file copying, moving, archiving, extraction, and junk cleaning run within `FileOperationForegroundService` with notification channel support.
+Every copy, move, delete, clean, compress and extract runs in `FileOperationForegroundService`.
+The UI never runs these on a ViewModel scope.
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor User
-    participant UI as Compose UI / ViewModel
-    participant Repo as Storage / File Repository
+    participant VM as ViewModel
+    participant Clip as FileClipboard
+    participant Mgr as OperationManager
     participant FGS as FileOperationForegroundService
-    participant Notif as Android NotificationManager
-    participant FS as File System / Storage Access
+    participant Exec as FileOperationExecutor
+    participant Notif as NotificationManager
+    participant MS as MediaStore
 
-    User->>UI: Trigger operation (e.g., Copy, Archive, Clean)
-    UI->>FGS: Start Service with Operation Intent
-    FGS->>Notif: Post ongoing foreground notification (progress)
-    loop Processing files
-        FGS->>Repo: Execute batch chunk
-        Repo->>FS: Perform I/O operation
-        FS-->>Repo: Operation status
-        Repo-->>FGS: Progress update (bytes / item count)
-        FGS->>Notif: Update notification progress fraction
-        FGS-->>UI: Emit StateFlow progress
+    User->>VM: Paste / Delete / Compress / Extract
+    VM->>Clip: paste(destDir) (copy or cut)
+    Clip->>Mgr: enqueue(Copy | Move)
+    VM->>Mgr: enqueue(Delete | Compress | Extract | Clean)
+    Mgr->>FGS: startForegroundService(ACTION_START)
+    FGS->>Notif: startForeground(progress notification)
+    loop until queue empty
+        FGS->>Mgr: poll()
+        FGS->>Exec: execute(op) on Dispatchers.IO
+        Exec-->>FGS: OperationProgress (throttled 120ms)
+        FGS-->>Mgr: publish(ActiveOperation) → UI banner
+        FGS->>Notif: update (throttled 500ms)
+        Exec-->>FGS: touched paths
+        FGS->>MS: scanFile(touched)
+        FGS-->>Mgr: publish(OperationResult) → UI snackbar
     end
-    FGS->>Notif: Show completion notification
-    FGS->>FGS: stopForeground() & stopSelf()
-    FGS-->>UI: Operation Complete
+    FGS->>FGS: stopForeground + stopSelf(lastStartId)
 ```
 
----
+**Cancel**: notification action or UI → `ACTION_CANCEL` → current job cancelled. The executor checks
+cancellation every 256 KB chunk, deletes the half-written file, and zip4j tasks get `isCancelAllTasks`.
+
+**Safety rules in the executor**
+- Never overwrites: name clashes become `name (1).ext`.
+- Refuses to copy/move a folder into itself.
+- Move tries `renameTo` first (instant on the same volume), falls back to copy + delete.
+- A failed compress deletes the partial archive.
 
 ## 3. Storage Hierarchy & Network Drive Integration
 
