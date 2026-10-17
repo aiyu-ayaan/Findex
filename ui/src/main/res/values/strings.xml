@@ -110,6 +110,20 @@
     <string name="action_new_tab">New Tab</string>
     <string name="action_close_tab">Close Tab</string>
     <string name="action_open_in_new_tab">Open in new tab</string>
+    <string name="detail_empty_hint">Select a file to see its preview and details here</string>
+    <string name="cd_close_details">Close details</string>
+    <string name="rail_graph">Graph</string>
+    <string name="rail_cleaner">Cleaner</string>
+    <string name="rail_whatsapp">WhatsApp</string>
+    <string name="rail_bin">Bin</string>
+    <string name="action_copy_path">Copy path</string>
+    <string name="path_copied">Path copied to clipboard</string>
+    <string name="preview_file">Preview</string>
+    <string name="preview_play_video">Play video</string>
+    <string name="preview_play_audio">Play audio</string>
+    <string name="preview_lines_truncated">%1$d lines shown</string>
+    <string name="preview_empty_file">Empty file</string>
+    <string name="details_item_info">Item details</string>
 
     <string name="action_open">Open</string>
     <string name="action_create">Create</string>

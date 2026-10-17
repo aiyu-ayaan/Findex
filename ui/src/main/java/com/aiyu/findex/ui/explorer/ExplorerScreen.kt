@@ -1,5 +1,13 @@
 package com.aiyu.findex.ui.explorer
 
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.material3.NavigationDrawerItem
+import com.aiyu.findex.ui.components.LocalContentWidth
+import com.aiyu.findex.ui.components.windowWidth
+import com.aiyu.findex.ui.components.ProvideContentWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.widthIn
@@ -116,6 +124,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.ui.LocalSnackbarHostState
 import com.aiyu.findex.ui.R
+import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.components.OperationBanner
 import com.aiyu.findex.ui.components.ShapeIcon
 import com.aiyu.findex.ui.theme.Dimens
@@ -183,11 +192,14 @@ fun ExplorerScreen(
     val gridStates = remember { mutableMapOf<String, androidx.compose.foundation.lazy.grid.LazyGridState>() }
 
     val tab = state.tab
+    // MD3 list-detail: with room for both panes, tapping a file shows it beside the list.
+    val listDetail = (LocalContentWidth.current ?: windowWidth()) >= 720.dp
 
     fun open(item: StorageItem) {
         when {
             state.inSelection -> viewModel.toggleSelection(item.path)
             item.isDirectory -> viewModel.openFolder(item.path)
+            listDetail -> viewModel.focus(item.path)
             item.isArchive -> modal = ExplorerModal.Extract(item)
             else -> {
                 viewModel.onFileOpened(item.path)
@@ -240,30 +252,30 @@ fun ExplorerScreen(
             }
         },
         floatingActionButton = {
-            ExplorerFab(
-                visible = !state.inSelection,
-                clipboardCount = state.clipboard?.paths?.size ?: 0,
-                isCut = state.clipboard?.isCut == true,
-                menuOpen = fabMenuOpen,
-                onMenuOpenChange = { fabMenuOpen = it },
-                onPaste = viewModel::paste,
-                onClearClipboard = viewModel::clearClipboard,
-                onNewFolder = { fabMenuOpen = false; modal = ExplorerModal.NewFolder },
-                onNewTab = { fabMenuOpen = false; viewModel.addTab() }
-            )
+            if (!listDetail) {
+                ExplorerFab(
+                    visible = !state.inSelection,
+                    clipboardCount = state.clipboard?.paths?.size ?: 0,
+                    isCut = state.clipboard?.isCut == true,
+                    menuOpen = fabMenuOpen,
+                    onMenuOpenChange = { fabMenuOpen = it },
+                    onPaste = viewModel::paste,
+                    onClearClipboard = viewModel::clearClipboard,
+                    onNewFolder = { fabMenuOpen = false; modal = ExplorerModal.NewFolder },
+                    onNewTab = { fabMenuOpen = false; viewModel.addTab() }
+                )
+            }
         }
     ) { innerPadding ->
-        Box(
-            Modifier
-                .fillMaxSize()
-                .padding(top = innerPadding.calculateTopPadding())
-        ) {
+      Row(Modifier.fillMaxSize().padding(top = innerPadding.calculateTopPadding())) {
+        ProvideContentWidth(if (listDetail) Modifier.width(ExplorerListPaneWidth).fillMaxHeight() else Modifier.weight(1f).fillMaxHeight()) {
+        Box(Modifier.fillMaxSize()) {
             val listPadding = PaddingValues(
-                start = Dimens.gutter, end = Dimens.gutter, top = Dimens.sm,
+                start = readableGutter(), end = readableGutter(), top = Dimens.sm,
                 bottom = innerPadding.calculateBottomPadding() + 120.dp
             )
             val header: @Composable () -> Unit = {
-                AnimatedVisibility(
+                androidx.compose.animation.AnimatedVisibility(
                     visible = state.activeOperation != null,
                     enter = expandVertically() + fadeIn(),
                     exit = shrinkVertically() + fadeOut()
@@ -305,7 +317,8 @@ fun ExplorerScreen(
                         contentPadding = listPadding,
                         onClick = ::open,
                         onSelectionChange = viewModel::setSelection,
-                        header = header
+                        header = header,
+                        focused = state.focused
                     )
                     else -> FileList(
                         items = state.items,
@@ -315,13 +328,31 @@ fun ExplorerScreen(
                         onClick = ::open,
                         onMore = { modal = ExplorerModal.Actions(it) },
                         onSelectionChange = viewModel::setSelection,
-                        header = header
+                        header = header,
+                        focused = state.focused
                     )
                 }
             }
 
             if (state.isLoading) {
                 LoadingIndicator(Modifier.align(Alignment.Center))
+            }
+
+            if (listDetail) {
+                ExplorerFab(
+                    visible = !state.inSelection,
+                    clipboardCount = state.clipboard?.paths?.size ?: 0,
+                    isCut = state.clipboard?.isCut == true,
+                    menuOpen = fabMenuOpen,
+                    onMenuOpenChange = { fabMenuOpen = it },
+                    onPaste = viewModel::paste,
+                    onClearClipboard = viewModel::clearClipboard,
+                    onNewFolder = { fabMenuOpen = false; modal = ExplorerModal.NewFolder },
+                    onNewTab = { fabMenuOpen = false; viewModel.addTab() },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = Dimens.lg, bottom = Dimens.xxl)
+                )
             }
 
             SelectionToolbar(
@@ -345,6 +376,33 @@ fun ExplorerScreen(
                     .offset(y = -FloatingToolbarDefaults.ScreenOffset)
             )
         }
+      }
+        if (listDetail) {
+            val focusedItem = state.focusedItem
+            ExplorerDetailPane(
+                item = focusedItem,
+                folderName = tab?.let { if (it.path == it.root) it.rootName else File(it.path).name } ?: "",
+                folderItemCount = state.items.size,
+                load = viewModel::details,
+                actions = DetailActions(
+                    onOpen = { focusedItem?.let { viewModel.onFileOpened(it.path); context.openFile(it.path) } },
+                    onShare = { focusedItem?.let { context.shareFiles(listOf(it.path)) } },
+                    onCopy = { focusedItem?.let { viewModel.copySelection(listOf(it.path)) } },
+                    onCut = { focusedItem?.let { viewModel.cutSelection(listOf(it.path)) } },
+                    onRename = { focusedItem?.let { modal = ExplorerModal.Rename(it) } },
+                    onCompress = { focusedItem?.let { modal = ExplorerModal.Compress(listOf(it.path), it.name.substringBeforeLast('.')) } },
+                    onExtract = { focusedItem?.let { modal = ExplorerModal.Extract(it) } },
+                    onDelete = { focusedItem?.let { modal = ExplorerModal.Delete(listOf(it.path)) } },
+                    onClose = { viewModel.focus(null) },
+                    onNewFolder = { modal = ExplorerModal.NewFolder }
+                ),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .padding(start = Dimens.sm, end = Dimens.lg, top = Dimens.sm, bottom = Dimens.lg)
+            )
+        }
+      }
     }
 
     when (val m = modal) {
@@ -436,12 +494,6 @@ private fun BrowseTopBar(
         },
         actions = {
             TabCountButton(tabCount, onOpenTabs)
-            IconButton(onClick = onBookmark) {
-                Icon(
-                    if (isBookmarked) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
-                    contentDescription = stringResource(if (isBookmarked) R.string.action_remove_bookmark else R.string.action_bookmark)
-                )
-            }
             IconButton(onClick = onToggleView) {
                 Icon(
                     if (gridView) Icons.Rounded.ViewAgenda else Icons.Rounded.GridView,
@@ -453,6 +505,11 @@ private fun BrowseTopBar(
                     Icon(Icons.Rounded.MoreVert, contentDescription = stringResource(R.string.cd_more_options))
                 }
                 DropdownMenu(expanded = menu, onDismissRequest = { menu = false }, shape = MaterialTheme.shapes.large) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(if (isBookmarked) R.string.action_remove_bookmark else R.string.action_bookmark)) },
+                        leadingIcon = { Icon(if (isBookmarked) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder, null) },
+                        onClick = { menu = false; onBookmark() }
+                    )
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.sort_title)) },
                         leadingIcon = { Icon(Icons.AutoMirrored.Rounded.Sort, null) },
@@ -605,10 +662,15 @@ private fun ExplorerFab(
     onPaste: () -> Unit,
     onClearClipboard: () -> Unit,
     onNewFolder: () -> Unit,
-    onNewTab: () -> Unit
+    onNewTab: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     if (clipboardCount > 0) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Dimens.sm)) {
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Dimens.sm)
+        ) {
             SmallFloatingActionButton(onClick = onClearClipboard, modifier = Modifier.animateFloatingActionButton(visible, Alignment.BottomEnd)) {
                 Icon(Icons.Rounded.Close, contentDescription = stringResource(R.string.cd_clear_clipboard))
             }
@@ -639,7 +701,7 @@ private fun ExplorerFab(
                 Icon(icon, contentDescription = stringResource(R.string.cd_create_menu), modifier = Modifier.animateIcon({ checkedProgress }))
             }
         },
-        modifier = Modifier.semantics { isTraversalGroup = true }
+        modifier = modifier.semantics { isTraversalGroup = true }
     ) {
         FloatingActionButtonMenuItem(
             onClick = onNewFolder,
