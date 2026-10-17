@@ -36,7 +36,9 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.CleaningServices
 import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.Forum
-import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import com.aiyu.findex.ui.components.MenuIcon
 import androidx.compose.material.icons.rounded.PieChart
 import androidx.compose.material.icons.rounded.SdCard
 import androidx.compose.material.icons.rounded.Settings
@@ -115,6 +117,7 @@ fun HomeScreen(
     onOpenDrawer: () -> Unit,
     onNavigate: (Any) -> Unit,
     modifier: Modifier = Modifier,
+    drawerProgress: () -> Float = { 0f },
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -132,7 +135,7 @@ fun HomeScreen(
                 subtitle = { Text(stringResource(R.string.home_subtitle)) },
                 navigationIcon = {
                     IconButton(onClick = onOpenDrawer) {
-                        Icon(Icons.Rounded.Menu, contentDescription = stringResource(R.string.cd_open_drawer))
+                        MenuIcon(drawerProgress, Modifier.semantics { contentDescription = context.getString(R.string.cd_open_drawer) })
                     }
                 },
                 actions = {

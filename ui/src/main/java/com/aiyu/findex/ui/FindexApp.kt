@@ -14,14 +14,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -47,6 +44,8 @@ import com.aiyu.findex.core.model.FileOperation
 import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.model.ThemeMode
 import com.aiyu.findex.ui.components.FindexDrawerSheet
+import com.aiyu.findex.ui.components.PushDrawer
+import com.aiyu.findex.ui.components.rememberPushDrawerState
 import com.aiyu.findex.ui.di.failureRes
 import com.aiyu.findex.ui.explorer.ExplorerScreen
 import com.aiyu.findex.ui.home.HomeScreen
@@ -126,14 +125,14 @@ fun FindexApp(viewModel: AppViewModel = hiltViewModel()) {
 @Composable
 private fun FindexNavigation() {
     val navController = rememberNavController()
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val drawerState = rememberPushDrawerState()
     val scope = rememberCoroutineScope()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val onHome = backStackEntry?.destination?.hasRoute(HomeRoute::class) == true
     val startDestination: Any = remember { if (navController.context.hasStorageAccess()) HomeRoute else OnboardingRoute }
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
+    PushDrawer(
+        state = drawerState,
         gesturesEnabled = onHome || drawerState.isOpen,
         drawerContent = {
             FindexDrawerSheet(
@@ -163,6 +162,7 @@ private fun FindexNavigation() {
             composable<HomeRoute> {
                 HomeScreen(
                     onOpenDrawer = { scope.launch { drawerState.open() } },
+                    drawerProgress = { drawerState.fraction },
                     onNavigate = { navController.navigate(it) }
                 )
             }

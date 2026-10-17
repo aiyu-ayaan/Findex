@@ -80,7 +80,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 
 ### MVP polish (feedback)
 - [x] Status bar icons follow the in-app theme, not the system theme
-- [ ] Discord-style push drawer + modern menu icon
+- [x] Discord-style push drawer + modern menu icon
 - [x] Unified scalloped category shapes
 - [ ] Verify drag-to-select on a physical device
 - [ ] Large-screen (tablet) layout pass
