@@ -18,7 +18,9 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -41,6 +43,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.aiyu.findex.core.model.FileOperation
 import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.model.ThemeMode
 import com.aiyu.findex.ui.components.FindexDrawerSheet
@@ -60,6 +63,8 @@ import com.aiyu.findex.ui.tools.CleanerScreen
 import com.aiyu.findex.ui.tools.WhatsAppScreen
 import com.aiyu.findex.ui.navigation.HomeRoute
 import com.aiyu.findex.ui.navigation.OnboardingRoute
+import com.aiyu.findex.ui.navigation.RecycleBinRoute
+import com.aiyu.findex.ui.trash.RecycleBinScreen
 import com.aiyu.findex.ui.onboarding.OnboardingScreen
 import com.aiyu.findex.ui.theme.FindexTheme
 import com.aiyu.findex.ui.util.hasStorageAccess
@@ -83,6 +88,18 @@ fun FindexApp(viewModel: AppViewModel = hiltViewModel()) {
         val context = LocalContext.current
         LaunchedEffect(Unit) {
             viewModel.operationResults.collect { result ->
+                val trash = (result as? OperationResult.Success)?.operation as? FileOperation.Trash
+                if (trash != null) {
+                    val count = trash.targets.size
+                    val undo = snackbarHostState.showSnackbar(
+                        message = context.resources.getQuantityString(R.plurals.moved_to_bin, count, count),
+                        actionLabel = context.getString(R.string.undo),
+                        // With an action the default is Indefinite, which would block later results.
+                        duration = SnackbarDuration.Long
+                    )
+                    if (undo == SnackbarResult.ActionPerformed) viewModel.undoTrash(trash.id)
+                    return@collect
+                }
                 val message = when (result) {
                     is OperationResult.Success -> context.getString(R.string.operation_completed)
                     is OperationResult.Cancelled -> context.getString(R.string.operation_cancelled)
@@ -164,6 +181,7 @@ private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: N
     composable<CleanerRoute> { CleanerScreen(onBack = back) }
     composable<WhatsAppRoute> { WhatsAppScreen(onBack = back) }
     composable<SettingsRoute> { SettingsScreen(onBack = back) }
+    composable<RecycleBinRoute> { RecycleBinScreen(onBack = back) }
 }
 
 private fun AnimatedContentTransitionScope<NavBackStackEntry>.sharedAxisEnter(

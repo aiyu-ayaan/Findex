@@ -22,6 +22,18 @@ sealed interface FileOperation {
         override val id: String = UUID.randomUUID().toString()
     ) : FileOperation
 
+    /** Moves targets into the recycle bin; restorable until purged. */
+    data class Trash(
+        val targets: List<String>,
+        override val id: String = UUID.randomUUID().toString()
+    ) : FileOperation
+
+    /** Moves recycle-bin entries (by row id) back to where they came from. */
+    data class Restore(
+        val ids: List<Long>,
+        override val id: String = UUID.randomUUID().toString()
+    ) : FileOperation
+
     data class Compress(
         val targets: List<String>,
         val destinationArchive: String,

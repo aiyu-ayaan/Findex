@@ -13,6 +13,7 @@
     <string name="nav_archive_manager">Archive Manager</string>
     <string name="nav_network_storage">Network Storage</string>
     <string name="nav_settings">Settings</string>
+    <string name="nav_recycle_bin">Recycle bin</string>
 
     <string name="badge_soon">Soon</string>
 
@@ -236,6 +237,8 @@
     <string name="op_title_copy">Copying %1$s item(s)</string>
     <string name="op_title_move">Moving %1$s item(s)</string>
     <string name="op_title_delete">Deleting %1$s item(s)</string>
+    <string name="op_title_trash">Moving %1$s item(s) to Recycle bin</string>
+    <string name="op_title_restore">Restoring %1$s item(s)</string>
     <string name="op_title_clean">Cleaning %1$s item(s)</string>
     <string name="op_title_compress">Compressing to %1$s</string>
     <string name="op_title_extract">Extracting %1$s</string>
@@ -245,4 +248,22 @@
     <string name="error_access_denied">Permission denied for this location</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
+
+    <!-- Recycle bin -->
+    <plurals name="trash_title">
+        <item quantity="one">Move %d item to Recycle bin?</item>
+        <item quantity="other">Move %d items to Recycle bin?</item>
+    </plurals>
+    <string name="trash_body">You can restore it from the Recycle bin for 30 days.</string>
+    <string name="delete_permanently">Delete permanently</string>
+    <string name="action_move_to_bin">Move to bin</string>
+    <string name="action_restore">Restore</string>
+    <string name="action_empty_bin">Empty bin</string>
+    <string name="undo">Undo</string>
+    <plurals name="moved_to_bin">
+        <item quantity="one">%d item moved to Recycle bin</item>
+        <item quantity="other">%d items moved to Recycle bin</item>
+    </plurals>
+    <string name="recycle_bin_hint">Items are deleted forever after 30 days</string>
+    <string name="recycle_bin_empty">Recycle bin is empty</string>
 </resources>

@@ -67,8 +67,8 @@ class CategoryViewModel @Inject constructor(
     fun copySelection() { clipboard.copy(_uiState.value.selection.toList()); clearSelection() }
     fun cutSelection() { clipboard.cut(_uiState.value.selection.toList()); clearSelection() }
 
-    fun delete(paths: List<String>) {
-        operationManager.enqueue(FileOperation.Delete(paths))
+    fun delete(paths: List<String>, permanent: Boolean) {
+        operationManager.enqueue(if (permanent) FileOperation.Delete(paths) else FileOperation.Trash(paths))
         clearSelection()
     }
 

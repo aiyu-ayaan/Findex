@@ -192,6 +192,6 @@ fun CategoryScreen(
         )
     }
     deletePaths?.let { paths ->
-        DeleteDialog(paths.size, onConfirm = { viewModel.delete(paths); deletePaths = null }, onDismiss = { deletePaths = null })
+        DeleteDialog(paths.size, onConfirm = { permanent -> viewModel.delete(paths, permanent); deletePaths = null }, onDismiss = { deletePaths = null })
     }
 }

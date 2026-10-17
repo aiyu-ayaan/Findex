@@ -27,11 +27,11 @@ graph TD
     subgraph ":core"
         StorageRepo[StorageRepository<br/>File + MediaStore]
         LibraryRepo[LibraryRepository]
-        DB[(Room / SQLite<br/>bookmarks · recent_files)]
+        DB[(Room / SQLite<br/>bookmarks · recent_files · trash)]
         Settings[(DataStore<br/>config only)]
         OpMgr[OperationManager]
         Clip[FileClipboard]
-        Exec[FileOperationExecutor<br/>copy · move · delete · zip4j]
+        Exec[FileOperationExecutor<br/>copy · move · delete · trash · restore · zip4j]
         FGS[FileOperationForegroundService]
         OpStringsIf[[OperationStrings interface]]
     end
@@ -62,7 +62,7 @@ graph TD
 
 | Store | Holds | Never holds |
 | :--- | :--- | :--- |
-| Room (SQLite) `findex.db` | Bookmarks, recent files, (post-MVP) network drives | Settings |
+| Room (SQLite) `findex.db` | Bookmarks, recent files, recycle bin entries, (post-MVP) network drives | Settings |
 | DataStore `settings` | Theme mode, dynamic color, hidden files, grid view, sort | Lists / records |
 
 ---
@@ -212,3 +212,24 @@ flowchart TD
 
 `StorageScanner` skips `Android/data` and `Android/obb` and never offers top-level standard
 folders (DCIM, Music…) as "empty folders".
+
+## 7. Recycle Bin
+
+Delete defaults to `FileOperation.Trash`. Files move (a cheap rename) into `<volume root>/.FindexTrash/` on their own volume. A `trash` row records where each one came from. `Delete permanently` and the bin screen still use `FileOperation.Delete`, which also drops matching `trash` rows.
+
+```mermaid
+flowchart LR
+    Dialog[DeleteDialog<br/>Move to bin / Delete permanently] -->|Trash| Mgr[OperationManager]
+    Dialog -->|Delete| Mgr
+    Mgr --> FGS[FileOperationForegroundService] --> Exec[FileOperationExecutor]
+    Exec -->|1. insert row| DB[(trash table<br/>batchId = operation id)]
+    Exec -->|2. rename / copy+delete| Bin[/volume/.FindexTrash/]
+    Snack[Undo snackbar] -->|TrashRepository.undo batchId| Mgr
+    BinUI[RecycleBinScreen] -->|Restore ids / Delete trashPaths| Mgr
+    App[AppViewModel init] -->|purgeExpired > 30 days| Mgr
+```
+
+- The row is inserted before the move, so a crash mid-move never leaves an untracked file in the bin.
+- Deleting something that is already inside `.FindexTrash` is always permanent.
+- `RecycleBinViewModel` drops rows whose file vanished outside the app.
+- Room schema v2 adds `trash` through `AutoMigration(1, 2)`.

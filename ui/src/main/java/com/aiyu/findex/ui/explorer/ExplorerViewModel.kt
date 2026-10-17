@@ -252,8 +252,8 @@ class ExplorerViewModel @Inject constructor(
 
     fun clearClipboard() = clipboard.clear()
 
-    fun delete(paths: Collection<String>) {
-        operationManager.enqueue(FileOperation.Delete(paths.toList()))
+    fun delete(paths: Collection<String>, permanent: Boolean) {
+        operationManager.enqueue(if (permanent) FileOperation.Delete(paths.toList()) else FileOperation.Trash(paths.toList()))
         clearSelection()
     }
 

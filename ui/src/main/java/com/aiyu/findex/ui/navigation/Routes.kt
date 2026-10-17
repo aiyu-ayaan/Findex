@@ -10,3 +10,4 @@ import kotlinx.serialization.Serializable
 @Serializable object CleanerRoute
 @Serializable object WhatsAppRoute
 @Serializable object SettingsRoute
+@Serializable object RecycleBinRoute

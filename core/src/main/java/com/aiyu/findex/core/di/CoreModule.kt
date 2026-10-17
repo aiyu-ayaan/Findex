@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.aiyu.findex.core.db.BookmarkDao
 import com.aiyu.findex.core.db.FindexDatabase
 import com.aiyu.findex.core.db.RecentFileDao
+import com.aiyu.findex.core.db.TrashDao
 import com.aiyu.findex.core.repository.StorageRepository
 import com.aiyu.findex.core.repository.StorageRepositoryImpl
 import dagger.Binds
@@ -36,5 +37,8 @@ abstract class CoreModule {
 
         @Provides
         fun provideRecentFileDao(db: FindexDatabase): RecentFileDao = db.recentFileDao()
+
+        @Provides
+        fun provideTrashDao(db: FindexDatabase): TrashDao = db.trashDao()
     }
 }

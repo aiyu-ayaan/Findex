@@ -21,12 +21,14 @@ import androidx.compose.material.icons.rounded.DriveFileRenameOutline
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.FolderZip
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.RestoreFromTrash
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Unarchive
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonGroupDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -52,6 +54,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -76,9 +79,9 @@ import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.util.formatDate
 import com.aiyu.findex.ui.util.formatSize
 
-enum class ItemAction { OPEN, SHARE, SHOW_IN_FOLDER, COPY, CUT, RENAME, COMPRESS, EXTRACT, BOOKMARK, DETAILS, DELETE }
+enum class ItemAction { OPEN, SHARE, SHOW_IN_FOLDER, RESTORE, COPY, CUT, RENAME, COMPRESS, EXTRACT, BOOKMARK, DETAILS, DELETE }
 
-val ExplorerItemActions = ItemAction.entries.toSet() - ItemAction.SHOW_IN_FOLDER
+val ExplorerItemActions = ItemAction.entries.toSet() - ItemAction.SHOW_IN_FOLDER - ItemAction.RESTORE
 
 /** Long-press-free per-item actions, opened from the row's overflow button. */
 @Composable
@@ -104,6 +107,7 @@ fun ItemActionSheet(
             if (!item.isDirectory) row(ItemAction.OPEN, Icons.AutoMirrored.Rounded.OpenInNew, R.string.action_open)
             if (!item.isDirectory) row(ItemAction.SHARE, Icons.Rounded.Share, R.string.action_share)
             row(ItemAction.SHOW_IN_FOLDER, Icons.Rounded.FolderOpen, R.string.action_show_in_folder)
+            row(ItemAction.RESTORE, Icons.Rounded.RestoreFromTrash, R.string.action_restore)
             row(ItemAction.COPY, Icons.Rounded.ContentCopy, R.string.action_copy)
             row(ItemAction.CUT, Icons.Rounded.ContentCut, R.string.action_cut)
             row(ItemAction.RENAME, Icons.Rounded.DriveFileRenameOutline, R.string.action_rename)
@@ -357,14 +361,36 @@ private fun PasswordField(
 }
 
 @Composable
-fun DeleteDialog(count: Int, onConfirm: () -> Unit, onDismiss: () -> Unit) {
+/** Defaults to moving into the Recycle bin; [permanentOnly] skips the bin (e.g. deleting from the bin itself). */
+fun DeleteDialog(count: Int, onConfirm: (permanent: Boolean) -> Unit, onDismiss: () -> Unit, permanentOnly: Boolean = false) {
+    var permanent by rememberSaveable { mutableStateOf(permanentOnly) }
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = { Icon(Icons.Rounded.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.error) },
-        title = { Text(pluralStringResource(R.plurals.delete_title, count, count)) },
-        text = { Text(stringResource(R.string.delete_body)) },
+        title = { Text(pluralStringResource(if (permanent) R.plurals.delete_title else R.plurals.trash_title, count, count)) },
+        text = {
+            Column {
+                Text(stringResource(if (permanent) R.string.delete_body else R.string.trash_body))
+                if (!permanentOnly) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .padding(top = Dimens.md)
+                            .clip(MaterialTheme.shapes.small)
+                            .toggleable(value = permanent, role = Role.Checkbox, onValueChange = { permanent = it })
+                    ) {
+                        Checkbox(checked = permanent, onCheckedChange = null)
+                        Spacer(Modifier.width(Dimens.sm))
+                        Text(stringResource(R.string.delete_permanently))
+                    }
+                }
+            }
+        },
         confirmButton = {
-            TextButton(onClick = onConfirm) { Text(stringResource(R.string.action_delete), color = MaterialTheme.colorScheme.error) }
+            TextButton(onClick = { onConfirm(permanent) }) {
+                if (permanent) Text(stringResource(R.string.action_delete), color = MaterialTheme.colorScheme.error)
+                else Text(stringResource(R.string.action_move_to_bin))
+            }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
     )

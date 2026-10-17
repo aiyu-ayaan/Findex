@@ -15,3 +15,13 @@ data class ClipboardContent(val paths: List<String>, val isCut: Boolean)
 data class Bookmark(val path: String, val name: String)
 
 data class RecentFile(val path: String, val name: String, val size: Long, val openedAt: Long)
+
+data class TrashItem(
+    val id: Long,
+    val name: String,
+    val originalPath: String,
+    val trashPath: String,
+    val size: Long,
+    val isDirectory: Boolean,
+    val deletedAt: Long
+)

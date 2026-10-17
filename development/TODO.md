@@ -79,6 +79,8 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 ---
 
 ### MVP polish (feedback)
+- [x] Status bar icons follow the in-app theme, not the system theme
+- [ ] Discord-style push drawer + modern menu icon
 - [x] Unified scalloped category shapes
 - [ ] Verify drag-to-select on a physical device
 - [ ] Large-screen (tablet) layout pass
@@ -97,7 +99,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [ ] Credential manager & bookmarks
 
 ### Quality of life
-- [ ] Recycle bin + undo delete
+- [x] Recycle bin + undo delete (`.FindexTrash` per volume, 30-day purge, Undo snackbar)
 - [ ] Global search with index
 - [ ] Duplicate finder
 - [ ] Tab session persistence

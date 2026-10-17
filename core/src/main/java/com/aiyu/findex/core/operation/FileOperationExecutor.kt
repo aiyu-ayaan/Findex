@@ -1,11 +1,15 @@
 package com.aiyu.findex.core.operation
 
+import android.content.Context
+import com.aiyu.findex.core.db.TrashDao
+import com.aiyu.findex.core.db.TrashEntity
 import com.aiyu.findex.core.model.FailureReason
 import com.aiyu.findex.core.model.FileOperation
 import com.aiyu.findex.core.model.FileOperationException
 import com.aiyu.findex.core.model.OperationProgress
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ensureActive
 import net.lingala.zip4j.ZipFile
 import net.lingala.zip4j.exception.ZipException
@@ -23,11 +27,15 @@ import javax.inject.Singleton
  * Cancellation is cooperative: cancel the coroutine and the executor stops at the next chunk.
  */
 @Singleton
-class FileOperationExecutor @Inject constructor() {
+class FileOperationExecutor @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val trashDao: TrashDao
+) {
 
     private companion object {
         const val BUFFER_SIZE = 256 * 1024
         const val REPORT_INTERVAL_MS = 120L
+        const val TRASH_DIR = ".FindexTrash"
     }
 
     /** @return every path created or removed, so the caller can refresh MediaStore. */
@@ -38,6 +46,9 @@ class FileOperationExecutor @Inject constructor() {
                 is FileOperation.Copy -> transfer(operation.id, operation.sources, operation.destinationDir, move = false, touched, report)
                 is FileOperation.Move -> transfer(operation.id, operation.sources, operation.destinationDir, move = true, touched, report)
                 is FileOperation.Delete -> delete(operation.id, operation.targets, touched, report)
+                    .also { trashDao.deleteByTrashPaths(operation.targets) }
+                is FileOperation.Trash -> trash(operation, touched, report)
+                is FileOperation.Restore -> restore(operation, touched, report)
                 is FileOperation.Clean -> delete(operation.id, operation.targets, touched, report)
                 is FileOperation.Compress -> compress(operation, report).also { touched += operation.destinationArchive }
                 is FileOperation.Extract -> extract(operation, report)
@@ -142,6 +153,87 @@ class FileOperationExecutor @Inject constructor() {
             }
         }
         tracker.finish()
+    }
+
+    // endregion
+
+    // region Recycle bin
+
+    private suspend fun trash(operation: FileOperation.Trash, touched: MutableList<String>, report: (OperationProgress) -> Unit) {
+        val files = operation.targets.map(::File).filter { it.exists() }
+        report(OperationProgress(operation.id, isIndeterminate = true))
+        val tracker = ProgressTracker(operation.id, totalBytes = 0, totalItems = files.sumOf { it.walkTopDown().count() }, report)
+        val alreadyInBin = mutableListOf<String>()
+        for (src in files) {
+            currentCoroutineContext().ensureActive()
+            val bin = trashDirFor(src)
+            // Deleting something that is already in the bin (browsed via hidden files) is permanent.
+            if (src.canonicalPath == bin.canonicalPath || src.canonicalPath.startsWith(bin.canonicalPath + File.separator)) {
+                alreadyInBin += src.absolutePath
+                continue
+            }
+            val target = uniqueTarget(bin, src.name)
+            // Row first: if the process dies mid-move the file is still findable from the bin.
+            val rowId = trashDao.insert(
+                TrashEntity(
+                    originalPath = src.absolutePath, trashPath = target.absolutePath, name = src.name,
+                    size = src.totalSize(), isDirectory = src.isDirectory, batchId = operation.id
+                )
+            )
+            src.walkTopDown().mapTo(touched) { it.absolutePath }
+            if (!moveFile(src, target, tracker)) {
+                if (!target.exists()) trashDao.delete(rowId)
+                throw FileOperationException(FailureReason.ACCESS_DENIED)
+            }
+        }
+        if (alreadyInBin.isNotEmpty()) {
+            delete(operation.id, alreadyInBin, touched) {}
+            trashDao.deleteByTrashPaths(alreadyInBin)
+        }
+        tracker.finish()
+    }
+
+    private suspend fun restore(operation: FileOperation.Restore, touched: MutableList<String>, report: (OperationProgress) -> Unit) {
+        val entries = operation.ids.chunked(500).flatMap { trashDao.byIds(it) }
+        report(OperationProgress(operation.id, isIndeterminate = true))
+        val tracker = ProgressTracker(operation.id, totalBytes = 0, totalItems = entries.sumOf { File(it.trashPath).walkTopDown().count() }, report)
+        for (entry in entries) {
+            currentCoroutineContext().ensureActive()
+            val src = File(entry.trashPath)
+            if (!src.exists()) {
+                trashDao.delete(entry.id)
+                continue
+            }
+            val original = File(entry.originalPath)
+            val parent = original.parentFile ?: throw FileOperationException(FailureReason.ACCESS_DENIED)
+            if (!parent.exists() && !parent.mkdirs()) throw FileOperationException(FailureReason.ACCESS_DENIED)
+            val target = uniqueTarget(parent, original.name)
+            if (!moveFile(src, target, tracker)) throw FileOperationException(FailureReason.ACCESS_DENIED)
+            trashDao.delete(entry.id)
+            target.walkTopDown().mapTo(touched) { it.absolutePath }
+        }
+        tracker.finish()
+    }
+
+    /** Rename when on the same volume, otherwise copy then delete. False when the source could not be fully removed. */
+    private suspend fun moveFile(src: File, target: File, tracker: ProgressTracker): Boolean {
+        if (src.renameTo(target)) {
+            tracker.addItems(src.name, items = target.walkTopDown().count(), bytes = 0)
+            return true
+        }
+        copyRecursively(src, target, tracker)
+        // The copy is kept even if the source is only partly removed, so nothing gets lost.
+        return src.deleteRecursively()
+    }
+
+    /** `<volume root>/.FindexTrash`, so trashing stays a cheap rename on the same volume. */
+    private fun trashDirFor(file: File): File {
+        val roots = context.getExternalFilesDirs(null).filterNotNull().map { it.absolutePath.substringBefore("/Android/data/") }
+        val root = roots.filter { file.absolutePath.startsWith(it + File.separator) }.maxByOrNull { it.length } ?: roots.first()
+        val dir = File(root, TRASH_DIR)
+        if (!dir.exists() && !dir.mkdirs()) throw FileOperationException(FailureReason.ACCESS_DENIED)
+        File(dir, ".nomedia").createNewFile()
+        return dir
     }
 
     // endregion

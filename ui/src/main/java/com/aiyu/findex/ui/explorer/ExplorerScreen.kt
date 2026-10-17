@@ -341,7 +341,7 @@ fun ExplorerScreen(
                 val item = m.item
                 when (action) {
                     ItemAction.OPEN -> open(item)
-                    ItemAction.SHOW_IN_FOLDER -> Unit
+                    ItemAction.SHOW_IN_FOLDER, ItemAction.RESTORE -> Unit
                     ItemAction.SHARE -> context.shareFiles(listOf(item.path))
                     ItemAction.COPY -> viewModel.copySelection(listOf(item.path))
                     ItemAction.CUT -> viewModel.cutSelection(listOf(item.path))
@@ -380,7 +380,7 @@ fun ExplorerScreen(
         )
         is ExplorerModal.Delete -> DeleteDialog(
             count = m.paths.size,
-            onConfirm = { viewModel.delete(m.paths); modal = null },
+            onConfirm = { permanent -> viewModel.delete(m.paths, permanent); modal = null },
             onDismiss = { modal = null }
         )
         is ExplorerModal.Details -> DetailsSheet(m.item, load = viewModel::details, onDismiss = { modal = null })

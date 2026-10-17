@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CleaningServices
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.CloudQueue
 import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.Forum
@@ -34,6 +35,7 @@ import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.navigation.AnalyzerRoute
 import com.aiyu.findex.ui.navigation.CleanerRoute
 import com.aiyu.findex.ui.navigation.HomeRoute
+import com.aiyu.findex.ui.navigation.RecycleBinRoute
 import com.aiyu.findex.ui.navigation.SettingsRoute
 import com.aiyu.findex.ui.navigation.WhatsAppRoute
 import com.aiyu.findex.ui.theme.Dimens
@@ -45,6 +47,7 @@ private val mainEntries = listOf(
     DrawerEntry(R.string.nav_storage_graph, Icons.Rounded.PieChart, AnalyzerRoute),
     DrawerEntry(R.string.nav_storage_cleaner, Icons.Rounded.CleaningServices, CleanerRoute),
     DrawerEntry(R.string.nav_whatsapp_cleaner, Icons.Rounded.Forum, WhatsAppRoute),
+    DrawerEntry(R.string.nav_recycle_bin, Icons.Rounded.Delete, RecycleBinRoute),
 )
 
 @Composable

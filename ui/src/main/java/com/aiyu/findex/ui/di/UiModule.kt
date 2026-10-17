@@ -39,6 +39,8 @@ fun operationTitleRes(operation: FileOperation): Int = when (operation) {
     is FileOperation.Copy -> R.string.op_title_copy
     is FileOperation.Move -> R.string.op_title_move
     is FileOperation.Delete -> R.string.op_title_delete
+    is FileOperation.Trash -> R.string.op_title_trash
+    is FileOperation.Restore -> R.string.op_title_restore
     is FileOperation.Clean -> R.string.op_title_clean
     is FileOperation.Compress -> R.string.op_title_compress
     is FileOperation.Extract -> R.string.op_title_extract
@@ -48,6 +50,8 @@ fun operationCount(operation: FileOperation): Any = when (operation) {
     is FileOperation.Copy -> operation.sources.size
     is FileOperation.Move -> operation.sources.size
     is FileOperation.Delete -> operation.targets.size
+    is FileOperation.Trash -> operation.targets.size
+    is FileOperation.Restore -> operation.ids.size
     is FileOperation.Clean -> operation.targets.size
     is FileOperation.Compress -> File(operation.destinationArchive).name
     is FileOperation.Extract -> File(operation.archivePath).name
