@@ -298,7 +298,6 @@ class FileOperationExecutor @Inject constructor(
         val created = !dest.exists()
         val format = ArchiveFormat.of(archive.name) ?: throw FileOperationException(FailureReason.UNSUPPORTED_ARCHIVE)
         try {
-            if (format == ArchiveFormat.ZIP) return extractZip(op, report)
             dest.mkdirs()
             val tracker = ProgressTracker(op.id, totalBytes = 0, totalItems = 0, report)
             ArchiveCodecs.read(format, archive, dest, op.password, onTotal = { tracker.totalBytes = it }, onBytes = tracker::addBytes)
@@ -307,24 +306,6 @@ class FileOperationExecutor @Inject constructor(
             if (created) dest.deleteRecursively() // no half-extracted folder left behind
             throw e
         }
-    }
-
-    private suspend fun extractZip(op: FileOperation.Extract, report: (OperationProgress) -> Unit) {
-        val zip = ZipFile(File(op.archivePath), op.password?.toCharArray()).apply { isRunInThread = true }
-        zip.use {
-            try {
-                if (zip.isEncrypted && op.password.isNullOrEmpty()) throw FileOperationException(FailureReason.WRONG_PASSWORD)
-                val dest = File(op.destinationDir).apply { mkdirs() }
-                zip.extractAll(dest.absolutePath)
-                awaitMonitor(zip.progressMonitor) { fraction ->
-                    report(OperationProgress(op.id, File(op.archivePath).name, processedItems = (fraction * 100).toInt(), totalItems = 100))
-                }
-            } catch (e: ZipException) {
-                if (e.type == ZipException.Type.WRONG_PASSWORD) throw FileOperationException(FailureReason.WRONG_PASSWORD, e)
-                throw FileOperationException(FailureReason.UNKNOWN, e)
-            }
-        }
-        report(OperationProgress(op.id, processedItems = 100, totalItems = 100, isComplete = true))
     }
 
     /** Polls a zip4j background task, forwarding progress and cancelling it if the coroutine is cancelled. */

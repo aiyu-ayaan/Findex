@@ -3,9 +3,7 @@ package com.aiyu.findex.core.operation
 import com.aiyu.findex.core.model.ArchiveFormat
 import com.aiyu.findex.core.model.FailureReason
 import com.aiyu.findex.core.model.FileOperationException
-import com.github.junrar.Archive
-import com.github.junrar.exception.RarException
-import com.github.junrar.exception.UnsupportedRarV5Exception
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import org.apache.commons.compress.archivers.sevenz.SevenZFile
@@ -17,14 +15,20 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
+import net.sf.sevenzipjbinding.ExtractOperationResult
+import net.sf.sevenzipjbinding.SevenZip
+import net.sf.sevenzipjbinding.SevenZipException
+import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream
 import org.apache.commons.compress.PasswordRequiredException
 import java.io.File
 import java.io.FilterInputStream
 import java.io.IOException
 import java.io.InputStream
+import java.io.RandomAccessFile
 
 /**
- * 7z, tar (+gz/xz/bz2) and rar codecs; ZIP stays on zip4j in [FileOperationExecutor].
+ * Archive codecs besides ZIP writing (zip4j, in [FileOperationExecutor]): 7z and tar via Commons Compress,
+ * ZIP and RAR reading via native 7-Zip.
  * [onBytes] receives (current entry name, bytes processed since the last call).
  */
 internal object ArchiveCodecs {
@@ -81,9 +85,8 @@ internal object ArchiveCodecs {
         onBytes: (String, Long) -> Unit
     ) = when (format) {
         ArchiveFormat.SEVEN_Z -> read7z(archive, dest, password, onTotal, onBytes)
-        ArchiveFormat.RAR -> readRar(archive, dest, password, onTotal, onBytes)
+        ArchiveFormat.ZIP, ArchiveFormat.RAR -> readNative(archive, dest, password, onTotal, onBytes)
         ArchiveFormat.TAR, ArchiveFormat.TAR_GZ, ArchiveFormat.TAR_XZ, ArchiveFormat.TAR_BZ2 -> readTar(format, archive, dest, onTotal, onBytes)
-        ArchiveFormat.ZIP -> throw IllegalArgumentException("ZIP is handled by zip4j")
     }
 
     private suspend fun read7z(archive: File, dest: File, password: String?, onTotal: (Long) -> Unit, onBytes: (String, Long) -> Unit) {
@@ -149,30 +152,52 @@ internal object ArchiveCodecs {
         }
     }
 
-    // shortcut: junrar extracts a whole entry per call, so progress and cancel act between entries; fine for typical RARs.
-    private suspend fun readRar(archive: File, dest: File, password: String?, onTotal: (Long) -> Unit, onBytes: (String, Long) -> Unit) {
-        try {
-            Archive(archive, password).use { rar ->
-                val headers = rar.fileHeaders
-                onTotal(headers.sumOf { it.fullUnpackSize })
-                for (header in headers) {
+    /**
+     * Native 7-Zip engine: RAR4/RAR5 and every zip method (Deflate64, BZip2, LZMA, PPMd, AES, ZipCrypto).
+     * Not covered by JVM unit tests: the engine is an Android .so.
+     */
+    private suspend fun readNative(archive: File, dest: File, password: String?, onTotal: (Long) -> Unit, onBytes: (String, Long) -> Unit) {
+        val job = currentCoroutineContext()[Job]
+        RandomAccessFile(archive, "r").use { raf ->
+            val opened = try {
+                // Null format = autodetect from the content, not the file name.
+                SevenZip.openInArchive(null, RandomAccessFileInStream(raf), password)
+            } catch (e: SevenZipException) {
+                // Encrypted headers (RAR -hp, 7z -mhe) fail to open without the right password.
+                throw FileOperationException(if (password != null) FailureReason.WRONG_PASSWORD else FailureReason.UNSUPPORTED_ARCHIVE, e)
+            }
+            opened.use { inArchive ->
+                val items = inArchive.simpleInterface.archiveItems
+                onTotal(items.sumOf { it.size ?: 0L })
+                for (item in items) {
                     currentCoroutineContext().ensureActive()
-                    if (header.isEncrypted && password == null) throw FileOperationException(FailureReason.WRONG_PASSWORD)
-                    val name = header.fileName.replace('\\', '/')
+                    val name = item.path.replace('\\', '/')
                     val target = safeTarget(dest, name)
-                    if (header.isDirectory) {
+                    if (item.isFolder) {
                         target.mkdirs()
                         continue
                     }
+                    if (item.isEncrypted && password == null) throw FileOperationException(FailureReason.WRONG_PASSWORD)
                     target.parentFile?.mkdirs()
-                    target.outputStream().use { rar.extractFile(header, it) }
-                    onBytes(name, header.fullUnpackSize)
+                    val result = target.outputStream().buffered().use { out ->
+                        item.extractSlow({ data ->
+                            // Throwing from the callback is the only way to stop the native loop mid-file.
+                            if (job?.isActive == false) throw SevenZipException("cancelled")
+                            out.write(data)
+                            onBytes(name, data.size.toLong())
+                            data.size
+                        }, password)
+                    }
+                    currentCoroutineContext().ensureActive()
+                    when (result) {
+                        ExtractOperationResult.OK -> Unit
+                        ExtractOperationResult.WRONG_PASSWORD -> throw FileOperationException(FailureReason.WRONG_PASSWORD)
+                        ExtractOperationResult.UNSUPPORTEDMETHOD -> throw FileOperationException(FailureReason.UNSUPPORTED_ARCHIVE)
+                        // A bad key on an encrypted entry shows up as a data or CRC error.
+                        else -> throw FileOperationException(if (item.isEncrypted) FailureReason.WRONG_PASSWORD else FailureReason.UNKNOWN)
+                    }
                 }
             }
-        } catch (e: UnsupportedRarV5Exception) {
-            throw FileOperationException(FailureReason.UNSUPPORTED_ARCHIVE, e)
-        } catch (e: RarException) {
-            throw FileOperationException(if (password != null) FailureReason.WRONG_PASSWORD else FailureReason.UNKNOWN, e)
         }
     }
 

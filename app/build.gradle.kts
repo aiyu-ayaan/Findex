@@ -7,6 +7,14 @@ plugins {
 
 android {
     namespace = "com.aiyu.findex"
+
+    packaging {
+        jniLibs {
+            // core/src/main/jniLibs ships a 16 KB-aligned rebuild (development/scripts/build-7zip-jbinding.sh);
+            // project libs merge before the AAR's 4 KB-aligned copies, so pickFirst keeps ours.
+            pickFirsts += "**/lib7-Zip-JBinding.so"
+        }
+    }
     compileSdk = 37
 
     defaultConfig {

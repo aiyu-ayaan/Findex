@@ -2,7 +2,7 @@ package com.aiyu.findex.core.model
 
 /**
  * Archive types Findex can extract. [writable] ones are offered when compressing;
- * only ZIP can be written with a password (Commons Compress can't encrypt 7z).
+ * only ZIP can be written with a password (Commons Compress can't encrypt 7z). RAR covers v4 and v5.
  */
 enum class ArchiveFormat(val extension: String, val writable: Boolean, val passwordOnWrite: Boolean, val passwordOnRead: Boolean) {
     ZIP("zip", writable = true, passwordOnWrite = true, passwordOnRead = true),
@@ -21,7 +21,7 @@ enum class ArchiveFormat(val extension: String, val writable: Boolean, val passw
             ".tar.gz" to TAR_GZ, ".tgz" to TAR_GZ,
             ".tar.xz" to TAR_XZ, ".txz" to TAR_XZ,
             ".tar.bz2" to TAR_BZ2, ".tbz2" to TAR_BZ2,
-            ".tar" to TAR, ".zip" to ZIP, ".7z" to SEVEN_Z, ".rar" to RAR
+            ".tar" to TAR, ".zip" to ZIP, ".zipx" to ZIP, ".7z" to SEVEN_Z, ".rar" to RAR
         )
 
         fun of(fileName: String): ArchiveFormat? {

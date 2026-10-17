@@ -79,6 +79,8 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 ---
 
 ### MVP polish (feedback)
+- [x] 16 KB page-size compliant native libs
+- [x] Onboarding asks storage + notification permissions as separate steps
 - [x] Status bar icons follow the in-app theme, not the system theme
 - [x] Discord-style push drawer + modern menu icon
 - [x] Unified scalloped category shapes
@@ -90,7 +92,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 ## Post-MVP
 
 ### Archives+
-- [x] 7z / RAR / TAR extraction and creation (Commons Compress + xz + junrar; RAR4 extract-only, RAR5 reports unsupported)
+- [x] 7z / RAR / TAR extraction and creation (Commons Compress + xz; ZIP/RAR read via native 7-Zip incl. RAR5, 16 KB-aligned rebuild)
 - [ ] In-archive preview without full extraction
 
 ### Network Storage

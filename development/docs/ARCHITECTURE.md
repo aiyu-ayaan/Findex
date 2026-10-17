@@ -236,24 +236,24 @@ flowchart LR
 
 ## 8. Archives
 
-`ArchiveFormat` (core/model) detects formats by suffix (`.tar.gz`, `.tgz`, … before plain extensions) and says which can be written or take a password.
+`ArchiveFormat` (core/model) detects formats by suffix, checking `.tar.gz`, `.tgz` and similar before plain extensions. It also records which formats can be written and which take a password.
 
 ```mermaid
 flowchart LR
-    Exec[FileOperationExecutor] -->|ZIP| Zip4j[zip4j<br/>AES-256 write/read]
-    Exec -->|7z / tar / tar.gz| Codecs[ArchiveCodecs]
-    Codecs --> CC[Commons Compress<br/>+ xz for LZMA]
-    Codecs -->|rar, read only| Junrar[junrar<br/>RAR4]
+    Exec[FileOperationExecutor] -->|write ZIP| Zip4j[zip4j<br/>AES-256]
+    Exec -->|write 7z / tar / tar.gz<br/>read 7z / tar.*| CC[ArchiveCodecs<br/>Commons Compress + xz]
+    Exec -->|read ZIP / RAR| Native[ArchiveCodecs.readNative<br/>7-Zip-JBinding, native 7-Zip 16.02]
 ```
 
 | Format | Create | Extract | Password |
 |--------|--------|---------|----------|
-| ZIP | yes | yes | write + read (AES-256) |
+| ZIP / ZIPX | yes (zip4j) | yes, every method: Deflate, Deflate64, BZip2, LZMA, PPMd | write AES-256, read AES + ZipCrypto |
 | 7z | yes | yes | read only |
 | TAR, TAR.GZ | yes | yes | — |
 | TAR.XZ, TAR.BZ2 | — | yes | — |
-| RAR (v4) | — | yes | read; RAR5 → `UNSUPPORTED_ARCHIVE` |
+| RAR 4 / RAR 5 | — | yes | read, including encrypted headers |
 
+- **16 KB pages:** the 7-Zip-JBinding-4Android AAR ships 4 KB-aligned `.so` files, which Android 15+ devices with 16 KB pages refuse to load. `core/src/main/jniLibs` holds a 16 KB-aligned rebuild made by `development/scripts/build-7zip-jbinding.sh` (NDK r28). `app` uses `pickFirsts` so those copies win. Rerun the script whenever the AAR version changes.
 - Every entry path goes through `ArchiveCodecs.safeTarget` (zip-slip guard). Tar symlinks and hard links are skipped.
 - A failed or cancelled extract deletes the new destination folder, and a failed compress deletes the partial archive.
 - `uniqueTarget` keeps multi-part suffixes whole: `a (1).tar.gz`.
