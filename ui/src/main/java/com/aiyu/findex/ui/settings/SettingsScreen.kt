@@ -20,6 +20,12 @@ import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.LightMode
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.Visibility
+import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.SystemUpdate
+import androidx.compose.foundation.clickable
+import com.aiyu.findex.core.update.UpdateChannel
+import com.aiyu.findex.core.update.UpdateRepository
+import com.aiyu.findex.core.update.UpdateState
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,12 +42,10 @@ import androidx.compose.material3.ToggleButtonDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -63,7 +67,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(private val repo: SettingsRepository) : ViewModel() {
+class SettingsViewModel @Inject constructor(private val repo: SettingsRepository, private val updates: UpdateRepository) : ViewModel() {
+    val updateState = updates.state
+    val installedVersion get() = updates.installedName
+    fun setAutoUpdate(on: Boolean) = viewModelScope.launch { repo.setAutoUpdate(on) }
+    fun setChannel(channel: UpdateChannel) = viewModelScope.launch { repo.setUpdateChannel(channel) }
+    fun checkNow(channel: UpdateChannel) = viewModelScope.launch { updates.check(channel, manual = true) }
+
     val settings = repo.settings.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), AppSettings())
     fun setTheme(mode: ThemeMode) = viewModelScope.launch { repo.setThemeMode(mode) }
     fun setDynamic(on: Boolean) = viewModelScope.launch { repo.setDynamicColor(on) }
@@ -72,11 +82,11 @@ class SettingsViewModel @Inject constructor(private val repo: SettingsRepository
 }
 
 @Composable
-fun SettingsScreen(onBack: () -> Unit, viewModel: SettingsViewModel = hiltViewModel()) {
+fun SettingsScreen(onBack: () -> Unit, onOpenAbout: () -> Unit, viewModel: SettingsViewModel = hiltViewModel()) {
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    val context = LocalContext.current
-    val version = remember { context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "" }
+    val updateState by viewModel.updateState.collectAsStateWithLifecycle()
+    val channel = settings.updateChannel ?: UpdateChannel.forVersion(viewModel.installedVersion)
     val dynamicSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
     Scaffold(
@@ -136,14 +146,54 @@ fun SettingsScreen(onBack: () -> Unit, viewModel: SettingsViewModel = hiltViewMo
             item { SectionHeader(stringResource(R.string.settings_files)) }
             item { SwitchRow(Icons.Rounded.Visibility, R.string.show_hidden_files, R.string.settings_show_hidden_desc, settings.showHidden, viewModel::setHidden, groupedShape(0, 2)) }
             item { SwitchRow(Icons.Rounded.GridView, R.string.settings_grid, R.string.settings_grid_desc, settings.gridView, viewModel::setGrid, groupedShape(1, 2)) }
+            item { SectionHeader(stringResource(R.string.settings_updates)) }
+            item { SwitchRow(Icons.Rounded.SystemUpdate, R.string.settings_auto_update, R.string.settings_auto_update_desc, settings.autoUpdate, viewModel::setAutoUpdate, groupedShape(0, 3)) }
+            item {
+                Surface(shape = groupedShape(1, 3), color = MaterialTheme.colorScheme.surfaceContainerLow) {
+                    Column(Modifier.fillMaxWidth().padding(Dimens.lg)) {
+                        Text(stringResource(R.string.settings_channel), style = MaterialTheme.typography.titleMedium)
+                        Spacer(Modifier.height(Dimens.md))
+                        val labels = mapOf(UpdateChannel.STABLE to R.string.channel_stable, UpdateChannel.BETA to R.string.channel_beta, UpdateChannel.ALPHA to R.string.channel_alpha)
+                        Row(horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween)) {
+                            UpdateChannel.entries.forEachIndexed { index, option ->
+                                ToggleButton(
+                                    checked = channel == option,
+                                    onCheckedChange = { viewModel.setChannel(option) },
+                                    shapes = when (index) {
+                                        0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+                                        UpdateChannel.entries.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                                        else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+                                    },
+                                    modifier = Modifier.weight(1f)
+                                ) { Text(stringResource(labels.getValue(option)), maxLines = 1) }
+                            }
+                        }
+                    }
+                }
+            }
+            item {
+                val status = when (val u = updateState) {
+                    UpdateState.Checking -> stringResource(R.string.update_checking)
+                    UpdateState.UpToDate -> stringResource(R.string.update_up_to_date)
+                    is UpdateState.Available -> stringResource(R.string.update_available_row, u.release.name)
+                    else -> viewModel.installedVersion
+                }
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_check_updates)) },
+                    supportingContent = { Text(status) },
+                    leadingContent = { Icon(Icons.Rounded.Refresh, null) },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    modifier = Modifier.clip(groupedShape(2, 3)).clickable(enabled = updateState != UpdateState.Checking) { viewModel.checkNow(channel) }
+                )
+            }
             item { SectionHeader(stringResource(R.string.settings_about)) }
             item {
                 ListItem(
-                    headlineContent = { Text(stringResource(R.string.settings_version)) },
-                    supportingContent = { Text(version) },
+                    headlineContent = { Text(stringResource(R.string.about_title)) },
+                    supportingContent = { Text(stringResource(R.string.settings_about_subtitle, viewModel.installedVersion)) },
                     leadingContent = { Icon(Icons.Rounded.Info, null) },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    modifier = Modifier.clip(groupedShape(0, 1))
+                    modifier = Modifier.clip(groupedShape(0, 1)).clickable(onClick = onOpenAbout)
                 )
             }
         }

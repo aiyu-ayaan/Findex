@@ -236,6 +236,37 @@
     <string name="settings_grid_desc">Show folders as a grid of thumbnails</string>
     <string name="settings_about">About</string>
     <string name="settings_version">Version</string>
+    <string name="settings_updates">Updates</string>
+    <string name="settings_auto_update">Automatic updates</string>
+    <string name="settings_auto_update_desc">Check GitHub for a new release when Findex opens</string>
+    <string name="settings_channel">Release channel</string>
+    <string name="channel_stable">Stable</string>
+    <string name="channel_beta">Beta</string>
+    <string name="channel_alpha">Alpha</string>
+    <string name="settings_check_updates">Check for updates</string>
+    <string name="update_checking">Checking…</string>
+    <string name="update_up_to_date">You are on the latest version</string>
+    <string name="update_available_row">Version %1$s is available</string>
+    <string name="settings_about_subtitle">Version %1$s, developer and acknowledgements</string>
+    <string name="update_title">Update available</string>
+    <string name="update_subtitle">%1$s · you are on %2$s</string>
+    <string name="update_whats_new">What\'s new</string>
+    <string name="update_install">Install</string>
+    <string name="update_allow_install">Allow installing</string>
+    <string name="update_downloading">Downloading… %1$d%%</string>
+    <string name="update_not_now">Not now</string>
+    <string name="update_failed">Update failed</string>
+    <string name="about_title">About Findex</string>
+    <string name="about_section_app">App</string>
+    <string name="about_version_build">Version %1$s · build %2$d</string>
+    <string name="about_source_code">Source code</string>
+    <string name="about_section_developer">Developer</string>
+    <string name="about_developer_tagline">Designed and built by one developer.</string>
+    <string name="about_github">GitHub</string>
+    <string name="about_portfolio">Portfolio</string>
+    <string name="about_section_open_source">Open source</string>
+    <string name="about_acknowledgements">Acknowledgements</string>
+    <string name="about_acknowledgements_subtitle">Libraries and projects Findex is built on</string>
 
     <!-- Compression & Extraction -->
     <string name="compress_dialog_title">Create Archive</string>
