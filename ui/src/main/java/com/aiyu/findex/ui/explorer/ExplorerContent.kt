@@ -100,6 +100,8 @@ private fun Modifier.dragToSelect(
     val currentSelection by rememberUpdatedState(selection)
     val edge = with(LocalDensity.current) { 72.dp.toPx() }
     val maxSpeed = with(LocalDensity.current) { 18.dp.toPx() }
+    // Back-swipe starts at the screen edge and is a slow press; don't read it as a long-press.
+    val gestureEdge = with(LocalDensity.current) { 32.dp.toPx() }
 
     fun indexAt(offset: Offset): Int {
         val key = keyAt(offset) as? String ?: return -1
@@ -128,7 +130,8 @@ private fun Modifier.dragToSelect(
         awaitEachGesture {
             val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
             // Non-null when the finger lifts or moves past touch slop before the long-press timeout.
-            val endedEarly = withTimeoutOrNull(viewConfiguration.longPressTimeoutMillis) {
+            if (down.position.x < gestureEdge || down.position.x > size.width - gestureEdge) return@awaitEachGesture
+            val endedEarly = withTimeoutOrNull(viewConfiguration.longPressTimeoutMillis + 250) {
                 do {
                     val change = awaitPointerEvent(PointerEventPass.Initial).changes.firstOrNull { it.id == down.id }
                 } while (change != null && !change.changedToUp() &&
@@ -213,7 +216,7 @@ fun FileList(
                 inSelection = inSelection,
                 shape = groupedShape(index, items.size),
                 onClick = { onClick(item) },
-                onLongClick = { onSelectionChange(selection + item.path) },
+                onLongClick = { }, // selection starts in dragToSelect, after its longer, edge-aware hold
                 onMore = { onMore(item) },
                 subtitle = subtitle?.invoke(item),
                 tags = tags[item.path].orEmpty(),
@@ -253,7 +256,7 @@ fun FileGrid(
                 selected = item.path in selection,
                 focused = item.path == focused,
                 onClick = { onClick(item) },
-                onLongClick = { onSelectionChange(selection + item.path) },
+                onLongClick = { }, // selection starts in dragToSelect, after its longer, edge-aware hold
                 tags = tags[item.path].orEmpty(),
                 modifier = Modifier.animateItem()
             )
