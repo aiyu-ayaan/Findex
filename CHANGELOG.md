@@ -1,0 +1,58 @@
+## v0.0.1-alpha.1 (2026-10-18)
+
+- !alpha feat(Update) : Add in-app updates with release notes, Updates screen and About screen
+- ui(Plugins) : Add logo design plugin to enabled plugins list
+- ui(Updates) : Move update settings to their own Updates screen
+- ui(About) : Add About screen with developer section and Acknowledgements
+- ui(Update) : Show a global update dialog with release notes and add update settings
+- feat(Update) : Add GitHub release update checker, downloader and session installer in core
+- ci(Release) : Add marker-driven release workflow from Domus that builds and publishes the signed APK
+- perf(Startup) : Add baseline profile module and exit splash as soon as content is ready
+- ui(Brand) : Add Index F logo, animated splash with M3 motion and README header
+- feat(Network) : Open SMB shares as Explorer tabs with copy, move and delete between device and network
+- perf(Thumbnails) : Cache 256px image and video thumbnails on disk with bounded LRU and throttled generation
+- feat(Network) : Add SMB share browsing with Keystore-encrypted credentials and connected Device/Network toggle on Home
+- ui(Selection) : Make selection toolbar and item sheet archive-aware with Extract and Browse
+- feat(Archives) : Browse archive contents and open single entries without full extraction
+- feat(Duplicates) : Add duplicate file finder with staged hashing and keep-one guard
+- feat(Search) : Add global file search over the MediaStore index
+- feat(Tabs) : Persist open tabs in Room and restore them on cold start
+- ui(DetailPane) : Shrink tablet preview into a 360dp supporting pane with compact hero and property rows
+- docs(Readme) : Add README with screenshots, PolyForm Noncommercial license under Ayaan and emulator display fix
+- tool(Skills) : Add gravitas skill and skills lockfile
+- build(Release) : Configure release signing, R8 shrinking, Proguard rules and build script
+- ui(Explorer) : Refine tablet master-detail integration, focus indicators and divider
+- ui(DetailPane) : Redesign tablet inspector layout with structured property cards and action toolbar
+- ui(Preview) : Add responsive hero media cards, audio player and fullscreen image lightbox
+- ui(Inspector) : Add rich media metadata extraction and hash calculator
+- docs(Tablet) : Document adaptive layout and preview pane architecture
+- ui(Preview) : Redesign tablet preview pane with rich media, text preview and anchored FAB
+- ui(Explorer) : Support focused item selection and grid/list highlight for tablet list-detail
+- ui(Navigation) : Add adaptive navigation rail, permanent drawer and readable gutters for tablets
+- feat(Archives) : Add archive entry listing and single-entry extraction
+- feat(Tabs) : Add shared tab session, Tabs overview, open-in-new-tab and visible pill tab strip
+- feat(Archives) : Read RAR5 and every zip method via a 16 KB-aligned native 7-Zip
+- ui(Shell) : Hold splash until content is ready and fix drawer text color
+- ui(Onboarding) : Ask storage and notification access as separate permission steps
+- feat(Archives) : Add 7z, TAR, TAR.GZ creation and 7z, RAR, TAR.XZ/BZ2 extraction
+- ui(Drawer) : Settle push drawer with anchored spring physics instead of stopping mid-way
+- ui(Drawer) : Replace modal drawer with Discord-style push drawer and morphing menu icon
+- ui(Theme) : Match status bar icons to the in-app theme
+- feat(RecycleBin) : Move deletes to a restorable recycle bin with undo
+- ui(Selection) : Restore drag-to-select and even out category icons
+- ui(Explorer) : Keep long-pressed item selected and fix analyzer start scroll
+- ui(Analyzer) : Make storage breakdown readable
+- ui(MVP) : Add expressive Home, Explorer, Categories, Tools and Settings
+- core(Scanner) : Add storage scanner for analyzer and cleaners
+- ui(Shell) : Add navigation host, onboarding, drawer and app branding
+- core(Engine) : Add file operation engine, Room database and settings
+- ui(Theme) : Add complete M3 Expressive design tokens
+- docs(MVP) : Add MVP plan, design system and restructure TODO
+- Add reasoning contract bytecode for decision rules in UI/UX framework
+- docs(Architecture) : Add architecture diagram and setup development tracking
+- scripts(Runner) : Add run.sh for building and launching on emulator
+- app(Init) : Create app module with Application, MainActivity and Hilt setup
+- ui(Init) : Create ui module with Material 3 Expressive theme, strings and home screen
+- core(Init) : Create core module with storage models, repository and foreground service skeleton
+- build(Setup) : Initialize multi-module Gradle configuration and wrapper
+
