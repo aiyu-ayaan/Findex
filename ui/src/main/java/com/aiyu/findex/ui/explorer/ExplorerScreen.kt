@@ -61,6 +61,7 @@ import androidx.compose.material.icons.rounded.CreateNewFolder
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.DriveFileRenameOutline
 import androidx.compose.material.icons.rounded.FolderOff
+import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.FolderZip
 import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.Info
@@ -372,6 +373,7 @@ fun ExplorerScreen(
                 onDetails = { state.selectedItems.singleOrNull()?.let { modal = ExplorerModal.Details(it) } },
                 onOpenInNewTab = { state.selectedItems.singleOrNull()?.let { viewModel.openInNewTab(it.path) } },
                 onExtract = { state.selectedItems.singleOrNull()?.let { viewModel.clearSelection(); modal = ExplorerModal.Extract(it) } },
+                onBrowse = { state.selectedItems.singleOrNull()?.let { viewModel.clearSelection(); onOpenArchive(it.path) } },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .navigationBarsPadding()
@@ -424,7 +426,7 @@ fun ExplorerScreen(
                 modal = null
                 val item = m.item
                 when (action) {
-                    ItemAction.OPEN -> open(item)
+                    ItemAction.OPEN -> if (item.isArchive) onOpenArchive(item.path) else open(item)
                     ItemAction.SHOW_IN_FOLDER, ItemAction.RESTORE -> Unit
                     ItemAction.OPEN_IN_NEW_TAB -> viewModel.openInNewTab(item.path)
                     ItemAction.SHARE -> context.shareFiles(listOf(item.path))
@@ -739,6 +741,7 @@ private fun SelectionToolbar(
     onDetails: () -> Unit,
     onOpenInNewTab: () -> Unit,
     onExtract: () -> Unit,
+    onBrowse: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     AnimatedVisibility(
@@ -754,8 +757,16 @@ private fun SelectionToolbar(
         ) {
             IconButton(onClick = onCopy) { Icon(Icons.Rounded.ContentCopy, stringResource(R.string.action_copy)) }
             IconButton(onClick = onCut) { Icon(Icons.Rounded.ContentCut, stringResource(R.string.action_cut)) }
-            IconButton(onClick = onCompress) { Icon(Icons.Rounded.FolderZip, stringResource(R.string.action_compress)) }
-            IconButton(onClick = onShare) { Icon(Icons.Rounded.Share, stringResource(R.string.action_share)) }
+            // A single archive is extracted, not zipped again; compressing it stays in the overflow.
+            if (singleSelected?.isArchive == true) {
+                IconButton(onClick = onExtract) { Icon(Icons.Rounded.Unarchive, stringResource(R.string.action_extract)) }
+            } else {
+                IconButton(onClick = onCompress) { Icon(Icons.Rounded.FolderZip, stringResource(R.string.action_compress)) }
+            }
+            // Folders can't be shared as attachments.
+            if (singleSelected?.isDirectory != true) {
+                IconButton(onClick = onShare) { Icon(Icons.Rounded.Share, stringResource(R.string.action_share)) }
+            }
             IconButton(onClick = onDelete) { Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete)) }
             Box {
                 IconButton(onClick = { more = true }) { Icon(Icons.Rounded.MoreVert, stringResource(R.string.cd_more_options)) }
@@ -769,9 +780,14 @@ private fun SelectionToolbar(
                     }
                     if (singleSelected?.isArchive == true) {
                         DropdownMenuItem(
-                            text = { Text(stringResource(R.string.action_extract)) },
-                            leadingIcon = { Icon(Icons.Rounded.Unarchive, null) },
-                            onClick = { more = false; onExtract() }
+                            text = { Text(stringResource(R.string.action_browse)) },
+                            leadingIcon = { Icon(Icons.Rounded.FolderOpen, null) },
+                            onClick = { more = false; onBrowse() }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.action_compress)) },
+                            leadingIcon = { Icon(Icons.Rounded.FolderZip, null) },
+                            onClick = { more = false; onCompress() }
                         )
                     }
                     DropdownMenuItem(

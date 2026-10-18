@@ -61,6 +61,7 @@ import java.io.File
 fun SearchScreen(
     onBack: () -> Unit,
     onOpenFolder: (String) -> Unit,
+    onOpenArchive: (String) -> Unit,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -75,6 +76,7 @@ fun SearchScreen(
     fun open(item: StorageItem) {
         keyboard?.hide()
         if (item.isDirectory) onOpenFolder(item.path)
+        else if (item.isArchive) onOpenArchive(item.path)
         else {
             viewModel.onOpened(item.path)
             context.openFile(item.path)

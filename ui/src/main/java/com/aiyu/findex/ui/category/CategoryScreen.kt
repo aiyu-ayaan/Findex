@@ -71,6 +71,7 @@ import java.io.File
 fun CategoryScreen(
     onBack: () -> Unit,
     onOpenFolder: (String) -> Unit,
+    onOpenArchive: (String) -> Unit,
     viewModel: CategoryViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -84,6 +85,7 @@ fun CategoryScreen(
 
     fun open(item: StorageItem) {
         if (state.selection.isNotEmpty()) viewModel.toggle(item.path)
+        else if (item.isArchive) onOpenArchive(item.path)
         else {
             viewModel.onOpened(item.path)
             context.openFile(item.path)

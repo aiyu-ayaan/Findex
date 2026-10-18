@@ -208,22 +208,23 @@ private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -
 private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: NavHostController) {
     val back: () -> Unit = { navController.popBackStack() }
     val openFolder: (String) -> Unit = { navController.navigate(ExplorerRoute(it)) }
+    val openArchive: (String) -> Unit = { navController.navigate(ArchiveRoute(it)) }
     composable<ExplorerRoute> {
         ExplorerScreen(
             onBack = back,
             onOpenTabs = { navController.navigate(TabsRoute) { launchSingleTop = true } },
-            onOpenArchive = { navController.navigate(ArchiveRoute(it)) }
+            onOpenArchive = openArchive
         )
     }
     composable<ArchiveRoute> { ArchiveScreen(onBack = back) }
-    composable<CategoryRoute> { CategoryScreen(onBack = back, onOpenFolder = openFolder) }
+    composable<CategoryRoute> { CategoryScreen(onBack = back, onOpenFolder = openFolder, onOpenArchive = openArchive) }
     composable<AnalyzerRoute> { AnalyzerScreen(onBack = back, onOpenFolder = openFolder) }
     composable<CleanerRoute> { CleanerScreen(onBack = back) }
     composable<WhatsAppRoute> { WhatsAppScreen(onBack = back) }
     composable<SettingsRoute> { SettingsScreen(onBack = back) }
     composable<RecycleBinRoute> { RecycleBinScreen(onBack = back) }
     composable<DuplicatesRoute> { DuplicatesScreen(onBack = back, onOpenFolder = openFolder) }
-    composable<SearchRoute> { SearchScreen(onBack = back, onOpenFolder = openFolder) }
+    composable<SearchRoute> { SearchScreen(onBack = back, onOpenFolder = openFolder, onOpenArchive = openArchive) }
     composable<TabsRoute> {
         TabsScreen(onBack = back, onOpenExplorer = {
             // Opened from an explorer: go back to it (it follows the shared session).
