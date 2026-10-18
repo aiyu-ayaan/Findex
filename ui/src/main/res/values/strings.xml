@@ -237,8 +237,11 @@
     <string name="settings_about">About</string>
     <string name="settings_version">Version</string>
     <string name="settings_updates">Updates</string>
+    <string name="settings_updates_subtitle">Automatic updates, release channel and checking for a new version</string>
     <string name="settings_auto_update">Automatic updates</string>
     <string name="settings_auto_update_desc">Check GitHub for a new release when Findex opens</string>
+    <string name="updates_title">Updates</string>
+    <string name="updates_current">Installed version %1$s</string>
     <string name="settings_channel">Release channel</string>
     <string name="channel_stable">Stable</string>
     <string name="channel_beta">Beta</string>

@@ -20,3 +20,4 @@ import kotlinx.serialization.Serializable
 @Serializable object NetworkRoute
 @Serializable object AboutRoute
 @Serializable object AcknowledgementsRoute
+@Serializable object UpdatesRoute

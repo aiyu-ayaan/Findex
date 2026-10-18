@@ -474,4 +474,4 @@ flowchart TD
     Recv -- confirm screen / failure reason --> Repo
 ```
 
-Settings → About opens `AboutScreen` (app, developer, source) → `AcknowledgementsScreen`; both are nav destinations, so back is predictive.
+Settings → Updates opens `UpdatesScreen` (toggle, channel, manual check). Settings → About opens `AboutScreen` (app, developer, source) → `AcknowledgementsScreen`; both are nav destinations, so back is predictive.

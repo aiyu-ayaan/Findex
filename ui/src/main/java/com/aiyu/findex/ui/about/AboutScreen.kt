@@ -23,8 +23,6 @@ import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumFlexibleTopAppBar
 import androidx.compose.material3.Scaffold
@@ -45,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.components.SectionHeader
 import com.aiyu.findex.ui.components.groupedShape
+import com.aiyu.findex.ui.components.SettingItem
 import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.theme.Dimens
 
@@ -141,12 +140,11 @@ private fun AboutScaffold(@StringRes title: Int, onBack: () -> Unit, content: an
 
 @Composable
 private fun Row(title: String, subtitle: String, icon: ImageVector, shape: androidx.compose.ui.graphics.Shape, external: Boolean = false, onClick: (() -> Unit)? = null) {
-    ListItem(
+    SettingItem(
         headlineContent = { Text(title) },
         supportingContent = { Text(subtitle) },
         leadingContent = { Icon(icon, null) },
         trailingContent = if (external) ({ Icon(Icons.AutoMirrored.Rounded.OpenInNew, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }) else null,
-        colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         modifier = Modifier.clip(shape).let { if (onClick != null) it.clickable(onClick = onClick) else it }
     )
 }

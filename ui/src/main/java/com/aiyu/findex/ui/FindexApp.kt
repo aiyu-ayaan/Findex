@@ -86,6 +86,8 @@ import com.aiyu.findex.ui.update.UpdateDialog
 import com.aiyu.findex.ui.about.AboutScreen
 import com.aiyu.findex.ui.about.AcknowledgementsScreen
 import com.aiyu.findex.ui.navigation.AboutRoute
+import com.aiyu.findex.ui.navigation.UpdatesRoute
+import com.aiyu.findex.ui.update.UpdatesScreen
 import com.aiyu.findex.ui.navigation.AcknowledgementsRoute
 import com.aiyu.findex.ui.util.hasNotificationAccess
 import com.aiyu.findex.ui.util.hasStorageAccess
@@ -242,7 +244,8 @@ private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: N
     composable<AnalyzerRoute> { AnalyzerScreen(onBack = back, onOpenFolder = openFolder) }
     composable<CleanerRoute> { CleanerScreen(onBack = back) }
     composable<WhatsAppRoute> { WhatsAppScreen(onBack = back) }
-    composable<SettingsRoute> { SettingsScreen(onBack = back, onOpenAbout = { navController.navigate(AboutRoute) }) }
+    composable<SettingsRoute> { SettingsScreen(onBack = back, onOpenAbout = { navController.navigate(AboutRoute) }, onOpenUpdates = { navController.navigate(UpdatesRoute) }) }
+    composable<UpdatesRoute> { UpdatesScreen(onBack = back) }
     composable<AboutRoute> { AboutScreen(onBack = back, onOpenAcknowledgements = { navController.navigate(AcknowledgementsRoute) }) }
     composable<AcknowledgementsRoute> { AcknowledgementsScreen(onBack = back) }
     composable<RecycleBinRoute> { RecycleBinScreen(onBack = back) }
