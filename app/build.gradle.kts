@@ -17,6 +17,13 @@ android {
             // core/src/main/jniLibs ships a 16 KB-aligned rebuild (development/scripts/build-7zip-jbinding.sh);
             // project libs merge before the AAR's 4 KB-aligned copies, so pickFirst keeps ours.
             pickFirsts += "**/lib7-Zip-JBinding.so"
+            // Compress .so in the APK: ~40% smaller download, extracted once at install.
+            useLegacyPackaging = true
+        }
+        resources {
+            // BouncyCastle post-quantum Picnic tables (~1.2 MB); smbj never uses Picnic.
+            excludes += "org/bouncycastle/pqc/crypto/picnic/**"
+            excludes += "META-INF/**/LICENSE*"
         }
     }
     compileSdk = 37
@@ -73,6 +80,8 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            // 32-bit x86 has no real devices left; x86_64 stays for emulators and baseline profiles.
+            ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
             signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
