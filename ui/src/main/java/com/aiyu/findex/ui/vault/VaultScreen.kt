@@ -97,6 +97,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
@@ -120,11 +123,26 @@ fun VaultScreen(onBack: () -> Unit, viewModel: VaultViewModel = hiltViewModel())
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val activity = context.findActivity()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     // Keep vault contents out of screenshots and the recents preview.
     DisposableEffect(activity) {
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         onDispose { activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE) }
+    }
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_PAUSE, Lifecycle.Event.ON_STOP -> viewModel.onScreenPaused()
+                Lifecycle.Event.ON_RESUME -> viewModel.endExternalFlow()
+                else -> Unit
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            viewModel.onScreenPaused()
+        }
     }
     LaunchedEffect(state.message) {
         state.message?.let { Toast.makeText(context, it, Toast.LENGTH_SHORT).show(); viewModel.consumeMessage() }
@@ -169,16 +187,26 @@ private fun Context.findActivity(): Activity? {
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
-private fun authenticate(activity: Activity, cipher: Cipher, onSuccess: (Cipher) -> Unit) {
+private fun authenticate(
+    activity: Activity,
+    cipher: Cipher,
+    onEnd: () -> Unit = {},
+    onSuccess: (Cipher) -> Unit
+) {
     val prompt = BiometricPrompt.Builder(activity)
         .setTitle(activity.getString(R.string.vault_biometric_prompt_title))
         .setSubtitle(activity.getString(R.string.vault_biometric_prompt_subtitle))
-        .setNegativeButton(activity.getString(R.string.vault_biometric_prompt_negative), activity.mainExecutor) { _, _ -> }
+        .setNegativeButton(activity.getString(R.string.vault_biometric_prompt_negative), activity.mainExecutor) { _, _ -> onEnd() }
         .build()
     prompt.authenticate(BiometricPrompt.CryptoObject(cipher), CancellationSignal(), activity.mainExecutor,
         object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                onEnd()
                 result.cryptoObject?.cipher?.let(onSuccess)
+            }
+
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
+                onEnd()
             }
         })
 }
@@ -186,7 +214,8 @@ private fun authenticate(activity: Activity, cipher: Cipher, onSuccess: (Cipher)
 private fun enroll(activity: Activity, viewModel: VaultViewModel) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return
     val cipher = viewModel.biometricEnrollCipher() ?: return
-    authenticate(activity, cipher, viewModel::onBiometricEnrolled)
+    viewModel.beginExternalFlow()
+    authenticate(activity, cipher, onEnd = viewModel::endExternalFlow, onSuccess = viewModel::onBiometricEnrolled)
 }
 
 @Composable
@@ -307,6 +336,7 @@ private fun LockedScreen(state: VaultUiState, viewModel: VaultViewModel, onBack:
     val locked = state.phase as? VaultPhase.Locked ?: return
     val password = rememberTextFieldState()
     val activity = LocalContext.current.findActivity()
+    val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(locked.lockoutUntil) {
@@ -315,12 +345,17 @@ private fun LockedScreen(state: VaultUiState, viewModel: VaultViewModel, onBack:
     val lockedOut = locked.lockoutUntil > now
     val promptBiometric = {
         if (activity != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) scope.launch {
-            viewModel.biometricUnlockCipher()?.let { authenticate(activity, it, viewModel::onBiometricAuthenticated) }
+            viewModel.biometricUnlockCipher()?.let { authenticate(activity, it, onSuccess = viewModel::onBiometricAuthenticated) }
         }
     }
-    // Auto-prompt once per screen entry.
-    var prompted by rememberSaveable { mutableStateOf(false) }
-    LaunchedEffect(locked.biometric) { if (locked.biometric && !prompted && !lockedOut) { prompted = true; promptBiometric() } }
+    // Auto-prompt once per lock cycle, only while the screen is RESUMED.
+    var prompted by remember { mutableStateOf(false) }
+    LaunchedEffect(locked.biometric, lifecycleState) {
+        if (locked.biometric && !prompted && !lockedOut && lifecycleState == Lifecycle.State.RESUMED) {
+            prompted = true
+            promptBiometric()
+        }
+    }
 
     Scaffold(topBar = { BackBar(stringResource(R.string.vault_title), onBack) }) { padding ->
         Column(
@@ -416,9 +451,11 @@ private fun UnlockedScreen(state: VaultUiState, viewModel: VaultViewModel, onBac
     LaunchedEffect(items) { selected = selected.intersect(items.map { it.id }.toSet()) }
 
     val folderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
+        viewModel.endExternalFlow()
         uri?.let(::treeToPath)?.let { viewModel.exportTo(selected, it); selected = emptySet() }
     }
     val filePicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
+        viewModel.endExternalFlow()
         if (uris.isEmpty()) return@rememberLauncherForActivityResult
         val paths = uris.mapNotNull { docToPath(context, it) }.distinct().filter { File(it).exists() }
         if (paths.isNotEmpty()) viewModel.requestImport(paths) else dialog = "add"
@@ -432,7 +469,7 @@ private fun UnlockedScreen(state: VaultUiState, viewModel: VaultViewModel, onBac
                     navigationIcon = { IconButton(onClick = { selected = emptySet() }) { Icon(Icons.Rounded.Close, stringResource(R.string.cd_clear_selection)) } },
                     actions = {
                         IconButton(onClick = { dialog = "restore" }) { Icon(Icons.Rounded.Restore, stringResource(R.string.vault_export_original)) }
-                        IconButton(onClick = { folderPicker.launch(null) }) { Icon(Icons.Rounded.SaveAlt, stringResource(R.string.vault_export_choose_folder)) }
+                        IconButton(onClick = { viewModel.beginExternalFlow(); folderPicker.launch(null) }) { Icon(Icons.Rounded.SaveAlt, stringResource(R.string.vault_export_choose_folder)) }
                         IconButton(onClick = { dialog = "delete" }) { Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete)) }
                     }
                 )
@@ -453,7 +490,6 @@ private fun UnlockedScreen(state: VaultUiState, viewModel: VaultViewModel, onBac
                                     }
                                 )
                             }
-                            DropdownMenuItem(text = { Text(stringResource(R.string.vault_menu_auto_lock)) }, onClick = { menu = false; dialog = "autolock" })
                             DropdownMenuItem(text = { Text(stringResource(R.string.vault_menu_lock_now)) }, onClick = { menu = false; viewModel.lock() })
                         }
                     }
@@ -462,7 +498,7 @@ private fun UnlockedScreen(state: VaultUiState, viewModel: VaultViewModel, onBac
         },
         floatingActionButton = {
             if (!selection) ExtendedFloatingActionButton(
-                onClick = { filePicker.launch(arrayOf("*/*")) },
+                onClick = { viewModel.beginExternalFlow(); filePicker.launch(arrayOf("*/*")) },
                 icon = { Icon(Icons.Rounded.NoteAdd, null) },
                 text = { Text(stringResource(R.string.vault_add_files)) }
             )

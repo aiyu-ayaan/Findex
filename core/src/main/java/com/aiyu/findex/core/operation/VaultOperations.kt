@@ -106,7 +106,7 @@ class VaultOperations @Inject constructor(
             val progress = Progress(op.id, report, rows.sumOf { it.size }, rows.size)
             for (row in rows) {
                 currentCoroutineContext().ensureActive()
-                val entry = repository.decrypt(row)
+                val entry = repository.decrypt(row, dek)
                 progress.name = entry.name; progress.emit(force = true)
                 val target = uniqueTarget(dest, entry.name)
                 try {

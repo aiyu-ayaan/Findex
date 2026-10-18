@@ -169,7 +169,19 @@ class VaultViewModel @Inject constructor(
 
     fun setAutoLock(minutes: Int) = viewModelScope.launch { settings.setVaultAutoLockMinutes(minutes) }
 
+    fun beginExternalFlow() = session.beginExternalFlow()
+
+    fun endExternalFlow() = session.endExternalFlow()
+
+    fun onScreenPaused() = session.lockIfNotInExternalFlow()
+
     fun lock() = session.lock()
+
+    override fun onCleared() {
+        super.onCleared()
+        session.endExternalFlow()
+        session.lock()
+    }
 
     fun rebuildIndex() = work { repository.rebuildIndex(); refresh() }
 

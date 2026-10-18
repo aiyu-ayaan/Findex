@@ -33,17 +33,20 @@ class VaultRepository @Inject constructor(
         runCatching {
             session.withKey { dek ->
                 val index = VaultFormat.indexKey(dek)
-                try { rows.map { it.decrypt(index) } } finally { index.fill(0) }
+                try { rows.map { it.toEntry(index) } } finally { index.fill(0) }
             }
         }.getOrDefault(emptyList())
     }.flowOn(Dispatchers.Default)
 
-    fun decrypt(row: VaultItemEntity): VaultEntry = session.withKey { dek ->
-        val index = VaultFormat.indexKey(dek)
-        try { row.decrypt(index) } finally { index.fill(0) }
+    fun decrypt(row: VaultItemEntity, dek: ByteArray? = null): VaultEntry {
+        fun decode(key: ByteArray): VaultEntry {
+            val index = VaultFormat.indexKey(key)
+            return try { row.toEntry(index) } finally { index.fill(0) }
+        }
+        return if (dek != null) decode(dek) else session.withKey(::decode)
     }
 
-    private fun VaultItemEntity.decrypt(index: ByteArray) = VaultEntry(
+    private fun VaultItemEntity.toEntry(index: ByteArray) = VaultEntry(
         id, VaultFormat.openString(index, nameCipher), VaultFormat.openString(index, originalPathCipher),
         mimeType, size, lastModified, addedAt
     )
