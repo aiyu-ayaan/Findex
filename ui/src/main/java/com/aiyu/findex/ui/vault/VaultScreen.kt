@@ -77,13 +77,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import android.view.ViewTreeObserver
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -92,6 +95,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -120,7 +124,7 @@ import javax.crypto.Cipher
 
 @Composable
 fun VaultScreen(onBack: () -> Unit, viewModel: VaultViewModel = hiltViewModel()) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsState()
     val context = LocalContext.current
     val activity = context.findActivity()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -441,11 +445,22 @@ private fun UnlockedScreen(state: VaultUiState, viewModel: VaultViewModel, onBac
     val autoLock by viewModel.autoLockMinutes.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val activity = context.findActivity()
+    val view = LocalView.current
     var selected by rememberSaveable { mutableStateOf(setOf<Long>()) }
     var menu by remember { mutableStateOf(false) }
     var dialog by remember { mutableStateOf<String?>(null) }
     var opening by remember { mutableStateOf<VaultEntry?>(null) }
     val selection = selected.isNotEmpty()
+    val popupOpen by rememberUpdatedState(menu || dialog != null || opening != null || state.pendingImport != null)
+
+    // Gesture-nav swipe-to-home uses transientLaunch=true and defers onPause; window focus drops immediately.
+    DisposableEffect(view) {
+        val listener = ViewTreeObserver.OnWindowFocusChangeListener { hasFocus ->
+            if (!hasFocus && !popupOpen) viewModel.onScreenPaused()
+        }
+        view.viewTreeObserver.addOnWindowFocusChangeListener(listener)
+        onDispose { view.viewTreeObserver.removeOnWindowFocusChangeListener(listener) }
+    }
 
     LaunchedEffect(state.enrollBiometric) { if (state.enrollBiometric && activity != null) { viewModel.enrollHandled(); enroll(activity, viewModel) } }
     LaunchedEffect(items) { selected = selected.intersect(items.map { it.id }.toSet()) }

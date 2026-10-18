@@ -74,7 +74,20 @@ class VaultViewModel @Inject constructor(
     val biometricSupported: Boolean get() = keys.biometricSupported
 
     init {
-        viewModelScope.launch { session.unlocked.collect { refresh() } }
+        viewModelScope.launch {
+            session.unlocked.collect { unlocked ->
+                if (!unlocked) lockStateImmediately()
+                refresh()
+            }
+        }
+    }
+
+    private fun lockStateImmediately() {
+        _state.update { cur ->
+            if (cur.phase == VaultPhase.Unlocked) {
+                cur.copy(phase = VaultPhase.Locked(0L, cur.biometricEnabled && keys.biometricSupported))
+            } else cur
+        }
     }
 
     private suspend fun refresh() {
@@ -173,9 +186,15 @@ class VaultViewModel @Inject constructor(
 
     fun endExternalFlow() = session.endExternalFlow()
 
-    fun onScreenPaused() = session.lockIfNotInExternalFlow()
+    fun onScreenPaused() {
+        session.lockIfNotInExternalFlow()
+        if (!session.unlocked.value) lockStateImmediately()
+    }
 
-    fun lock() = session.lock()
+    fun lock() {
+        session.lock()
+        lockStateImmediately()
+    }
 
     override fun onCleared() {
         super.onCleared()
