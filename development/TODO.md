@@ -108,3 +108,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] Duplicate finder (size → 64 KB head hash → full SHA-256; one copy always kept)
 - [x] Tab session persistence (Room `open_tabs`, restored on cold start)
 - [x] Tablet two-pane explorer
+
+### Performance
+- [x] Baseline + startup profile (`:baselineprofile` module, ProfileInstaller); cold start TTID 580 ms to 456 ms on API 37 emulator
+- [x] Splash exits as soon as content is ready (no longer waits out the 950 ms logo animation)

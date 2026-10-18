@@ -19,3 +19,4 @@ rootProject.name = "Findex"
 include(":app")
 include(":core")
 include(":ui")
+include(":baselineprofile")

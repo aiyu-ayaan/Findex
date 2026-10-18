@@ -19,19 +19,15 @@ class MainActivity : ComponentActivity() {
         installSplashScreen().apply {
             setKeepOnScreenCondition { !contentReady }
             setOnExitAnimationListener { provider ->
-                // Let the logo animation finish before leaving, so a fast start never cuts it mid-draw.
-                val remaining = provider.iconAnimationStartMillis + provider.iconAnimationDurationMillis -
-                    System.currentTimeMillis()
+                // Leave as soon as content is ready; waiting out the 950ms logo animation held every start.
                 val exit = AnimationUtils.loadInterpolator(this@MainActivity, R.interpolator.emphasized_accelerate)
                 // The icon is its own surface on API 31+, so it does not inherit the parent's alpha.
                 provider.iconView.animate()
                     .alpha(0f).scaleX(0.9f).scaleY(0.9f)
-                    .setStartDelay(remaining.coerceAtLeast(0))
                     .setDuration(SPLASH_EXIT_MS)
                     .setInterpolator(exit)
                 provider.view.animate()
                     .alpha(0f)
-                    .setStartDelay(remaining.coerceAtLeast(0))
                     .setDuration(SPLASH_EXIT_MS)
                     .setInterpolator(exit)
                     .withEndAction { provider.remove() }

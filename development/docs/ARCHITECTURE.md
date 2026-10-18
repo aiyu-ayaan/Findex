@@ -6,7 +6,7 @@ Findex is a native Android file explorer built with Kotlin, Jetpack Compose, Mat
 
 ## 1. Module Architecture
 
-The application is structured into three distinct Gradle modules adhering to clean architecture separation:
+The application is structured into three distinct Gradle modules (plus the `:baselineprofile` test module) adhering to clean architecture separation:
 
 ```mermaid
 graph TD
@@ -36,6 +36,11 @@ graph TD
         OpStringsIf[[OperationStrings interface]]
     end
 
+    subgraph ":baselineprofile"
+        Gen[BaselineProfileGenerator<br/>startup + browse journey]
+        Bench[StartupBenchmark<br/>cold start, None vs Partial]
+    end
+
     App --> MainAct --> Theme --> Nav --> Screens --> VMs
     VMs --> StorageRepo
     VMs --> LibraryRepo --> DB
@@ -48,6 +53,9 @@ graph TD
     FGS --> OpStringsIf
     OpStrings -. Hilt @Binds .-> OpStringsIf
     OpStrings --> UIStrings
+    Gen -. generateReleaseBaselineProfile .-> Prof[app/src/release/generated/<br/>baseline-prof.txt · startup-prof.txt]
+    Prof -. ProfileInstaller / ART AOT .-> App
+    Bench -. measures .-> MainAct
 ```
 
 ### Module Responsibilities
@@ -56,6 +64,7 @@ graph TD
 | :--- | :--- | :--- | :--- |
 | `:app` | `com.android.application` | Application entry point (`FindexApp` with `@HiltAndroidApp`), `MainActivity`, Android Manifest, system permissions. | **NO `strings.xml`** (pulls merged resources from `:ui`). |
 | `:ui` | `com.android.library` | Compose UI components, Material 3 Expressive theming, navigation drawer, screen layouts, ViewModels. | **Centralized `strings.xml`** holding all app strings for future localization. |
+| `:baselineprofile` | `com.android.test` | Macrobenchmark module: `BaselineProfileGenerator` records startup + browse paths into `app/src/release/generated/baselineProfiles`; `StartupBenchmark` compares cold start with and without the profile. Regenerate: `./gradlew :app:generateReleaseBaselineProfile` (emulator/device connected). | **NO `strings.xml`**. |
 | `:core` | `com.android.library` | Models, repositories, Room database, DataStore settings, operation queue, foreground service, Hilt bindings. | **NO `strings.xml`**. Notification texts come from `OperationStrings`, implemented in `:ui`. |
 
 ### Persistence rule
