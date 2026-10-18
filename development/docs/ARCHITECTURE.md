@@ -191,7 +191,9 @@ flowchart LR
     Remote -->|stream bytes| Smb
     Smb -->|SMB 2/3| Smbj[smbj, cached DiskShare per server]
     Smb -->|password| CC[CredentialCipher · Keystore]
-    Tab -->|open file| DL[download to cache/network] --> Viewer[openFile / shareFiles]
+    Tab -->|open / share file| Viewer[openFile / shareFiles]
+    Viewer -->|content://…smbprovider| Prov[SmbContentProvider<br/>openProxyFileDescriptor]
+    Prov -->|256 KB buffered seekable read| RAF[SmbRandomAccessFile] --> Smb
 ```
 
 - Copy / move work in every direction: device → share, share → device, share → share. A move inside one share is a server-side rename; everything else streams with progress in the foreground service and deletes a half-written target on failure.
@@ -199,7 +201,7 @@ flowchart LR
 - Compress, extract, archive browse and checksums need local files and are hidden on shares; the executor also rejects them (`FailureReason.NOT_SUPPORTED`).
 - Network errors map to `FailureReason.NETWORK` / `NetworkError` messages instead of crashing a listing.
 - `TabSession` restores share tabs while the share is still saved; their title is the share's label.
-- Opening a share file downloads it to `cache/network/<id>/` (`.part` then rename, reused if the size matches) and hands it to a viewer.
+- Opening or sharing a share file issues a seekable `content://<pkg>.smbprovider/<serverId>/<inner>?size=<bytes>` URI (`SmbContentProvider` + `StorageManager.openProxyFileDescriptor` backed by `SmbRandomAccessFile` with a 256 KB read-ahead window) so default external video/media players stream and seek directly over SMB without downloading the file first.
 - Room schema v4 adds `network_servers` through `AutoMigration(3, 4)`.
 - Not yet: share discovery, WebDAV / FTP / SFTP.
 
@@ -244,22 +246,25 @@ flowchart TD
 
 ## 5b. Thumbnails & image loading
 
-`findexImageLoader` (ui/components/Thumbnails.kt) is Coil's singleton loader, set in `FindexApp`. Every list/grid thumbnail goes through a `Thumb(path, lastModified, isVideo)` model instead of the raw file, so a full photo or a video frame is decoded only once.
+`findexImageLoader` (ui/components/Thumbnails.kt) is Coil's singleton loader, set in `FindexApp`. Every list/grid thumbnail goes through a `Thumb(path, lastModified, isVideo)` model instead of the raw file, so a full photo or a video frame is decoded only once for both local storage and SMB network shares.
 
 ```mermaid
 flowchart LR
     Row[FileThumbnail] -->|Thumb| Mem{Memory cache<br/>25% of heap}
     Mem -->|miss| Fetch[ThumbFetcher]
     Fetch -->|hit| Disk[(cache/thumbnails<br/>150 MB LRU)]
-    Fetch -->|miss, max 3 at once| Gen[ThumbnailUtils 256px<br/>API 26-28: sampled decode / frame]
+    Fetch -->|miss, local path| Gen[ThumbnailUtils 256px<br/>API 26-28: sampled decode / frame]
+    Fetch -->|miss, smb:// path| RemoteGen[SmbRandomAccessFile<br/>EXIF thumb / sampled stream / MediaDataSource]
     Gen -->|WebP| Disk
+    RemoteGen -->|WebP| Disk
     Disk --> Row
 ```
 
 - The disk cache key includes `lastModified`, so an edited file gets a new thumbnail; old entries are never read again and are evicted first once the cache reaches 150 MB (least-recently-used). Android may also clear `cacheDir` under storage pressure.
 - Generation runs on `Dispatchers.IO.limitedParallelism(3)` so a fling over hundreds of videos can't saturate the CPU and drop frames.
+- For SMB network shares (`smb://`), `ThumbFetcher` uses `SmbRandomAccessFile`: photos check embedded EXIF thumbnails in the first 256 KB chunk before falling back to a sampled stream decode, and videos extract a scaled sync frame via `MediaMetadataRetriever` + `MediaDataSource` without downloading the full video.
 - Requests are cancelled when a row scrolls off screen (Coil lifecycle), so only visible thumbnails are built.
-- Full-size previews (`ImagePreviewCard`, `VideoPreviewCard`) still load the file directly; `VideoFrameDecoder` is registered for them.
+- Full-size previews (`ImagePreviewCard`, `VideoPreviewCard`) load local files directly (`VideoFrameDecoder` is registered for them) and use `Thumb` for SMB files.
 
 ## 6. Tools
 

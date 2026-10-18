@@ -101,6 +101,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [ ] WebDAV and FTP / SFTP
 - [x] Credential manager (Keystore-encrypted passwords, add/remove shares)
 - [x] Copy / move / delete between device and shares (and share to share), New-tab location picker
+- [x] SMB image/video thumbnails (`ThumbFetcher` + `SmbRandomAccessFile`) and direct video streaming in default app (`SmbContentProvider` + `openProxyFileDescriptor`)
 
 ### Quality of life
 - [x] Recycle bin + undo delete (`.FindexTrash` per volume, 30-day purge, Undo snackbar)
