@@ -11,6 +11,9 @@ interface OperationStrings {
     val channelName: String
     val channelDescription: String
     val cancel: String
+    val updateChannelName: String
+    val updateNotificationBody: String
+    fun updateNotificationTitle(version: String): String
     fun title(operation: FileOperation): String
     fun progress(currentItem: String, percent: Int, queued: Int): String
     fun result(result: OperationResult): String

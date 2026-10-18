@@ -108,6 +108,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.work.runtime.ktx)
     // Installs the generated baseline profile on sideloaded/non-Play installs too.
     implementation(libs.androidx.profileinstaller)
     baselineProfile(project(":baselineprofile"))

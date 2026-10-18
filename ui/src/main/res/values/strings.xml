@@ -239,7 +239,7 @@
     <string name="settings_updates">Updates</string>
     <string name="settings_updates_subtitle">Automatic updates, release channel and checking for a new version</string>
     <string name="settings_auto_update">Automatic updates</string>
-    <string name="settings_auto_update_desc">Check GitHub for a new release when Findex opens</string>
+    <string name="settings_auto_update_desc">Check GitHub daily in the background and when Findex opens</string>
     <string name="updates_title">Updates</string>
     <string name="updates_current">Installed version %1$s</string>
     <string name="settings_channel">Release channel</string>
@@ -259,6 +259,9 @@
     <string name="update_downloading">Downloading… %1$d%%</string>
     <string name="update_not_now">Not now</string>
     <string name="update_failed">Update failed</string>
+    <string name="update_notification_channel_name">App Updates</string>
+    <string name="update_notification_title">Update available: %1$s</string>
+    <string name="update_notification_body">Tap to view release notes and install</string>
     <string name="about_title">About Findex</string>
     <string name="about_section_app">App</string>
     <string name="about_version_build">Version %1$s · build %2$d</string>

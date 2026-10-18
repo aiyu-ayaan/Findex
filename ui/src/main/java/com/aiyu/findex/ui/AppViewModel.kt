@@ -7,9 +7,11 @@ import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.operation.OperationManager
 import com.aiyu.findex.core.repository.TrashRepository
 import com.aiyu.findex.ui.explorer.TabSession
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import com.aiyu.findex.core.update.UpdateChannel
+import com.aiyu.findex.core.update.UpdateCheckScheduler
 import com.aiyu.findex.core.update.UpdateRepository
 import com.aiyu.findex.core.update.UpdateState
 import com.aiyu.findex.core.settings.SettingsRepository
@@ -27,7 +29,8 @@ class AppViewModel @Inject constructor(
     operationManager: OperationManager,
     private val trashRepository: TrashRepository,
     tabSession: TabSession,
-    private val updates: UpdateRepository
+    private val updates: UpdateRepository,
+    private val updateCheckScheduler: UpdateCheckScheduler
 ) : ViewModel() {
     val tabCount: StateFlow<Int> = tabSession.state.map { it.tabs.size }.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
 
@@ -46,6 +49,12 @@ class AppViewModel @Inject constructor(
         viewModelScope.launch {
             val s = settingsRepository.settings.first()
             if (s.autoUpdate) updates.check(s.updateChannel ?: UpdateChannel.forVersion(updates.installedName))
+        }
+        viewModelScope.launch {
+            settingsRepository.settings
+                .map { it.autoUpdate }
+                .distinctUntilChanged()
+                .collect { enabled -> updateCheckScheduler.sync(enabled) }
         }
     }
 

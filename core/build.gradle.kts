@@ -29,6 +29,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.zip4j)
     implementation(libs.commons.compress)
     implementation(libs.xz) // LZMA/LZMA2 for 7z and .tar.xz

@@ -33,6 +33,7 @@ class SettingsRepository @Inject constructor(
         val onboardingDone = booleanPreferencesKey("onboarding_done")
         val autoUpdate = booleanPreferencesKey("auto_update")
         val updateChannel = stringPreferencesKey("update_channel")
+        val lastNotifiedUpdateVersion = stringPreferencesKey("last_notified_update_version")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -48,12 +49,15 @@ class SettingsRepository @Inject constructor(
         )
     }
 
+    val lastNotifiedUpdateVersion: Flow<String?> = context.dataStore.data.map { it[Keys.lastNotifiedUpdateVersion] }
+
     suspend fun setThemeMode(mode: ThemeMode) = edit { it[Keys.themeMode] = mode.name }
     suspend fun setDynamicColor(enabled: Boolean) = edit { it[Keys.dynamicColor] = enabled }
     suspend fun setShowHidden(enabled: Boolean) = edit { it[Keys.showHidden] = enabled }
     suspend fun setGridView(enabled: Boolean) = edit { it[Keys.gridView] = enabled }
     suspend fun setAutoUpdate(enabled: Boolean) = edit { it[Keys.autoUpdate] = enabled }
     suspend fun setUpdateChannel(channel: UpdateChannel) = edit { it[Keys.updateChannel] = channel.name }
+    suspend fun setLastNotifiedUpdateVersion(version: String) = edit { it[Keys.lastNotifiedUpdateVersion] = version }
     suspend fun setOnboardingDone() = edit { it[Keys.onboardingDone] = true }
     suspend fun setSort(sort: SortSpec) = edit {
         it[Keys.sortBy] = sort.by.name

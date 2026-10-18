@@ -20,6 +20,10 @@ class ResourceOperationStrings @Inject constructor(
     override val channelName: String get() = context.getString(R.string.notification_channel_name)
     override val channelDescription: String get() = context.getString(R.string.notification_channel_description)
     override val cancel: String get() = context.getString(R.string.cancel)
+    override val updateChannelName: String get() = context.getString(R.string.update_notification_channel_name)
+    override val updateNotificationBody: String get() = context.getString(R.string.update_notification_body)
+
+    override fun updateNotificationTitle(version: String): String = context.getString(R.string.update_notification_title, version)
 
     override fun title(operation: FileOperation): String = context.getString(operationTitleRes(operation), operationCount(operation))
 
