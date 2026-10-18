@@ -54,7 +54,7 @@ import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.components.ShapeIcon
 import com.aiyu.findex.ui.components.icon
 import com.aiyu.findex.ui.components.CategoryShape
-import com.aiyu.findex.ui.components.isImageExtension
+import com.aiyu.findex.ui.components.isMediaExtension
 import com.aiyu.findex.ui.components.titleRes
 import com.aiyu.findex.ui.explorer.DeleteDialog
 import com.aiyu.findex.ui.explorer.FileGrid
@@ -91,7 +91,7 @@ fun CategoryScreen(
         when {
             state.selection.isNotEmpty() -> viewModel.toggle(item.path)
             item.isArchive -> onOpenArchive(item.path)
-            isImageExtension(item.extension) -> {
+            isMediaExtension(item.extension) -> {
                 viewModel.onOpened(item.path)
                 viewerInitialPath = item.path
             }

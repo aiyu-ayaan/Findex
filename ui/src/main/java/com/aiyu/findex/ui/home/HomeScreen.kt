@@ -299,7 +299,7 @@ fun HomeScreen(
                                     .clip(groupedShape(index, uiState.recents.size))
                                     .clickable {
                                         viewModel.onRecentOpened(recent.path)
-                                        if (com.aiyu.findex.ui.components.isImageExtension(ext)) {
+                                        if (com.aiyu.findex.ui.components.isMediaExtension(ext)) {
                                             recentViewerPath = recent.path
                                         } else {
                                             context.openFile(recent.path, recent.size)

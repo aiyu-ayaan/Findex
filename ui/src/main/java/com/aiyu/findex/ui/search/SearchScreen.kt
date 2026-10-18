@@ -46,7 +46,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.components.ShapeIcon
-import com.aiyu.findex.ui.components.isImageExtension
+import com.aiyu.findex.ui.components.isMediaExtension
 import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.explorer.DeleteDialog
 import com.aiyu.findex.ui.explorer.FileList
@@ -82,7 +82,7 @@ fun SearchScreen(
         when {
             item.isDirectory -> onOpenFolder(item.path)
             item.isArchive -> onOpenArchive(item.path)
-            isImageExtension(item.extension) -> {
+            isMediaExtension(item.extension) -> {
                 viewModel.onOpened(item.path)
                 viewerInitialPath = item.path
             }

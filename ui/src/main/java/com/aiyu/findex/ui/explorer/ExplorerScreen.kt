@@ -131,7 +131,7 @@ import com.aiyu.findex.ui.tabs.NewTabSheet
 import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.components.OperationBanner
 import com.aiyu.findex.ui.components.ShapeIcon
-import com.aiyu.findex.ui.components.isImageExtension
+import com.aiyu.findex.ui.components.isMediaExtension
 import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.util.openFile
 import com.aiyu.findex.ui.util.openFileWithChooser
@@ -215,7 +215,7 @@ fun ExplorerScreen(
             state.inSelection -> viewModel.toggleSelection(item.path)
             item.isDirectory -> viewModel.openFolder(item.path)
             listDetail -> viewModel.focus(item.path)
-            isImageExtension(item.extension) -> {
+            isMediaExtension(item.extension) -> {
                 if (SmbPath.parse(item.path) == null) viewModel.onFileOpened(item.path)
                 modal = ExplorerModal.MediaViewer(item.path)
             }
@@ -438,7 +438,7 @@ fun ExplorerScreen(
                 actions = DetailActions(
                     onOpen = {
                         focusedItem?.let {
-                            if (isImageExtension(it.extension)) {
+                            if (isMediaExtension(it.extension)) {
                                 if (SmbPath.parse(it.path) == null) viewModel.onFileOpened(it.path)
                                 modal = ExplorerModal.MediaViewer(it.path)
                             } else {
@@ -484,7 +484,7 @@ fun ExplorerScreen(
                 when (action) {
                     ItemAction.OPEN -> when {
                         item.isDirectory -> viewModel.openFolder(item.path)
-                        isImageExtension(item.extension) -> {
+                        isMediaExtension(item.extension) -> {
                             if (!state.isNetwork) viewModel.onFileOpened(item.path)
                             modal = ExplorerModal.MediaViewer(item.path)
                         }
