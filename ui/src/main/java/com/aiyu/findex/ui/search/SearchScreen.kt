@@ -57,6 +57,7 @@ import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.util.openFile
 import com.aiyu.findex.ui.util.openFileWithChooser
 import com.aiyu.findex.ui.util.shareFiles
+import com.aiyu.findex.ui.viewer.InAppViewers
 import java.io.File
 
 /** Name search across every indexed volume. Folders open in the Explorer; images open in the built-in viewer; other files open externally. */
@@ -65,6 +66,7 @@ fun SearchScreen(
     onBack: () -> Unit,
     onOpenFolder: (String) -> Unit,
     onOpenArchive: (String) -> Unit,
+    onOpenFile: (Any) -> Unit = {},
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -88,7 +90,7 @@ fun SearchScreen(
             }
             else -> {
                 viewModel.onOpened(item.path)
-                context.openFile(item.path, item.size)
+                InAppViewers.routeFor(item)?.let(onOpenFile) ?: context.openFile(item.path, item.size)
             }
         }
     }

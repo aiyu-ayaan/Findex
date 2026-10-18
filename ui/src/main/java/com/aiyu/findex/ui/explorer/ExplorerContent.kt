@@ -62,6 +62,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.aiyu.findex.core.model.StorageItem
+import com.aiyu.findex.core.repository.Tag
+import com.aiyu.findex.ui.tags.TagDots
 import com.aiyu.findex.core.network.SmbPath
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.components.FileThumbnail
@@ -189,7 +191,9 @@ fun FileList(
     modifier: Modifier = Modifier,
     focused: String? = null,
     /** Replaces the size/date line, e.g. with the parent folder in search results; null keeps the default. */
-    subtitle: (@Composable (StorageItem) -> String?)? = null
+    subtitle: (@Composable (StorageItem) -> String?)? = null,
+    /** Tags by item path; shown as dots after the name. */
+    tags: Map<String, List<Tag>> = emptyMap()
 ) {
     val inSelection = selection.isNotEmpty()
     LazyColumn(
@@ -212,6 +216,7 @@ fun FileList(
                 onLongClick = { onSelectionChange(selection + item.path) },
                 onMore = { onMore(item) },
                 subtitle = subtitle?.invoke(item),
+                tags = tags[item.path].orEmpty(),
                 modifier = Modifier.animateItem()
             )
         }
@@ -228,7 +233,8 @@ fun FileGrid(
     onSelectionChange: (Set<String>) -> Unit,
     header: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    focused: String? = null
+    focused: String? = null,
+    tags: Map<String, List<Tag>> = emptyMap()
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(104.dp),
@@ -248,6 +254,7 @@ fun FileGrid(
                 focused = item.path == focused,
                 onClick = { onClick(item) },
                 onLongClick = { onSelectionChange(selection + item.path) },
+                tags = tags[item.path].orEmpty(),
                 modifier = Modifier.animateItem()
             )
         }
@@ -265,7 +272,8 @@ private fun FileRow(
     onLongClick: () -> Unit,
     onMore: () -> Unit,
     modifier: Modifier = Modifier,
-    subtitle: String? = null
+    subtitle: String? = null,
+    tags: List<Tag> = emptyList()
 ) {
     val container by animateColorAsState(
         when {
@@ -302,12 +310,19 @@ private fun FileRow(
             }
             Spacer(Modifier.width(Dimens.lg))
             Column(Modifier.weight(1f)) {
-                Text(
-                    item.name,
-                    style = MaterialTheme.typography.bodyLarge,
-                    maxLines = 1,
-                    overflow = TextOverflow.MiddleEllipsis
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        item.name,
+                        style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.MiddleEllipsis,
+                        modifier = Modifier.weight(1f, fill = false)
+                    )
+                    if (tags.isNotEmpty()) {
+                        Spacer(Modifier.width(Dimens.sm))
+                        TagDots(tags)
+                    }
+                }
                 Text(
                     text = subtitle ?: metaLine(item),
                     style = MaterialTheme.typography.bodyMedium,
@@ -352,7 +367,8 @@ private fun FileCell(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
-    focused: Boolean = false
+    focused: Boolean = false,
+    tags: List<Tag> = emptyList()
 ) {
     val container by animateColorAsState(
         when {
@@ -400,6 +416,10 @@ private fun FileCell(
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center
             )
+            if (tags.isNotEmpty()) {
+                Spacer(Modifier.size(Dimens.xs))
+                TagDots(tags)
+            }
         }
     }
 }

@@ -68,6 +68,7 @@ import com.aiyu.findex.ui.util.formatSize
 import com.aiyu.findex.ui.util.openFile
 import com.aiyu.findex.ui.util.openFileWithChooser
 import com.aiyu.findex.ui.util.shareFiles
+import com.aiyu.findex.ui.viewer.InAppViewers
 import java.io.File
 
 @Composable
@@ -75,6 +76,7 @@ fun CategoryScreen(
     onBack: () -> Unit,
     onOpenFolder: (String) -> Unit,
     onOpenArchive: (String) -> Unit,
+    onOpenFile: (Any) -> Unit = {},
     viewModel: CategoryViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -97,7 +99,7 @@ fun CategoryScreen(
             }
             else -> {
                 viewModel.onOpened(item.path)
-                context.openFile(item.path, item.size)
+                InAppViewers.routeFor(item)?.let(onOpenFile) ?: context.openFile(item.path, item.size)
             }
         }
     }

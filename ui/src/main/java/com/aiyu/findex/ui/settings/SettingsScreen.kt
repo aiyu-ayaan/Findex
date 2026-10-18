@@ -16,6 +16,7 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Contrast
 import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.GridView
+import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.LightMode
 import androidx.compose.material.icons.rounded.Palette
@@ -71,6 +72,7 @@ class SettingsViewModel @Inject constructor(private val repo: SettingsRepository
     fun setTheme(mode: ThemeMode) = viewModelScope.launch { repo.setThemeMode(mode) }
     fun setDynamic(on: Boolean) = viewModelScope.launch { repo.setDynamicColor(on) }
     fun setHidden(on: Boolean) = viewModelScope.launch { repo.setShowHidden(on) }
+    fun setStorageHistory(on: Boolean) = viewModelScope.launch { repo.setStorageHistory(on) }
     fun setGrid(on: Boolean) = viewModelScope.launch { repo.setGridView(on) }
 }
 
@@ -135,8 +137,9 @@ fun SettingsScreen(onBack: () -> Unit, onOpenAbout: () -> Unit, onOpenUpdates: (
                 }
             }
             item { SectionHeader(stringResource(R.string.settings_files)) }
-            item { SwitchRow(Icons.Rounded.Visibility, R.string.show_hidden_files, R.string.settings_show_hidden_desc, settings.showHidden, viewModel::setHidden, groupedShape(0, 2)) }
-            item { SwitchRow(Icons.Rounded.GridView, R.string.settings_grid, R.string.settings_grid_desc, settings.gridView, viewModel::setGrid, groupedShape(1, 2)) }
+            item { SwitchRow(Icons.Rounded.Visibility, R.string.show_hidden_files, R.string.settings_show_hidden_desc, settings.showHidden, viewModel::setHidden, groupedShape(0, 3)) }
+            item { SwitchRow(Icons.Rounded.GridView, R.string.settings_grid, R.string.settings_grid_desc, settings.gridView, viewModel::setGrid, groupedShape(1, 3)) }
+            item { SwitchRow(Icons.Rounded.History, R.string.settings_storage_history, R.string.settings_storage_history_desc, settings.storageHistory, viewModel::setStorageHistory, groupedShape(2, 3)) }
             item { SectionHeader(stringResource(R.string.settings_updates)) }
             item {
                 SettingItem(

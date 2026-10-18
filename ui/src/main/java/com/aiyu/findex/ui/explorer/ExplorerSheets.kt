@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Label
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.BookmarkBorder
 import androidx.compose.material.icons.rounded.ContentCopy
@@ -22,6 +23,9 @@ import androidx.compose.material.icons.rounded.DriveFileRenameOutline
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.FolderZip
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.PhotoSizeSelectLarge
+import androidx.compose.material.icons.rounded.PushPin
 import androidx.compose.material.icons.rounded.RestoreFromTrash
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Tab
@@ -78,16 +82,19 @@ import com.aiyu.findex.core.model.ArchiveFormat
 import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.components.FileThumbnail
+import com.aiyu.findex.ui.components.isImageExtension
+import com.aiyu.findex.ui.shortcuts.canPinShortcuts
+import androidx.compose.ui.platform.LocalContext
 import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.util.formatDate
 import com.aiyu.findex.ui.util.formatSize
 
-enum class ItemAction { OPEN, OPEN_WITH, OPEN_IN_NEW_TAB, SHARE, SHOW_IN_FOLDER, RESTORE, COPY, CUT, RENAME, COMPRESS, EXTRACT, BOOKMARK, DETAILS, DELETE }
+enum class ItemAction { OPEN, OPEN_WITH, OPEN_IN_NEW_TAB, SHARE, SHOW_IN_FOLDER, RESTORE, COPY, CUT, RENAME, COMPRESS, EXTRACT, BOOKMARK, DETAILS, DELETE, TAGS, PIN_SHORTCUT, MOVE_TO_VAULT, COMPRESS_IMAGE, BATCH_RENAME }
 
 val ExplorerItemActions = ItemAction.entries.toSet() - ItemAction.SHOW_IN_FOLDER - ItemAction.RESTORE
 
-/** On an SMB share: no archives (they need local files) and no recycle bin restore. */
-val NetworkItemActions = ExplorerItemActions - ItemAction.COMPRESS - ItemAction.EXTRACT
+/** On an SMB share: no archives (they need local files), no recycle bin restore, no vault or image tools. */
+val NetworkItemActions = ExplorerItemActions - ItemAction.COMPRESS - ItemAction.EXTRACT - ItemAction.MOVE_TO_VAULT - ItemAction.COMPRESS_IMAGE
 
 /** Long-press-free per-item actions, opened from the row's overflow button. */
 @Composable
@@ -124,7 +131,11 @@ fun ItemActionSheet(
             row(ItemAction.RENAME, Icons.Rounded.DriveFileRenameOutline, R.string.action_rename)
             if (item.isArchive) row(ItemAction.EXTRACT, Icons.Rounded.Unarchive, R.string.action_extract)
             else row(ItemAction.COMPRESS, Icons.Rounded.FolderZip, R.string.action_compress)
-            if (item.isDirectory) row(ItemAction.BOOKMARK, Icons.Rounded.BookmarkBorder, R.string.action_bookmark)
+            row(ItemAction.BOOKMARK, Icons.Rounded.BookmarkBorder, R.string.action_bookmark)
+            row(ItemAction.TAGS, Icons.AutoMirrored.Rounded.Label, R.string.action_tags)
+            if (item.isDirectory && LocalContext.current.canPinShortcuts()) row(ItemAction.PIN_SHORTCUT, Icons.Rounded.PushPin, R.string.action_pin_shortcut)
+            if (!item.isDirectory && isImageExtension(item.extension)) row(ItemAction.COMPRESS_IMAGE, Icons.Rounded.PhotoSizeSelectLarge, R.string.action_compress_image)
+            row(ItemAction.MOVE_TO_VAULT, Icons.Rounded.Lock, R.string.action_move_to_vault)
             row(ItemAction.DETAILS, Icons.Rounded.Info, R.string.action_details)
             HorizontalDivider(Modifier.padding(horizontal = Dimens.xl, vertical = Dimens.sm))
             // Destructive action separated and in the error color.

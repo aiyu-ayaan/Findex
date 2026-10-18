@@ -1,6 +1,7 @@
 package com.aiyu.findex.core.repository
 
 import android.content.Context
+import com.aiyu.findex.core.db.PathIndexDao
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
@@ -28,7 +29,8 @@ import javax.inject.Singleton
 @Singleton
 class StorageRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val smb: SmbRepository
+    private val smb: SmbRepository,
+    private val pathIndex: PathIndexDao
 ) : StorageRepository {
 
     override val downloadsPath: String =
@@ -168,7 +170,11 @@ class StorageRepositoryImpl @Inject constructor(
             arrayOf("%$escaped%"),
             "${MediaStore.MediaColumns.DATE_MODIFIED} DESC"
         )?.use { c ->
-            while (c.moveToNext() && paths.size < limit) c.getString(0)?.let(paths::add)
+            while (c.moveToNext() && paths.size < limit) {
+                val p = c.getString(0) ?: continue
+                if ("/${com.aiyu.findex.core.vault.VaultKeyManager.DIR_NAME}/" in "$p/" || "/.FindexTrash/" in "$p/") continue
+                paths.add(p)
+            }
         }
         // The index lags behind deletes; only report what is still on disk.
         paths.map(::File).filter { it.exists() }.map { it.toStorageItem() }
@@ -183,12 +189,14 @@ class StorageRepositoryImpl @Inject constructor(
             return@withContext runCatching {
                 if (smb.stat(id, newInner) != null) return@runCatching null
                 smb.rename(id, inner, newInner)
+                pathIndex.onMoved(path, SmbPath.of(id, newInner))
                 smb.stat(id, newInner)
             }.getOrNull()
         }
         val src = File(path)
         val target = File(src.parentFile, name)
         if (target.exists() || !src.renameTo(target)) return@withContext null
+        pathIndex.onMoved(src.absolutePath, target.absolutePath)
         scan(src, target)
         target.toStorageItem()
     }

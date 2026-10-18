@@ -1,5 +1,6 @@
 package com.aiyu.findex
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import androidx.activity.ComponentActivity
@@ -7,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.aiyu.findex.ui.FindexApp
+import com.aiyu.findex.ui.navigation.LaunchRequests
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,6 +38,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent { FindexApp(onReady = { contentReady = true }) }
+        if (savedInstanceState == null) forwardFolder(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        forwardFolder(intent)
+    }
+
+    /** Pinned folder shortcuts carry the folder path; the NavHost opens it. */
+    private fun forwardFolder(intent: Intent?) {
+        intent?.getStringExtra(LaunchRequests.EXTRA_FOLDER_PATH)?.let { LaunchRequests.folder.value = it }
     }
 
     private companion object {

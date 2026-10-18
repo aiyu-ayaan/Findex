@@ -304,7 +304,19 @@ fun HomeScreen(
                 item(key = "bookmarks") {
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(Dimens.sm)) {
                         items(uiState.bookmarks, key = { it.path }) { bookmark ->
-                            BookmarkChip(bookmark.name, onClick = { onNavigate(ExplorerRoute(bookmark.path)) })
+                            BookmarkChip(bookmark.name, onClick = {
+                                val file = java.io.File(bookmark.path)
+                                // Bookmarked files open like recents; folders and smb paths browse.
+                                if (!bookmark.path.startsWith("smb://") && file.isFile) {
+                                    val ext = file.extension
+                                    if (com.aiyu.findex.ui.components.isMediaExtension(ext)) recentViewerPath = bookmark.path
+                                    else com.aiyu.findex.ui.viewer.InAppViewers.routeFor(
+                                        com.aiyu.findex.core.model.StorageItem(path = bookmark.path, name = bookmark.name, size = file.length(), extension = ext.lowercase())
+                                    )?.let(onNavigate) ?: context.openFile(bookmark.path, file.length())
+                                } else {
+                                    onNavigate(ExplorerRoute(bookmark.path))
+                                }
+                            })
                         }
                     }
                 }
@@ -341,7 +353,9 @@ fun HomeScreen(
                                         if (com.aiyu.findex.ui.components.isMediaExtension(ext)) {
                                             recentViewerPath = recent.path
                                         } else {
-                                            context.openFile(recent.path, recent.size)
+                                            val item = com.aiyu.findex.core.model.StorageItem(path = recent.path, name = recent.name, size = recent.size, extension = ext.lowercase())
+                                            com.aiyu.findex.ui.viewer.InAppViewers.routeFor(item)?.let(onNavigate)
+                                                ?: context.openFile(recent.path, recent.size)
                                         }
                                     }
                             )
@@ -375,7 +389,11 @@ fun HomeScreen(
         )
     }
     recentViewerPath?.let { initialPath ->
-        val recentStorageItems = remember(uiState.recents) {
+        val recentStorageItems = remember(uiState.recents, initialPath) {
+            if (uiState.recents.none { it.path == initialPath }) {
+                val f = java.io.File(initialPath)
+                return@remember listOf(com.aiyu.findex.core.model.StorageItem(name = f.name, path = initialPath, isDirectory = false, size = f.length(), lastModified = f.lastModified()))
+            }
             uiState.recents.map { r ->
                 com.aiyu.findex.core.model.StorageItem(
                     name = r.name,

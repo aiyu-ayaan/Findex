@@ -40,6 +40,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import com.aiyu.findex.core.model.FileOperation
 import com.aiyu.findex.core.model.OperationResult
@@ -91,6 +92,28 @@ import com.aiyu.findex.ui.update.UpdatesScreen
 import com.aiyu.findex.ui.navigation.AcknowledgementsRoute
 import com.aiyu.findex.ui.util.hasNotificationAccess
 import com.aiyu.findex.ui.util.hasStorageAccess
+import com.aiyu.findex.ui.changes.RecentChangesScreen
+import com.aiyu.findex.ui.imagecompress.ImageCompressDialog
+import com.aiyu.findex.ui.navigation.AudioPlayerRoute
+import com.aiyu.findex.ui.navigation.BatchRenameRoute
+import com.aiyu.findex.ui.navigation.FavoritesRoute
+import com.aiyu.findex.ui.navigation.ImageCompressRoute
+import com.aiyu.findex.ui.navigation.LargeFilesRoute
+import com.aiyu.findex.ui.navigation.LaunchRequests
+import com.aiyu.findex.ui.navigation.PdfViewerRoute
+import com.aiyu.findex.ui.navigation.RecentChangesRoute
+import com.aiyu.findex.ui.navigation.TaggedFilesRoute
+import com.aiyu.findex.ui.navigation.TextViewerRoute
+import com.aiyu.findex.ui.navigation.VaultRoute
+import com.aiyu.findex.ui.rename.BatchRenameScreen
+import com.aiyu.findex.ui.tags.FavoritesScreen
+import com.aiyu.findex.ui.tags.TaggedFilesScreen
+import com.aiyu.findex.ui.tools.LargeFilesScreen
+import com.aiyu.findex.ui.vault.VaultScreen
+import com.aiyu.findex.ui.viewer.AudioPlayerScreen
+import com.aiyu.findex.ui.viewer.PdfViewerScreen
+import com.aiyu.findex.ui.viewer.TextViewerScreen
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 /** App-wide snackbar so results of background operations show on whatever screen is visible. */
@@ -126,7 +149,12 @@ fun FindexApp(onReady: () -> Unit = {}, viewModel: AppViewModel = hiltViewModel(
                     return@collect
                 }
                 val message = when (result) {
-                    is OperationResult.Success -> context.getString(R.string.operation_completed)
+                    is OperationResult.Success -> if (result.skipped > 0) {
+                        context.getString(R.string.operation_completed) + " · " +
+                            context.resources.getQuantityString(R.plurals.imgc_skipped, result.skipped, result.skipped)
+                    } else {
+                        context.getString(R.string.operation_completed)
+                    }
                     is OperationResult.Cancelled -> context.getString(R.string.operation_cancelled)
                     is OperationResult.Failed -> context.getString(failureRes(result.reason))
                 }
@@ -182,6 +210,15 @@ private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -
         if (route == HomeRoute) navController.popBackStack(HomeRoute, inclusive = false)
         else navController.navigate(route) { launchSingleTop = true; popUpTo<HomeRoute>() }
     }
+    // Pinned folder shortcuts. Skipped until onboarding has granted storage access.
+    if (startDestination == HomeRoute) {
+        LaunchedEffect(navController) {
+            LaunchRequests.folder.filterNotNull().collect { path ->
+                LaunchRequests.folder.value = null
+                navController.navigate(ExplorerRoute(path)) { launchSingleTop = true; popUpTo<HomeRoute>() }
+            }
+        }
+    }
     PushDrawer(
         state = drawerState,
         permanent = permanentDrawer,
@@ -230,17 +267,19 @@ private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: N
     val back: () -> Unit = { navController.popBackStack() }
     val openFolder: (String) -> Unit = { navController.navigate(ExplorerRoute(it)) }
     val openArchive: (String) -> Unit = { navController.navigate(ArchiveRoute(it)) }
+    val openFile: (Any) -> Unit = { navController.navigate(it) }
     composable<ExplorerRoute> {
         ExplorerScreen(
             onBack = back,
             onOpenTabs = { navController.navigate(TabsRoute) { launchSingleTop = true } },
-            onOpenArchive = openArchive
+            onOpenArchive = openArchive,
+            onFeatureRoute = openFile
         )
     }
     composable<ArchiveRoute> { ArchiveScreen(onBack = back) }
     // A share opens as a normal explorer tab, so copy / paste works between it and the device.
     composable<NetworkRoute> { NetworkScreen(onBack = back, onOpenServer = { navController.navigate(ExplorerRoute(SmbPath.of(it, ""))) }) }
-    composable<CategoryRoute> { CategoryScreen(onBack = back, onOpenFolder = openFolder, onOpenArchive = openArchive) }
+    composable<CategoryRoute> { CategoryScreen(onBack = back, onOpenFolder = openFolder, onOpenArchive = openArchive, onOpenFile = openFile) }
     composable<AnalyzerRoute> { AnalyzerScreen(onBack = back, onOpenFolder = openFolder) }
     composable<CleanerRoute> { CleanerScreen(onBack = back) }
     composable<WhatsAppRoute> { WhatsAppScreen(onBack = back) }
@@ -250,7 +289,24 @@ private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: N
     composable<AcknowledgementsRoute> { AcknowledgementsScreen(onBack = back) }
     composable<RecycleBinRoute> { RecycleBinScreen(onBack = back) }
     composable<DuplicatesRoute> { DuplicatesScreen(onBack = back, onOpenFolder = openFolder) }
-    composable<SearchRoute> { SearchScreen(onBack = back, onOpenFolder = openFolder, onOpenArchive = openArchive) }
+    composable<SearchRoute> { SearchScreen(onBack = back, onOpenFolder = openFolder, onOpenArchive = openArchive, onOpenFile = openFile) }
+    composable<BatchRenameRoute> { BatchRenameScreen(onBack = back) }
+    composable<VaultRoute> { VaultScreen(onBack = back) }
+    composable<LargeFilesRoute> { LargeFilesScreen(onBack = back, onOpenFolder = openFolder) }
+    dialog<ImageCompressRoute> { ImageCompressDialog(onDismiss = back) }
+    composable<TextViewerRoute> { TextViewerScreen(onBack = back) }
+    composable<PdfViewerRoute> { PdfViewerScreen(onBack = back) }
+    composable<AudioPlayerRoute> { AudioPlayerScreen(onBack = back) }
+    composable<FavoritesRoute> {
+        FavoritesScreen(
+            onBack = back,
+            onOpenFolder = openFolder,
+            onOpenTag = { navController.navigate(TaggedFilesRoute(it)) },
+            onOpenFile = openFile
+        )
+    }
+    composable<TaggedFilesRoute> { TaggedFilesScreen(onBack = back, onOpenFolder = openFolder, onOpenFile = openFile) }
+    composable<RecentChangesRoute> { RecentChangesScreen(onBack = back, onOpenFolder = openFolder, onOpenFile = openFile) }
     composable<TabsRoute> {
         TabsScreen(onBack = back, onOpenExplorer = {
             // Opened from an explorer: go back to it (it follows the shared session).

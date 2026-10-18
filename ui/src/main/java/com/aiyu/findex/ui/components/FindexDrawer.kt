@@ -21,7 +21,11 @@ import androidx.compose.material.icons.rounded.CloudQueue
 import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.FileCopy
 import androidx.compose.material.icons.rounded.Forum
+import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.SdStorage
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.PieChart
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Tab
@@ -41,6 +45,10 @@ import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.navigation.AnalyzerRoute
 import com.aiyu.findex.ui.navigation.CleanerRoute
 import com.aiyu.findex.ui.navigation.DuplicatesRoute
+import com.aiyu.findex.ui.navigation.FavoritesRoute
+import com.aiyu.findex.ui.navigation.LargeFilesRoute
+import com.aiyu.findex.ui.navigation.RecentChangesRoute
+import com.aiyu.findex.ui.navigation.VaultRoute
 import com.aiyu.findex.ui.navigation.NetworkRoute
 import com.aiyu.findex.ui.navigation.HomeRoute
 import com.aiyu.findex.ui.navigation.RecycleBinRoute
@@ -58,6 +66,13 @@ private val mainEntries = listOf(
     DrawerEntry(R.string.nav_whatsapp_cleaner, Icons.Rounded.Forum, WhatsAppRoute),
     DrawerEntry(R.string.nav_duplicates, Icons.Rounded.FileCopy, DuplicatesRoute),
     DrawerEntry(R.string.nav_recycle_bin, Icons.Rounded.Delete, RecycleBinRoute),
+)
+
+private val moreEntries = listOf(
+    DrawerEntry(R.string.nav_favorites, Icons.Rounded.Star, FavoritesRoute),
+    DrawerEntry(R.string.nav_large_files, Icons.Rounded.SdStorage, LargeFilesRoute),
+    DrawerEntry(R.string.nav_recent_changes, Icons.Rounded.History, RecentChangesRoute),
+    DrawerEntry(R.string.nav_vault, Icons.Rounded.Lock, VaultRoute()),
 )
 
 @Composable
@@ -97,6 +112,23 @@ fun FindexDrawerSheet(
             }
 
             mainEntries.forEach { entry ->
+                NavigationDrawerItem(
+                    icon = { Icon(entry.icon, contentDescription = null) },
+                    label = { Text(stringResource(entry.titleRes)) },
+                    selected = isCurrent(entry.route),
+                    onClick = { onNavigate(entry.route) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+            }
+
+            HorizontalDivider(Modifier.padding(horizontal = Dimens.xxl, vertical = Dimens.sm))
+            Text(
+                text = stringResource(R.string.drawer_section_more),
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = Dimens.xxl, vertical = Dimens.sm)
+            )
+            moreEntries.forEach { entry ->
                 NavigationDrawerItem(
                     icon = { Icon(entry.icon, contentDescription = null) },
                     label = { Text(stringResource(entry.titleRes)) },

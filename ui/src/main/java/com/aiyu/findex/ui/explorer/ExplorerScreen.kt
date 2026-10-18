@@ -63,6 +63,7 @@ import androidx.compose.material.icons.rounded.DriveFileRenameOutline
 import androidx.compose.material.icons.rounded.FolderOff
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.FolderZip
+import androidx.compose.material.icons.automirrored.rounded.Label
 import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.MoreVert
@@ -131,7 +132,19 @@ import com.aiyu.findex.ui.tabs.NewTabSheet
 import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.components.OperationBanner
 import com.aiyu.findex.ui.components.ShapeIcon
+import com.aiyu.findex.ui.components.isImageExtension
 import com.aiyu.findex.ui.components.isMediaExtension
+import com.aiyu.findex.ui.navigation.BatchRenameRoute
+import com.aiyu.findex.ui.navigation.ImageCompressRoute
+import com.aiyu.findex.ui.navigation.SelectionHandoff
+import com.aiyu.findex.ui.navigation.VaultRoute
+import com.aiyu.findex.ui.shortcuts.pinFolderShortcut
+import com.aiyu.findex.ui.tags.TagPickerSheet
+import com.aiyu.findex.ui.viewer.InAppViewers
+import androidx.compose.runtime.produceState
+import androidx.compose.material.icons.rounded.EditNote
+import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.PhotoSizeSelectLarge
 import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.util.openFile
 import com.aiyu.findex.ui.util.openFileWithChooser
@@ -148,6 +161,7 @@ private sealed interface ExplorerModal {
     data class Delete(val paths: List<String>) : ExplorerModal
     data class Details(val item: StorageItem) : ExplorerModal
     data class MediaViewer(val initialPath: String) : ExplorerModal
+    data class Tags(val paths: List<String>) : ExplorerModal
     data object NewFolder : ExplorerModal
     data object Sort : ExplorerModal
 }
@@ -157,6 +171,8 @@ fun ExplorerScreen(
     onBack: () -> Unit,
     onOpenTabs: () -> Unit,
     onOpenArchive: (String) -> Unit,
+    /** Opens a feature destination (vault, batch rename, image compress, …) through the NavHost. */
+    onFeatureRoute: (Any) -> Unit,
     viewModel: ExplorerViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -164,6 +180,7 @@ fun ExplorerScreen(
     val snackbar = LocalSnackbarHostState.current
     val scope = rememberCoroutineScope()
     var modal by remember { mutableStateOf<ExplorerModal?>(null) }
+    val say: (Int) -> Unit = { scope.launch { snackbar.showSnackbar(context.getString(it)) } }
     var fabMenuOpen by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val fastEffects = MaterialTheme.motionScheme.fastEffectsSpec<Float>()
@@ -224,7 +241,7 @@ fun ExplorerScreen(
             item.isArchive -> onOpenArchive(item.path)
             else -> {
                 viewModel.onFileOpened(item.path)
-                context.openFile(item.path, item.size)
+                InAppViewers.routeFor(item)?.let(onFeatureRoute) ?: context.openFile(item.path, item.size)
             }
         }
     }
@@ -339,7 +356,8 @@ fun ExplorerScreen(
                         onClick = ::open,
                         onSelectionChange = viewModel::setSelection,
                         header = header,
-                        focused = state.focused
+                        focused = state.focused,
+                        tags = state.tagsByPath
                     )
                     else -> FileList(
                         items = state.items,
@@ -350,7 +368,8 @@ fun ExplorerScreen(
                         onMore = { modal = ExplorerModal.Actions(it) },
                         onSelectionChange = viewModel::setSelection,
                         header = header,
-                        focused = state.focused
+                        focused = state.focused,
+                        tags = state.tagsByPath
                     )
                 }
             }
@@ -413,6 +432,19 @@ fun ExplorerScreen(
                 onOpenInNewTab = { state.selectedItems.singleOrNull()?.let { viewModel.openInNewTab(it.path) } },
                 onExtract = { state.selectedItems.singleOrNull()?.let { viewModel.clearSelection(); modal = ExplorerModal.Extract(it) } },
                 onBrowse = { state.selectedItems.singleOrNull()?.let { viewModel.clearSelection(); onOpenArchive(it.path) } },
+                selectionCount = state.selection.size,
+                allImages = state.selectedItems.isNotEmpty() && state.selectedItems.all { !it.isDirectory && isImageExtension(it.extension) },
+                onFeature = { action ->
+                    if (action == ItemAction.TAGS) { modal = ExplorerModal.Tags(state.selection.toList()); return@SelectionToolbar }
+                    val token = SelectionHandoff.put(state.selection.toList())
+                    viewModel.clearSelection()
+                    when (action) {
+                        ItemAction.BATCH_RENAME -> onFeatureRoute(BatchRenameRoute(token))
+                        ItemAction.MOVE_TO_VAULT -> onFeatureRoute(VaultRoute(token))
+                        ItemAction.COMPRESS_IMAGE -> onFeatureRoute(ImageCompressRoute(token))
+                        else -> Unit
+                    }
+                },
                 network = state.isNetwork,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -443,7 +475,7 @@ fun ExplorerScreen(
                                 modal = ExplorerModal.MediaViewer(it.path)
                             } else {
                                 if (SmbPath.parse(it.path) == null) viewModel.onFileOpened(it.path)
-                                context.openFile(it.path, it.size)
+                                InAppViewers.routeFor(it)?.let(onFeatureRoute) ?: context.openFile(it.path, it.size)
                             }
                         }
                     },
@@ -507,9 +539,26 @@ fun ExplorerScreen(
                     ItemAction.BOOKMARK -> viewModel.toggleBookmark(item.path, bookmarked = false)
                     ItemAction.DETAILS -> modal = ExplorerModal.Details(item)
                     ItemAction.DELETE -> modal = ExplorerModal.Delete(listOf(item.path))
+                    ItemAction.MOVE_TO_VAULT -> onFeatureRoute(VaultRoute(SelectionHandoff.put(listOf(item.path))))
+                    ItemAction.COMPRESS_IMAGE -> onFeatureRoute(ImageCompressRoute(SelectionHandoff.put(listOf(item.path))))
+                    ItemAction.BATCH_RENAME -> onFeatureRoute(BatchRenameRoute(SelectionHandoff.put(listOf(item.path))))
+                    ItemAction.PIN_SHORTCUT -> say(if (context.pinFolderShortcut(item.path, item.name)) R.string.shortcut_pinned else R.string.shortcut_unsupported)
+                    ItemAction.TAGS -> modal = ExplorerModal.Tags(listOf(item.path))
                 }
             }
         )
+        is ExplorerModal.Tags -> {
+            val initial by produceState<Set<Long>?>(null, m.paths) { value = viewModel.commonTagIds(m.paths) }
+            initial?.let { start ->
+                TagPickerSheet(
+                    tags = state.allTags,
+                    initial = start,
+                    onApply = { viewModel.applyTags(m.paths, start, it); modal = null },
+                    onCreate = viewModel::createTag,
+                    onDismiss = { modal = null }
+                )
+            }
+        }
         is ExplorerModal.Rename -> NameDialog(
             title = stringResource(R.string.action_rename),
             initial = m.item.name,
@@ -819,6 +868,10 @@ private fun SelectionToolbar(
     onOpenInNewTab: () -> Unit,
     onExtract: () -> Unit,
     onBrowse: () -> Unit,
+    selectionCount: Int,
+    allImages: Boolean,
+    /** [ItemAction.BATCH_RENAME], [ItemAction.MOVE_TO_VAULT] or [ItemAction.COMPRESS_IMAGE] on the whole selection. */
+    onFeature: (ItemAction) -> Unit,
     modifier: Modifier = Modifier,
     /** On an SMB share: archive actions and external share are not available. */
     network: Boolean = false
@@ -851,6 +904,11 @@ private fun SelectionToolbar(
             Box {
                 IconButton(onClick = { more = true }) { Icon(Icons.Rounded.MoreVert, stringResource(R.string.cd_more_options)) }
                 DropdownMenu(expanded = more, onDismissRequest = { more = false }, shape = MaterialTheme.shapes.large) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.action_tags)) },
+                        leadingIcon = { Icon(Icons.AutoMirrored.Rounded.Label, null) },
+                        onClick = { more = false; onFeature(ItemAction.TAGS) }
+                    )
                     if (singleSelected?.isDirectory == true) {
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.action_open_in_new_tab)) },
@@ -876,6 +934,27 @@ private fun SelectionToolbar(
                         enabled = singleSelected != null,
                         onClick = { more = false; onRename() }
                     )
+                    if (selectionCount >= 2) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.action_batch_rename)) },
+                            leadingIcon = { Icon(Icons.Rounded.EditNote, null) },
+                            onClick = { more = false; onFeature(ItemAction.BATCH_RENAME) }
+                        )
+                    }
+                    if (!network && allImages) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.action_compress_image)) },
+                            leadingIcon = { Icon(Icons.Rounded.PhotoSizeSelectLarge, null) },
+                            onClick = { more = false; onFeature(ItemAction.COMPRESS_IMAGE) }
+                        )
+                    }
+                    if (!network) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.action_move_to_vault)) },
+                            leadingIcon = { Icon(Icons.Rounded.Lock, null) },
+                            onClick = { more = false; onFeature(ItemAction.MOVE_TO_VAULT) }
+                        )
+                    }
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.action_details)) },
                         leadingIcon = { Icon(Icons.Rounded.Info, null) },

@@ -133,6 +133,7 @@ fun AnalyzerScreen(
                         }
                     }
                 }
+                item(key = "growth") { GrowthCard(drive.path, Modifier.padding(bottom = Dimens.md)) }
                 item(key = "breakdownHeader") { SectionHeader(stringResource(R.string.analyzer_breakdown)) }
                 val rows = categories.filter { (state.stats[it]?.bytes ?: 0) > 0 }
                 itemsIndexed(rows, key = { _, c -> c.name }) { index, c ->

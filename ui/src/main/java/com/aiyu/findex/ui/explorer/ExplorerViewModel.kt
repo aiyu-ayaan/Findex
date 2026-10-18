@@ -20,6 +20,8 @@ import com.aiyu.findex.core.network.NetworkException
 import com.aiyu.findex.core.network.SmbPath
 import com.aiyu.findex.core.network.SmbRepository
 import com.aiyu.findex.core.repository.LibraryRepository
+import com.aiyu.findex.core.repository.Tag
+import com.aiyu.findex.core.repository.TagRepository
 import com.aiyu.findex.ui.network.messageRes
 import com.aiyu.findex.core.repository.StorageRepository
 import com.aiyu.findex.core.settings.SettingsRepository
@@ -60,6 +62,9 @@ data class ExplorerUiState(
     val clipboard: ClipboardContent? = null,
     val activeOperation: ActiveOperation? = null,
     val isBookmarked: Boolean = false,
+    val allTags: List<Tag> = emptyList(),
+    /** Tags of the current folder's children, by path. */
+    val tagsByPath: Map<String, List<Tag>> = emptyMap(),
     /** Direction of the last folder change, for the shared-axis animation. */
     val forward: Boolean = true,
     /** File shown in the list-detail pane on wide windows. */
@@ -86,7 +91,8 @@ class ExplorerViewModel @Inject constructor(
     private val clipboard: FileClipboard,
     private val operationManager: OperationManager,
     private val tabSession: TabSession,
-    private val smbRepository: SmbRepository
+    private val smbRepository: SmbRepository,
+    private val tagRepository: TagRepository
 ) : ViewModel() {
 
     private val startPath: String? = savedStateHandle.toRoute<ExplorerRoute>().path
@@ -146,6 +152,12 @@ class ExplorerViewModel @Inject constructor(
         viewModelScope.launch { operationManager.active.collect { a -> _uiState.update { it.copy(activeOperation = a) } } }
         viewModelScope.launch {
             operationManager.results.collect { if (it !is OperationResult.Cancelled) load(showLoading = false) }
+        }
+        viewModelScope.launch { tagRepository.tags().collect { t -> _uiState.update { it.copy(allTags = t) } } }
+        viewModelScope.launch {
+            _uiState.map { it.tab?.path }.distinctUntilChanged()
+                .flatMapLatest { path -> if (path == null) kotlinx.coroutines.flow.flowOf(emptyMap()) else tagRepository.tagsInFolder(path) }
+                .collect { m -> _uiState.update { it.copy(tagsByPath = m) } }
         }
         viewModelScope.launch {
             _uiState.map { it.tab?.path }.distinctUntilChanged()
@@ -339,6 +351,20 @@ class ExplorerViewModel @Inject constructor(
             libraryRepository.toggleBookmark(path, name, bookmarked)
             _messages.send(if (bookmarked) R.string.bookmark_removed else R.string.bookmark_added)
         }
+    }
+
+    /** Tag ids carried by every one of [paths]. */
+    suspend fun commonTagIds(paths: List<String>): Set<Long> =
+        paths.map { tagRepository.tagIdsFor(it) }.reduceOrNull { a, b -> a intersect b } ?: emptySet()
+
+    /** [initial] is what the picker opened with; only differences are written, partial tags on a multi-selection stay. */
+    fun applyTags(paths: List<String>, initial: Set<Long>, checked: Set<Long>) {
+        viewModelScope.launch { tagRepository.apply(paths, add = checked - initial, remove = initial - checked) }
+        clearSelection()
+    }
+
+    fun createTag(name: String, colorIndex: Int) {
+        viewModelScope.launch { tagRepository.create(name, colorIndex) }
     }
 
     suspend fun details(item: StorageItem): FileDetails = withContext(Dispatchers.IO) {

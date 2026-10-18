@@ -2,6 +2,7 @@ package com.aiyu.findex.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aiyu.findex.core.history.StorageHistoryScheduler
 import com.aiyu.findex.core.model.AppSettings
 import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.operation.OperationManager
@@ -30,7 +31,8 @@ class AppViewModel @Inject constructor(
     private val trashRepository: TrashRepository,
     tabSession: TabSession,
     private val updates: UpdateRepository,
-    private val updateCheckScheduler: UpdateCheckScheduler
+    private val updateCheckScheduler: UpdateCheckScheduler,
+    private val storageHistoryScheduler: StorageHistoryScheduler
 ) : ViewModel() {
     val tabCount: StateFlow<Int> = tabSession.state.map { it.tabs.size }.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
 
@@ -55,6 +57,12 @@ class AppViewModel @Inject constructor(
                 .map { it.autoUpdate }
                 .distinctUntilChanged()
                 .collect { enabled -> updateCheckScheduler.sync(enabled) }
+        }
+        viewModelScope.launch {
+            settingsRepository.settings
+                .map { it.storageHistory }
+                .distinctUntilChanged()
+                .collect { enabled -> storageHistoryScheduler.sync(enabled) }
         }
     }
 
