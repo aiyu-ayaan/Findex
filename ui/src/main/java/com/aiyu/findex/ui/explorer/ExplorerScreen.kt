@@ -15,8 +15,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.activity.BackEventCompat
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.animation.AnimatedContent
@@ -96,6 +94,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.animateFloatingActionButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -220,8 +219,6 @@ fun ExplorerScreen(
         }
     }
     val backScale by animateFloatAsState(1f - 0.08f * backProgress, MaterialTheme.motionScheme.fastSpatialSpec(), label = "backScale")
-    val listStates = remember { mutableMapOf<String, androidx.compose.foundation.lazy.LazyListState>() }
-    val gridStates = remember { mutableMapOf<String, androidx.compose.foundation.lazy.grid.LazyGridState>() }
 
     val tab = state.tab
     // MD3 list-detail: with room for both panes, tapping a file shows it beside the list.
@@ -326,13 +323,14 @@ fun ExplorerScreen(
 
             // Shared-axis X between folders: deeper slides in from the right, up from the left.
             AnimatedContent(
-                targetState = (tab?.id to state.itemsPath),
+                // Items travel with the target so the outgoing folder never lays out (and clamps its scroll) with the new folder's list.
+                targetState = Triple(tab?.id, state.itemsPath, state.items),
                 transitionSpec = {
                     val dir = if (state.forward) 1 else -1
                     (slideInHorizontally(spatial) { it / 8 * dir } + fadeIn(effects)) togetherWith
                         (slideOutHorizontally(spatial) { -it / 8 * dir } + fadeOut(effects))
                 },
-                contentKey = { it },
+                contentKey = { it.first to it.second },
                 label = "folder",
                 modifier = Modifier.graphicsLayer {
                     // Predictive back preview: the folder shrinks and slides toward the swipe direction.
@@ -341,17 +339,22 @@ fun ExplorerScreen(
                     translationX = (if (backFromLeft) 1 else -1) * backProgress * 32.dp.toPx()
                     alpha = 1f - 0.3f * backProgress
                 }
-            ) { (_, path) ->
+            ) { (tabId, path, items) ->
+                val saved = remember(state.settings.gridView) { if (tabId != null && path != null) viewModel.scrollFor(tabId, path) else 0 to 0 }
                 when {
-                    path == null -> Unit
-                    state.items.isEmpty() -> Column(Modifier.fillMaxSize()) {
+                    tabId == null || path == null -> Unit
+                    items.isEmpty() -> Column(Modifier.fillMaxSize()) {
                         Box(Modifier.padding(horizontal = Dimens.gutter)) { header() }
                         EmptyFolder()
                     }
                     state.settings.gridView -> FileGrid(
-                        items = state.items,
+                        items = items,
                         selection = state.selection,
-                        state = gridStates.getOrPut(path) { LazyGridState() },
+                        state = rememberLazyGridState(saved.first, saved.second).also { grid ->
+                            DisposableEffect(grid) {
+                                onDispose { viewModel.saveScroll(tabId, path, grid.firstVisibleItemIndex, grid.firstVisibleItemScrollOffset) }
+                            }
+                        },
                         contentPadding = listPadding,
                         onClick = ::open,
                         onSelectionChange = viewModel::setSelection,
@@ -360,9 +363,13 @@ fun ExplorerScreen(
                         tags = state.tagsByPath
                     )
                     else -> FileList(
-                        items = state.items,
+                        items = items,
                         selection = state.selection,
-                        state = listStates.getOrPut(path) { LazyListState() },
+                        state = rememberLazyListState(saved.first, saved.second).also { list ->
+                            DisposableEffect(list) {
+                                onDispose { viewModel.saveScroll(tabId, path, list.firstVisibleItemIndex, list.firstVisibleItemScrollOffset) }
+                            }
+                        },
                         contentPadding = listPadding,
                         onClick = ::open,
                         onMore = { modal = ExplorerModal.Actions(it) },

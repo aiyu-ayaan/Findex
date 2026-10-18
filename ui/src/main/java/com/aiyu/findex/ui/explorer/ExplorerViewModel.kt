@@ -209,6 +209,28 @@ class ExplorerViewModel @Inject constructor(
 
     fun openFolder(path: String) = setPath(path, forward = true)
 
+    // Scroll (first visible index, offset) per (tab id, folder); only folders still on the tab's path are kept.
+    private val scrollPositions = HashMap<Pair<Long, String>, Pair<Int, Int>>()
+
+    fun scrollFor(tabId: Long, path: String): Pair<Int, Int> {
+        pruneScroll(tabId)
+        return scrollPositions[tabId to path] ?: (0 to 0)
+    }
+
+    /** Saved only while [path] is the tab's folder or one of its parents, so a folder left by going up starts at the top next time. */
+    fun saveScroll(tabId: Long, path: String, index: Int, offset: Int) {
+        pruneScroll(tabId)
+        val current = _uiState.value.tabs.firstOrNull { it.id == tabId }?.path ?: return
+        if (current.isSameOrInside(path)) scrollPositions[tabId to path] = index to offset
+    }
+
+    private fun pruneScroll(tabId: Long) {
+        val current = _uiState.value.tabs.firstOrNull { it.id == tabId }?.path
+        scrollPositions.keys.removeAll { (id, path) -> id == tabId && (current == null || !current.isSameOrInside(path)) }
+    }
+
+    private fun String.isSameOrInside(folder: String) = this == folder || startsWith("$folder/")
+
     fun jumpTo(path: String) {
         val current = _uiState.value.tab?.path ?: return
         if (path != current) setPath(path, forward = path.length > current.length)
