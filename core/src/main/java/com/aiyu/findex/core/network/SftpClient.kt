@@ -7,6 +7,8 @@ import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.Session
 import com.jcraft.jsch.SftpATTRS
 import com.jcraft.jsch.SftpException
+import com.jcraft.jsch.UIKeyboardInteractive
+import com.jcraft.jsch.UserInfo
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -268,6 +270,8 @@ internal class SftpSession private constructor(
                 val user = username.ifEmpty { "guest" }
                 session = jsch.getSession(user, host, port).apply {
                     if (password.isNotEmpty()) setPassword(password)
+                    // Many servers (OpenSSH default on Ubuntu, Synology) only offer keyboard-interactive, which needs a UserInfo.
+                    userInfo = PasswordUserInfo(password)
                     val config = Properties().apply {
                         put("StrictHostKeyChecking", "no")
                         put("PreferredAuthentications", "password,keyboard-interactive,publickey")
@@ -341,4 +345,21 @@ internal class SftpSession private constructor(
             return NetworkException(NetworkError.UNKNOWN, e)
         }
     }
+}
+
+/** Answers keyboard-interactive password prompts with the saved password; host keys are accepted as before. */
+private class PasswordUserInfo(private val password: String) : UserInfo, UIKeyboardInteractive {
+    override fun getPassphrase(): String? = null
+    override fun getPassword(): String = password
+    override fun promptPassword(message: String?) = true
+    override fun promptPassphrase(message: String?) = false
+    override fun promptYesNo(message: String?) = true
+    override fun showMessage(message: String?) = Unit
+    override fun promptKeyboardInteractive(
+        destination: String?,
+        name: String?,
+        instruction: String?,
+        prompt: Array<out String>?,
+        echo: BooleanArray?
+    ): Array<String> = Array(prompt?.size ?: 0) { password }
 }

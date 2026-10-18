@@ -427,7 +427,7 @@
     <string name="network_field_domain">Domain or workgroup (optional)</string>
     <string name="network_connect">Connect and save</string>
     <string name="network_connecting">Connecting…</string>
-    <string name="network_password_note">The password is encrypted with a key kept in Android Keystore.</string>
+    <string name="network_password_note">Encrypted with a key kept in Android Keystore. Leave empty to reuse the password saved for this username.</string>
     <string name="network_guest">Guest</string>
     <string name="network_status_connected">Connected</string>
     <string name="network_remember_password">Remember password</string>

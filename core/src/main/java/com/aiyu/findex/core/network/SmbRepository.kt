@@ -1,6 +1,8 @@
 package com.aiyu.findex.core.network
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
 import com.aiyu.findex.core.db.NetworkServerDao
 import com.aiyu.findex.core.db.NetworkServerEntity
 import com.aiyu.findex.core.model.StorageItem
@@ -20,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
@@ -264,16 +267,31 @@ class SmbRepository @Inject constructor(
     private val dao: NetworkServerDao,
     private val cipher: CredentialCipher
 ) {
-    private val smbClient = SMBClient(
-        SmbConfig.builder()
-            .withTimeout(15, TimeUnit.SECONDS)
-            .withSoTimeout(30, TimeUnit.SECONDS)
-            .build()
-    )
-    private val sessions = HashMap<Long, NetworkSession>()
+    private val smbConfig = SmbConfig.builder()
+        .withTimeout(15, TimeUnit.SECONDS)
+        .withSoTimeout(30, TimeUnit.SECONDS)
+        .build()
+    // Concurrent: the network callback drops sessions from its own thread.
+    private val sessions = java.util.concurrent.ConcurrentHashMap<Long, NetworkSession>()
     // Passwords of servers saved without "Remember password"; process memory only, never written to disk.
     private val sessionPasswords = java.util.concurrent.ConcurrentHashMap<Long, String>()
     private val lock = Mutex()
+
+    init {
+        // Sockets opened on the old Wi-Fi band/network hang until timeout; drop them so the next call reconnects.
+        context.getSystemService(ConnectivityManager::class.java)?.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
+            private var current: Network? = null
+            override fun onAvailable(network: Network) {
+                if (current != null && current != network) dropAllSessions()
+                current = network
+            }
+            override fun onLost(network: Network) = dropAllSessions()
+        })
+    }
+
+    private fun dropAllSessions() {
+        sessions.keys.toList().forEach { id -> sessions.remove(id)?.runCatching { close() } }
+    }
 
     val servers: Flow<List<NetworkServer>> = dao.observeAll().map { list -> list.map { it.toModel() } }
 
@@ -295,8 +313,12 @@ class SmbRepository @Inject constructor(
     ): NetworkServer = withContext(Dispatchers.IO) {
         val old = existingId?.let { dao.byId(it) ?: throw NetworkException(NetworkError.UNKNOWN) }
         // Not known (unsaved and not unlocked) falls back to empty, so the connect check reports AUTH_FAILED.
-        val effectivePassword = if (password.isEmpty() && old != null) runCatching { storedPassword(old) }.getOrDefault("") else password
         val norm = NetworkEndpoint.normalize(host, share, protocol, port)
+        val effectivePassword = when {
+            password.isNotEmpty() -> password
+            old != null -> runCatching { storedPassword(old) }.getOrDefault("")
+            else -> knownPassword(norm.host, username.trim())
+        }
         if (norm.host.isEmpty()) throw NetworkException(NetworkError.HOST_UNREACHABLE)
         if (norm.protocol == NetworkProtocol.SMB && norm.share.isEmpty()) {
             throw NetworkException(NetworkError.SHARE_NOT_FOUND)
@@ -463,12 +485,20 @@ class SmbRepository @Inject constructor(
         }
         return try {
             block(session(fresh = false))
-        } catch (e: IOException) {
-            // Transport failures (idle timeout, Wi-Fi change) leave a dead session: retry once on a new one.
-            try { block(session(fresh = true)) } catch (e2: Exception) { throw e2.toNetwork() }
         } catch (e: Exception) {
-            throw e.toNetwork()
+            // Transport failures (idle timeout, Wi-Fi change) leave a dead session: retry once on a new one.
+            // smbj wraps them in SMBRuntimeException, so look through the cause chain.
+            if (e is NetworkException || generateSequence<Throwable>(e) { it.cause }.none { it is IOException }) throw e.toNetwork()
+            try { block(session(fresh = true)) } catch (e2: Exception) { throw e2.toNetwork() }
         }
+    }
+
+    /** Password of another saved server with the same login, same host first, so a second share needs no retyping. */
+    private suspend fun knownPassword(host: String, username: String): String {
+        if (username.isEmpty()) return ""
+        val sameUser = dao.observeAll().first().filter { it.username.equals(username, ignoreCase = true) }
+            .sortedByDescending { it.host.equals(host, ignoreCase = true) }
+        return sameUser.firstNotNullOfOrNull { e -> runCatching { storedPassword(e) }.getOrNull()?.takeIf { it.isNotEmpty() } }.orEmpty()
     }
 
     private fun storedPassword(entity: NetworkServerEntity): String = when {
@@ -500,25 +530,30 @@ class SmbRepository @Inject constructor(
     }
 
     private fun openSmb(entity: NetworkServerEntity, password: String, port: Int): NetworkSession {
-        val auth = if (entity.username.isEmpty()) AuthenticationContext.guest()
-        else AuthenticationContext(entity.username, password.toCharArray(), entity.domain.ifEmpty { null })
+        // Accept "DOMAIN\user" typed into the username field, as Windows does.
+        val user = entity.username.substringAfter('\\')
+        val domain = entity.domain.ifEmpty { entity.username.substringBefore('\\', "") }
+        val auth = if (user.isEmpty()) AuthenticationContext.guest()
+        else AuthenticationContext(user, password.toCharArray(), domain.ifEmpty { null })
         val rawShare = entity.share.trim().replace('\\', '/').trim('/')
         val shareName = rawShare.substringBefore('/')
         val subPath = rawShare.substringAfter('/', "")
         if (shareName.isEmpty()) throw NetworkException(NetworkError.SHARE_NOT_FOUND)
-        val connection = if (port == NetworkProtocol.SMB.defaultPort) {
-            smbClient.connect(entity.host)
-        } else {
-            smbClient.connect(entity.host, port)
+        // One client per session: a shared client hands back its cached connection even after Wi-Fi drops it.
+        val client = SMBClient(smbConfig)
+        try {
+            val connection = client.connect(entity.host, port)
+            val session = connection.authenticate(auth)
+            val diskShare = session.connectShare(shareName) as? DiskShare
+                ?: throw NetworkException(NetworkError.SHARE_NOT_FOUND)
+            if (subPath.isNotEmpty() && !diskShare.folderExists(subPath.replace('/', '\\'))) {
+                throw NetworkException(NetworkError.SHARE_NOT_FOUND)
+            }
+            return SmbSession(client, diskShare, subPath)
+        } catch (e: Exception) {
+            runCatching { client.close() }
+            throw e
         }
-        val session = connection.authenticate(auth)
-        val diskShare = session.connectShare(shareName) as? DiskShare
-            ?: throw NetworkException(NetworkError.SHARE_NOT_FOUND)
-        if (subPath.isNotEmpty() && !diskShare.folderExists(subPath.replace('/', '\\'))) {
-            runCatching { diskShare.close() }
-            throw NetworkException(NetworkError.SHARE_NOT_FOUND)
-        }
-        return SmbSession(diskShare, subPath)
     }
 
     private fun NetworkServerEntity.toModel() = NetworkServer(
@@ -535,6 +570,7 @@ class SmbRepository @Inject constructor(
 }
 
 private class SmbSession(
+    private val client: SMBClient,
     private val share: DiskShare,
     private val baseSubPath: String
 ) : NetworkSession {
@@ -679,7 +715,10 @@ private class SmbSession(
             override fun close() = file.close()
         }
 
-    override fun close() = share.close()
+    override fun close() {
+        runCatching { share.close() }
+        client.close()
+    }
 }
 
 private fun Exception.toNetwork(): NetworkException = when (this) {
