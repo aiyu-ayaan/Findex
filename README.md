@@ -2,8 +2,9 @@
 
 # Findex
 
-[![Last commit](https://img.shields.io/github/last-commit/aiyu-ayaan/Findex/master)](https://github.com/aiyu-ayaan/Findex/commits/master)
-[![License](https://img.shields.io/github/license/aiyu-ayaan/Findex)](LICENSE)
+[![Last commit](https://badgen.net/github/last-commit/aiyu-ayaan/Findex)](https://github.com/aiyu-ayaan/Findex/commits/master)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
+[![Release](https://badgen.net/github/release/aiyu-ayaan/Findex)](https://github.com/aiyu-ayaan/Findex/releases)
 
 ![Kotlin](https://img.shields.io/badge/language-Kotlin-7F52FF?logo=kotlin&logoColor=white)
 ![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?logo=jetpackcompose&logoColor=white)
@@ -36,70 +37,88 @@ A modern, native Android file explorer built with **Jetpack Compose** and **Mate
 
 ## ✨ Features
 
-- **🎨 Material 3 Expressive**
-  - Seed-tuned dynamic color scheme with rich surface container elevations.
-  - Expressive morphing shapes (`Cookie`, `Scallop`, `Clover`, `Pill`) for categories and status badges.
-  - Wavy expressive progress bars and animated storage gauges.
-  - Predictive back gestures and shared-axis motion transitions.
-  - Discord-style push drawer with native smooth physics.
+### Explore & organize
+- **Explorer**: list/grid, sort, hidden files, thumbnails for images, video, PDF, APK and audio art, predictive back and shared-axis motion.
+- **Multi-tab multitasking**: open many folders at once, copy/cut/paste across tabs through one clipboard, tabs restored on cold start.
+- **Dual pane**: two folders side by side (stacked on phones). Copy, move and delete across panes. **Folder compare** marks only-here, newer, older, different and same, and can select what the other pane is missing.
+- **Selection like Google Photos**: long-press, swipe to range-select, or tap items after the first. Floating toolbar for copy, cut, compress, delete, share.
+- **Global search** over the MediaStore index, **recent files**, **favorites and colored tags**, shortcuts, recent changes.
+- **Batch rename** with preview and conflict checks.
+- **Recycle Bin**: per-volume `.FindexTrash`, undo, 30-day purge.
 
-- **📑 Multi-Tab Multitasking**
-  - Open multiple browser tabs simultaneously.
-  - Seamlessly copy, cut, and paste files across tabs via the unified in-memory clipboard.
-  - Quick tab switcher sheet with tab count indicator.
+### Storage tools
+- **Storage analyzer**: circular gauge, category breakdown (Photos, Videos, Audio, Documents, Apps, Archives), growth history.
+- **Large file finder** and **duplicate finder** (staged hashing, keep-one guard).
+- **Storage Cleaner**: junk, obsolete APKs, cache artifacts, empty folder trees and empty files.
+- **App Cleaner**: leftover folders of uninstalled apps in `Android/media`, `data`, `obb`, plus reachable app caches.
+- **Social media cleaners**: WhatsApp, Telegram and Instagram media by type and direction.
+- **Image compression** in batch.
 
-- **👆 3D Touch & Drag-to-Select**
-  - Google Photos-style swipe-to-select range gestures.
-  - Long-press to activate multi-selection with expressive checkmark animations.
-  - Floating action toolbar anchored dynamically for batch operations (copy, cut, compress, delete, share).
+### Archives
+- Create ZIP (AES-256 password), 7z, TAR, TAR.GZ.
+- Extract ZIP, 7z, RAR/RAR5, TAR, TAR.XZ/BZ2.
+- Browse an archive and open single entries without full extraction.
+- 16 KB page-size compliant native binaries for Android 15+.
 
-- **📊 Storage Graph & Analyzer**
-  - Interactive circular storage gauge showing disk consumption.
-  - Real-time category breakdown (Photos, Videos, Audio, Documents, Apps, Archives).
-  - Large file detector for quickly finding and reclaiming storage hogs.
+### Network & sharing
+- **Network storage**: SMB, WebDAV, FTP, SFTP. Shares open as normal Explorer tabs, with live status, thumbnails and video streaming. Passwords are Keystore-encrypted, or session-only.
+- **Share this phone**: local web server with address and random 6-digit PIN. Browse, preview, download, upload, rename and delete from a computer's browser. Access presets (View / Download / Full) apply live. Stops itself after an idle timeout. Plain HTTP: trusted networks only.
 
-- **🧹 Storage & WhatsApp Cleaner**
-  - **Storage Cleaner**: Deep-scans junk files, obsolete APKs, empty folders, and cache artifacts.
-  - **WhatsApp Cleaner**: Granular categorization of WhatsApp media (sent/received voice notes, images, videos, documents).
+### Privacy & viewers
+- **Encrypted Vault**: password and biometric unlock, encrypted at rest, locks when the app leaves the screen.
+- **Built-in viewers**: image/video gallery, text/code, PDF, audio player, plus a file hash calculator and media metadata inspector.
 
-- **🗜️ Archive Studio**
-  - Create and extract ZIP archives with **AES-256 password encryption**.
-  - Extract and inspect multi-format archives (ZIP, 7z, RAR/RAR5, TAR).
-  - 16 KB page-size compliant native binaries for Android 15+.
+### Platform & design
+- **Material 3 Expressive**: dynamic color, shape morphing (`Cookie`, `Scallop`, `Clover`, `Pill`), wavy progress, push drawer with spring physics.
+- **Foreground operation queue**: copy, move, compress, extract, delete and clean run in `FileOperationForegroundService`, cancellable, with notification progress.
+- **Adaptive tablet layout**: navigation rail, permanent drawer, list-detail with inspector pane.
+- **In-app updates**: daily background check, release notes, Updates screen.
 
-- **🌐 Network Storage**
-  - Connect to SMB (Windows shares), WebDAV, FTP and SFTP servers; shares open as normal Explorer tabs.
-  - Keystore-encrypted saved passwords, or "remember password" off for session-only use.
-  - Copy, move and delete between device and shares, with thumbnails and direct video streaming.
+---
 
-- **💻 Share this Phone**
-  - Starts a local web server and shows an address plus a random 6-digit PIN; open it in any browser on the same Wi-Fi or hotspot.
-  - Web UI follows the app's Material 3 look: Photos, Videos, Audio, Documents sections and a full file explorer, with preview, download, upload, rename and delete (to the Recycle Bin).
-  - You control access from the phone (View / Download / Full presets or per-permission switches), and changes apply instantly to connected browsers.
-  - Runs as a foreground service and stops itself after an idle timeout (default 5 minutes, configurable).
-  - Plain HTTP: use it only on networks you trust.
+## 🧭 How it works
 
-- **🔒 Encrypted Vault**
-  - Password and biometric unlock; files are encrypted at rest and locked as soon as the app leaves the screen.
+### Modules
 
-- **🛠️ Built-in Viewers & Tools**
-  - Image and video gallery, text/code viewer, PDF viewer and audio player.
-  - Batch rename, image compression, duplicate finder, favorites and colored tags, recent changes and storage growth history.
+```mermaid
+graph TD
+    app[":app<br/>FindexApp · MainActivity"] --> ui[":ui<br/>Compose screens · ViewModels · strings.xml"]
+    ui --> core[":core<br/>repositories · Room · DataStore · operations · network · share server"]
+    bp[":baselineprofile<br/>profile generation, not shipped"] -. measures .-> app
+```
 
-- **🔄 In-app Updates**
-  - Daily background check with release notes and an Updates screen.
+### Long file operations
 
-- **🗑️ Recycle Bin & Safe Deletion**
-  - Per-volume `.FindexTrash` support with instantaneous undo deletion.
-  - Automatic 30-day purge tracking backed by local Room database.
+```mermaid
+sequenceDiagram
+    actor User
+    participant VM as ViewModel
+    participant Mgr as OperationManager
+    participant FGS as ForegroundService
+    participant Exec as FileOperationExecutor
+    User->>VM: Copy / Move / Delete / Compress / Extract / Clean
+    VM->>Mgr: enqueue(operation)
+    Mgr->>FGS: startForegroundService
+    loop until queue empty
+        FGS->>Mgr: poll()
+        FGS->>Exec: execute (IO dispatcher)
+        Exec-->>FGS: progress
+        FGS-->>VM: progress banner + result snackbar
+    end
+```
 
-- **⚡ Foreground Operation Queue**
-  - Heavy file operations (copy, move, compress, delete, clean) run securely inside `FileOperationForegroundService`.
-  - Cancellable tasks with persistent Android notification progress updates.
+### Storage sources
 
-- **📱 Adaptive Tablet & Large Screen Layout**
-  - Adaptive Navigation Rail and permanent side drawer for expanded windows.
-  - Two-pane List-Detail layout with dedicated Inspector Pane (properties, media metadata, file hash calculator, audio player, image lightbox).
+```mermaid
+graph LR
+    Explorer --> Local[Internal / SD card]
+    Explorer --> Net[Network drive]
+    Net --> SMB & WebDAV & FTP & SFTP
+    Explorer --> Vault[(Encrypted Vault)]
+    Browser[Computer browser] -- LAN + PIN --> Share[Share this phone server] --> Explorer
+```
+
+More diagrams: [ARCHITECTURE.md](development/docs/ARCHITECTURE.md).
 
 ---
 
@@ -176,4 +195,4 @@ adb shell wm density reset
 
 ## 📄 License
 
-This project is licensed under the **PolyForm Noncommercial License 1.0.0** by **Ayaan**. See [LICENSE](LICENSE) for details.
+This project is licensed under the **Apache License 2.0**, Copyright 2026 **Ayaan**. See [LICENSE](LICENSE) for details.
