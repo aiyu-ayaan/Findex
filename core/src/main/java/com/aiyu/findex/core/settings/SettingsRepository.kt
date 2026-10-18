@@ -9,6 +9,7 @@ import com.aiyu.findex.core.model.AppSettings
 import com.aiyu.findex.core.model.SortBy
 import com.aiyu.findex.core.model.SortSpec
 import com.aiyu.findex.core.model.ThemeMode
+import com.aiyu.findex.core.update.UpdateChannel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -30,6 +31,8 @@ class SettingsRepository @Inject constructor(
         val sortBy = stringPreferencesKey("sort_by")
         val sortAscending = booleanPreferencesKey("sort_ascending")
         val onboardingDone = booleanPreferencesKey("onboarding_done")
+        val autoUpdate = booleanPreferencesKey("auto_update")
+        val updateChannel = stringPreferencesKey("update_channel")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -39,7 +42,9 @@ class SettingsRepository @Inject constructor(
             showHidden = p[Keys.showHidden] ?: false,
             gridView = p[Keys.gridView] ?: false,
             sort = SortSpec(p[Keys.sortBy].toEnum(SortBy.NAME), p[Keys.sortAscending] ?: true),
-            onboardingDone = p[Keys.onboardingDone] ?: false
+            onboardingDone = p[Keys.onboardingDone] ?: false,
+            autoUpdate = p[Keys.autoUpdate] ?: true,
+            updateChannel = p[Keys.updateChannel]?.let { n -> UpdateChannel.entries.firstOrNull { it.name == n } }
         )
     }
 
@@ -47,6 +52,8 @@ class SettingsRepository @Inject constructor(
     suspend fun setDynamicColor(enabled: Boolean) = edit { it[Keys.dynamicColor] = enabled }
     suspend fun setShowHidden(enabled: Boolean) = edit { it[Keys.showHidden] = enabled }
     suspend fun setGridView(enabled: Boolean) = edit { it[Keys.gridView] = enabled }
+    suspend fun setAutoUpdate(enabled: Boolean) = edit { it[Keys.autoUpdate] = enabled }
+    suspend fun setUpdateChannel(channel: UpdateChannel) = edit { it[Keys.updateChannel] = channel.name }
     suspend fun setOnboardingDone() = edit { it[Keys.onboardingDone] = true }
     suspend fun setSort(sort: SortSpec) = edit {
         it[Keys.sortBy] = sort.by.name

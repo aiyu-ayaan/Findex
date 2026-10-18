@@ -1,5 +1,7 @@
 package com.aiyu.findex.core.model
 
+import com.aiyu.findex.core.update.UpdateChannel
+
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
 
 data class AppSettings(
@@ -9,7 +11,10 @@ data class AppSettings(
     val gridView: Boolean = false,
     val sort: SortSpec = SortSpec(),
     /** Set once the user leaves onboarding, so a declined notification prompt isn't shown again. */
-    val onboardingDone: Boolean = false
+    val onboardingDone: Boolean = false,
+    val autoUpdate: Boolean = true,
+    /** Null until chosen: the channel then follows the installed build (see UpdateChannel.forVersion). */
+    val updateChannel: UpdateChannel? = null
 )
 
 data class ClipboardContent(val paths: List<String>, val isCut: Boolean)
