@@ -48,6 +48,11 @@ fun operationTitleRes(operation: FileOperation): Int = when (operation) {
     is FileOperation.Clean -> R.string.op_title_clean
     is FileOperation.Compress -> R.string.op_title_compress
     is FileOperation.Extract -> R.string.op_title_extract
+    is FileOperation.BatchRename -> R.string.op_title_batch_rename
+    is FileOperation.ImageTransform -> R.string.op_title_image_transform
+    is FileOperation.VaultImport -> R.string.op_title_vault_import
+    is FileOperation.VaultExport -> R.string.op_title_vault_export
+    is FileOperation.VaultDelete -> R.string.op_title_vault_delete
 }
 
 fun operationCount(operation: FileOperation): Any = when (operation) {
@@ -59,6 +64,11 @@ fun operationCount(operation: FileOperation): Any = when (operation) {
     is FileOperation.Clean -> operation.targets.size
     is FileOperation.Compress -> File(operation.destinationArchive).name
     is FileOperation.Extract -> File(operation.archivePath).name
+    is FileOperation.BatchRename -> operation.renames.size
+    is FileOperation.ImageTransform -> operation.sources.size
+    is FileOperation.VaultImport -> operation.sources.size
+    is FileOperation.VaultExport -> operation.itemIds.size
+    is FileOperation.VaultDelete -> operation.itemIds.size
 }
 
 fun failureRes(reason: FailureReason): Int = when (reason) {
@@ -70,6 +80,11 @@ fun failureRes(reason: FailureReason): Int = when (reason) {
     FailureReason.NETWORK -> R.string.error_network
     FailureReason.NOT_SUPPORTED -> R.string.error_not_supported_network
     FailureReason.UNKNOWN -> R.string.operation_failed
+    FailureReason.VAULT_LOCKED -> R.string.error_vault_locked
+    FailureReason.NAME_CONFLICT -> R.string.error_name_conflict
+    FailureReason.INVALID_NAME -> R.string.error_op_invalid_name
+    FailureReason.UNSUPPORTED_IMAGE -> R.string.error_unsupported_image
+    FailureReason.NESTED_SELECTION -> R.string.error_nested_selection
 }
 
 @Module

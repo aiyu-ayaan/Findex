@@ -14,7 +14,13 @@ data class AppSettings(
     val onboardingDone: Boolean = false,
     val autoUpdate: Boolean = true,
     /** Null until chosen: the channel then follows the installed build (see UpdateChannel.forVersion). */
-    val updateChannel: UpdateChannel? = null
+    val updateChannel: UpdateChannel? = null,
+    /** Daily storage snapshots for the growth graph. */
+    val storageHistory: Boolean = true,
+    /** Soft wrap in the text viewer. */
+    val textWrap: Boolean = true,
+    /** Minutes in the background before the vault locks; 0 = as soon as the app leaves. */
+    val vaultAutoLockMinutes: Int = 1
 )
 
 data class ClipboardContent(val paths: List<String>, val isCut: Boolean)

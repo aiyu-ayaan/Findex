@@ -6,8 +6,12 @@ import com.aiyu.findex.core.db.BookmarkDao
 import com.aiyu.findex.core.db.FindexDatabase
 import com.aiyu.findex.core.db.NetworkServerDao
 import com.aiyu.findex.core.db.OpenTabDao
+import com.aiyu.findex.core.db.PathIndexDao
 import com.aiyu.findex.core.db.RecentFileDao
+import com.aiyu.findex.core.db.StorageSnapshotDao
+import com.aiyu.findex.core.db.TagDao
 import com.aiyu.findex.core.db.TrashDao
+import com.aiyu.findex.core.db.VaultDao
 import com.aiyu.findex.core.repository.StorageRepository
 import com.aiyu.findex.core.repository.StorageRepositoryImpl
 import dagger.Binds
@@ -48,5 +52,17 @@ abstract class CoreModule {
 
         @Provides
         fun provideNetworkServerDao(db: FindexDatabase): NetworkServerDao = db.networkServerDao()
+
+        @Provides
+        fun provideTagDao(db: FindexDatabase): TagDao = db.tagDao()
+
+        @Provides
+        fun provideVaultDao(db: FindexDatabase): VaultDao = db.vaultDao()
+
+        @Provides
+        fun provideStorageSnapshotDao(db: FindexDatabase): StorageSnapshotDao = db.storageSnapshotDao()
+
+        @Provides
+        fun providePathIndexDao(db: FindexDatabase): PathIndexDao = db.pathIndexDao()
     }
 }

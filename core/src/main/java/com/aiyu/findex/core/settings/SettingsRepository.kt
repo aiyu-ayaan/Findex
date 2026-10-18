@@ -3,6 +3,7 @@ package com.aiyu.findex.core.settings
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.aiyu.findex.core.model.AppSettings
@@ -34,6 +35,9 @@ class SettingsRepository @Inject constructor(
         val autoUpdate = booleanPreferencesKey("auto_update")
         val updateChannel = stringPreferencesKey("update_channel")
         val lastNotifiedUpdateVersion = stringPreferencesKey("last_notified_update_version")
+        val storageHistory = booleanPreferencesKey("storage_history")
+        val textWrap = booleanPreferencesKey("text_wrap")
+        val vaultAutoLockMinutes = intPreferencesKey("vault_auto_lock_minutes")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -45,7 +49,10 @@ class SettingsRepository @Inject constructor(
             sort = SortSpec(p[Keys.sortBy].toEnum(SortBy.NAME), p[Keys.sortAscending] ?: true),
             onboardingDone = p[Keys.onboardingDone] ?: false,
             autoUpdate = p[Keys.autoUpdate] ?: true,
-            updateChannel = p[Keys.updateChannel]?.let { n -> UpdateChannel.entries.firstOrNull { it.name == n } }
+            updateChannel = p[Keys.updateChannel]?.let { n -> UpdateChannel.entries.firstOrNull { it.name == n } },
+            storageHistory = p[Keys.storageHistory] ?: true,
+            textWrap = p[Keys.textWrap] ?: true,
+            vaultAutoLockMinutes = p[Keys.vaultAutoLockMinutes] ?: 1
         )
     }
 
@@ -58,6 +65,9 @@ class SettingsRepository @Inject constructor(
     suspend fun setAutoUpdate(enabled: Boolean) = edit { it[Keys.autoUpdate] = enabled }
     suspend fun setUpdateChannel(channel: UpdateChannel) = edit { it[Keys.updateChannel] = channel.name }
     suspend fun setLastNotifiedUpdateVersion(version: String) = edit { it[Keys.lastNotifiedUpdateVersion] = version }
+    suspend fun setStorageHistory(enabled: Boolean) = edit { it[Keys.storageHistory] = enabled }
+    suspend fun setTextWrap(enabled: Boolean) = edit { it[Keys.textWrap] = enabled }
+    suspend fun setVaultAutoLockMinutes(minutes: Int) = edit { it[Keys.vaultAutoLockMinutes] = minutes }
     suspend fun setOnboardingDone() = edit { it[Keys.onboardingDone] = true }
     suspend fun setSort(sort: SortSpec) = edit {
         it[Keys.sortBy] = sort.by.name
