@@ -138,7 +138,7 @@ Screen gutter 16dp on compact, 24dp on medium+. Content max width 840dp.
 | Screen | Key components |
 |--------|----------------|
 | Onboarding | `MaterialShapes` morphing illustration, large filled `Button` |
-| Home | `LargeFlexibleTopAppBar`-style header, `PrimaryTabRow` (Device/Network), hero `Card` + `LinearWavyProgressIndicator`, category grid, tonal suggestion cards |
+| Home | `LargeFlexibleTopAppBar`-style header, connected `ToggleButton` group (Device/Network, shown once a share is saved), hero `Card` + `LinearWavyProgressIndicator`, category grid, tonal suggestion cards |
 | Drawer | `PushDrawer` (Discord-style: screen slides aside as an `extraLarge` card over `surfaceContainerLow`), `NavigationDrawerItem` (full shape), `MenuIcon` two-line glyph that morphs with drawer progress |
 | Explorer | `TopAppBar` + breadcrumb `LazyRow`, `SecondaryScrollableTabRow` for tabs, grouped list rows / grid cells, `HorizontalFloatingToolbar` for selection, `FloatingActionButton` (new folder) / paste `ExtendedFloatingActionButton`, `ModalBottomSheet` for item actions and sort |
 | Dialogs | `AlertDialog` with `OutlinedTextField`, password field with visibility toggle |

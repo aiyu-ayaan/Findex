@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.commons.compress)
     implementation(libs.xz) // LZMA/LZMA2 for 7z and .tar.xz
     implementation(libs.sevenzipjbinding) // native 7-Zip: RAR4/RAR5 and all zip methods
+    implementation(libs.smbj) // SMB 2/3 client for Windows network shares
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)

@@ -163,6 +163,32 @@ classDiagram
     StorageItem --> FileCategory
 ```
 
+### SMB network shares
+
+Saved shares live in Room (`network_servers`). The password is sealed with AES-256-GCM using a key that never leaves the Android Keystore (`CredentialCipher`); the table only holds `iv + ciphertext`. Browsing is read-only: files are pulled into `cache/network/<server id>/` and handed to a viewer or the share sheet.
+
+```mermaid
+flowchart LR
+    Drawer[Drawer / rail: Network Storage] --> NS[NetworkScreen<br/>saved shares + Add sheet]
+    HomeTab[Home: Device / Network<br/>connected button group] --> NB
+    NS -->|add: connect first, then save| Repo[SmbRepository]
+    NS -->|tap share| NB[NetworkBrowseScreen]
+    NB --> VM[NetworkBrowseViewModel] -->|list / download| Repo
+    Repo -->|encrypt / decrypt password| CC[CredentialCipher<br/>Android Keystore AES-GCM]
+    Repo -->|rows| DB[(network_servers)]
+    Repo -->|SMB 2/3| Smbj[smbj SMBClient<br/>cached DiskShare per server]
+    Repo -->|.part then rename| Cache[(cache/network)]
+    Cache --> Intent[openFile / shareFiles]
+```
+
+- `add` connects and opens the share before saving, so a bad host, password or share name never gets stored.
+- Errors map to `NetworkError` (`HOST_UNREACHABLE`, `AUTH_FAILED`, `SHARE_NOT_FOUND`, `ACCESS_DENIED`, `UNKNOWN`) and show as plain-language messages.
+- A stale session (idle timeout, Wi-Fi change) is retried once on a fresh connection.
+- Downloads go to `<file>.part` and are renamed on success; a cached copy with the same size is reused. Remote names can't escape the cache folder.
+- Virtual paths `smb://<id>/<inner>` (`SmbPath`) let the screens reuse `FileList`.
+- Room schema v4 adds `network_servers` through `AutoMigration(3, 4)`.
+- Not yet: upload, copy/move to a share, share discovery, WebDAV / FTP / SFTP.
+
 ---
 
 ## 4. Standalone Runner (`run.sh`)

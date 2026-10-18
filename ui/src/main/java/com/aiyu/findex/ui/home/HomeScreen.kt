@@ -30,6 +30,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Add
@@ -59,19 +60,27 @@ import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.WavyProgressIndicatorDefaults
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material.icons.rounded.Dns
+import androidx.compose.material.icons.rounded.PhoneAndroid
+import androidx.compose.material3.ToggleButtonDefaults
+import androidx.compose.material3.ToggleButton
+import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
@@ -107,6 +116,8 @@ import com.aiyu.findex.ui.navigation.CategoryRoute
 import com.aiyu.findex.ui.navigation.CleanerRoute
 import com.aiyu.findex.ui.navigation.ExplorerRoute
 import com.aiyu.findex.ui.navigation.DuplicatesRoute
+import com.aiyu.findex.ui.navigation.NetworkBrowseRoute
+import com.aiyu.findex.ui.network.NetworkServerCard
 import com.aiyu.findex.ui.navigation.SearchRoute
 import com.aiyu.findex.ui.navigation.SettingsRoute
 import com.aiyu.findex.ui.navigation.WhatsAppRoute
@@ -154,8 +165,14 @@ fun HomeScreen(
             )
         }
     ) { innerPadding ->
+        val listState = rememberLazyListState()
+        // Saved servers load after the drives; keyed items would keep the hero on top and hide the new tab row.
+        LaunchedEffect(uiState.hasNetworkDrives) {
+            if (uiState.hasNetworkDrives && listState.firstVisibleItemIndex <= 1) listState.scrollToItem(0)
+        }
         // No full-screen spinner: drives load in a few ms, and a spinner would only flash between splash and content.
         LazyColumn(
+            state = listState,
             contentPadding = PaddingValues(
                 start = readableGutter(), end = readableGutter(),
                 top = innerPadding.calculateTopPadding() + Dimens.xs,
@@ -166,17 +183,30 @@ fun HomeScreen(
         ) {
             if (uiState.hasNetworkDrives) {
                 item(key = "tabs") {
-                    PrimaryTabRow(selectedTabIndex = uiState.selectedTabIndex) {
-                        Tab(
-                            selected = uiState.selectedTabIndex == 0,
-                            onClick = { viewModel.selectTab(0) },
-                            text = { Text(stringResource(R.string.tab_device)) }
-                        )
-                        Tab(
-                            selected = uiState.selectedTabIndex == 1,
-                            onClick = { viewModel.selectTab(1) },
-                            text = { Text(stringResource(R.string.tab_network)) }
-                        )
+                    // M3 Expressive connected button group: the selected side morphs to a full pill.
+                    val options = listOf(
+                        R.string.tab_device to Icons.Rounded.PhoneAndroid,
+                        R.string.tab_network to Icons.Rounded.Dns
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
+                        modifier = Modifier.fillMaxWidth().selectableGroup()
+                    ) {
+                        options.forEachIndexed { index, (label, icon) ->
+                            ToggleButton(
+                                checked = uiState.selectedTabIndex == index,
+                                onCheckedChange = { viewModel.selectTab(index) },
+                                shapes = if (index == 0) ButtonGroupDefaults.connectedLeadingButtonShapes()
+                                else ButtonGroupDefaults.connectedTrailingButtonShapes(),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .heightIn(min = Dimens.minTouch)
+                                    .semantics { role = Role.Tab }
+                            ) {
+                                Icon(icon, contentDescription = null, modifier = Modifier.padding(end = Dimens.sm).size(ToggleButtonDefaults.IconSize))
+                                Text(stringResource(label), maxLines = 1)
+                            }
+                        }
                     }
                 }
             }
@@ -192,8 +222,12 @@ fun HomeScreen(
             }
 
             if (uiState.selectedTabIndex == 1 && uiState.hasNetworkDrives) {
-                items(uiState.networkDrives, key = { it.id }) { drive ->
-                    DriveCard(drive, onClick = { onNavigate(ExplorerRoute(drive.path)) })
+                itemsIndexed(uiState.networkDrives, key = { _, s -> "smb${s.id}" }) { index, server ->
+                    NetworkServerCard(
+                        server = server,
+                        shape = groupedShape(index, uiState.networkDrives.size),
+                        onClick = { onNavigate(NetworkBrowseRoute(server.id)) }
+                    )
                 }
                 return@LazyColumn
             }

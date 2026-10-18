@@ -55,6 +55,10 @@ import com.aiyu.findex.ui.home.HomeScreen
 import com.aiyu.findex.ui.archive.ArchiveScreen
 import com.aiyu.findex.ui.navigation.ArchiveRoute
 import com.aiyu.findex.ui.navigation.DuplicatesRoute
+import com.aiyu.findex.ui.navigation.NetworkBrowseRoute
+import com.aiyu.findex.ui.navigation.NetworkRoute
+import com.aiyu.findex.ui.network.NetworkBrowseScreen
+import com.aiyu.findex.ui.network.NetworkScreen
 import com.aiyu.findex.ui.navigation.SearchRoute
 import com.aiyu.findex.ui.tools.DuplicatesScreen
 import com.aiyu.findex.ui.search.SearchScreen
@@ -217,6 +221,8 @@ private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: N
         )
     }
     composable<ArchiveRoute> { ArchiveScreen(onBack = back) }
+    composable<NetworkRoute> { NetworkScreen(onBack = back, onOpenServer = { navController.navigate(NetworkBrowseRoute(it)) }) }
+    composable<NetworkBrowseRoute> { NetworkBrowseScreen(onBack = back) }
     composable<CategoryRoute> { CategoryScreen(onBack = back, onOpenFolder = openFolder, onOpenArchive = openArchive) }
     composable<AnalyzerRoute> { AnalyzerScreen(onBack = back, onOpenFolder = openFolder) }
     composable<CleanerRoute> { CleanerScreen(onBack = back) }

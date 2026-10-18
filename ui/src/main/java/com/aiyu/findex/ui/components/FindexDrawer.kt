@@ -41,6 +41,7 @@ import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.navigation.AnalyzerRoute
 import com.aiyu.findex.ui.navigation.CleanerRoute
 import com.aiyu.findex.ui.navigation.DuplicatesRoute
+import com.aiyu.findex.ui.navigation.NetworkRoute
 import com.aiyu.findex.ui.navigation.HomeRoute
 import com.aiyu.findex.ui.navigation.RecycleBinRoute
 import com.aiyu.findex.ui.navigation.SettingsRoute
@@ -115,19 +116,11 @@ fun FindexDrawerSheet(
                 onClick = { onNavigate(TabsRoute) },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
             )
-            // Explain unavailable destinations instead of hiding them.
             NavigationDrawerItem(
                 icon = { Icon(Icons.Rounded.CloudQueue, contentDescription = null) },
                 label = { Text(stringResource(R.string.nav_network_storage)) },
-                badge = {
-                    Text(
-                        stringResource(R.string.badge_soon),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.tertiary
-                    )
-                },
-                selected = false,
-                onClick = {},
+                selected = isCurrent(NetworkRoute),
+                onClick = { onNavigate(NetworkRoute) },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
             )
             NavigationDrawerItem(
@@ -151,7 +144,8 @@ private val railEntries = listOf(
     RailEntry(R.string.rail_whatsapp, Icons.Rounded.Forum, WhatsAppRoute),
     RailEntry(R.string.rail_bin, Icons.Rounded.Delete, RecycleBinRoute),
     RailEntry(R.string.nav_tabs, Icons.Rounded.Tab, TabsRoute),
-    RailEntry(R.string.nav_settings, Icons.Rounded.Settings, SettingsRoute),
+    // Settings stays reachable from Home's top bar; the rail is capped at 7 items.
+    RailEntry(R.string.rail_network, Icons.Rounded.CloudQueue, NetworkRoute),
 )
 
 /** Medium and expanded windows: the same destinations as the drawer, as an always-visible rail (MD3: 3–7 items). */

@@ -17,3 +17,6 @@ import kotlinx.serialization.Serializable
 @Serializable object DuplicatesRoute
 /** Browses the contents of the archive at [path] without extracting it. */
 @Serializable data class ArchiveRoute(val path: String)
+@Serializable object NetworkRoute
+/** Browses saved SMB server [serverId]. */
+@Serializable data class NetworkBrowseRoute(val serverId: Long)

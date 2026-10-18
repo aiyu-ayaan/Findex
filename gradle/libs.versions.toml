@@ -21,6 +21,7 @@ commonsCompress = "1.28.0"
 xz = "1.10"
 sevenZipJBinding = "Release-16.02-2.02"
 coil = "3.3.0"
+smbj = "0.14.0"
 junit = "4.13.2"
 testExtJunit = "1.3.0"
 testRunner = "1.7.0"
@@ -60,6 +61,7 @@ xz = { group = "org.tukaani", name = "xz", version.ref = "xz" }
 sevenzipjbinding = { group = "com.github.omicronapps", name = "7-Zip-JBinding-4Android", version.ref = "sevenZipJBinding" }
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-video = { group = "io.coil-kt.coil3", name = "coil-video", version.ref = "coil" }
+smbj = { group = "com.hierynomus", name = "smbj", version.ref = "smbj" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "testExtJunit" }

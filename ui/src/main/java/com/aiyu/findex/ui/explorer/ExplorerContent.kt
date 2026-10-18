@@ -187,8 +187,8 @@ fun FileList(
     header: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     focused: String? = null,
-    /** Replaces the size/date line, e.g. with the parent folder in search results. */
-    subtitle: ((StorageItem) -> String)? = null
+    /** Replaces the size/date line, e.g. with the parent folder in search results; null keeps the default. */
+    subtitle: (@Composable (StorageItem) -> String?)? = null
 ) {
     val inSelection = selection.isNotEmpty()
     LazyColumn(

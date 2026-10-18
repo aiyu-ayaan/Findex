@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.aiyu.findex.core.db.BookmarkDao
 import com.aiyu.findex.core.db.FindexDatabase
+import com.aiyu.findex.core.db.NetworkServerDao
 import com.aiyu.findex.core.db.OpenTabDao
 import com.aiyu.findex.core.db.RecentFileDao
 import com.aiyu.findex.core.db.TrashDao
@@ -44,5 +45,8 @@ abstract class CoreModule {
 
         @Provides
         fun provideOpenTabDao(db: FindexDatabase): OpenTabDao = db.openTabDao()
+
+        @Provides
+        fun provideNetworkServerDao(db: FindexDatabase): NetworkServerDao = db.networkServerDao()
     }
 }

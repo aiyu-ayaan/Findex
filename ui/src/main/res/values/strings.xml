@@ -25,7 +25,6 @@
     <string name="tabs_current">Current tab</string>
     <string name="cd_close_tab">Close tab %1$s</string>
 
-    <string name="badge_soon">Soon</string>
 
     <!-- Onboarding -->
     <string name="onboarding_title">Your files, beautifully organised</string>
@@ -355,4 +354,36 @@
     <string name="archive_unlock">Unlock</string>
     <string name="archive_password_label">Password</string>
     <string name="archive_opening">Opening %1$s…</string>
+    <!-- Network storage (SMB) -->
+    <string name="network_title">Network Storage</string>
+    <string name="network_subtitle">Windows and Samba shares on your network</string>
+    <string name="network_empty_title">No servers yet</string>
+    <string name="network_empty_body">Add a shared folder from a PC or NAS to browse it here.</string>
+    <string name="network_add">Add server</string>
+    <string name="network_add_title">Add SMB share</string>
+    <string name="network_field_name">Display name (optional)</string>
+    <string name="network_field_host">Host or IP address</string>
+    <string name="network_field_host_help">For example 192.168.1.20 or my-pc.local</string>
+    <string name="network_field_share">Share name</string>
+    <string name="network_field_share_help">The shared folder, for example Public</string>
+    <string name="network_field_user">Username</string>
+    <string name="network_field_user_help">Leave empty to connect as guest</string>
+    <string name="network_field_password">Password</string>
+    <string name="network_field_domain">Domain or workgroup (optional)</string>
+    <string name="network_connect">Connect and save</string>
+    <string name="network_connecting">Connecting…</string>
+    <string name="network_password_note">The password is encrypted with a key kept in Android Keystore.</string>
+    <string name="network_guest">Guest</string>
+    <string name="network_remove">Remove server</string>
+    <string name="network_remove_title">Remove “%1$s”?</string>
+    <string name="network_remove_body">The saved login and any downloaded copies are deleted. Files on the server are not touched.</string>
+    <string name="network_downloading">Downloading %1$s…</string>
+    <string name="network_retry">Try again</string>
+    <string name="network_read_only">Read-only: open and share files from this share.</string>
+    <string name="network_error_host">Can’t reach the server. Check the address and that you are on the same network.</string>
+    <string name="network_error_auth">Sign-in failed. Check the username and password.</string>
+    <string name="network_error_share">No share with that name on this server.</string>
+    <string name="network_error_denied">Access denied for this account.</string>
+    <string name="network_error_unknown">Something went wrong talking to the server.</string>
+    <string name="rail_network">Network</string>
 </resources>

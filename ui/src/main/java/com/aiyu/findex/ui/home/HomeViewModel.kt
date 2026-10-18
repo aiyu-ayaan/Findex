@@ -3,6 +3,7 @@ package com.aiyu.findex.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aiyu.findex.core.model.DriveType
+import com.aiyu.findex.core.network.SmbRepository
 import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.operation.OperationManager
 import com.aiyu.findex.core.repository.LibraryRepository
@@ -20,7 +21,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val storageRepository: StorageRepository,
     private val libraryRepository: LibraryRepository,
-    private val operationManager: OperationManager
+    private val operationManager: OperationManager,
+    smbRepository: SmbRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -32,6 +34,7 @@ class HomeViewModel @Inject constructor(
         refresh()
         viewModelScope.launch { libraryRepository.bookmarks.collect { b -> _uiState.update { it.copy(bookmarks = b) } } }
         viewModelScope.launch { libraryRepository.recentFiles(6).collect { r -> _uiState.update { it.copy(recents = r) } } }
+        viewModelScope.launch { smbRepository.servers.collect { s -> _uiState.update { it.copy(networkDrives = s, selectedTabIndex = if (s.isEmpty()) 0 else it.selectedTabIndex) } } }
         viewModelScope.launch { operationManager.active.collect { a -> _uiState.update { it.copy(activeOperation = a) } } }
         // Space and counts change after any finished operation.
         viewModelScope.launch {
@@ -42,12 +45,7 @@ class HomeViewModel @Inject constructor(
     fun refresh() {
         viewModelScope.launch {
             storageRepository.getStorageDrives().collect { all ->
-                _uiState.update {
-                    it.copy(
-                        drives = all.filter { d -> d.type != DriveType.NETWORK },
-                        networkDrives = all.filter { d -> d.type == DriveType.NETWORK }
-                    )
-                }
+                _uiState.update { it.copy(drives = all.filter { d -> d.type != DriveType.NETWORK }) }
             }
         }
         viewModelScope.launch {

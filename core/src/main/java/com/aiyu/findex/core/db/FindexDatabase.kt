@@ -132,15 +132,47 @@ interface OpenTabDao {
     }
 }
 
+/**
+ * A saved SMB server. [passwordCipher] is the password encrypted with an Android Keystore key
+ * (`CredentialCipher`); it is never stored in plain text. Null means guest or no password.
+ */
+@Entity(tableName = "network_servers")
+data class NetworkServerEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val name: String,
+    val host: String,
+    val share: String,
+    val username: String,
+    val domain: String,
+    val passwordCipher: String?,
+    val createdAt: Long = System.currentTimeMillis()
+)
+
+@Dao
+interface NetworkServerDao {
+    @Query("SELECT * FROM network_servers ORDER BY createdAt ASC")
+    fun observeAll(): Flow<List<NetworkServerEntity>>
+
+    @Query("SELECT * FROM network_servers WHERE id = :id")
+    suspend fun byId(id: Long): NetworkServerEntity?
+
+    @Upsert
+    suspend fun upsert(server: NetworkServerEntity): Long
+
+    @Query("DELETE FROM network_servers WHERE id = :id")
+    suspend fun delete(id: Long)
+}
+
 @Database(
-    entities = [BookmarkEntity::class, RecentFileEntity::class, TrashEntity::class, OpenTabEntity::class],
-    version = 3,
+    entities = [BookmarkEntity::class, RecentFileEntity::class, TrashEntity::class, OpenTabEntity::class, NetworkServerEntity::class],
+    version = 4,
     exportSchema = true,
-    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)]
+    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3), AutoMigration(from = 3, to = 4)]
 )
 abstract class FindexDatabase : RoomDatabase() {
     abstract fun bookmarkDao(): BookmarkDao
     abstract fun recentFileDao(): RecentFileDao
     abstract fun trashDao(): TrashDao
     abstract fun openTabDao(): OpenTabDao
+    abstract fun networkServerDao(): NetworkServerDao
 }
