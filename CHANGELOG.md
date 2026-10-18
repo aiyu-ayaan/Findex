@@ -1,3 +1,29 @@
+## v0.0.1-alpha.2 (2026-10-18)
+
+- !alpha : Add encrypted vault, built-in viewers, multi-protocol network storage and batch tools
+- fix(Vault) : Lock vault immediately on transient home gestures and rapid relaunch
+- fix(Vault) : Lock vault immediately on pause, screen off and screen changes
+- docs(Architecture) : Document vault, batch tools, viewers, tags and storage history
+- feat(Explorer) : Add built-in viewers, colored tags, shortcuts, recent changes and storage growth
+- feat(Tools) : Add batch rename, large file finder and image compression
+- feat(Vault) : Add encrypted file vault with password and biometric unlock
+- core(Database) : Add Room v7 schema, path index and feature operation models
+- feat(Network) : Edit or remove servers from a long-press menu
+- feat(Network) : Show live status and capacity on Home network cards
+- fix(Viewer) : Open videos in the built-in media viewer
+- build(Release) : Cut release APK from 14 MB to 7 MB
+- docs(Architecture) : Document multi-protocol network storage and daily background update checks
+- feat(Network) : Add WebDAV, FTP and SFTP network storage support
+- feat(Update) : Add daily background update check and notification
+- ui(Viewer) : Fix viewer surface colors and add predictive back gesture
+- docs(Architecture) : Document universal thumbnail previews and built-in media viewer
+- ui(Viewer) : Add built-in image and video viewer with bottom thumbnail strip and options
+- ui(Thumbnails) : Add content thumbnail previews for PDFs, APKs and audio art
+- docs(Architecture) : Document SMB thumbnail generation and seekable SmbContentProvider streaming
+- ui(Network) : Stream SMB files in default app via seekable SmbContentProvider
+- ui(Thumbnails) : Load image and video thumbnails from SMB network shares
+- core(Network) : Add buffered seekable SmbRandomAccessFile for SMB streaming and thumbnails
+
 ## v0.0.1-alpha.1 (2026-10-18)
 
 - !alpha feat(Update) : Add in-app updates with release notes, Updates screen and About screen
