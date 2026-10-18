@@ -272,9 +272,9 @@ flowchart TD
     WindowWidth -->|">= 1200dp (Expanded)"| ExpandedLayout["Permanent Drawer 300dp + Full Navigation"]
 
     subgraph TwoPaneExplorer ["Two-Pane Master-Detail Explorer (content width >= 720dp)"]
-        ListPane["List Pane 390dp<br/>LazyList / LazyGrid<br/>Primary focus border indicator<br/>Centered Bottom FAB<br/>Selection Toolbar"]
+        ListPane["List Pane (fills remaining width)<br/>LazyList / LazyGrid<br/>Primary focus border indicator<br/>Centered Bottom FAB<br/>Selection Toolbar"]
         Divider["VerticalDivider"]
-        DetailPane["ExplorerDetailPane (Inspector)<br/>Image / Video / Audio / Text Heroes<br/>Fullscreen Zoomable Lightbox<br/>In-line Audio Player<br/>Action Toolbar<br/>Properties Card + Checksums"]
+        DetailPane["ExplorerDetailPane 360dp supporting pane<br/>Image / Video / Audio / Text Heroes<br/>Fullscreen Zoomable Lightbox<br/>In-line Audio Player<br/>Action Toolbar<br/>Properties Card + Checksums"]
         ListPane -->|"tap file: focus(path)"| DetailPane
         ListPane --- Divider --- DetailPane
         DetailPane -->|"onOpen / onShare / onDelete"| Ops["Operations / External Intent"]
@@ -293,9 +293,9 @@ flowchart TD
    - `600dp - 1200dp`: Persistent `NavigationRail` (`FindexNavRail`) saving horizontal space.
    - `>= 1200dp`: Permanent full navigation drawer (`FindexDrawerSheet`).
 2. **Two-Pane Master-Detail Layout & Inspector**:
-   - Left pane (`ExplorerListPaneWidth = 390.dp`): List or Grid of items. The Floating Action Button is centered at the bottom of the list pane with clear vertical margin, completely avoiding collision with the detail view or border. The active/focused item features an expressive tinted container and a 1.5dp primary border.
+   - Left pane (fills remaining width): List or Grid of items. The Floating Action Button is centered at the bottom of the list pane with clear vertical margin, completely avoiding collision with the detail view or border. The active/focused item features an expressive tinted container and a 1.5dp primary border.
    - Middle divider: Clean `VerticalDivider` providing structural separation between panes.
-   - Right pane (`ExplorerDetailPane`): Inspector surface with adaptive media heroes (`PreviewComponents`), interactive fullscreen zoom lightbox, in-line audio playback, syntax text reader with line numbers, structured specifications (dimensions, duration, exact byte size), location card with one-tap copy, and on-demand MD5 / SHA-256 checksum calculator.
+   - Right pane (`ExplorerDetailPane`, fixed `ExplorerDetailPaneWidth = 360.dp`): compact inspector surface with adaptive media heroes (`PreviewComponents`), interactive fullscreen zoom lightbox, in-line audio playback, syntax text reader with line numbers, structured specifications (dimensions, duration, exact byte size), location card with one-tap copy, and on-demand MD5 / SHA-256 checksum calculator.
 3. **Readable Gutters**:
    - `readableGutter()` automatically centers content with standard margins on extra-wide screens up to `Dimens.contentMaxWidth = 840.dp`.
 

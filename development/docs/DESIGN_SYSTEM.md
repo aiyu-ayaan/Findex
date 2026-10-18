@@ -183,16 +183,18 @@ Every gesture has a button alternative (select all, per-row checkbox).
   - Permanent Navigation Drawer (`surfaceContainerLow`, 300dp) for expanded widths (>= 1200dp).
 - **Two-Pane Explorer & Inspector**:
   - Activated when available content width is >= 720dp.
-  - List pane: `ExplorerListPaneWidth = 390.dp`, with centered bottom FAB for paste/create actions and subtle `VerticalDivider` separating panes.
+  - List pane takes the remaining width (`weight(1f)`), with centered bottom FAB for paste/create actions and subtle `VerticalDivider` separating panes.
   - Focused item in list/grid is highlighted with `secondaryContainer` and a 1.5dp primary accent border.
-  - Detail pane: `surfaceContainerLow` surface with 28dp corners, 1dp subtle border, and structured scrollable sections.
+  - Detail pane: MD3 supporting pane, fixed `ExplorerDetailPaneWidth = 360.dp`; `surfaceContainerLow` surface with 28dp corners, 1dp subtle border.
+  - Inspector order: category chip + close → hero (capped: image ≤ 220dp, video ≤ 200dp, text ≤ 180dp, icon heroes 56dp) → name + size/date → one full-width primary button (Open / Open folder / Extract) → icon toolbar (share, copy, cut, rename, compress|open, delete) → Overview card with label/value rows + location → checksums.
+  - Hero cards carry no action buttons; the primary button is the single CTA.
   - Media hero previews (`PreviewComponents`):
     - **Photos**: Adaptive framing with resolution (`1920 × 1080 · 2.1 MP`) and size chips, fullscreen button, and interactive Fullscreen Lightbox Dialog featuring pinch-to-zoom and pan gestures.
     - **Videos**: 16:9 responsive card with video frame thumbnail, gradient scrim, duration chip, and centered play button.
     - **Audio**: In-line player with real-time playback control, track slider, metadata (title, artist, album), and expressive category tone vinyl styling.
     - **Code/Text**: Code card with line numbers gutter, copy content action, and monospace syntax styling.
-    - **APKs**: Application icon, label, package name, version, and Install action.
-    - **Archives**: Format badge (ZIP/7Z/RAR), size, and Extract action.
+    - **APKs**: Application icon, label, package name, version.
+    - **Archives**: Format badge (ZIP/7Z/RAR) and size.
     - **Folders**: Subfolder/file count, total computed size, and direct Open Folder navigation.
   - **Action Toolbar & Properties**:
     - Primary CTA (Open/Extract/Install) paired with Share, followed by a secondary tonal icon strip (Copy, Cut, Rename, Compress/Extract, Delete).

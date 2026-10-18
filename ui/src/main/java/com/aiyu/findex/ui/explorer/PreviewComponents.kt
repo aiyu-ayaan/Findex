@@ -134,7 +134,7 @@ fun ImagePreviewCard(
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 220.dp, max = 380.dp)
+                .heightIn(min = 140.dp, max = 220.dp)
                 .clickable { showLightbox = true }
                 .padding(Dimens.xs)
         )
@@ -345,6 +345,7 @@ fun VideoPreviewCard(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .fillMaxWidth()
+            .heightIn(max = 200.dp)
             .aspectRatio(16f / 9f)
             .clip(MaterialTheme.shapes.extraLarge)
             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
@@ -667,7 +668,7 @@ fun TextPreviewCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 180.dp, max = 280.dp)
+                    .heightIn(min = 96.dp, max = 180.dp)
                     .padding(Dimens.md)
                     .verticalScroll(rememberScrollState())
             ) {
@@ -718,7 +719,6 @@ fun TextPreviewCard(
 @Composable
 fun ArchivePreviewCard(
     item: StorageItem,
-    onExtract: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val tone = FileCategory.ARCHIVES.tone
@@ -733,7 +733,7 @@ fun ArchivePreviewCard(
                 color = tone.accent.copy(alpha = 0.4f),
                 shape = MaterialTheme.shapes.extraLarge
             )
-            .padding(Dimens.xl)
+            .padding(Dimens.lg)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -744,8 +744,8 @@ fun ArchivePreviewCard(
                 shape = MaterialShapes.Cookie9Sided,
                 container = tone.container,
                 content = tone.onContainer,
-                size = 72.dp,
-                iconSize = 36.dp
+                size = 56.dp,
+                iconSize = 28.dp
             )
             Spacer(Modifier.height(Dimens.md))
             Text(
@@ -758,18 +758,6 @@ fun ArchivePreviewCard(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(Modifier.height(Dimens.lg))
-            Button(
-                onClick = onExtract,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = tone.accent,
-                    contentColor = tone.onContainer
-                )
-            ) {
-                Icon(Icons.Rounded.Unarchive, contentDescription = null, modifier = Modifier.size(18.dp))
-                Spacer(Modifier.width(Dimens.sm))
-                Text(stringResource(R.string.action_extract))
-            }
         }
     }
 }
@@ -781,7 +769,6 @@ fun ArchivePreviewCard(
 @Composable
 fun ApkPreviewCard(
     item: StorageItem,
-    onInstall: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -800,7 +787,7 @@ fun ApkPreviewCard(
                 color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
                 shape = MaterialTheme.shapes.extraLarge
             )
-            .padding(Dimens.xl)
+            .padding(Dimens.lg)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -812,7 +799,7 @@ fun ApkPreviewCard(
                     bitmap = drawable.bitmap.asImageBitmap(),
                     contentDescription = apkMeta?.appName ?: item.name,
                     modifier = Modifier
-                        .size(64.dp)
+                        .size(56.dp)
                         .clip(MaterialTheme.shapes.large)
                 )
             } else {
@@ -849,12 +836,6 @@ fun ApkPreviewCard(
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-            Spacer(Modifier.height(Dimens.lg))
-            FilledTonalButton(onClick = onInstall) {
-                Icon(Icons.Rounded.Android, contentDescription = null, modifier = Modifier.size(18.dp))
-                Spacer(Modifier.width(Dimens.sm))
-                Text(stringResource(R.string.action_install))
-            }
         }
     }
 }
@@ -867,7 +848,6 @@ fun ApkPreviewCard(
 fun FolderPreviewCard(
     item: StorageItem,
     details: FileDetails?,
-    onOpenFolder: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -880,7 +860,7 @@ fun FolderPreviewCard(
                 color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
                 shape = MaterialTheme.shapes.extraLarge
             )
-            .padding(Dimens.xl)
+            .padding(Dimens.lg)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -891,8 +871,8 @@ fun FolderPreviewCard(
                 shape = CategoryShape,
                 container = MaterialTheme.colorScheme.primaryContainer,
                 content = MaterialTheme.colorScheme.onPrimaryContainer,
-                size = 72.dp,
-                iconSize = 36.dp
+                size = 56.dp,
+                iconSize = 28.dp
             )
             Spacer(Modifier.height(Dimens.md))
             Text(
@@ -918,12 +898,6 @@ fun FolderPreviewCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            Spacer(Modifier.height(Dimens.lg))
-            Button(onClick = onOpenFolder) {
-                Icon(Icons.Rounded.FolderOpen, contentDescription = null, modifier = Modifier.size(18.dp))
-                Spacer(Modifier.width(Dimens.sm))
-                Text(stringResource(R.string.action_open_folder))
-            }
         }
     }
 }
@@ -942,7 +916,7 @@ fun GenericPreviewCard(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 160.dp, max = 220.dp)
+            .height(120.dp)
             .clip(MaterialTheme.shapes.extraLarge)
             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
             .border(
@@ -958,8 +932,8 @@ fun GenericPreviewCard(
                 shape = MaterialShapes.Square,
                 container = MaterialTheme.colorScheme.surfaceContainerHighest,
                 content = MaterialTheme.colorScheme.onSurfaceVariant,
-                size = 64.dp,
-                iconSize = 32.dp
+                size = 56.dp,
+                iconSize = 28.dp
             )
             Spacer(Modifier.height(Dimens.md))
             Surface(

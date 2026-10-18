@@ -269,7 +269,7 @@ fun ExplorerScreen(
         }
     ) { innerPadding ->
       Row(Modifier.fillMaxSize().padding(top = innerPadding.calculateTopPadding())) {
-        ProvideContentWidth(if (listDetail) Modifier.width(ExplorerListPaneWidth).fillMaxHeight() else Modifier.weight(1f).fillMaxHeight()) {
+        ProvideContentWidth(Modifier.weight(1f).fillMaxHeight()) {
         Box(Modifier.fillMaxSize()) {
             val listPadding = PaddingValues(
                 start = readableGutter(), end = readableGutter(), top = Dimens.sm,
@@ -405,7 +405,7 @@ fun ExplorerScreen(
                     onOpenFolder = { viewModel.openFolder(it) }
                 ),
                 modifier = Modifier
-                    .weight(1f)
+                    .width(ExplorerDetailPaneWidth)
                     .fillMaxHeight()
                     .padding(start = Dimens.md, end = Dimens.lg, top = Dimens.sm, bottom = Dimens.lg)
             )

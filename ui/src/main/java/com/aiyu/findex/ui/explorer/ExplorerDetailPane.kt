@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -47,6 +48,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -78,8 +80,8 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Locale
 
-/** Width of the list pane when the explorer shows list-detail (MD3 canonical layout for file browsers). */
-val ExplorerListPaneWidth = 390.dp
+/** Width of the supporting detail pane; the file list takes the rest (MD3 supporting-pane layout). */
+val ExplorerDetailPaneWidth = 360.dp
 
 private val IMAGE_EXTENSIONS = setOf("jpg", "jpeg", "png", "gif", "webp", "heic", "heif", "bmp", "svg", "avif")
 private val VIDEO_EXTENSIONS = setOf("mp4", "mkv", "webm", "avi", "mov", "3gp", "m4v", "ts")
@@ -226,16 +228,24 @@ private fun ItemDetail(
         if (isAud) value = FileInspector.inspectAudio(file)
     }
 
+    val copy: (String, String, Int) -> Unit = { label, text, message ->
+        val cm = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager
+        cm?.setPrimaryClip(android.content.ClipData.newPlainText(label, text))
+        scope.launch { snackbar.showSnackbar(context.getString(message)) }
+    }
+    val openPrimary = if (item.isDirectory) {
+        { actions.onOpenFolder?.invoke(item.path) ?: actions.onOpen() }
+    } else actions.onOpen
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = Dimens.xl, vertical = Dimens.lg)
+            .padding(horizontal = Dimens.lg, vertical = Dimens.md)
     ) {
-        // 1. Top Header Row: Category Badge + Dismiss/Share Actions
+        // 1. Header: category chip + close
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
             Surface(
@@ -265,136 +275,86 @@ private fun ItemDetail(
                     )
                 }
             }
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = actions.onShare) {
-                    Icon(Icons.Rounded.Share, contentDescription = stringResource(R.string.action_share))
-                }
-                IconButton(onClick = actions.onClose) {
-                    Icon(Icons.Rounded.Close, contentDescription = stringResource(R.string.cd_close_details))
-                }
-            }
-        }
-
-        Spacer(Modifier.height(Dimens.md))
-
-        // 2. Hero Preview Section
-        when {
-            isImg -> ImagePreviewCard(
-                item = item,
-                onOpenExternal = actions.onOpen
-            )
-            isVid -> VideoPreviewCard(
-                item = item,
-                onPlay = actions.onOpen
-            )
-            isAud -> AudioPreviewCard(
-                item = item,
-                onOpenExternal = actions.onOpen
-            )
-            isTxt -> TextPreviewCard(
-                item = item,
-                onOpenExternal = actions.onOpen
-            )
-            item.isArchive -> ArchivePreviewCard(
-                item = item,
-                onExtract = actions.onExtract
-            )
-            item.isDirectory -> FolderPreviewCard(
-                item = item,
-                details = details,
-                onOpenFolder = { actions.onOpenFolder?.invoke(item.path) ?: actions.onOpen() }
-            )
-            ext == "apk" -> ApkPreviewCard(
-                item = item,
-                onInstall = actions.onOpen
-            )
-            else -> GenericPreviewCard(
-                item = item,
-                onOpen = actions.onOpen
-            )
-        }
-
-        Spacer(Modifier.height(Dimens.lg))
-
-        // 3. File Identity Section
-        Text(
-            text = item.name,
-            style = MaterialTheme.typography.titleLargeEmphasized,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
-        Spacer(Modifier.height(Dimens.xs))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = formatSize(item.size),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = " · ${formatDate(item.lastModified)}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        Spacer(Modifier.height(Dimens.lg))
-
-        // 4. Action Buttons Section
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.sm)
-        ) {
-            if (item.isArchive) {
-                Button(
-                    onClick = actions.onExtract,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(Icons.Rounded.Unarchive, contentDescription = null, modifier = Modifier.size(18.dp))
-                    Spacer(Modifier.width(Dimens.sm))
-                    Text(stringResource(R.string.action_extract))
-                }
-                FilledTonalButton(onClick = actions.onOpen) {
-                    Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = null, modifier = Modifier.size(18.dp))
-                    Spacer(Modifier.width(Dimens.sm))
-                    Text(stringResource(R.string.action_open))
-                }
-            } else {
-                Button(
-                    onClick = actions.onOpen,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = null, modifier = Modifier.size(18.dp))
-                    Spacer(Modifier.width(Dimens.sm))
-                    Text(stringResource(R.string.action_open))
-                }
-                FilledTonalButton(onClick = actions.onShare) {
-                    Icon(Icons.Rounded.Share, contentDescription = null, modifier = Modifier.size(18.dp))
-                    Spacer(Modifier.width(Dimens.sm))
-                    Text(stringResource(R.string.action_share))
-                }
+            Spacer(Modifier.weight(1f))
+            IconButton(onClick = actions.onClose) {
+                Icon(Icons.Rounded.Close, contentDescription = stringResource(R.string.cd_close_details))
             }
         }
 
         Spacer(Modifier.height(Dimens.sm))
 
-        // 5. Secondary Quick Actions Toolbar
+        // 2. Hero preview, capped so metadata stays above the fold
+        when {
+            isImg -> ImagePreviewCard(item = item, onOpenExternal = actions.onOpen)
+            isVid -> VideoPreviewCard(item = item, onPlay = actions.onOpen)
+            isAud -> AudioPreviewCard(item = item, onOpenExternal = actions.onOpen)
+            isTxt -> TextPreviewCard(item = item, onOpenExternal = actions.onOpen)
+            item.isArchive -> ArchivePreviewCard(item = item)
+            item.isDirectory -> FolderPreviewCard(item = item, details = details)
+            ext == "apk" -> ApkPreviewCard(item = item)
+            else -> GenericPreviewCard(item = item, onOpen = actions.onOpen)
+        }
+
+        Spacer(Modifier.height(Dimens.md))
+
+        // 3. Identity
+        Text(
+            text = item.name,
+            style = MaterialTheme.typography.titleMediumEmphasized,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
+        Spacer(Modifier.height(Dimens.xxs))
+        Text(
+            text = "${formatSize(details?.totalBytes ?: item.size)} · ${formatDate(item.lastModified)}",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Spacer(Modifier.height(Dimens.md))
+
+        // 4. One primary action, the rest as a compact icon toolbar
+        Button(
+            onClick = if (item.isArchive) actions.onExtract else openPrimary,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                when {
+                    item.isArchive -> Icons.Rounded.Unarchive
+                    item.isDirectory -> Icons.Rounded.FolderOpen
+                    else -> Icons.AutoMirrored.Rounded.OpenInNew
+                },
+                contentDescription = null,
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(Modifier.width(Dimens.sm))
+            Text(
+                stringResource(
+                    when {
+                        item.isArchive -> R.string.action_extract
+                        item.isDirectory -> R.string.action_open_folder
+                        else -> R.string.action_open
+                    }
+                )
+            )
+        }
+
+        Spacer(Modifier.height(Dimens.sm))
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(Dimens.xs)) {
-                ActionIcon(Icons.Rounded.ContentCopy, R.string.action_copy, actions.onCopy)
-                ActionIcon(Icons.Rounded.ContentCut, R.string.action_cut, actions.onCut)
-                ActionIcon(Icons.Rounded.DriveFileRenameOutline, R.string.action_rename, actions.onRename)
-                if (item.isArchive) {
-                    ActionIcon(Icons.Rounded.Unarchive, R.string.action_extract, actions.onExtract)
-                } else {
-                    ActionIcon(Icons.Rounded.FolderZip, R.string.action_compress, actions.onCompress)
-                }
+            ActionIcon(Icons.Rounded.Share, R.string.action_share, actions.onShare)
+            ActionIcon(Icons.Rounded.ContentCopy, R.string.action_copy, actions.onCopy)
+            ActionIcon(Icons.Rounded.ContentCut, R.string.action_cut, actions.onCut)
+            ActionIcon(Icons.Rounded.DriveFileRenameOutline, R.string.action_rename, actions.onRename)
+            if (item.isArchive) {
+                ActionIcon(Icons.AutoMirrored.Rounded.OpenInNew, R.string.action_open, actions.onOpen)
+            } else {
+                ActionIcon(Icons.Rounded.FolderZip, R.string.action_compress, actions.onCompress)
             }
-
             FilledTonalIconButton(
                 onClick = actions.onDelete,
                 colors = IconButtonDefaults.filledTonalIconButtonColors(
@@ -406,143 +366,82 @@ private fun ItemDetail(
             }
         }
 
-        Spacer(Modifier.height(Dimens.xl))
+        Spacer(Modifier.height(Dimens.lg))
 
-        // 6. Sectioned Information Cards
-        // Card A: Properties & Technical Specs
+        // 5. Properties: one label/value row each, fits the narrow supporting pane
         Surface(
             shape = MaterialTheme.shapes.large,
             color = MaterialTheme.colorScheme.surfaceContainer,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Column(Modifier.padding(Dimens.lg)) {
+            Column(Modifier.padding(horizontal = Dimens.lg, vertical = Dimens.md)) {
                 Text(
                     text = stringResource(R.string.details_overview),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.primary
                 )
-                Spacer(Modifier.height(Dimens.md))
-
-                // Row 1: Size & Exact Bytes
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    val total = details?.totalBytes ?: item.size
+                Spacer(Modifier.height(Dimens.xs))
+                val total = details?.totalBytes ?: item.size
+                DetailProp(
+                    stringResource(R.string.details_size),
+                    "${formatSize(total)} (${String.format(Locale.ROOT, "%,d", total)} B)"
+                )
+                DetailProp(stringResource(R.string.details_type), item.mimeType ?: ext.uppercase().ifEmpty { "-" })
+                DetailProp(stringResource(R.string.details_modified), formatDate(item.lastModified))
+                imageMeta?.let { im ->
                     DetailProp(
-                        label = stringResource(R.string.details_size),
-                        value = "${formatSize(total)} (${String.format(Locale.ROOT, "%,d", total)} B)",
-                        modifier = Modifier.weight(1f)
-                    )
-                    DetailProp(
-                        label = stringResource(R.string.details_type),
-                        value = item.mimeType ?: ext.uppercase().ifEmpty { "-" },
-                        modifier = Modifier.weight(1f)
+                        stringResource(R.string.details_dimensions),
+                        "${im.width} × ${im.height} (${String.format(Locale.ROOT, "%.1f MP", im.megapixels)})"
                     )
                 }
-
-                // Row 2: Modified date & Media Specs (Dimensions / Duration / Counts)
-                Spacer(Modifier.height(Dimens.md))
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                videoMeta?.let { vm ->
+                    val res = if (vm.width > 0 && vm.height > 0) " · ${vm.width}×${vm.height}" else ""
+                    DetailProp(stringResource(R.string.details_duration), formatDuration(vm.durationMs) + res)
+                }
+                audioMeta?.let { am ->
+                    DetailProp(stringResource(R.string.details_duration), formatDuration(am.durationMs))
+                }
+                val d = details
+                if (item.isDirectory && d != null) {
                     DetailProp(
-                        label = stringResource(R.string.details_modified),
-                        value = formatDate(item.lastModified),
-                        modifier = Modifier.weight(1f)
+                        stringResource(R.string.details_contains),
+                        pluralStringResource(R.plurals.file_count, d.fileCount, d.fileCount) + ", " +
+                            pluralStringResource(R.plurals.folder_count, d.folderCount, d.folderCount)
                     )
-
-                    when {
-                        imageMeta != null -> {
-                            val im = imageMeta!!
-                            DetailProp(
-                                label = stringResource(R.string.details_dimensions),
-                                value = "${im.width} × ${im.height} (${String.format(Locale.ROOT, "%.1f MP", im.megapixels)})",
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                        videoMeta != null -> {
-                            val vm = videoMeta!!
-                            val dur = formatDuration(vm.durationMs)
-                            val res = if (vm.width > 0 && vm.height > 0) " · ${vm.width}×${vm.height}" else ""
-                            DetailProp(
-                                label = stringResource(R.string.details_duration),
-                                value = "$dur$res",
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                        audioMeta != null -> {
-                            val am = audioMeta!!
-                            DetailProp(
-                                label = stringResource(R.string.details_duration),
-                                value = formatDuration(am.durationMs),
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                        item.isDirectory -> {
-                            val d = details
-                            if (d != null) {
-                                DetailProp(
-                                    label = stringResource(R.string.details_contains),
-                                    value = pluralStringResource(R.plurals.file_count, d.fileCount, d.fileCount) + ", " +
-                                        pluralStringResource(R.plurals.folder_count, d.folderCount, d.folderCount),
-                                    modifier = Modifier.weight(1f)
-                                )
-                            } else {
-                                Spacer(Modifier.weight(1f))
-                            }
-                        }
-                        else -> Spacer(Modifier.weight(1f))
+                }
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = Dimens.xs),
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f)) {
+                        Text(
+                            stringResource(R.string.details_path),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            item.path,
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
-                }
-            }
-        }
-
-        Spacer(Modifier.height(Dimens.md))
-
-        // Card B: Location Card with Copy Button
-        Surface(
-            shape = MaterialTheme.shapes.large,
-            color = MaterialTheme.colorScheme.surfaceContainer,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Dimens.lg)
-            ) {
-                Column(Modifier.weight(1f)) {
-                    Text(
-                        stringResource(R.string.details_path),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(Modifier.height(Dimens.xxs))
-                    Text(
-                        item.path,
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                IconButton(
-                    onClick = {
-                        val cm = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager
-                        cm?.setPrimaryClip(android.content.ClipData.newPlainText("path", item.path))
-                        scope.launch {
-                            snackbar.showSnackbar(context.getString(R.string.path_copied))
-                        }
+                    IconButton(onClick = { copy("path", item.path, R.string.path_copied) }) {
+                        Icon(
+                            Icons.Rounded.ContentCopy,
+                            contentDescription = stringResource(R.string.action_copy_path),
+                            modifier = Modifier.size(18.dp)
+                        )
                     }
-                ) {
-                    Icon(
-                        Icons.Rounded.ContentCopy,
-                        contentDescription = stringResource(R.string.action_copy_path),
-                        modifier = Modifier.size(20.dp)
-                    )
                 }
             }
         }
 
         if (!item.isDirectory) {
-            Spacer(Modifier.height(Dimens.md))
+            Spacer(Modifier.height(Dimens.sm))
 
-            // Card C: On-Demand Checksums (MD5 & SHA-256)
+            // 6. On-demand checksums (MD5 & SHA-256)
             var checksums by remember(item.path) { mutableStateOf<FileChecksums?>(null) }
             var isCalculating by remember(item.path) { mutableStateOf(false) }
 
@@ -551,65 +450,45 @@ private fun ItemDetail(
                 color = MaterialTheme.colorScheme.surfaceContainer,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(Modifier.padding(Dimens.lg)) {
+                Column(Modifier.padding(horizontal = Dimens.lg, vertical = Dimens.sm)) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = Dimens.minTouch)
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                Icons.Rounded.Numbers,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp),
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                            Spacer(Modifier.width(Dimens.xs))
-                            Text(
-                                text = stringResource(R.string.details_checksums),
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-
+                        Icon(
+                            Icons.Rounded.Numbers,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(Modifier.width(Dimens.sm))
+                        Text(
+                            text = stringResource(R.string.details_checksums),
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.weight(1f)
+                        )
                         if (checksums == null) {
                             if (isCalculating) {
                                 CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                             } else {
-                                FilledTonalButton(
-                                    onClick = {
-                                        isCalculating = true
-                                        scope.launch {
-                                            checksums = FileInspector.calculateChecksums(file)
-                                            isCalculating = false
-                                        }
-                                    },
-                                    contentPadding = ButtonDefaults.TextButtonContentPadding
-                                ) {
-                                    Text(stringResource(R.string.details_calculate_hash), style = MaterialTheme.typography.labelSmall)
+                                TextButton(onClick = {
+                                    isCalculating = true
+                                    scope.launch {
+                                        checksums = FileInspector.calculateChecksums(file)
+                                        isCalculating = false
+                                    }
+                                }) {
+                                    Text(stringResource(R.string.details_calculate_hash))
                                 }
                             }
                         }
                     }
-
                     checksums?.let { chk ->
-                        Spacer(Modifier.height(Dimens.md))
-                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-                        Spacer(Modifier.height(Dimens.sm))
-
-                        HashRow("MD5", chk.md5) {
-                            val cm = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager
-                            cm?.setPrimaryClip(android.content.ClipData.newPlainText("MD5", chk.md5))
-                            scope.launch { snackbar.showSnackbar(context.getString(R.string.details_copied_hash)) }
-                        }
-
-                        Spacer(Modifier.height(Dimens.xs))
-
-                        HashRow("SHA-256", chk.sha256) {
-                            val cm = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager
-                            cm?.setPrimaryClip(android.content.ClipData.newPlainText("SHA-256", chk.sha256))
-                            scope.launch { snackbar.showSnackbar(context.getString(R.string.details_copied_hash)) }
-                        }
+                        HashRow("MD5", chk.md5) { copy("MD5", chk.md5, R.string.details_copied_hash) }
+                        HashRow("SHA-256", chk.sha256) { copy("SHA-256", chk.sha256, R.string.details_copied_hash) }
                     }
                 }
             }
@@ -624,34 +503,44 @@ private fun HashRow(algorithm: String, hash: String, onCopy: () -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onCopy)
+            .heightIn(min = Dimens.minTouch)
+            .clickable(onClickLabel = stringResource(R.string.action_copy), onClick = onCopy)
             .padding(vertical = Dimens.xs)
     ) {
         Column(Modifier.weight(1f)) {
             Text(algorithm, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.outline)
             Text(hash, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
-        IconButton(onClick = onCopy, modifier = Modifier.size(28.dp)) {
-            Icon(Icons.Rounded.ContentCopy, contentDescription = "Copy $algorithm", modifier = Modifier.size(16.dp))
-        }
+        Icon(
+            Icons.Rounded.ContentCopy,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
 @Composable
-private fun DetailProp(label: String, value: String, modifier: Modifier = Modifier) {
-    Column(modifier) {
+private fun DetailProp(label: String, value: String) {
+    Row(
+        verticalAlignment = Alignment.Top,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = Dimens.xs)
+    ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.primary
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.width(96.dp)
         )
-        Spacer(Modifier.height(Dimens.xxs))
         Text(
             text = value,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurface,
             maxLines = 2,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f)
         )
     }
 }
