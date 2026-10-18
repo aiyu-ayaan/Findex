@@ -147,6 +147,26 @@ class StorageRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun search(query: String, limit: Int): List<StorageItem> = withContext(Dispatchers.IO) {
+        val term = query.trim()
+        if (term.isEmpty()) return@withContext emptyList()
+        // shortcut: MediaStore skips hidden and .nomedia folders; build a filesystem index if users miss those.
+        val escaped = term.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        val paths = mutableListOf<String>()
+        context.contentResolver.query(
+            MediaStore.Files.getContentUri("external"),
+            arrayOf(MediaStore.MediaColumns.DATA),
+            "${MediaStore.MediaColumns.DISPLAY_NAME} LIKE ? ESCAPE '\\'",
+            arrayOf("%$escaped%"),
+            "${MediaStore.MediaColumns.DATE_MODIFIED} DESC"
+        )?.use { c ->
+            while (c.moveToNext() && paths.size < limit) c.getString(0)?.let(paths::add)
+        }
+        // The index lags behind deletes; only report what is still on disk.
+        paths.map(::File).filter { it.exists() }.map { it.toStorageItem() }
+            .sortedWith(compareByDescending<StorageItem> { it.isDirectory }.thenByDescending { it.name.startsWith(term, ignoreCase = true) })
+    }
+
     override suspend fun rename(path: String, newName: String): StorageItem? = withContext(Dispatchers.IO) {
         val name = newName.trim()
         if (!isValidName(name)) return@withContext null

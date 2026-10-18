@@ -52,6 +52,8 @@ import com.aiyu.findex.ui.components.rememberPushDrawerState
 import com.aiyu.findex.ui.di.failureRes
 import com.aiyu.findex.ui.explorer.ExplorerScreen
 import com.aiyu.findex.ui.home.HomeScreen
+import com.aiyu.findex.ui.navigation.SearchRoute
+import com.aiyu.findex.ui.search.SearchScreen
 import com.aiyu.findex.ui.navigation.AnalyzerRoute
 import com.aiyu.findex.ui.navigation.CategoryRoute
 import com.aiyu.findex.ui.navigation.CleanerRoute
@@ -209,6 +211,7 @@ private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: N
     composable<WhatsAppRoute> { WhatsAppScreen(onBack = back) }
     composable<SettingsRoute> { SettingsScreen(onBack = back) }
     composable<RecycleBinRoute> { RecycleBinScreen(onBack = back) }
+    composable<SearchRoute> { SearchScreen(onBack = back, onOpenFolder = openFolder) }
     composable<TabsRoute> {
         TabsScreen(onBack = back, onOpenExplorer = {
             // Opened from an explorer: go back to it (it follows the shared session).

@@ -102,7 +102,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 
 ### Quality of life
 - [x] Recycle bin + undo delete (`.FindexTrash` per volume, 30-day purge, Undo snackbar)
-- [ ] Global search with index
+- [x] Global search with index (MediaStore `Files` index, Home search icon)
 - [ ] Duplicate finder
 - [x] Tab session persistence (Room `open_tabs`, restored on cold start)
 - [x] Tablet two-pane explorer

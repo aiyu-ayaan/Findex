@@ -186,7 +186,9 @@ fun FileList(
     onSelectionChange: (Set<String>) -> Unit,
     header: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    focused: String? = null
+    focused: String? = null,
+    /** Replaces the size/date line, e.g. with the parent folder in search results. */
+    subtitle: ((StorageItem) -> String)? = null
 ) {
     val inSelection = selection.isNotEmpty()
     LazyColumn(
@@ -208,6 +210,7 @@ fun FileList(
                 onClick = { onClick(item) },
                 onLongClick = { onSelectionChange(selection + item.path) },
                 onMore = { onMore(item) },
+                subtitle = subtitle?.invoke(item),
                 modifier = Modifier.animateItem()
             )
         }
@@ -260,7 +263,8 @@ private fun FileRow(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onMore: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    subtitle: String? = null
 ) {
     val container by animateColorAsState(
         when {
@@ -304,10 +308,11 @@ private fun FileRow(
                     overflow = TextOverflow.MiddleEllipsis
                 )
                 Text(
-                    text = metaLine(item),
+                    text = subtitle ?: metaLine(item),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1
+                    maxLines = 1,
+                    overflow = TextOverflow.MiddleEllipsis
                 )
             }
             if (!inSelection) {

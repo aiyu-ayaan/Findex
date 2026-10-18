@@ -250,6 +250,26 @@ flowchart LR
 - `ExplorerViewModel` waits for `awaitRestored()` before deciding to open a fresh tab, so a cold start resumes the last session.
 - Room schema v3 adds `open_tabs` through `AutoMigration(2, 3)`.
 
+## 7c. Global search
+
+Search uses the MediaStore `Files` table as its index: no second index to build or keep fresh. With all-files access it covers every file and folder MediaStore has scanned on every volume.
+
+```mermaid
+flowchart LR
+    Home[HomeScreen search icon] --> SS[SearchScreen<br/>SearchBarDefaults.InputField]
+    SS -->|onQueryChange| SVM[SearchViewModel<br/>debounce 250ms · mapLatest]
+    Ops[OperationManager.results] -->|re-run query| SVM
+    SVM -->|search q| Repo[StorageRepository.search]
+    Repo -->|DISPLAY_NAME LIKE %q% ESCAPE| MS[(MediaStore Files)]
+    Repo -->|drop missing paths<br/>folders first, prefix matches next| SVM
+    SS -->|folder| Explorer[ExplorerRoute path]
+    SS -->|file| Ext[openFile intent]
+```
+
+- `%`, `_` and `\` in the query are escaped, so they match literally.
+- Results are capped at 300 and filtered to paths that still exist (MediaStore lags behind deletes).
+- Known limit: MediaStore skips hidden and `.nomedia` folders.
+
 ## 8. Archives
 
 `ArchiveFormat` (core/model) detects formats by suffix, checking `.tar.gz`, `.tgz` and similar before plain extensions. It also records which formats can be written and which take a password.

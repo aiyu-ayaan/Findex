@@ -41,6 +41,7 @@ import androidx.compose.ui.semantics.semantics
 import com.aiyu.findex.ui.components.MenuIcon
 import androidx.compose.material.icons.rounded.PieChart
 import androidx.compose.material.icons.rounded.SdCard
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Storage
 import androidx.compose.material.icons.rounded.Usb
@@ -104,6 +105,7 @@ import com.aiyu.findex.ui.navigation.AnalyzerRoute
 import com.aiyu.findex.ui.navigation.CategoryRoute
 import com.aiyu.findex.ui.navigation.CleanerRoute
 import com.aiyu.findex.ui.navigation.ExplorerRoute
+import com.aiyu.findex.ui.navigation.SearchRoute
 import com.aiyu.findex.ui.navigation.SettingsRoute
 import com.aiyu.findex.ui.navigation.WhatsAppRoute
 import com.aiyu.findex.ui.theme.Dimens
@@ -139,6 +141,9 @@ fun HomeScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = { onNavigate(SearchRoute) }) {
+                        Icon(Icons.Rounded.Search, contentDescription = stringResource(R.string.action_search))
+                    }
                     IconButton(onClick = { onNavigate(SettingsRoute) }) {
                         Icon(Icons.Rounded.Settings, contentDescription = stringResource(R.string.nav_settings))
                     }

@@ -328,4 +328,9 @@
     <string name="action_open_folder">Open folder</string>
     <string name="details_overview">Overview</string>
     <string name="details_exact_bytes">%1$s bytes</string>
+    <!-- Search -->
+    <string name="search_hint">Search files and folders</string>
+    <string name="search_prompt">Find anything on your storage by name</string>
+    <string name="search_no_results">No files match “%1$s”</string>
+    <string name="cd_clear_search">Clear search</string>
 </resources>

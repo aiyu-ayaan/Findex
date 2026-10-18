@@ -13,3 +13,4 @@ import kotlinx.serialization.Serializable
 @Serializable object SettingsRoute
 @Serializable object RecycleBinRoute
 @Serializable object TabsRoute
+@Serializable object SearchRoute

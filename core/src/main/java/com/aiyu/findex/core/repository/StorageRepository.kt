@@ -15,6 +15,9 @@ interface StorageRepository {
     suspend fun getCategoryFiles(category: FileCategory): List<StorageItem>
     suspend fun getCategoryStats(): Map<FileCategory, CategoryStat>
 
+    /** Files and folders whose name contains [query], from the MediaStore file index; folders first. */
+    suspend fun search(query: String, limit: Int = 300): List<StorageItem>
+
     /** @return the renamed item, or null when the name is taken or invalid. */
     suspend fun rename(path: String, newName: String): StorageItem?
     suspend fun createFolder(parentPath: String, name: String): StorageItem?
