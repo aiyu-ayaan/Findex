@@ -26,6 +26,8 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import java.net.ConnectException
 import java.net.NoRouteToHostException
 import java.net.SocketTimeoutException
@@ -170,6 +172,72 @@ class SmbRepository @Inject constructor(
             partial.delete()
         }
     }
+
+    // region Primitives for the file operation executor (copy / move / delete across local and SMB)
+
+    /** The entry at [inner], or null when nothing is there. */
+    suspend fun stat(serverId: Long, inner: String): StorageItem? = withContext(Dispatchers.IO) {
+        withShare(serverId) { share ->
+            val path = inner.toSmb()
+            when {
+                path.isEmpty() || share.folderExists(path) -> StorageItem(
+                    path = SmbPath.of(serverId, inner), name = inner.substringAfterLast('/'), isDirectory = true
+                )
+                share.fileExists(path) -> {
+                    val info = share.getFileInformation(path)
+                    val name = inner.substringAfterLast('/')
+                    StorageItem(
+                        path = SmbPath.of(serverId, inner),
+                        name = name,
+                        size = info.standardInformation.endOfFile,
+                        lastModified = info.basicInformation.lastWriteTime.toEpochMillis(),
+                        extension = name.substringAfterLast('.', "").lowercase()
+                    )
+                }
+                else -> null
+            }
+        }
+    }
+
+    suspend fun mkdir(serverId: Long, inner: String) = withContext(Dispatchers.IO) {
+        withShare(serverId) { it.mkdir(inner.toSmb()) }
+    }
+
+    /** Removes a file, or a folder with everything in it. */
+    suspend fun delete(serverId: Long, inner: String, isDirectory: Boolean) = withContext(Dispatchers.IO) {
+        withShare(serverId) { if (isDirectory) it.rmdir(inner.toSmb(), true) else it.rm(inner.toSmb()) }
+    }
+
+    /** Server-side rename or move within the same share. */
+    suspend fun rename(serverId: Long, inner: String, newInner: String) = withContext(Dispatchers.IO) {
+        withShare(serverId) { share ->
+            share.open(
+                inner.toSmb(),
+                EnumSet.of(AccessMask.DELETE, AccessMask.GENERIC_READ),
+                null,
+                SMB2ShareAccess.ALL,
+                SMB2CreateDisposition.FILE_OPEN,
+                null
+            ).use { it.rename(newInner.toSmb()) }
+        }
+    }
+
+    suspend fun <T> read(serverId: Long, inner: String, block: suspend (InputStream) -> T): T = withContext(Dispatchers.IO) {
+        withShare(serverId) { share ->
+            share.openFile(inner.toSmb(), EnumSet.of(AccessMask.GENERIC_READ), null, SMB2ShareAccess.ALL, SMB2CreateDisposition.FILE_OPEN, null)
+                .use { remote -> remote.inputStream.use { block(it) } }
+        }
+    }
+
+    /** Creates a new file; fails if one already exists, so nothing is ever overwritten. */
+    suspend fun <T> write(serverId: Long, inner: String, block: suspend (OutputStream) -> T): T = withContext(Dispatchers.IO) {
+        withShare(serverId) { share ->
+            share.openFile(inner.toSmb(), EnumSet.of(AccessMask.GENERIC_WRITE), null, SMB2ShareAccess.ALL, SMB2CreateDisposition.FILE_CREATE, null)
+                .use { remote -> remote.outputStream.use { block(it) } }
+        }
+    }
+
+    // endregion
 
     private val cacheRoot get() = File(context.cacheDir, "network")
 

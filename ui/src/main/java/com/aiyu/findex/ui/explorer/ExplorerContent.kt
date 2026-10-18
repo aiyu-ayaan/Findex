@@ -62,6 +62,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.aiyu.findex.core.model.StorageItem
+import com.aiyu.findex.core.network.SmbPath
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.components.FileThumbnail
 import com.aiyu.findex.ui.components.MorphingShapeIcon
@@ -407,6 +408,8 @@ private fun FileCell(
 private fun metaLine(item: StorageItem): String {
     val date = formatDate(item.lastModified)
     return if (item.isDirectory) {
+        // SMB listings don't count a folder's children; showing "0 items" would be wrong.
+        if (SmbPath.parse(item.path) != null) return date
         pluralStringResource(R.plurals.item_count, item.itemCount, item.itemCount) + " · " + date
     } else {
         formatSize(item.size) + " · " + date

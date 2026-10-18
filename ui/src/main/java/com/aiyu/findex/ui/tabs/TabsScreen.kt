@@ -33,6 +33,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,9 +75,9 @@ class TabsViewModel @Inject constructor(
     fun close(index: Int) = tabSession.close(index)
     fun closeAll() = tabSession.closeAll()
 
-    fun newTab(then: () -> Unit) {
+    fun newTab(path: String, then: () -> Unit) {
         viewModelScope.launch {
-            tabSession.newTab(storageRepository.getStorageDrives().first().first().path)
+            tabSession.newTab(path)
             then()
         }
     }
@@ -89,6 +92,7 @@ fun TabsScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    var newTabSheet by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -107,7 +111,7 @@ fun TabsScreen(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { viewModel.newTab(onOpenExplorer) },
+                onClick = { newTabSheet = true },
                 icon = { Icon(Icons.Rounded.Add, contentDescription = null) },
                 text = { Text(stringResource(R.string.action_new_tab)) }
             )
@@ -161,6 +165,9 @@ fun TabsScreen(
                 )
             }
         }
+    }
+    if (newTabSheet) {
+        NewTabSheet(onPick = { newTabSheet = false; viewModel.newTab(it, onOpenExplorer) }, onDismiss = { newTabSheet = false })
     }
 }
 

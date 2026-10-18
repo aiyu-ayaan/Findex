@@ -2,6 +2,8 @@ package com.aiyu.findex.ui.explorer
 
 import com.aiyu.findex.core.db.OpenTabDao
 import com.aiyu.findex.core.db.OpenTabEntity
+import com.aiyu.findex.core.network.SmbPath
+import com.aiyu.findex.core.network.SmbRepository
 import com.aiyu.findex.core.repository.StorageRepository
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +36,8 @@ data class TabsState(val tabs: List<ExplorerTab> = emptyList(), val active: Int 
 @Singleton
 class TabSession @Inject constructor(
     private val storageRepository: StorageRepository,
-    private val openTabDao: OpenTabDao
+    private val openTabDao: OpenTabDao,
+    private val smbRepository: SmbRepository
 ) {
     private val _state = MutableStateFlow(TabsState())
     val state: StateFlow<TabsState> = _state.asStateFlow()
@@ -51,9 +54,14 @@ class TabSession @Inject constructor(
 
     private suspend fun restoreAndPersist() {
         // A removed SD card drops its tabs; a deleted folder falls back to its volume root.
-        val saved = runCatching { openTabDao.all() }.getOrDefault(emptyList()).filter { File(it.root).isDirectory }
+        // Network tabs are kept only while their share is still saved; checking the folder would need the network.
+        val servers = runCatching { smbRepository.servers.first().map { it.id }.toSet() }.getOrDefault(emptySet())
+        val saved = runCatching { openTabDao.all() }.getOrDefault(emptyList()).filter { tab ->
+            SmbPath.parse(tab.root)?.let { it.first in servers } ?: File(tab.root).isDirectory
+        }
         val tabs = saved.map {
-            ExplorerTab(nextId.getAndIncrement(), it.root, it.rootName, if (File(it.path).isDirectory) it.path else it.root)
+            val path = if (SmbPath.parse(it.path) != null || File(it.path).isDirectory) it.path else it.root
+            ExplorerTab(nextId.getAndIncrement(), it.root, it.rootName, path)
         }
         val active = saved.indexOfFirst { it.isActive }.coerceAtLeast(0)
         // Tabs opened before the restore finished stay after the saved ones.
@@ -107,6 +115,10 @@ class TabSession @Inject constructor(
 
     /** The storage volume [path] lives on becomes the tab's root; up-navigation stops there. */
     private suspend fun createTab(path: String): ExplorerTab {
+        SmbPath.parse(path)?.let { (id, _) ->
+            val server = smbRepository.server(id)
+            return ExplorerTab(nextId.getAndIncrement(), SmbPath.of(id, ""), server?.label ?: path, path)
+        }
         val drive = storageRepository.getStorageDrives().first().filter { path.startsWith(it.path) }.maxByOrNull { it.path.length }
         return ExplorerTab(
             id = nextId.getAndIncrement(),

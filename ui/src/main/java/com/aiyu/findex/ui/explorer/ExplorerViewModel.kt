@@ -16,7 +16,11 @@ import com.aiyu.findex.core.model.sortedBy
 import com.aiyu.findex.core.operation.FileClipboard
 import com.aiyu.findex.core.operation.OperationManager
 import com.aiyu.findex.core.operation.uniqueTarget
+import com.aiyu.findex.core.network.NetworkException
+import com.aiyu.findex.core.network.SmbPath
+import com.aiyu.findex.core.network.SmbRepository
 import com.aiyu.findex.core.repository.LibraryRepository
+import com.aiyu.findex.ui.network.messageRes
 import com.aiyu.findex.core.repository.StorageRepository
 import com.aiyu.findex.core.settings.SettingsRepository
 import com.aiyu.findex.ui.R
@@ -62,6 +66,8 @@ data class ExplorerUiState(
     val focused: String? = null
 ) {
     val focusedItem: StorageItem? get() = focused?.let { f -> items.firstOrNull { it.path == f } }
+    /** The active tab browses an SMB share: no bin, archives or external share there. */
+    val isNetwork: Boolean get() = tab?.let { SmbPath.parse(it.root) != null } ?: false
     val tab: ExplorerTab? get() = tabs.getOrNull(activeTab)
     val inSelection: Boolean get() = selection.isNotEmpty()
     val canGoUp: Boolean get() = tab?.let { it.path != it.root } ?: false
@@ -79,13 +85,21 @@ class ExplorerViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val clipboard: FileClipboard,
     private val operationManager: OperationManager,
-    private val tabSession: TabSession
+    private val tabSession: TabSession,
+    private val smbRepository: SmbRepository
 ) : ViewModel() {
 
     private val startPath: String? = savedStateHandle.toRoute<ExplorerRoute>().path
 
     private val _uiState = MutableStateFlow(ExplorerUiState())
     val uiState: StateFlow<ExplorerUiState> = _uiState.asStateFlow()
+
+    private val _remoteReady = Channel<Pair<File, Boolean>>(Channel.BUFFERED)
+    /** A network file pulled into the cache; the flag is true to share it instead of opening it. */
+    val remoteReady = _remoteReady.receiveAsFlow()
+
+    private val _downloading = MutableStateFlow<String?>(null)
+    val downloading: StateFlow<String?> = _downloading.asStateFlow()
 
     private val _messages = Channel<Int>(Channel.BUFFERED)
     /** One-shot snackbar messages (string resource ids). */
@@ -152,7 +166,14 @@ class ExplorerViewModel @Inject constructor(
                 delay(200)
                 _uiState.update { it.copy(isLoading = true) }
             } else null
-            val items = storageRepository.getFilesInDirectory(tab.path, settings.showHidden).sortedBy(settings.sort)
+            val items = try {
+                storageRepository.getFilesInDirectory(tab.path, settings.showHidden).sortedBy(settings.sort)
+            } catch (e: NetworkException) {
+                spinner?.cancel()
+                _uiState.update { it.copy(isLoading = false) }
+                _messages.send(e.error.messageRes())
+                return@launch
+            }
             spinner?.cancel()
             listingCache[key] = items
             publish(tab.path, items)
@@ -186,12 +207,30 @@ class ExplorerViewModel @Inject constructor(
         val s = _uiState.value
         val tab = s.tab ?: return false
         if (!s.canGoUp) return false
-        setPath(File(tab.path).parent ?: tab.root, forward = false)
+        // String parent works for both "/storage/…" and "smb://id/…" paths.
+        setPath(tab.path.substringBeforeLast('/').takeIf { it.length >= tab.root.length } ?: tab.root, forward = false)
         return true
     }
 
     fun onFileOpened(path: String) {
+        if (SmbPath.parse(path) != null) return // recents reopen local files only
         viewModelScope.launch { libraryRepository.recordOpened(File(path)) }
+    }
+
+    /** Pulls a network file into the cache, then [remoteReady] hands it to a viewer (or the share sheet). */
+    fun openRemote(item: StorageItem, share: Boolean = false) {
+        val (id, inner) = SmbPath.parse(item.path) ?: return
+        if (_downloading.value != null) return
+        _downloading.value = item.name
+        viewModelScope.launch {
+            try {
+                _remoteReady.send(smbRepository.download(id, inner, item.size) to share)
+            } catch (e: NetworkException) {
+                _messages.send(e.error.messageRes())
+            } finally {
+                _downloading.value = null
+            }
+        }
     }
 
     // endregion
@@ -303,6 +342,8 @@ class ExplorerViewModel @Inject constructor(
     }
 
     suspend fun details(item: StorageItem): FileDetails = withContext(Dispatchers.IO) {
+        // Walking a share for folder totals would mean many round trips; show what the listing gave.
+        if (SmbPath.parse(item.path) != null) return@withContext FileDetails(item, item.size, if (item.isDirectory) 0 else 1, 0)
         val file = File(item.path)
         if (!file.isDirectory) return@withContext FileDetails(item, file.length(), 1, 0)
         var bytes = 0L

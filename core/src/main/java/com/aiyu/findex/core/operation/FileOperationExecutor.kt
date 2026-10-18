@@ -8,6 +8,9 @@ import com.aiyu.findex.core.model.FailureReason
 import com.aiyu.findex.core.model.FileOperation
 import com.aiyu.findex.core.model.FileOperationException
 import com.aiyu.findex.core.model.OperationProgress
+import com.aiyu.findex.core.network.NetworkException
+import com.aiyu.findex.core.network.SmbPath
+import com.aiyu.findex.core.network.SmbRepository
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -20,6 +23,8 @@ import net.lingala.zip4j.model.enums.EncryptionMethod
 import net.lingala.zip4j.progress.ProgressMonitor
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,7 +35,8 @@ import javax.inject.Singleton
 @Singleton
 class FileOperationExecutor @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val trashDao: TrashDao
+    private val trashDao: TrashDao,
+    private val smb: SmbRepository
 ) {
 
     private companion object {
@@ -43,21 +49,22 @@ class FileOperationExecutor @Inject constructor(
     suspend fun execute(operation: FileOperation, report: (OperationProgress) -> Unit): List<String> {
         val touched = mutableListOf<String>()
         try {
-            when (operation) {
-                is FileOperation.Copy -> transfer(operation.id, operation.sources, operation.destinationDir, move = false, touched, report)
-                is FileOperation.Move -> transfer(operation.id, operation.sources, operation.destinationDir, move = true, touched, report)
-                is FileOperation.Delete -> delete(operation.id, operation.targets, touched, report)
-                    .also { trashDao.deleteByTrashPaths(operation.targets) }
-                is FileOperation.Trash -> trash(operation, touched, report)
-                is FileOperation.Restore -> restore(operation, touched, report)
-                is FileOperation.Clean -> delete(operation.id, operation.targets, touched, report)
-                is FileOperation.Compress -> compress(operation, report).also { touched += operation.destinationArchive }
-                is FileOperation.Extract -> extract(operation, report)
-                    .also { File(operation.destinationDir).walkTopDown().mapTo(touched) { it.absolutePath } }
+            val remote = operation.paths().any { SmbPath.parse(it) != null }
+            when {
+                remote && (operation is FileOperation.Compress || operation is FileOperation.Extract || operation is FileOperation.Restore) ->
+                    throw FileOperationException(FailureReason.NOT_SUPPORTED)
+                remote && operation is FileOperation.Copy -> remoteTransfer(operation.id, operation.sources, operation.destinationDir, move = false, touched, report)
+                remote && operation is FileOperation.Move -> remoteTransfer(operation.id, operation.sources, operation.destinationDir, move = true, touched, report)
+                // Network shares have no recycle bin: removing from one is always permanent.
+                remote && operation is FileOperation.Trash -> remoteDelete(operation.id, operation.targets, touched, report)
+                remote && operation is FileOperation.Delete -> remoteDelete(operation.id, operation.targets, touched, report)
+                else -> executeLocal(operation, touched, report)
             }
             return touched
         } catch (e: FileOperationException) {
             throw e
+        } catch (e: NetworkException) {
+            throw FileOperationException(FailureReason.NETWORK, e)
         } catch (e: SecurityException) {
             throw FileOperationException(FailureReason.ACCESS_DENIED, e)
         } catch (e: IOException) {
@@ -65,6 +72,191 @@ class FileOperationExecutor @Inject constructor(
             throw FileOperationException(reason, e)
         }
     }
+
+    private suspend fun executeLocal(operation: FileOperation, touched: MutableList<String>, report: (OperationProgress) -> Unit) {
+        when (operation) {
+            is FileOperation.Copy -> transfer(operation.id, operation.sources, operation.destinationDir, move = false, touched, report)
+            is FileOperation.Move -> transfer(operation.id, operation.sources, operation.destinationDir, move = true, touched, report)
+            is FileOperation.Delete -> delete(operation.id, operation.targets, touched, report)
+                .also { trashDao.deleteByTrashPaths(operation.targets) }
+            is FileOperation.Trash -> trash(operation, touched, report)
+            is FileOperation.Restore -> restore(operation, touched, report)
+            is FileOperation.Clean -> delete(operation.id, operation.targets, touched, report)
+            is FileOperation.Compress -> compress(operation, report).also { touched += operation.destinationArchive }
+            is FileOperation.Extract -> extract(operation, report)
+                .also { File(operation.destinationDir).walkTopDown().mapTo(touched) { it.absolutePath } }
+        }
+    }
+
+    private fun FileOperation.paths(): List<String> = when (this) {
+        is FileOperation.Copy -> sources + destinationDir
+        is FileOperation.Move -> sources + destinationDir
+        is FileOperation.Delete -> targets
+        is FileOperation.Trash -> targets
+        is FileOperation.Clean -> targets
+        is FileOperation.Compress -> targets + destinationArchive
+        is FileOperation.Extract -> listOf(archivePath, destinationDir)
+        is FileOperation.Restore -> emptyList()
+    }
+
+    // region Network (SMB) transfers
+
+    /** A file or folder on the device or on a saved SMB share. [dir] is null until looked up. */
+    private sealed interface Node { val name: String }
+    private data class LocalNode(val file: File) : Node { override val name: String get() = file.name }
+    private data class SmbNode(val id: Long, val inner: String, val dir: Boolean? = null) : Node {
+        override val name: String get() = inner.substringAfterLast('/')
+    }
+
+    private fun nodeOf(path: String): Node = SmbPath.parse(path)?.let { (id, inner) -> SmbNode(id, inner) } ?: LocalNode(File(path))
+
+    private suspend fun Node.isDir(): Boolean = when (this) {
+        is LocalNode -> file.isDirectory
+        is SmbNode -> dir ?: (smb.stat(id, inner)?.isDirectory == true)
+    }
+
+    private suspend fun Node.exists(): Boolean = when (this) {
+        is LocalNode -> file.exists()
+        is SmbNode -> smb.stat(id, inner) != null
+    }
+
+    private suspend fun Node.children(): List<Node> = when (this) {
+        is LocalNode -> file.listFiles()?.map { LocalNode(it) }.orEmpty()
+        is SmbNode -> smb.list(id, inner).map { SmbNode(id, SmbPath.parse(it.path)!!.second, it.isDirectory) }
+    }
+
+    private fun Node.child(name: String): Node = when (this) {
+        is LocalNode -> LocalNode(File(file, name))
+        is SmbNode -> SmbNode(id, if (inner.isEmpty()) name else "$inner/$name")
+    }
+
+    private suspend fun Node.totalSize(): Long = when (this) {
+        is LocalNode -> file.totalSize()
+        is SmbNode -> if (isDir()) children().sumOf { it.totalSize() } else smb.stat(id, inner)?.size ?: 0L
+    }
+
+    /** Same naming as [uniqueTarget], checked against either file system. */
+    private suspend fun Node.uniqueChild(name: String): Node {
+        if (this is LocalNode) return LocalNode(uniqueTarget(file, name))
+        var candidate = child(name)
+        if (!candidate.exists()) return candidate
+        val base = name.substringBeforeLast('.', name)
+        val ext = name.substringAfterLast('.', "").let { if (it.isEmpty() || it == name) "" else ".$it" }
+        var i = 1
+        while (candidate.exists()) candidate = child("$base (${i++})$ext")
+        return candidate
+    }
+
+    private suspend fun Node.mkdir() = when (this) {
+        is LocalNode -> if (!file.exists() && !file.mkdirs()) throw IOException("mkdirs failed: $file") else Unit
+        is SmbNode -> smb.mkdir(id, inner)
+    }
+
+    private suspend fun Node.remove(isDir: Boolean) = when (this) {
+        is LocalNode -> if (!file.deleteRecursively() && file.exists()) throw FileOperationException(FailureReason.ACCESS_DENIED) else Unit
+        is SmbNode -> smb.delete(id, inner, isDir)
+    }
+
+    private suspend fun <T> Node.read(block: suspend (InputStream) -> T): T = when (this) {
+        is LocalNode -> file.inputStream().use { block(it) }
+        is SmbNode -> smb.read(id, inner, block)
+    }
+
+    private suspend fun <T> Node.write(block: suspend (OutputStream) -> T): T = when (this) {
+        is LocalNode -> file.outputStream().use { block(it) }
+        is SmbNode -> smb.write(id, inner, block)
+    }
+
+    /** Copy / move where the source or destination is on an SMB share. Bytes are streamed; nothing is staged. */
+    private suspend fun remoteTransfer(
+        id: String,
+        sources: List<String>,
+        destinationDir: String,
+        move: Boolean,
+        touched: MutableList<String>,
+        report: (OperationProgress) -> Unit
+    ) {
+        val dest = nodeOf(destinationDir)
+        val nodes = sources.map(::nodeOf).filter { it.exists() }
+        for (src in nodes) {
+            val intoItself = when {
+                src is SmbNode && dest is SmbNode -> src.id == dest.id && (dest.inner == src.inner || dest.inner.startsWith(src.inner + "/"))
+                src is LocalNode && dest is LocalNode -> dest.file.canonicalPath.startsWith(src.file.canonicalPath + File.separator)
+                else -> false
+            }
+            if (intoItself && src.isDir()) throw FileOperationException(FailureReason.INTO_ITSELF)
+        }
+
+        report(OperationProgress(id, isIndeterminate = true))
+        val tracker = ProgressTracker(id, nodes.sumOf { it.totalSize() }, totalItems = 0, report)
+        for (src in nodes) {
+            val srcIsDir = src.isDir()
+            val parent = when (src) {
+                is LocalNode -> src.file.parentFile?.let { LocalNode(it) }
+                is SmbNode -> SmbNode(src.id, src.inner.substringBeforeLast('/', ""))
+            }
+            if (move && parent == dest) continue
+            val target = dest.uniqueChild(src.name)
+            // Same share: let the server move it instead of streaming every byte down and back up.
+            if (move && src is SmbNode && target is SmbNode && src.id == target.id) {
+                smb.rename(src.id, src.inner, target.inner)
+                tracker.addItems(src.name, items = 1, bytes = 0)
+                continue
+            }
+            copyNode(src, srcIsDir, target, tracker)
+            if (target is LocalNode) target.file.walkTopDown().mapTo(touched) { it.absolutePath }
+            if (move) {
+                if (src is LocalNode) src.file.walkTopDown().mapTo(touched) { it.absolutePath }
+                src.remove(srcIsDir)
+            }
+        }
+        tracker.finish()
+    }
+
+    private suspend fun copyNode(src: Node, isDir: Boolean, target: Node, tracker: ProgressTracker) {
+        currentCoroutineContext().ensureActive()
+        if (isDir) {
+            target.mkdir()
+            tracker.addItems(src.name, items = 1, bytes = 0)
+            for (child in src.children()) copyNode(child, child.isDir(), target.child(child.name), tracker)
+            return
+        }
+        try {
+            src.read { input ->
+                target.write { output ->
+                    val buffer = ByteArray(BUFFER_SIZE)
+                    while (true) {
+                        currentCoroutineContext().ensureActive()
+                        val read = input.read(buffer)
+                        if (read < 0) break
+                        output.write(buffer, 0, read)
+                        tracker.addBytes(src.name, read.toLong())
+                    }
+                }
+            }
+        } catch (e: Throwable) {
+            // A half-copied file is worse than none, on either side.
+            runCatching { target.remove(isDir = false) }
+            throw e
+        }
+        if (src is LocalNode && target is LocalNode) target.file.setLastModified(src.file.lastModified())
+        tracker.addItems(src.name, items = 1, bytes = 0)
+    }
+
+    private suspend fun remoteDelete(id: String, targets: List<String>, touched: MutableList<String>, report: (OperationProgress) -> Unit) {
+        val nodes = targets.map(::nodeOf).filter { it.exists() }
+        report(OperationProgress(id, isIndeterminate = true))
+        val tracker = ProgressTracker(id, totalBytes = 0, totalItems = nodes.size, report)
+        for (node in nodes) {
+            currentCoroutineContext().ensureActive()
+            if (node is LocalNode) node.file.walkTopDown().mapTo(touched) { it.absolutePath }
+            node.remove(node.isDir())
+            tracker.addItems(node.name, items = 1, bytes = 0)
+        }
+        tracker.finish()
+    }
+
+    // endregion
 
     // region Copy / Move
 

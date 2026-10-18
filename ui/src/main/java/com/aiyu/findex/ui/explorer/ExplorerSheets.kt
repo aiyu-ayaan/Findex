@@ -86,6 +86,9 @@ enum class ItemAction { OPEN, OPEN_IN_NEW_TAB, SHARE, SHOW_IN_FOLDER, RESTORE, C
 
 val ExplorerItemActions = ItemAction.entries.toSet() - ItemAction.SHOW_IN_FOLDER - ItemAction.RESTORE
 
+/** On an SMB share: no archives (they need local files) and no recycle bin restore. */
+val NetworkItemActions = ExplorerItemActions - ItemAction.COMPRESS - ItemAction.EXTRACT
+
 /** Long-press-free per-item actions, opened from the row's overflow button. */
 @Composable
 fun ItemActionSheet(

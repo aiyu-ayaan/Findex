@@ -1,20 +1,13 @@
 package com.aiyu.findex.ui.network
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
-import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.core.network.NetworkError
 import com.aiyu.findex.core.network.NetworkException
 import com.aiyu.findex.core.network.NetworkServer
-import com.aiyu.findex.core.network.SmbPath
 import com.aiyu.findex.core.network.SmbRepository
 import com.aiyu.findex.ui.R
-import com.aiyu.findex.ui.navigation.NetworkBrowseRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,9 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 fun NetworkError.messageRes(): Int = when (this) {
@@ -71,85 +62,4 @@ class NetworkViewModel @Inject constructor(
     fun remove(id: Long) {
         viewModelScope.launch { smb.delete(id) }
     }
-}
-
-/** What to do with a remote file once it is in the cache. */
-enum class RemoteIntent { OPEN, SHARE }
-
-data class NetworkBrowseState(
-    val server: NetworkServer? = null,
-    /** Folder inside the share; "" is the share root. */
-    val dir: String = "",
-    val items: List<StorageItem> = emptyList(),
-    val isLoading: Boolean = true,
-    val error: NetworkError? = null,
-    val downloading: String? = null
-)
-
-@HiltViewModel
-class NetworkBrowseViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    private val smb: SmbRepository
-) : ViewModel() {
-
-    private val serverId = savedStateHandle.toRoute<NetworkBrowseRoute>().serverId
-    private val _uiState = MutableStateFlow(NetworkBrowseState())
-    val uiState: StateFlow<NetworkBrowseState> = _uiState.asStateFlow()
-
-    private val _ready = Channel<Pair<File, RemoteIntent>>(Channel.BUFFERED)
-    val ready = _ready.receiveAsFlow()
-
-    private val _errors = Channel<NetworkError>(Channel.BUFFERED)
-    val errors = _errors.receiveAsFlow()
-
-    private var loadJob: Job? = null
-    private var downloadJob: Job? = null
-
-    init {
-        viewModelScope.launch { _uiState.update { it.copy(server = smb.server(serverId)) } }
-        load("")
-    }
-
-    fun load(dir: String = _uiState.value.dir) {
-        loadJob?.cancel()
-        _uiState.update { it.copy(dir = dir, isLoading = true, error = null) }
-        loadJob = viewModelScope.launch {
-            try {
-                val items = smb.list(serverId, dir)
-                _uiState.update { it.copy(items = items, isLoading = false) }
-            } catch (e: Exception) {
-                if (e is CancellationException) throw e
-                _uiState.update { it.copy(items = emptyList(), isLoading = false, error = e.networkError()) }
-            }
-        }
-    }
-
-    /** @return false at the share root (the screen should pop). */
-    fun up(): Boolean {
-        val dir = _uiState.value.dir
-        if (dir.isEmpty()) return false
-        load(dir.substringBeforeLast('/', ""))
-        return true
-    }
-
-    fun open(item: StorageItem, intent: RemoteIntent = RemoteIntent.OPEN) {
-        val inner = SmbPath.parse(item.path)?.second ?: return
-        if (item.isDirectory) {
-            load(inner)
-            return
-        }
-        if (downloadJob?.isActive == true) return
-        _uiState.update { it.copy(downloading = item.name) }
-        downloadJob = viewModelScope.launch {
-            try {
-                _ready.send(smb.download(serverId, inner, item.size) to intent)
-            } catch (e: Exception) {
-                if (e !is CancellationException) _errors.send(e.networkError())
-            } finally {
-                _uiState.update { it.copy(downloading = null) }
-            }
-        }
-    }
-
-    fun cancelDownload() = downloadJob?.cancel()
 }

@@ -96,10 +96,10 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] In-archive preview without full extraction (browse entries, open single files via cache)
 
 ### Network Storage
-- [x] Windows Network Share (SMB) client (smbj, read-only browse + open/share via cache)
+- [x] Windows Network Share (SMB) client (smbj; shares open as Explorer tabs)
 - [ ] WebDAV and FTP / SFTP
 - [x] Credential manager (Keystore-encrypted passwords, add/remove shares)
-- [ ] Network bookmarks, upload and copy/move to shares
+- [x] Copy / move / delete between device and shares (and share to share), New-tab location picker
 
 ### Quality of life
 - [x] Recycle bin + undo delete (`.FindexTrash` per volume, 30-day purge, Undo snackbar)

@@ -13,6 +13,8 @@ import com.aiyu.findex.core.model.DriveType
 import com.aiyu.findex.core.model.FileCategory
 import com.aiyu.findex.core.model.StorageDrive
 import com.aiyu.findex.core.model.StorageItem
+import com.aiyu.findex.core.network.SmbPath
+import com.aiyu.findex.core.network.SmbRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +27,8 @@ import javax.inject.Singleton
 
 @Singleton
 class StorageRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val smb: SmbRepository
 ) : StorageRepository {
 
     override val downloadsPath: String =
@@ -80,6 +83,10 @@ class StorageRepositoryImpl @Inject constructor(
 
     override suspend fun getFilesInDirectory(directoryPath: String, showHidden: Boolean): List<StorageItem> =
         withContext(Dispatchers.IO) {
+            // Network shares open in normal tabs; their listing comes from SMB. Throws NetworkException.
+            SmbPath.parse(directoryPath)?.let { (id, inner) ->
+                return@withContext smb.list(id, inner).filter { showHidden || !it.isHidden }
+            }
             val files = File(directoryPath).listFiles() ?: return@withContext emptyList()
             files.asSequence()
                 .filter { showHidden || !it.isHidden }
@@ -88,6 +95,7 @@ class StorageRepositoryImpl @Inject constructor(
         }
 
     override suspend fun getItem(path: String): StorageItem? = withContext(Dispatchers.IO) {
+        SmbPath.parse(path)?.let { (id, inner) -> return@withContext runCatching { smb.stat(id, inner) }.getOrNull() }
         File(path).takeIf { it.exists() }?.toStorageItem()
     }
 
@@ -170,6 +178,14 @@ class StorageRepositoryImpl @Inject constructor(
     override suspend fun rename(path: String, newName: String): StorageItem? = withContext(Dispatchers.IO) {
         val name = newName.trim()
         if (!isValidName(name)) return@withContext null
+        SmbPath.parse(path)?.let { (id, inner) ->
+            val newInner = (inner.substringBeforeLast('/', "").let { if (it.isEmpty()) "" else "$it/" }) + name
+            return@withContext runCatching {
+                if (smb.stat(id, newInner) != null) return@runCatching null
+                smb.rename(id, inner, newInner)
+                smb.stat(id, newInner)
+            }.getOrNull()
+        }
         val src = File(path)
         val target = File(src.parentFile, name)
         if (target.exists() || !src.renameTo(target)) return@withContext null
@@ -180,6 +196,14 @@ class StorageRepositoryImpl @Inject constructor(
     override suspend fun createFolder(parentPath: String, name: String): StorageItem? = withContext(Dispatchers.IO) {
         val trimmed = name.trim()
         if (!isValidName(trimmed)) return@withContext null
+        SmbPath.parse(parentPath)?.let { (id, inner) ->
+            val newInner = if (inner.isEmpty()) trimmed else "$inner/$trimmed"
+            return@withContext runCatching {
+                if (smb.stat(id, newInner) != null) return@runCatching null
+                smb.mkdir(id, newInner)
+                smb.stat(id, newInner)
+            }.getOrNull()
+        }
         val dir = File(parentPath, trimmed)
         if (dir.exists() || !dir.mkdir()) return@withContext null
         dir.toStorageItem()

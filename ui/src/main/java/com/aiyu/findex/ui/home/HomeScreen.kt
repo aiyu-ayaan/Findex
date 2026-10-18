@@ -116,7 +116,6 @@ import com.aiyu.findex.ui.navigation.CategoryRoute
 import com.aiyu.findex.ui.navigation.CleanerRoute
 import com.aiyu.findex.ui.navigation.ExplorerRoute
 import com.aiyu.findex.ui.navigation.DuplicatesRoute
-import com.aiyu.findex.ui.navigation.NetworkBrowseRoute
 import com.aiyu.findex.ui.network.NetworkServerCard
 import com.aiyu.findex.ui.navigation.SearchRoute
 import com.aiyu.findex.ui.navigation.SettingsRoute
@@ -226,7 +225,7 @@ fun HomeScreen(
                     NetworkServerCard(
                         server = server,
                         shape = groupedShape(index, uiState.networkDrives.size),
-                        onClick = { onNavigate(NetworkBrowseRoute(server.id)) }
+                        onClick = { onNavigate(ExplorerRoute(server.rootPath)) }
                     )
                 }
                 return@LazyColumn

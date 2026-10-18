@@ -63,6 +63,8 @@ fun failureRes(reason: FailureReason): Int = when (reason) {
     FailureReason.INTO_ITSELF -> R.string.error_into_itself
     FailureReason.ACCESS_DENIED -> R.string.error_access_denied
     FailureReason.UNSUPPORTED_ARCHIVE -> R.string.error_unsupported_archive
+    FailureReason.NETWORK -> R.string.error_network
+    FailureReason.NOT_SUPPORTED -> R.string.error_not_supported_network
     FailureReason.UNKNOWN -> R.string.operation_failed
 }
 

@@ -83,7 +83,7 @@ sealed interface OperationResult {
     data class Failed(override val operation: FileOperation, val reason: FailureReason) : OperationResult
 }
 
-enum class FailureReason { WRONG_PASSWORD, NO_SPACE, INTO_ITSELF, ACCESS_DENIED, UNSUPPORTED_ARCHIVE, UNKNOWN }
+enum class FailureReason { WRONG_PASSWORD, NO_SPACE, INTO_ITSELF, ACCESS_DENIED, UNSUPPORTED_ARCHIVE, NETWORK, NOT_SUPPORTED, UNKNOWN }
 
 class FileOperationException(val reason: FailureReason, cause: Throwable? = null) :
     Exception(reason.name, cause)

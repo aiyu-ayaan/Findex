@@ -125,7 +125,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.ui.LocalSnackbarHostState
+import com.aiyu.findex.core.network.SmbPath
 import com.aiyu.findex.ui.R
+import com.aiyu.findex.ui.tabs.NewTabSheet
 import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.components.OperationBanner
 import com.aiyu.findex.ui.components.ShapeIcon
@@ -168,6 +170,13 @@ fun ExplorerScreen(
     LaunchedEffect(Unit) {
         viewModel.messages.collect { snackbar.showSnackbar(context.getString(it)) }
     }
+    LaunchedEffect(Unit) {
+        viewModel.remoteReady.collect { (file, share) ->
+            if (share) context.shareFiles(listOf(file.absolutePath)) else context.openFile(file.absolutePath)
+        }
+    }
+    val downloading by viewModel.downloading.collectAsStateWithLifecycle()
+    var newTabSheet by rememberSaveable { mutableStateOf(false) }
 
     // Back: close FAB menu → clear selection → parent folder (predictive) → leave screen (NavHost predictive pop).
     var backProgress by remember { mutableFloatStateOf(0f) }
@@ -203,6 +212,8 @@ fun ExplorerScreen(
             state.inSelection -> viewModel.toggleSelection(item.path)
             item.isDirectory -> viewModel.openFolder(item.path)
             listDetail -> viewModel.focus(item.path)
+            // Network files are downloaded first; archives on a share open in an external app.
+            SmbPath.parse(item.path) != null -> viewModel.openRemote(item)
             item.isArchive -> onOpenArchive(item.path)
             else -> {
                 viewModel.onFileOpened(item.path)
@@ -235,7 +246,7 @@ fun ExplorerScreen(
                             onBookmark = { viewModel.toggleBookmark() },
                             onToggleView = { viewModel.setGridView(!state.settings.gridView) },
                             onSort = { modal = ExplorerModal.Sort },
-                            onNewTab = viewModel::addTab,
+                            onNewTab = { newTabSheet = true },
                             onNewFolder = { modal = ExplorerModal.NewFolder },
                             tabCount = state.tabs.size,
                             onOpenTabs = onOpenTabs,
@@ -265,7 +276,7 @@ fun ExplorerScreen(
                     onPaste = viewModel::paste,
                     onClearClipboard = viewModel::clearClipboard,
                     onNewFolder = { fabMenuOpen = false; modal = ExplorerModal.NewFolder },
-                    onNewTab = { fabMenuOpen = false; viewModel.addTab() }
+                    onNewTab = { fabMenuOpen = false; newTabSheet = true }
                 )
             }
         }
@@ -351,11 +362,32 @@ fun ExplorerScreen(
                     onPaste = viewModel::paste,
                     onClearClipboard = viewModel::clearClipboard,
                     onNewFolder = { fabMenuOpen = false; modal = ExplorerModal.NewFolder },
-                    onNewTab = { fabMenuOpen = false; viewModel.addTab() },
+                    onNewTab = { fabMenuOpen = false; newTabSheet = true },
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(bottom = Dimens.xl)
                 )
+            }
+
+            androidx.compose.animation.AnimatedVisibility(
+                visible = downloading != null,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically(),
+                modifier = Modifier.align(Alignment.TopCenter).padding(top = Dimens.sm)
+            ) {
+                Surface(shape = MaterialTheme.shapes.extraLarge, color = MaterialTheme.colorScheme.inverseSurface) {
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = Dimens.lg, vertical = Dimens.sm)) {
+                        LoadingIndicator(Modifier.size(28.dp), color = MaterialTheme.colorScheme.inversePrimary)
+                        Spacer(Modifier.width(Dimens.sm))
+                        Text(
+                            stringResource(R.string.network_opening_remote, downloading.orEmpty()),
+                            color = MaterialTheme.colorScheme.inverseOnSurface,
+                            style = MaterialTheme.typography.bodyMedium,
+                            maxLines = 1,
+                            overflow = TextOverflow.MiddleEllipsis
+                        )
+                    }
+                }
             }
 
             SelectionToolbar(
@@ -374,6 +406,7 @@ fun ExplorerScreen(
                 onOpenInNewTab = { state.selectedItems.singleOrNull()?.let { viewModel.openInNewTab(it.path) } },
                 onExtract = { state.selectedItems.singleOrNull()?.let { viewModel.clearSelection(); modal = ExplorerModal.Extract(it) } },
                 onBrowse = { state.selectedItems.singleOrNull()?.let { viewModel.clearSelection(); onOpenArchive(it.path) } },
+                network = state.isNetwork,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .navigationBarsPadding()
@@ -395,8 +428,12 @@ fun ExplorerScreen(
                 folderItemCount = state.items.size,
                 load = viewModel::details,
                 actions = DetailActions(
-                    onOpen = { focusedItem?.let { viewModel.onFileOpened(it.path); context.openFile(it.path) } },
-                    onShare = { focusedItem?.let { context.shareFiles(listOf(it.path)) } },
+                    onOpen = {
+                        focusedItem?.let {
+                            if (state.isNetwork) viewModel.openRemote(it) else { viewModel.onFileOpened(it.path); context.openFile(it.path) }
+                        }
+                    },
+                    onShare = { focusedItem?.let { if (state.isNetwork) viewModel.openRemote(it, share = true) else context.shareFiles(listOf(it.path)) } },
                     onCopy = { focusedItem?.let { viewModel.copySelection(listOf(it.path)) } },
                     onCut = { focusedItem?.let { viewModel.cutSelection(listOf(it.path)) } },
                     onRename = { focusedItem?.let { modal = ExplorerModal.Rename(it) } },
@@ -417,19 +454,28 @@ fun ExplorerScreen(
       }
     }
 
+    if (newTabSheet) {
+        NewTabSheet(onPick = { newTabSheet = false; viewModel.openInNewTab(it) }, onDismiss = { newTabSheet = false })
+    }
+
     when (val m = modal) {
         null -> Unit
         is ExplorerModal.Actions -> ItemActionSheet(
             item = m.item,
+            allowed = if (state.isNetwork) NetworkItemActions else ExplorerItemActions,
             onDismiss = { modal = null },
             onAction = { action ->
                 modal = null
                 val item = m.item
                 when (action) {
-                    ItemAction.OPEN -> if (item.isArchive) onOpenArchive(item.path) else open(item)
+                    ItemAction.OPEN -> when {
+                        state.isNetwork -> viewModel.openRemote(item)
+                        item.isArchive -> onOpenArchive(item.path)
+                        else -> open(item)
+                    }
                     ItemAction.SHOW_IN_FOLDER, ItemAction.RESTORE -> Unit
                     ItemAction.OPEN_IN_NEW_TAB -> viewModel.openInNewTab(item.path)
-                    ItemAction.SHARE -> context.shareFiles(listOf(item.path))
+                    ItemAction.SHARE -> if (state.isNetwork) viewModel.openRemote(item, share = true) else context.shareFiles(listOf(item.path))
                     ItemAction.COPY -> viewModel.copySelection(listOf(item.path))
                     ItemAction.CUT -> viewModel.cutSelection(listOf(item.path))
                     ItemAction.RENAME -> modal = ExplorerModal.Rename(item)
@@ -468,7 +514,9 @@ fun ExplorerScreen(
         is ExplorerModal.Delete -> DeleteDialog(
             count = m.paths.size,
             onConfirm = { permanent -> viewModel.delete(m.paths, permanent); modal = null },
-            onDismiss = { modal = null }
+            onDismiss = { modal = null },
+            // Network shares have no recycle bin.
+            permanentOnly = state.isNetwork
         )
         is ExplorerModal.Details -> DetailsSheet(m.item, load = viewModel::details, onDismiss = { modal = null })
         ExplorerModal.Sort -> SortSheet(
@@ -742,7 +790,9 @@ private fun SelectionToolbar(
     onOpenInNewTab: () -> Unit,
     onExtract: () -> Unit,
     onBrowse: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    /** On an SMB share: archive actions and external share are not available. */
+    network: Boolean = false
 ) {
     AnimatedVisibility(
         visible = visible,
@@ -758,13 +808,14 @@ private fun SelectionToolbar(
             IconButton(onClick = onCopy) { Icon(Icons.Rounded.ContentCopy, stringResource(R.string.action_copy)) }
             IconButton(onClick = onCut) { Icon(Icons.Rounded.ContentCut, stringResource(R.string.action_cut)) }
             // A single archive is extracted, not zipped again; compressing it stays in the overflow.
-            if (singleSelected?.isArchive == true) {
+            if (network) Unit
+            else if (singleSelected?.isArchive == true) {
                 IconButton(onClick = onExtract) { Icon(Icons.Rounded.Unarchive, stringResource(R.string.action_extract)) }
             } else {
                 IconButton(onClick = onCompress) { Icon(Icons.Rounded.FolderZip, stringResource(R.string.action_compress)) }
             }
             // Folders can't be shared as attachments.
-            if (singleSelected?.isDirectory != true) {
+            if (singleSelected?.isDirectory != true && !network) {
                 IconButton(onClick = onShare) { Icon(Icons.Rounded.Share, stringResource(R.string.action_share)) }
             }
             IconButton(onClick = onDelete) { Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete)) }
@@ -778,7 +829,7 @@ private fun SelectionToolbar(
                             onClick = { more = false; onOpenInNewTab() }
                         )
                     }
-                    if (singleSelected?.isArchive == true) {
+                    if (singleSelected?.isArchive == true && !network) {
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.action_browse)) },
                             leadingIcon = { Icon(Icons.Rounded.FolderOpen, null) },

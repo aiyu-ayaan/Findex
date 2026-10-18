@@ -66,6 +66,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.aiyu.findex.core.model.StorageItem
+import com.aiyu.findex.core.network.SmbPath
 import com.aiyu.findex.ui.LocalSnackbarHostState
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.components.CategoryShape
@@ -207,10 +208,12 @@ private fun ItemDetail(
 ) {
     val details by produceState<FileDetails?>(null, item) { value = load(item) }
     val ext = item.extension.lowercase()
-    val isImg = ext in IMAGE_EXTENSIONS
-    val isVid = ext in VIDEO_EXTENSIONS
-    val isAud = ext in AUDIO_EXTENSIONS
-    val isTxt = ext in TEXT_EXTENSIONS
+    // Rich previews read the file directly; network files get the generic card until opened.
+    val local = SmbPath.parse(item.path) == null
+    val isImg = local && ext in IMAGE_EXTENSIONS
+    val isVid = local && ext in VIDEO_EXTENSIONS
+    val isAud = local && ext in AUDIO_EXTENSIONS
+    val isTxt = local && ext in TEXT_EXTENSIONS
     val category = categoryOf(item.extension)
     val categoryTone = category?.tone
 
@@ -291,9 +294,9 @@ private fun ItemDetail(
             isVid -> VideoPreviewCard(item = item, onPlay = actions.onOpen)
             isAud -> AudioPreviewCard(item = item, onOpenExternal = actions.onOpen)
             isTxt -> TextPreviewCard(item = item, onOpenExternal = actions.onOpen)
-            item.isArchive -> ArchivePreviewCard(item = item)
+            item.isArchive && local -> ArchivePreviewCard(item = item)
             item.isDirectory -> FolderPreviewCard(item = item, details = details)
-            ext == "apk" -> ApkPreviewCard(item = item)
+            ext == "apk" && local -> ApkPreviewCard(item = item)
             else -> GenericPreviewCard(item = item, onOpen = actions.onOpen)
         }
 
@@ -317,12 +320,12 @@ private fun ItemDetail(
 
         // 4. One primary action, the rest as a compact icon toolbar
         Button(
-            onClick = if (item.isArchive) actions.onBrowse else openPrimary,
+            onClick = if (item.isArchive && local) actions.onBrowse else openPrimary,
             modifier = Modifier.fillMaxWidth()
         ) {
             Icon(
                 when {
-                    item.isArchive -> Icons.Rounded.FolderZip
+                    item.isArchive && local -> Icons.Rounded.FolderZip
                     item.isDirectory -> Icons.Rounded.FolderOpen
                     else -> Icons.AutoMirrored.Rounded.OpenInNew
                 },
@@ -333,7 +336,7 @@ private fun ItemDetail(
             Text(
                 stringResource(
                     when {
-                        item.isArchive -> R.string.action_browse
+                        item.isArchive && local -> R.string.action_browse
                         item.isDirectory -> R.string.action_open_folder
                         else -> R.string.action_open
                     }
@@ -352,7 +355,8 @@ private fun ItemDetail(
             ActionIcon(Icons.Rounded.ContentCopy, R.string.action_copy, actions.onCopy)
             ActionIcon(Icons.Rounded.ContentCut, R.string.action_cut, actions.onCut)
             ActionIcon(Icons.Rounded.DriveFileRenameOutline, R.string.action_rename, actions.onRename)
-            if (item.isArchive) {
+            if (!local) Unit
+            else if (item.isArchive) {
                 ActionIcon(Icons.Rounded.Unarchive, R.string.action_extract, actions.onExtract)
             } else {
                 ActionIcon(Icons.Rounded.FolderZip, R.string.action_compress, actions.onCompress)
@@ -440,7 +444,7 @@ private fun ItemDetail(
             }
         }
 
-        if (!item.isDirectory) {
+        if (!item.isDirectory && local) {
             Spacer(Modifier.height(Dimens.sm))
 
             // 6. On-demand checksums (MD5 & SHA-256)
