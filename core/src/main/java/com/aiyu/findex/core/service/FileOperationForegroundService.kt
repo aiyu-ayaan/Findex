@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
+import com.aiyu.findex.core.R
 import com.aiyu.findex.core.model.ActiveOperation
 import com.aiyu.findex.core.model.FailureReason
 import com.aiyu.findex.core.model.FileOperation
@@ -155,7 +156,8 @@ class FileOperationForegroundService : Service() {
         val percent = active?.progress?.let { (it.progressFraction * 100).toInt() } ?: 0
         val indeterminate = active == null || active.progress.isIndeterminate
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.stat_notify_sync)
+            .setSmallIcon(R.drawable.ic_stat_file_operation)
+            .setCategory(NotificationCompat.CATEGORY_PROGRESS)
             .setContentTitle(active?.let { strings.title(it.operation) } ?: strings.channelName)
             .setContentText(active?.let { strings.progress(it.progress.currentItemName, percent, manager.pendingCount()) })
             .setProgress(100, percent, indeterminate)
@@ -169,13 +171,16 @@ class FileOperationForegroundService : Service() {
     }
 
     private fun showResultNotification(result: OperationResult) {
-        if (result is OperationResult.Cancelled) return
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(if (result is OperationResult.Success) android.R.drawable.stat_sys_download_done else android.R.drawable.stat_notify_error)
-            .setContentTitle(strings.title(result.operation))
-            .setContentText(strings.result(result))
+            .setSmallIcon(if (result is OperationResult.Success) R.drawable.ic_stat_operation_done else R.drawable.ic_stat_file_operation)
+            .setContentTitle(strings.resultTitle(result))
+            .setContentText(if (result is OperationResult.Success) null else strings.result(result))
+            .setCategory(if (result is OperationResult.Failed) NotificationCompat.CATEGORY_ERROR else NotificationCompat.CATEGORY_STATUS)
+            .setSilent(true)
             .setAutoCancel(true)
             .setContentIntent(launchIntent())
+            // A cancel the user asked for only needs a brief acknowledgement.
+            .apply { if (result is OperationResult.Cancelled) setTimeoutAfter(4_000) }
             .build()
         notificationManager.notify(RESULT_NOTIFICATION_ID, notification)
     }

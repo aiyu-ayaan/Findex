@@ -32,9 +32,14 @@ class ResourceOperationStrings @Inject constructor(
         return if (queued > 0) context.resources.getQuantityString(R.plurals.operation_queued, queued, base, queued) else base
     }
 
+    override fun resultTitle(result: OperationResult): String = when (result) {
+        is OperationResult.Success -> context.getString(operationDoneRes(result.operation), operationCount(result.operation))
+        else -> title(result.operation)
+    }
+
     override fun result(result: OperationResult): String = when (result) {
         is OperationResult.Success -> context.getString(R.string.operation_completed)
-        is OperationResult.Cancelled -> context.getString(R.string.operation_cancelled)
+        is OperationResult.Cancelled -> context.getString(R.string.operation_cancelled_body)
         is OperationResult.Failed -> context.getString(failureRes(result.reason))
     }
 }
@@ -53,6 +58,22 @@ fun operationTitleRes(operation: FileOperation): Int = when (operation) {
     is FileOperation.VaultImport -> R.string.op_title_vault_import
     is FileOperation.VaultExport -> R.string.op_title_vault_export
     is FileOperation.VaultDelete -> R.string.op_title_vault_delete
+}
+
+fun operationDoneRes(operation: FileOperation): Int = when (operation) {
+    is FileOperation.Copy -> R.string.op_done_copy
+    is FileOperation.Move -> R.string.op_done_move
+    is FileOperation.Delete -> R.string.op_done_delete
+    is FileOperation.Trash -> R.string.op_done_trash
+    is FileOperation.Restore -> R.string.op_done_restore
+    is FileOperation.Clean -> R.string.op_done_clean
+    is FileOperation.Compress -> R.string.op_done_compress
+    is FileOperation.Extract -> R.string.op_done_extract
+    is FileOperation.BatchRename -> R.string.op_done_batch_rename
+    is FileOperation.ImageTransform -> R.string.op_done_image_transform
+    is FileOperation.VaultImport -> R.string.op_done_vault_import
+    is FileOperation.VaultExport -> R.string.op_done_vault_export
+    is FileOperation.VaultDelete -> R.string.op_done_vault_delete
 }
 
 fun operationCount(operation: FileOperation): Any = when (operation) {

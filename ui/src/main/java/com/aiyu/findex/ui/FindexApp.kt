@@ -53,6 +53,8 @@ import com.aiyu.findex.ui.components.FindexNavRail
 import com.aiyu.findex.ui.components.windowWidth
 import com.aiyu.findex.ui.components.rememberPushDrawerState
 import com.aiyu.findex.ui.di.failureRes
+import com.aiyu.findex.ui.di.operationCount
+import com.aiyu.findex.ui.di.operationDoneRes
 import com.aiyu.findex.ui.explorer.ExplorerScreen
 import com.aiyu.findex.ui.home.HomeScreen
 import com.aiyu.findex.ui.archive.ArchiveScreen
@@ -149,11 +151,9 @@ fun FindexApp(onReady: () -> Unit = {}, viewModel: AppViewModel = hiltViewModel(
                     return@collect
                 }
                 val message = when (result) {
-                    is OperationResult.Success -> if (result.skipped > 0) {
-                        context.getString(R.string.operation_completed) + " · " +
-                            context.resources.getQuantityString(R.plurals.imgc_skipped, result.skipped, result.skipped)
-                    } else {
-                        context.getString(R.string.operation_completed)
+                    is OperationResult.Success -> {
+                        val done = context.getString(operationDoneRes(result.operation), operationCount(result.operation))
+                        if (result.skipped > 0) done + " · " + context.resources.getQuantityString(R.plurals.imgc_skipped, result.skipped, result.skipped) else done
                     }
                     is OperationResult.Cancelled -> context.getString(R.string.operation_cancelled)
                     is OperationResult.Failed -> context.getString(failureRes(result.reason))

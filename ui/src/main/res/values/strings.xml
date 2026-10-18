@@ -296,7 +296,7 @@
 
     <!-- Notifications & Services -->
     <string name="notification_channel_name">File Operations</string>
-    <string name="notification_channel_description">Active background file operations progress</string>
+    <string name="notification_channel_description">Progress and results of copy, move, delete and archive tasks</string>
     <string name="operation_in_progress">Operation in progress…</string>
     <string name="operation_completed">Operation completed</string>
     <string name="operation_failed">Operation failed</string>
@@ -314,6 +314,20 @@
     <string name="op_title_clean">Cleaning %1$s item(s)</string>
     <string name="op_title_compress">Compressing to %1$s</string>
     <string name="op_title_extract">Extracting %1$s</string>
+    <string name="op_done_copy">Copied %1$s item(s)</string>
+    <string name="op_done_move">Moved %1$s item(s)</string>
+    <string name="op_done_delete">Deleted %1$s item(s)</string>
+    <string name="op_done_trash">Moved %1$s item(s) to Recycle bin</string>
+    <string name="op_done_restore">Restored %1$s item(s)</string>
+    <string name="op_done_clean">Cleaned %1$s item(s)</string>
+    <string name="op_done_compress">Created %1$s</string>
+    <string name="op_done_extract">Extracted %1$s</string>
+    <string name="op_done_batch_rename">Renamed %1$s item(s)</string>
+    <string name="op_done_image_transform">Compressed %1$s image(s)</string>
+    <string name="op_done_vault_import">Moved %1$s item(s) to the vault</string>
+    <string name="op_done_vault_export">Restored %1$s item(s) from the vault</string>
+    <string name="op_done_vault_delete">Deleted %1$s item(s) from the vault</string>
+    <string name="operation_cancelled_body">Stopped before finishing</string>
     <string name="error_wrong_password">Wrong or missing password</string>
     <string name="error_unsupported_archive">This archive format or version isn\'t supported</string>
     <string name="error_no_space">Not enough storage space</string>

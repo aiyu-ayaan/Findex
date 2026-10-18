@@ -16,5 +16,7 @@ interface OperationStrings {
     fun updateNotificationTitle(version: String): String
     fun title(operation: FileOperation): String
     fun progress(currentItem: String, percent: Int, queued: Int): String
+    /** Short headline of a finished operation, e.g. "Copied 3 items". */
+    fun resultTitle(result: OperationResult): String
     fun result(result: OperationResult): String
 }
