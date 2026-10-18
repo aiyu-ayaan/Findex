@@ -21,9 +21,11 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import java.io.Closeable
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -237,6 +239,51 @@ class SmbRepository @Inject constructor(
         }
     }
 
+    /**
+     * Opens a seekable reader for [inner] on [serverId]. Uses a 256 KB read-ahead buffer so
+     * sequential streaming and small header probes (thumbnails, video players) avoid per-call RPCs,
+     * and reconnects transparently if the share drops mid-stream.
+     */
+    suspend fun openRandomAccess(serverId: Long, inner: String, knownSize: Long = -1L): SmbRandomAccessFile =
+        withContext(Dispatchers.IO) {
+            val smbPath = inner.toSmb()
+            val (remote, size) = withShare(serverId) { share ->
+                val f = share.openFile(
+                    smbPath,
+                    EnumSet.of(AccessMask.GENERIC_READ),
+                    null,
+                    SMB2ShareAccess.ALL,
+                    SMB2CreateDisposition.FILE_OPEN,
+                    null
+                )
+                try {
+                    val s = if (knownSize >= 0L) knownSize else f.fileInformation.standardInformation.endOfFile
+                    f to s
+                } catch (e: Exception) {
+                    runCatching { f.close() }
+                    throw e
+                }
+            }
+            SmbRandomAccessFile(
+                size = size,
+                initial = remote,
+                reopen = {
+                    runBlocking(Dispatchers.IO) {
+                        withShare(serverId) { share ->
+                            share.openFile(
+                                smbPath,
+                                EnumSet.of(AccessMask.GENERIC_READ),
+                                null,
+                                SMB2ShareAccess.ALL,
+                                SMB2CreateDisposition.FILE_OPEN,
+                                null
+                            )
+                        }
+                    }
+                }
+            )
+        }
+
     // endregion
 
     private val cacheRoot get() = File(context.cacheDir, "network")
@@ -291,3 +338,96 @@ class SmbRepository @Inject constructor(
 
     private fun NetworkServerEntity.toModel() = NetworkServer(id, name, host, share, username, domain)
 }
+
+/**
+ * Thread-safe, seekable reader over an SMB file with a 256 KB read-ahead window.
+ * Supports both `MediaDataSource` (video thumbnails/metadata) and `ProxyFileDescriptorCallback` (streaming).
+ */
+class SmbRandomAccessFile internal constructor(
+    val size: Long,
+    initial: com.hierynomus.smbj.share.File,
+    private val reopen: () -> com.hierynomus.smbj.share.File
+) : Closeable {
+    private var remote: com.hierynomus.smbj.share.File = initial
+    private val chunk = ByteArray(256 * 1024)
+    private var chunkOffset = -1L
+    private var chunkLength = 0
+    private var closed = false
+
+    @Synchronized
+    @Throws(IOException::class)
+    fun readAt(position: Long, buffer: ByteArray, offset: Int, length: Int): Int {
+        if (closed) throw IOException("Closed")
+        if (position < 0L || position >= size) return -1
+        if (length <= 0) return 0
+
+        val maxAvail = minOf(length.toLong(), size - position).toInt()
+        var total = 0
+        var pos = position
+
+        while (total < maxAvail) {
+            if (chunkOffset < 0L || pos < chunkOffset || pos >= chunkOffset + chunkLength) {
+                val toFetch = minOf(chunk.size.toLong(), size - pos).toInt()
+                val fetched = fetchChunk(pos, toFetch)
+                if (fetched <= 0) break
+                chunkOffset = pos
+                chunkLength = fetched
+            }
+            val inChunk = (pos - chunkOffset).toInt()
+            val copy = minOf(maxAvail - total, chunkLength - inChunk)
+            System.arraycopy(chunk, inChunk, buffer, offset + total, copy)
+            total += copy
+            pos += copy
+        }
+        return if (total == 0) -1 else total
+    }
+
+    private fun fetchChunk(pos: Long, targetLen: Int): Int {
+        return try {
+            remote.read(chunk, pos, 0, targetLen)
+        } catch (e: Exception) {
+            runCatching { remote.close() }
+            try {
+                remote = reopen()
+                remote.read(chunk, pos, 0, targetLen)
+            } catch (e2: Exception) {
+                throw IOException("SMB read failed at $pos", e2)
+            }
+        }
+    }
+
+    /** Returns an [InputStream] view starting at [startOffset] without closing this reader on stream close. */
+    fun asInputStream(startOffset: Long = 0L): InputStream = object : InputStream() {
+        private var pos = startOffset
+        private val one = ByteArray(1)
+
+        override fun read(): Int {
+            val n = read(one, 0, 1)
+            return if (n <= 0) -1 else one[0].toInt() and 0xFF
+        }
+
+        override fun read(b: ByteArray, off: Int, len: Int): Int {
+            if (len == 0) return 0
+            val n = readAt(pos, b, off, len)
+            if (n > 0) pos += n
+            return n
+        }
+
+        override fun skip(n: Long): Long {
+            if (n <= 0L) return 0L
+            val skipped = minOf(n, (size - pos).coerceAtLeast(0L))
+            pos += skipped
+            return skipped
+        }
+
+        override fun available(): Int = (size - pos).coerceIn(0L, Int.MAX_VALUE.toLong()).toInt()
+    }
+
+    @Synchronized
+    override fun close() {
+        if (closed) return
+        closed = true
+        runCatching { remote.close() }
+    }
+}
+
