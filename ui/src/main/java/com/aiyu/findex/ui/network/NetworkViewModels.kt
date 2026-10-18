@@ -24,6 +24,7 @@ fun NetworkError.messageRes(): Int = when (this) {
     NetworkError.AUTH_FAILED -> R.string.network_error_auth
     NetworkError.SHARE_NOT_FOUND -> R.string.network_error_share
     NetworkError.ACCESS_DENIED -> R.string.network_error_denied
+    NetworkError.PASSWORD_REQUIRED -> R.string.network_error_password_required
     NetworkError.UNKNOWN -> R.string.network_error_unknown
 }
 
@@ -36,6 +37,14 @@ fun NetworkProtocol.labelRes(): Int = when (this) {
 }
 
 private fun Throwable.networkError() = (this as? NetworkException)?.error ?: NetworkError.UNKNOWN
+
+/** [SmbRepository.unlock] as a result: null once connected, otherwise why it failed. */
+suspend fun SmbRepository.unlockOrError(id: Long, password: String): NetworkError? = try {
+    unlock(id, password)
+    null
+} catch (e: NetworkException) {
+    e.error
+}
 
 data class AddServerState(val isConnecting: Boolean = false, val error: NetworkError? = null)
 
@@ -61,13 +70,14 @@ class NetworkViewModel @Inject constructor(
         domain: String,
         password: String,
         protocol: NetworkProtocol = NetworkProtocol.SMB,
-        port: Int = 0
+        port: Int = 0,
+        rememberPassword: Boolean = true
     ) {
         if (_add.value.isConnecting) return
         _add.value = AddServerState(isConnecting = true)
         viewModelScope.launch {
             try {
-                _added.send(smb.add(name, host, share, username, domain, password, protocol, port))
+                _added.send(smb.add(name, host, share, username, domain, password, protocol, port, rememberPassword))
                 _add.value = AddServerState()
             } catch (e: Exception) {
                 _add.value = AddServerState(error = e.networkError())
@@ -76,6 +86,11 @@ class NetworkViewModel @Inject constructor(
     }
 
     fun resetAdd() { _add.value = AddServerState() }
+
+    fun isLocked(server: NetworkServer) = smb.isLocked(server)
+
+    /** @return null once connected, otherwise why it failed. */
+    suspend fun unlock(id: Long, password: String): NetworkError? = smb.unlockOrError(id, password)
 
     fun remove(id: Long) {
         viewModelScope.launch { smb.delete(id) }

@@ -149,7 +149,9 @@ data class NetworkServerEntity(
     val passwordCipher: String?,
     val createdAt: Long = System.currentTimeMillis(),
     @ColumnInfo(defaultValue = "SMB") val protocol: String = "SMB",
-    @ColumnInfo(defaultValue = "0") val port: Int = 0
+    @ColumnInfo(defaultValue = "0") val port: Int = 0,
+    /** False: [passwordCipher] stays null and the password is asked for once per app run. */
+    @ColumnInfo(defaultValue = "1") val rememberPassword: Boolean = true
 )
 
 @Dao
@@ -169,13 +171,14 @@ interface NetworkServerDao {
 
 @Database(
     entities = [BookmarkEntity::class, RecentFileEntity::class, TrashEntity::class, OpenTabEntity::class, NetworkServerEntity::class],
-    version = 5,
+    version = 6,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
-        AutoMigration(from = 4, to = 5)
+        AutoMigration(from = 4, to = 5),
+        AutoMigration(from = 5, to = 6)
     ]
 )
 abstract class FindexDatabase : RoomDatabase() {

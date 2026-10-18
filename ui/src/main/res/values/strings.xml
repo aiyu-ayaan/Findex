@@ -429,6 +429,15 @@
     <string name="network_connecting">Connecting…</string>
     <string name="network_password_note">The password is encrypted with a key kept in Android Keystore.</string>
     <string name="network_guest">Guest</string>
+    <string name="network_status_connected">Connected</string>
+    <string name="network_remember_password">Remember password</string>
+    <string name="network_password_not_saved_note">Not saved. You will be asked once each time you open Findex.</string>
+    <string name="network_error_password_required">Password needed to connect</string>
+    <string name="network_unlock">Unlock</string>
+    <string name="network_unlock_title">Connect to “%1$s”</string>
+    <string name="network_unlock_body">Password for %1$s. Kept until you close Findex.</string>
+    <string name="network_status_offline">Disconnected. %1$s</string>
+    <string name="network_retry">Retry connection</string>
     <string name="network_remove">Remove server</string>
     <string name="network_remove_title">Remove “%1$s”?</string>
     <string name="network_remove_body">The saved login and any downloaded copies are deleted. Files on the server are not touched.</string>

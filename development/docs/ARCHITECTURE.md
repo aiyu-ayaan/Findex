@@ -210,7 +210,21 @@ flowchart LR
 - Network errors map to `FailureReason.NETWORK` / `NetworkError` messages instead of crashing a listing.
 - `TabSession` restores network tabs while the server is still saved; their title is the server's label.
 - Opening or sharing a network file issues a seekable `content://<pkg>.smbprovider/<serverId>/<inner>?size=<bytes>` URI (`SmbContentProvider` + `StorageManager.openProxyFileDescriptor` backed by `SmbRandomAccessFile` with a 256 KB read-ahead window) so default external video/media players stream and seek directly over SMB, SFTP, FTP, and WebDAV without downloading the file first.
+- Home **Network** tab: each server is a `NetworkDriveCard` driven by `SmbRepository.probe(id)` → `NetworkStatus` (`Checking` / `Online(space)` / `Offline(error)`). `HomeViewModel` probes new servers and re-probes all on every tab visit; offline cards are disabled with a retry button. Capacity comes from `NetworkSession.space()` (SMB share info, SFTP `statvfs@openssh.com`; FTP and WebDAV report none).
+
+```mermaid
+flowchart LR
+    Tab[Home Network tab] -->|selectTab / retry| VM[HomeViewModel.probe]
+    VM --> Repo[SmbRepository.probe]
+    Repo -->|withSession| S[NetworkSession.space]
+    S -->|ok| On[Online space?]
+    Repo -->|NetworkException| Off[Offline error]
+    On --> Card[NetworkDriveCard enabled]
+    Off --> CardOff[NetworkDriveCard disabled + retry]
+```
+
 - Room schema v4 adds `network_servers` (`AutoMigration(3, 4)`); Room schema v5 adds `protocol` and `port` (`AutoMigration(4, 5)`).
+- **Remember password** (add sheet switch, default on). Off: `passwordCipher` stays null and `rememberPassword = false` (Room v6, `AutoMigration(5, 6)`). The password lives only in `SmbRepository.sessionPasswords` (process memory). Until it is entered, `open()` throws `NetworkError.PASSWORD_REQUIRED`; Home shows a locked card with **Unlock**, the Network screen asks on tap (`UnlockServerDialog` → `SmbRepository.unlock`), and Explorer shows the error as a snackbar.
 
 ---
 

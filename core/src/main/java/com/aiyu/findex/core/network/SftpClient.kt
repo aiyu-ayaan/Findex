@@ -56,6 +56,11 @@ internal class SftpSession private constructor(
         }
     }
 
+    // statvfs@openssh.com; servers without the extension throw, and probe() treats that as "unknown".
+    override fun space(): NetworkSpace = synchronized(channelLock) {
+        channel.statVFS(baseDir).let { NetworkSpace(it.fragmentSize * it.blocks, it.fragmentSize * it.availBlocks) }
+    }
+
     override fun stat(serverId: Long, inner: String): StorageItem? = synchronized(channelLock) {
         val cleanInner = inner.trim('/')
         if (cleanInner.isEmpty()) {

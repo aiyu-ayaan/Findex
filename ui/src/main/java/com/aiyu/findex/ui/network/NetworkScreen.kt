@@ -29,6 +29,9 @@ import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.ui.semantics.Role
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonGroupDefaults
@@ -44,6 +47,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.ToggleButton
@@ -70,6 +74,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+import com.aiyu.findex.core.network.NetworkError
 import com.aiyu.findex.core.network.NetworkProtocol
 import com.aiyu.findex.core.network.NetworkServer
 import com.aiyu.findex.ui.R
@@ -85,6 +92,7 @@ fun NetworkScreen(onBack: () -> Unit, onOpenServer: (Long) -> Unit, viewModel: N
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     var adding by rememberSaveable { mutableStateOf(false) }
     var removing by remember { mutableStateOf<NetworkServer?>(null) }
+    var unlocking by remember { mutableStateOf<NetworkServer?>(null) }
 
     LaunchedEffect(Unit) { viewModel.added.collect { adding = false; onOpenServer(it.id) } }
 
@@ -143,7 +151,7 @@ fun NetworkScreen(onBack: () -> Unit, onOpenServer: (Long) -> Unit, viewModel: N
                     NetworkServerCard(
                         server = server,
                         shape = groupedShape(index, list.size),
-                        onClick = { onOpenServer(server.id) },
+                        onClick = { if (viewModel.isLocked(server)) unlocking = server else onOpenServer(server.id) },
                         onRemove = { removing = server }
                     )
                 }
@@ -153,6 +161,14 @@ fun NetworkScreen(onBack: () -> Unit, onOpenServer: (Long) -> Unit, viewModel: N
 
     if (adding) {
         AddServerSheet(viewModel = viewModel, onDismiss = { adding = false })
+    }
+    unlocking?.let { server ->
+        UnlockServerDialog(
+            server = server,
+            onUnlock = { viewModel.unlock(server.id, it) },
+            onUnlocked = { unlocking = null; onOpenServer(server.id) },
+            onDismiss = { unlocking = null }
+        )
     }
     removing?.let { server ->
         AlertDialog(
@@ -258,6 +274,7 @@ private fun AddServerSheet(viewModel: NetworkViewModel, onDismiss: () -> Unit) {
     var password by remember { mutableStateOf("") }
     var domain by rememberSaveable { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
+    var rememberPassword by rememberSaveable { mutableStateOf(true) }
 
     // Editing any field clears the last connection error.
     LaunchedEffect(effectiveProtocol, host, portText, share, user, password, domain) {
@@ -278,7 +295,8 @@ private fun AddServerSheet(viewModel: NetworkViewModel, onDismiss: () -> Unit) {
                 domain = domain,
                 password = password,
                 protocol = effectiveProtocol,
-                port = parsedPort
+                port = parsedPort,
+                rememberPassword = rememberPassword
             )
         }
     }
@@ -401,9 +419,29 @@ private fun AddServerSheet(viewModel: NetworkViewModel, onDismiss: () -> Unit) {
                         )
                     }
                 },
-                supportingText = { Text(stringResource(R.string.network_password_note)) },
+                supportingText = {
+                    Text(stringResource(if (rememberPassword) R.string.network_password_note else R.string.network_password_not_saved_note))
+                },
                 modifier = Modifier.fillMaxWidth()
             )
+
+            if (user.isNotEmpty()) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = Dimens.minTouch)
+                        .toggleable(
+                            value = rememberPassword,
+                            enabled = !state.isConnecting,
+                            role = Role.Switch,
+                            onValueChange = { rememberPassword = it }
+                        )
+                ) {
+                    Text(stringResource(R.string.network_remember_password), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+                    Switch(checked = rememberPassword, onCheckedChange = null, enabled = !state.isConnecting)
+                }
+            }
 
             if (effectiveProtocol == NetworkProtocol.SMB) {
                 Field(
@@ -469,5 +507,68 @@ private fun Field(
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction, autoCorrectEnabled = false),
         keyboardActions = KeyboardActions(onDone = { onDone() }),
         modifier = Modifier.fillMaxWidth()
+    )
+}
+
+/**
+ * Asks for the password of a server saved without "Remember password".
+ * [onUnlock] connects and returns the error, or null once connected.
+ */
+@Composable
+fun UnlockServerDialog(
+    server: NetworkServer,
+    onUnlock: suspend (String) -> NetworkError?,
+    onUnlocked: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    // Not saveable: a password must not end up in the saved-instance-state bundle.
+    var password by remember { mutableStateOf("") }
+    var showPassword by remember { mutableStateOf(false) }
+    var busy by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<NetworkError?>(null) }
+    val scope = rememberCoroutineScope()
+    val submit = {
+        if (!busy) {
+            busy = true
+            scope.launch {
+                error = onUnlock(password)
+                busy = false
+                if (error == null) onUnlocked()
+            }
+        }
+    }
+    AlertDialog(
+        onDismissRequest = { if (!busy) onDismiss() },
+        icon = { Icon(Icons.Rounded.Lock, null) },
+        title = { Text(stringResource(R.string.network_unlock_title, server.label)) },
+        text = {
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it; error = null },
+                singleLine = true,
+                enabled = !busy,
+                label = { Text(stringResource(R.string.network_field_password)) },
+                visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { submit() }),
+                trailingIcon = {
+                    IconButton(onClick = { showPassword = !showPassword }) {
+                        Icon(
+                            if (showPassword) Icons.Rounded.VisibilityOff else Icons.Rounded.Visibility,
+                            contentDescription = stringResource(if (showPassword) R.string.cd_hide_password else R.string.cd_show_password)
+                        )
+                    }
+                },
+                isError = error != null,
+                supportingText = { Text(stringResource(error?.messageRes() ?: R.string.network_unlock_body, server.username)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = { submit() }, enabled = !busy) {
+                Text(stringResource(if (busy) R.string.network_connecting else R.string.network_unlock))
+            }
+        },
+        dismissButton = { TextButton(onClick = onDismiss, enabled = !busy) { Text(stringResource(R.string.cancel)) } }
     )
 }

@@ -65,7 +65,8 @@ data class NetworkServer(
     val username: String,
     val domain: String,
     val protocol: NetworkProtocol = NetworkProtocol.SMB,
-    val port: Int = 0
+    val port: Int = 0,
+    val rememberPassword: Boolean = true
 ) {
     val effectivePort: Int get() = if (port > 0) port else protocol.defaultPort
 
@@ -91,7 +92,26 @@ data class NetworkServer(
     val rootPath: String get() = SmbPath.of(id, "")
 }
 
-enum class NetworkError { HOST_UNREACHABLE, AUTH_FAILED, SHARE_NOT_FOUND, ACCESS_DENIED, UNKNOWN }
+/** Capacity of a share, in bytes. */
+data class NetworkSpace(val totalBytes: Long, val freeBytes: Long) {
+    val usedBytes: Long get() = (totalBytes - freeBytes).coerceAtLeast(0)
+    val usedFraction: Float get() = if (totalBytes > 0) usedBytes.toFloat() / totalBytes else 0f
+}
+
+/** Reachability of a saved server, as probed by [SmbRepository.probe]. */
+sealed interface NetworkStatus {
+    data object Checking : NetworkStatus
+    /** [space] is null when the protocol cannot report capacity (FTP, most WebDAV). */
+    data class Online(val space: NetworkSpace?) : NetworkStatus
+    data class Offline(val error: NetworkError) : NetworkStatus
+}
+
+enum class NetworkError {
+    HOST_UNREACHABLE, AUTH_FAILED, SHARE_NOT_FOUND, ACCESS_DENIED,
+    /** The server doesn't keep its password and none was entered this app run; see [SmbRepository.unlock]. */
+    PASSWORD_REQUIRED,
+    UNKNOWN
+}
 
 class NetworkException(val error: NetworkError, cause: Throwable? = null) : Exception(error.name, cause)
 
@@ -213,6 +233,8 @@ internal interface NetworkSession : Closeable {
     val isConnected: Boolean
     fun list(serverId: Long, inner: String): List<StorageItem>
     fun stat(serverId: Long, inner: String): StorageItem?
+    /** Share capacity, or null when the server cannot report it. */
+    fun space(): NetworkSpace? = null
     fun mkdir(inner: String)
     fun delete(inner: String, isDirectory: Boolean)
     fun rename(inner: String, newInner: String)
@@ -249,6 +271,8 @@ class SmbRepository @Inject constructor(
             .build()
     )
     private val sessions = HashMap<Long, NetworkSession>()
+    // Passwords of servers saved without "Remember password"; process memory only, never written to disk.
+    private val sessionPasswords = java.util.concurrent.ConcurrentHashMap<Long, String>()
     private val lock = Mutex()
 
     val servers: Flow<List<NetworkServer>> = dao.observeAll().map { list -> list.map { it.toModel() } }
@@ -262,7 +286,8 @@ class SmbRepository @Inject constructor(
         domain: String,
         password: String,
         protocol: NetworkProtocol = NetworkProtocol.SMB,
-        port: Int = 0
+        port: Int = 0,
+        rememberPassword: Boolean = true
     ): NetworkServer = withContext(Dispatchers.IO) {
         val norm = NetworkEndpoint.normalize(host, share, protocol, port)
         if (norm.host.isEmpty()) throw NetworkException(NetworkError.HOST_UNREACHABLE)
@@ -275,22 +300,51 @@ class SmbRepository @Inject constructor(
             share = norm.share,
             username = username.trim(),
             domain = if (norm.protocol == NetworkProtocol.SMB) domain.trim() else "",
-            passwordCipher = password.takeIf { it.isNotEmpty() }?.let(cipher::encrypt),
+            passwordCipher = password.takeIf { rememberPassword && it.isNotEmpty() }?.let(cipher::encrypt),
             protocol = norm.protocol.name,
-            port = norm.port
+            port = norm.port,
+            rememberPassword = rememberPassword
         )
-        open(entity).close()
+        open(entity, password).close()
         val id = dao.upsert(entity)
+        if (!rememberPassword) sessionPasswords[id] = password
         entity.copy(id = id).toModel()
     }
 
     suspend fun delete(id: Long) {
-        lock.withLock { sessions.remove(id)?.runCatching { close() } }
+        lock.withLock {
+            sessions.remove(id)?.runCatching { close() }
+            sessionPasswords.remove(id)
+        }
         dao.delete(id)
         File(cacheRoot, id.toString()).deleteRecursively()
     }
 
     suspend fun server(id: Long): NetworkServer? = dao.byId(id)?.toModel()
+
+    /** True when [server] needs its password typed before it can connect. */
+    fun isLocked(server: NetworkServer): Boolean =
+        !server.rememberPassword && server.username.isNotEmpty() && !sessionPasswords.containsKey(server.id)
+
+    /** Connects [id] with [password] and keeps it in memory until the app process ends. Throws [NetworkException]. */
+    suspend fun unlock(id: Long, password: String): Unit = withContext(Dispatchers.IO) {
+        lock.withLock {
+            val entity = dao.byId(id) ?: throw NetworkException(NetworkError.UNKNOWN)
+            val session = open(entity, password)
+            sessions.remove(id)?.runCatching { close() }
+            sessions[id] = session
+            sessionPasswords[id] = password
+        }
+    }
+
+    /** Connects (or reuses the live session) to tell whether [id] is reachable, with its capacity when known. */
+    suspend fun probe(id: Long): NetworkStatus = withContext(Dispatchers.IO) {
+        try {
+            withSession(id) { NetworkStatus.Online(runCatching { it.space() }.getOrNull()) }
+        } catch (e: Exception) {
+            NetworkStatus.Offline((e as? NetworkException)?.error ?: NetworkError.UNKNOWN)
+        }
+    }
 
     /** Children of [inner] (path inside the server), folders first. */
     suspend fun list(serverId: Long, inner: String): List<StorageItem> = withContext(Dispatchers.IO) {
@@ -402,8 +456,13 @@ class SmbRepository @Inject constructor(
         }
     }
 
-    private fun open(entity: NetworkServerEntity): NetworkSession = try {
-        val password = entity.passwordCipher?.let { cipher.decrypt(it) ?: throw NetworkException(NetworkError.AUTH_FAILED) }.orEmpty()
+    private fun storedPassword(entity: NetworkServerEntity): String = when {
+        entity.rememberPassword -> entity.passwordCipher?.let { cipher.decrypt(it) ?: throw NetworkException(NetworkError.AUTH_FAILED) }.orEmpty()
+        entity.username.isEmpty() -> ""
+        else -> sessionPasswords[entity.id] ?: throw NetworkException(NetworkError.PASSWORD_REQUIRED)
+    }
+
+    private fun open(entity: NetworkServerEntity, password: String = storedPassword(entity)): NetworkSession = try {
         val protocol = NetworkProtocol.fromName(entity.protocol)
         val effectivePort = if (entity.port > 0) entity.port else protocol.defaultPort
         when (protocol) {
@@ -455,7 +514,8 @@ class SmbRepository @Inject constructor(
         username = username,
         domain = domain,
         protocol = NetworkProtocol.fromName(protocol),
-        port = port
+        port = port,
+        rememberPassword = rememberPassword
     )
 }
 
@@ -465,6 +525,8 @@ private class SmbSession(
 ) : NetworkSession {
 
     override val isConnected: Boolean get() = share.isConnected
+
+    override fun space(): NetworkSpace = share.shareInformation.let { NetworkSpace(it.totalSpace, it.freeSpace) }
 
     private fun resolveSmbPath(inner: String): String {
         val cleanInner = inner.trim('/')

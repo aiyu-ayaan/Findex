@@ -59,6 +59,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -79,6 +80,8 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.rounded.Dns
+import androidx.compose.material.icons.rounded.CloudOff
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material3.ToggleButtonDefaults
 import androidx.compose.material3.ToggleButton
@@ -118,7 +121,14 @@ import com.aiyu.findex.ui.navigation.CategoryRoute
 import com.aiyu.findex.ui.navigation.CleanerRoute
 import com.aiyu.findex.ui.navigation.ExplorerRoute
 import com.aiyu.findex.ui.navigation.DuplicatesRoute
-import com.aiyu.findex.ui.network.NetworkServerCard
+import com.aiyu.findex.ui.network.labelRes
+import com.aiyu.findex.ui.network.messageRes
+import com.aiyu.findex.ui.navigation.NetworkRoute
+import com.aiyu.findex.core.network.NetworkServer
+import com.aiyu.findex.core.network.NetworkStatus
+import com.aiyu.findex.core.network.NetworkError
+import com.aiyu.findex.ui.network.UnlockServerDialog
+import androidx.compose.material.icons.rounded.Lock
 import com.aiyu.findex.ui.navigation.SearchRoute
 import com.aiyu.findex.ui.navigation.SettingsRoute
 import com.aiyu.findex.ui.navigation.WhatsAppRoute
@@ -141,6 +151,7 @@ fun HomeScreen(
     val context = LocalContext.current
     val stagger = rememberStaggerState()
     var recentViewerPath by remember { androidx.compose.runtime.mutableStateOf<String?>(null) }
+    var unlocking by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
 
     Scaffold(
         modifier = modifier
@@ -224,12 +235,20 @@ fun HomeScreen(
             }
 
             if (uiState.selectedTabIndex == 1 && uiState.hasNetworkDrives) {
-                itemsIndexed(uiState.networkDrives, key = { _, s -> "smb${s.id}" }) { index, server ->
-                    NetworkServerCard(
+                items(uiState.networkDrives, key = { "smb${it.id}" }) { server ->
+                    NetworkDriveCard(
                         server = server,
-                        shape = groupedShape(index, uiState.networkDrives.size),
-                        onClick = { onNavigate(ExplorerRoute(server.rootPath)) }
+                        status = uiState.networkStatus[server.id] ?: NetworkStatus.Checking,
+                        onClick = { onNavigate(ExplorerRoute(server.rootPath)) },
+                        onRetry = { viewModel.probe(server.id) },
+                        onUnlock = { unlocking = server }
                     )
+                }
+                item(key = "addServer") {
+                    OutlinedButton(onClick = { onNavigate(NetworkRoute) }, modifier = Modifier.fillMaxWidth().heightIn(min = Dimens.minTouch)) {
+                        Icon(Icons.Rounded.Add, contentDescription = null, modifier = Modifier.padding(end = Dimens.sm))
+                        Text(stringResource(R.string.network_add))
+                    }
                 }
                 return@LazyColumn
             }
@@ -313,6 +332,14 @@ fun HomeScreen(
         }
     }
 
+    unlocking?.let { server ->
+        UnlockServerDialog(
+            server = server,
+            onUnlock = { viewModel.unlock(server.id, it) },
+            onUnlocked = { unlocking = null },
+            onDismiss = { unlocking = null }
+        )
+    }
     recentViewerPath?.let { initialPath ->
         val recentStorageItems = remember(uiState.recents) {
             uiState.recents.map { r ->
@@ -449,6 +476,79 @@ private fun DriveCard(drive: StorageDrive, onClick: () -> Unit) {
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+            }
+        }
+    }
+}
+
+/** Compact sibling of [DriveCard] for a saved server; disabled while the server can't be reached. */
+@Composable
+private fun NetworkDriveCard(server: NetworkServer, status: NetworkStatus, onClick: () -> Unit, onRetry: () -> Unit, onUnlock: () -> Unit) {
+    val locked = (status as? NetworkStatus.Offline)?.error == NetworkError.PASSWORD_REQUIRED
+    val offline = status is NetworkStatus.Offline && !locked
+    Card(
+        onClick = onClick,
+        enabled = status is NetworkStatus.Online,
+        shape = MaterialTheme.shapes.extraLarge,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(Dimens.lg)) {
+            ShapeIcon(
+                icon = when {
+                    locked -> Icons.Rounded.Lock
+                    offline -> Icons.Rounded.CloudOff
+                    else -> Icons.Rounded.Dns
+                },
+                shape = MaterialShapes.Pill,
+                container = if (offline) MaterialTheme.colorScheme.surfaceContainerHighest else MaterialTheme.colorScheme.secondaryContainer,
+                content = if (offline) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSecondaryContainer
+            )
+            Spacer(Modifier.width(Dimens.lg))
+            Column(Modifier.weight(1f)) {
+                Text(server.label, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(
+                    stringResource(server.protocol.labelRes()) + " · " + server.username.ifEmpty { stringResource(R.string.network_guest) } + " · " + server.displayAddress,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.MiddleEllipsis
+                )
+                Spacer(Modifier.height(Dimens.sm))
+                when (status) {
+                    NetworkStatus.Checking -> {
+                        LinearWavyProgressIndicator(modifier = Modifier.fillMaxWidth())
+                        Spacer(Modifier.height(Dimens.xs))
+                        Text(stringResource(R.string.network_connecting), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    is NetworkStatus.Online -> status.space?.let { space ->
+                        LinearWavyProgressIndicator(progress = { space.usedFraction }, modifier = Modifier.fillMaxWidth())
+                        Spacer(Modifier.height(Dimens.xs))
+                        Text(
+                            stringResource(R.string.storage_used_of, formatSize(space.usedBytes), formatSize(space.totalBytes)) +
+                                " · " + stringResource(R.string.storage_free_space, formatSize(space.freeBytes)),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    } ?: Text(stringResource(R.string.network_status_connected), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                    is NetworkStatus.Offline -> if (locked) Text(
+                        stringResource(R.string.network_error_password_required),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    ) else Text(
+                        stringResource(R.string.network_status_offline, stringResource(status.error.messageRes())),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+            if (offline) {
+                IconButton(onClick = onRetry) { Icon(Icons.Rounded.Refresh, contentDescription = stringResource(R.string.network_retry)) }
+            }
+            if (locked) {
+                FilledTonalButton(onClick = onUnlock) { Text(stringResource(R.string.network_unlock)) }
             }
         }
     }
