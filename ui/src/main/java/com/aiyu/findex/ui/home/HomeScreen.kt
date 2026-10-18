@@ -69,7 +69,9 @@ import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
@@ -138,6 +140,7 @@ fun HomeScreen(
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val context = LocalContext.current
     val stagger = rememberStaggerState()
+    var recentViewerPath by remember { androidx.compose.runtime.mutableStateOf<String?>(null) }
 
     Scaffold(
         modifier = modifier
@@ -284,18 +287,23 @@ fun HomeScreen(
                 item(key = "recents") {
                     Column(verticalArrangement = Arrangement.spacedBy(Dimens.xxs)) {
                         uiState.recents.forEachIndexed { index, recent ->
+                            val ext = recent.name.substringAfterLast('.', "")
                             ListItem(
                                 headlineContent = { Text(recent.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
                                 supportingContent = { Text(formatSize(recent.size)) },
                                 leadingContent = {
-                                    FileThumbnail(recent.path, isDirectory = false, extension = recent.name.substringAfterLast('.', ""))
+                                    FileThumbnail(recent.path, isDirectory = false, extension = ext)
                                 },
                                 colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 modifier = Modifier
                                     .clip(groupedShape(index, uiState.recents.size))
                                     .clickable {
                                         viewModel.onRecentOpened(recent.path)
-                                        context.openFile(recent.path)
+                                        if (com.aiyu.findex.ui.components.isImageExtension(ext)) {
+                                            recentViewerPath = recent.path
+                                        } else {
+                                            context.openFile(recent.path, recent.size)
+                                        }
                                     }
                             )
                         }
@@ -303,6 +311,25 @@ fun HomeScreen(
                 }
             }
         }
+    }
+
+    recentViewerPath?.let { initialPath ->
+        val recentStorageItems = remember(uiState.recents) {
+            uiState.recents.map { r ->
+                com.aiyu.findex.core.model.StorageItem(
+                    name = r.name,
+                    path = r.path,
+                    isDirectory = false,
+                    size = r.size,
+                    lastModified = r.openedAt
+                )
+            }
+        }
+        com.aiyu.findex.ui.explorer.MediaViewerDialog(
+            items = recentStorageItems,
+            initialPath = initialPath,
+            onDismiss = { recentViewerPath = null }
+        )
     }
 }
 

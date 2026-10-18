@@ -11,7 +11,8 @@ import com.aiyu.findex.core.network.SmbPath
 import com.aiyu.findex.ui.R
 import java.io.File
 
-private fun Context.uriFor(path: String, size: Long = -1L): Uri {
+/** Returns a content:// URI for a local file (via FileProvider) or SMB file (via SmbContentProvider). */
+fun Context.contentUriFor(path: String, size: Long = -1L): Uri {
     SmbPath.parse(path)?.let { (serverId, inner) ->
         return SmbContentProvider.uriFor(this, serverId, inner, size)
     }
@@ -21,7 +22,7 @@ private fun Context.uriFor(path: String, size: Long = -1L): Uri {
 /** Opens a local or network file in the default app (streaming over SMB when remote). @return false when no app can handle it. */
 fun Context.openFile(path: String, size: Long = -1L): Boolean {
     val intent = Intent(Intent.ACTION_VIEW)
-        .setDataAndType(uriFor(path, size), SmbContentProvider.mimeTypeForName(path))
+        .setDataAndType(contentUriFor(path, size), SmbContentProvider.mimeTypeForName(path))
         .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
     return try {
         startActivity(intent)
@@ -32,10 +33,26 @@ fun Context.openFile(path: String, size: Long = -1L): Boolean {
     }
 }
 
+/** Opens the system app chooser so the user can pick another app to open a local or network file. */
+fun Context.openFileWithChooser(path: String, size: Long = -1L): Boolean {
+    val intent = Intent(Intent.ACTION_VIEW)
+        .setDataAndType(contentUriFor(path, size), SmbContentProvider.mimeTypeForName(path))
+        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    val chooser = Intent.createChooser(intent, getString(R.string.action_open_in_another_app))
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    return try {
+        startActivity(chooser)
+        true
+    } catch (e: ActivityNotFoundException) {
+        Toast.makeText(this, R.string.error_no_app, Toast.LENGTH_SHORT).show()
+        false
+    }
+}
+
 fun Context.shareFiles(paths: List<String>) {
     val valid = paths.filter { SmbPath.parse(it) != null || File(it).isFile }
     if (valid.isEmpty()) return
-    val uris = ArrayList(valid.map { uriFor(it) })
+    val uris = ArrayList(valid.map { contentUriFor(it) })
     val intent = if (uris.size == 1) {
         Intent(Intent.ACTION_SEND)
             .putExtra(Intent.EXTRA_STREAM, uris.first())

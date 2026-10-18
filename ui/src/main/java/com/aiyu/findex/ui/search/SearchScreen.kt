@@ -46,17 +46,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.components.ShapeIcon
+import com.aiyu.findex.ui.components.isImageExtension
 import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.explorer.DeleteDialog
 import com.aiyu.findex.ui.explorer.FileList
 import com.aiyu.findex.ui.explorer.ItemAction
 import com.aiyu.findex.ui.explorer.ItemActionSheet
+import com.aiyu.findex.ui.explorer.MediaViewerDialog
 import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.util.openFile
+import com.aiyu.findex.ui.util.openFileWithChooser
 import com.aiyu.findex.ui.util.shareFiles
 import java.io.File
 
-/** Name search across every indexed volume. Folders open in the Explorer; files open externally. */
+/** Name search across every indexed volume. Folders open in the Explorer; images open in the built-in viewer; other files open externally. */
 @Composable
 fun SearchScreen(
     onBack: () -> Unit,
@@ -70,16 +73,23 @@ fun SearchScreen(
     val focusRequester = remember { FocusRequester() }
     var actionsFor by remember { mutableStateOf<StorageItem?>(null) }
     var deletePaths by remember { mutableStateOf<List<String>?>(null) }
+    var viewerInitialPath by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
 
     fun open(item: StorageItem) {
         keyboard?.hide()
-        if (item.isDirectory) onOpenFolder(item.path)
-        else if (item.isArchive) onOpenArchive(item.path)
-        else {
-            viewModel.onOpened(item.path)
-            context.openFile(item.path)
+        when {
+            item.isDirectory -> onOpenFolder(item.path)
+            item.isArchive -> onOpenArchive(item.path)
+            isImageExtension(item.extension) -> {
+                viewModel.onOpened(item.path)
+                viewerInitialPath = item.path
+            }
+            else -> {
+                viewModel.onOpened(item.path)
+                context.openFile(item.path, item.size)
+            }
         }
     }
 
@@ -149,18 +159,30 @@ fun SearchScreen(
     actionsFor?.let { item ->
         ItemActionSheet(
             item = item,
-            allowed = setOf(ItemAction.OPEN, ItemAction.SHARE, ItemAction.SHOW_IN_FOLDER, ItemAction.DELETE),
+            allowed = setOf(ItemAction.OPEN, ItemAction.OPEN_WITH, ItemAction.SHARE, ItemAction.SHOW_IN_FOLDER, ItemAction.DELETE),
             onDismiss = { actionsFor = null },
             onAction = { action ->
                 actionsFor = null
                 when (action) {
                     ItemAction.OPEN -> open(item)
+                    ItemAction.OPEN_WITH -> {
+                        viewModel.onOpened(item.path)
+                        context.openFileWithChooser(item.path, item.size)
+                    }
                     ItemAction.SHARE -> context.shareFiles(listOf(item.path))
                     ItemAction.SHOW_IN_FOLDER -> File(item.path).parent?.let(onOpenFolder)
                     ItemAction.DELETE -> deletePaths = listOf(item.path)
                     else -> Unit
                 }
             }
+        )
+    }
+    viewerInitialPath?.let { initialPath ->
+        MediaViewerDialog(
+            items = state.results,
+            initialPath = initialPath,
+            onDismiss = { viewerInitialPath = null },
+            onDelete = { target -> deletePaths = listOf(target.path) }
         )
     }
     deletePaths?.let { paths ->

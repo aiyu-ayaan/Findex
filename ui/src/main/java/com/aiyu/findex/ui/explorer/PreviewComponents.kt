@@ -3,18 +3,27 @@ package com.aiyu.findex.ui.explorer
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.media.MediaPlayer
-import androidx.compose.foundation.shape.CircleShape
+import android.widget.VideoView
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculatePan
+import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -22,21 +31,34 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.InsertDriveFile
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
+import androidx.compose.material.icons.automirrored.rounded.RotateRight
 import androidx.compose.material.icons.rounded.Android
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.ContentCopy
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.FolderZip
 import androidx.compose.material.icons.rounded.Fullscreen
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.PlayArrow
@@ -45,15 +67,19 @@ import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Unarchive
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -69,6 +95,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -76,7 +103,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -84,8 +113,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
@@ -95,23 +126,33 @@ import com.aiyu.findex.core.network.SmbPath
 import com.aiyu.findex.ui.LocalSnackbarHostState
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.components.CategoryShape
+import com.aiyu.findex.ui.components.FileThumbnail
 import com.aiyu.findex.ui.components.ShapeIcon
 import com.aiyu.findex.ui.components.Thumb
+import com.aiyu.findex.ui.components.isMediaExtension
+import com.aiyu.findex.ui.components.isVideoExtension
 import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.theme.tone
+import com.aiyu.findex.ui.util.contentUriFor
+import com.aiyu.findex.ui.util.formatDate
 import com.aiyu.findex.ui.util.formatSize
+import com.aiyu.findex.ui.util.openFile
+import com.aiyu.findex.ui.util.openFileWithChooser
+import com.aiyu.findex.ui.util.shareFiles
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Locale
 
-// region Image Preview & Fullscreen Lightbox
+// region Image Preview & Built-in Media Viewer (Images + Videos + Bottom Filmstrip)
 
 @Composable
 fun ImagePreviewCard(
     item: StorageItem,
     onOpenExternal: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    galleryItems: List<StorageItem> = emptyList(),
+    onDelete: ((StorageItem) -> Unit)? = null
 ) {
     val isRemote = remember(item.path) { SmbPath.parse(item.path) != null }
     val file = remember(item.path) { File(item.path) }
@@ -189,7 +230,7 @@ fun ImagePreviewCard(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(Dimens.sm)
-        ) {
+            ) {
             Text(
                 text = formatSize(item.size),
                 style = MaterialTheme.typography.labelSmall,
@@ -199,11 +240,11 @@ fun ImagePreviewCard(
     }
 
     if (showLightbox) {
-        ImageLightboxDialog(
-            item = item,
-            meta = meta,
+        MediaViewerDialog(
+            items = galleryItems.ifEmpty { listOf(item) },
+            initialPath = item.path,
             onDismiss = { showLightbox = false },
-            onOpenExternal = onOpenExternal
+            onDelete = onDelete
         )
     }
 }
@@ -215,119 +256,761 @@ fun ImageLightboxDialog(
     onDismiss: () -> Unit,
     onOpenExternal: () -> Unit
 ) {
-    val model = remember(item.path, item.lastModified) {
-        if (SmbPath.parse(item.path) != null) Thumb(item.path, item.lastModified, isVideo = false) else File(item.path)
+    MediaViewerDialog(
+        items = listOf(item),
+        initialPath = item.path,
+        onDismiss = onDismiss
+    )
+}
+
+/**
+ * Full-screen Material 3 Expressive media gallery viewer supporting both images and videos:
+ * - Horizontal swipe paging across all images and videos in the current folder/list
+ * - Pinch-to-zoom, double-tap zoom, pan, and 90° rotation for images (without blocking pager swipe when unzoomed)
+ * - Inline video playback (local & SMB stream) or one-tap external video player launch
+ * - Bottom filmstrip bar showing only small thumbnail previews (no filenames), with active highlight and tap-to-jump
+ * - Top & bottom options including "Open in another app", Share, Rotate, Details, and Delete
+ */
+@Composable
+fun MediaViewerDialog(
+    items: List<StorageItem>,
+    initialPath: String,
+    onDismiss: () -> Unit,
+    onDelete: ((StorageItem) -> Unit)? = null
+) {
+    val mediaItems = remember(items, initialPath) {
+        val filtered = items.filter { !it.isDirectory && isMediaExtension(it.extension) }
+        if (filtered.isNotEmpty()) filtered else items.filter { !it.isDirectory }
     }
-    var scale by remember { mutableFloatStateOf(1f) }
-    var offset by remember { mutableStateOf(Offset.Zero) }
+    if (mediaItems.isEmpty()) {
+        LaunchedEffect(Unit) { onDismiss() }
+        return
+    }
+
+    val initialIndex = remember(mediaItems, initialPath) {
+        mediaItems.indexOfFirst { it.path == initialPath }.coerceAtLeast(0)
+    }
+    val pagerState = rememberPagerState(initialPage = initialIndex) { mediaItems.size }
+    val currentIndex = pagerState.currentPage.coerceIn(0, mediaItems.lastIndex)
+    val currentItem = mediaItems[currentIndex]
+    val isVideo = isVideoExtension(currentItem.extension)
+    val isRemote = remember(currentItem.path) { SmbPath.parse(currentItem.path) != null }
+
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var showChrome by remember { mutableStateOf(true) }
+    var showDetailsSheet by remember { mutableStateOf(false) }
+    var overflowMenuOpen by remember { mutableStateOf(false) }
+
+    // Per-page rotation & zoom reset trigger
+    var pageRotation by remember(currentItem.path) { mutableFloatStateOf(0f) }
+    var resetZoomToken by remember(currentItem.path) { mutableIntStateOf(0) }
+    var isCurrentZoomed by remember(currentItem.path) { mutableStateOf(false) }
+
+    val imageMeta by produceState<ImageMeta?>(null, currentItem.path) {
+        if (!isRemote && !isVideo) value = FileInspector.inspectImage(File(currentItem.path))
+    }
+
+    val effectsSpec = MaterialTheme.motionScheme.defaultEffectsSpec<Float>()
+    val spatialSpec = MaterialTheme.motionScheme.defaultSpatialSpec<androidx.compose.ui.unit.IntOffset>()
 
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            decorFitsSystemWindows = false
+        )
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.95f))
+                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.97f))
         ) {
-            // Interactive Zoomable Image
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onDoubleTap = {
-                                if (scale > 1.2f) {
-                                    scale = 1f
-                                    offset = Offset.Zero
-                                } else {
-                                    scale = 2.5f
+            // Main Pager: swipe through images and videos
+            HorizontalPager(
+                state = pagerState,
+                key = { page -> mediaItems[page].path },
+                beyondViewportPageCount = 1,
+                modifier = Modifier.fillMaxSize()
+            ) { page ->
+                val pageItem = mediaItems[page]
+                val pageIsVideo = isVideoExtension(pageItem.extension)
+                val isCurrentPage = page == pagerState.currentPage
+                if (pageIsVideo) {
+                    MediaVideoSlide(
+                        item = pageItem,
+                        isCurrentPage = isCurrentPage,
+                        onToggleChrome = { showChrome = !showChrome },
+                        onOpenExternal = { context.openFile(pageItem.path, pageItem.size) },
+                        onOpenInAnotherApp = { context.openFileWithChooser(pageItem.path, pageItem.size) }
+                    )
+                } else {
+                    MediaImageSlide(
+                        item = pageItem,
+                        rotationDegrees = if (isCurrentPage) pageRotation else 0f,
+                        resetToken = if (isCurrentPage) resetZoomToken else 0,
+                        onZoomChanged = { zoomed -> if (isCurrentPage) isCurrentZoomed = zoomed },
+                        onToggleChrome = { showChrome = !showChrome }
+                    )
+                }
+            }
+
+            // Top Chrome Bar
+            AnimatedVisibility(
+                visible = showChrome,
+                enter = fadeIn(effectsSpec) + slideInVertically(spatialSpec) { -it / 2 },
+                exit = fadeOut(effectsSpec) + slideOutVertically(spatialSpec) { -it / 2 },
+                modifier = Modifier.align(Alignment.TopCenter)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(
+                                    MaterialTheme.colorScheme.scrim.copy(alpha = 0.82f),
+                                    Color.Transparent
+                                )
+                            )
+                        )
+                        .statusBarsPadding()
+                        .padding(horizontal = Dimens.sm, vertical = Dimens.sm)
+                ) {
+                    IconButton(onClick = onDismiss) {
+                        Icon(
+                            Icons.AutoMirrored.Rounded.ArrowBack,
+                            contentDescription = stringResource(R.string.cd_back),
+                            tint = MaterialTheme.colorScheme.inverseOnSurface
+                        )
+                    }
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = Dimens.xs)
+                    ) {
+                        Text(
+                            text = currentItem.name,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.inverseOnSurface,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        val posText = stringResource(R.string.viewer_item_position, currentIndex + 1, mediaItems.size)
+                        val dimText = imageMeta?.let { " · ${it.width} × ${it.height}" }.orEmpty()
+                        Text(
+                            text = "$posText$dimText · ${formatSize(currentItem.size)}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.78f),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+
+                    if (!isVideo && (isCurrentZoomed || pageRotation != 0f)) {
+                        IconButton(
+                            onClick = {
+                                pageRotation = 0f
+                                resetZoomToken++
+                            }
+                        ) {
+                            Icon(
+                                Icons.Rounded.Refresh,
+                                contentDescription = stringResource(R.string.action_reset_zoom),
+                                tint = MaterialTheme.colorScheme.inverseOnSurface
+                            )
+                        }
+                    }
+
+                    if (!isVideo) {
+                        IconButton(onClick = { pageRotation = (pageRotation + 90f) % 360f }) {
+                            Icon(
+                                Icons.AutoMirrored.Rounded.RotateRight,
+                                contentDescription = stringResource(R.string.action_rotate),
+                                tint = MaterialTheme.colorScheme.inverseOnSurface
+                            )
+                        }
+                    }
+
+                    IconButton(
+                        onClick = { context.openFileWithChooser(currentItem.path, currentItem.size) }
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Rounded.OpenInNew,
+                            contentDescription = stringResource(R.string.action_open_in_another_app),
+                            tint = MaterialTheme.colorScheme.inverseOnSurface
+                        )
+                    }
+
+                    Box {
+                        IconButton(onClick = { overflowMenuOpen = true }) {
+                            Icon(
+                                Icons.Rounded.MoreVert,
+                                contentDescription = stringResource(R.string.cd_more_options),
+                                tint = MaterialTheme.colorScheme.inverseOnSurface
+                            )
+                        }
+                        DropdownMenu(
+                            expanded = overflowMenuOpen,
+                            onDismissRequest = { overflowMenuOpen = false },
+                            shape = MaterialTheme.shapes.large
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.action_open_in_another_app)) },
+                                leadingIcon = { Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = null) },
+                                onClick = {
+                                    overflowMenuOpen = false
+                                    context.openFileWithChooser(currentItem.path, currentItem.size)
                                 }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.action_share)) },
+                                leadingIcon = { Icon(Icons.Rounded.Share, contentDescription = null) },
+                                onClick = {
+                                    overflowMenuOpen = false
+                                    context.shareFiles(listOf(currentItem.path))
+                                }
+                            )
+                            if (!isVideo) {
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.action_rotate)) },
+                                    leadingIcon = { Icon(Icons.AutoMirrored.Rounded.RotateRight, contentDescription = null) },
+                                    onClick = {
+                                        overflowMenuOpen = false
+                                        pageRotation = (pageRotation + 90f) % 360f
+                                    }
+                                )
+                            }
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.action_details)) },
+                                leadingIcon = { Icon(Icons.Rounded.Info, contentDescription = null) },
+                                onClick = {
+                                    overflowMenuOpen = false
+                                    showDetailsSheet = true
+                                }
+                            )
+                            if (onDelete != null) {
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            stringResource(R.string.action_delete),
+                                            color = MaterialTheme.colorScheme.error
+                                        )
+                                    },
+                                    leadingIcon = {
+                                        Icon(
+                                            Icons.Rounded.Delete,
+                                            contentDescription = null,
+                                            tint = MaterialTheme.colorScheme.error
+                                        )
+                                    },
+                                    onClick = {
+                                        overflowMenuOpen = false
+                                        onDelete(currentItem)
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Bottom Action Pill + Thumbnail Filmstrip (image-only thumbnails, no names)
+            AnimatedVisibility(
+                visible = showChrome,
+                enter = fadeIn(effectsSpec) + slideInVertically(spatialSpec) { it / 2 },
+                exit = fadeOut(effectsSpec) + slideOutVertically(spatialSpec) { it / 2 },
+                modifier = Modifier.align(Alignment.BottomCenter)
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(
+                                    Color.Transparent,
+                                    MaterialTheme.colorScheme.scrim.copy(alpha = 0.88f)
+                                )
+                            )
+                        )
+                        .navigationBarsPadding()
+                        .padding(top = Dimens.md, bottom = Dimens.md)
+                ) {
+                    // Quick Action Pill Bar
+                    Surface(
+                        shape = MaterialTheme.shapes.extraLarge,
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.92f),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+                        modifier = Modifier.padding(horizontal = Dimens.lg)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(Dimens.xs),
+                            modifier = Modifier.padding(horizontal = Dimens.sm, vertical = Dimens.xxs)
+                        ) {
+                            FilledTonalButton(
+                                onClick = { context.openFileWithChooser(currentItem.path, currentItem.size) },
+                                contentPadding = PaddingValues(horizontal = Dimens.md, vertical = Dimens.xs)
+                            ) {
+                                Icon(
+                                    Icons.AutoMirrored.Rounded.OpenInNew,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(Modifier.width(Dimens.xs))
+                                Text(
+                                    text = stringResource(R.string.action_open_in_another_app),
+                                    style = MaterialTheme.typography.labelLarge
+                                )
+                            }
+
+                            IconButton(onClick = { context.shareFiles(listOf(currentItem.path)) }) {
+                                Icon(
+                                    Icons.Rounded.Share,
+                                    contentDescription = stringResource(R.string.action_share)
+                                )
+                            }
+
+                            IconButton(onClick = { showDetailsSheet = true }) {
+                                Icon(
+                                    Icons.Rounded.Info,
+                                    contentDescription = stringResource(R.string.action_details)
+                                )
+                            }
+
+                            if (onDelete != null) {
+                                IconButton(onClick = { onDelete(currentItem) }) {
+                                    Icon(
+                                        Icons.Rounded.Delete,
+                                        contentDescription = stringResource(R.string.action_delete),
+                                        tint = MaterialTheme.colorScheme.error
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    if (mediaItems.size > 1) {
+                        Spacer(Modifier.height(Dimens.md))
+                        MediaFilmstripBar(
+                            items = mediaItems,
+                            selectedIndex = currentIndex,
+                            onSelect = { index ->
+                                scope.launch { pagerState.animateScrollToPage(index) }
                             }
                         )
                     }
-                    .pointerInput(Unit) {
-                        detectTransformGestures { _, pan, zoom, _ ->
-                            scale = (scale * zoom).coerceIn(0.8f, 6f)
-                            offset = if (scale > 1f) offset + pan else Offset.Zero
+                }
+            }
+        }
+    }
+
+    if (showDetailsSheet) {
+        MediaViewerDetailsSheet(
+            item = currentItem,
+            imageMeta = imageMeta,
+            onDismiss = { showDetailsSheet = false }
+        )
+    }
+}
+
+/**
+ * Bottom horizontal filmstrip showing small thumbnail previews of all images and videos in the current folder/list.
+ * Renders ONLY the thumbnail image (no filenames), with expressive size/border transition on the active item.
+ */
+@Composable
+private fun MediaFilmstripBar(
+    items: List<StorageItem>,
+    selectedIndex: Int,
+    onSelect: (Int) -> Unit
+) {
+    val listState = rememberLazyListState()
+    val fastSpatialDp = MaterialTheme.motionScheme.fastSpatialSpec<androidx.compose.ui.unit.Dp>()
+    val fastEffects = MaterialTheme.motionScheme.fastEffectsSpec<Float>()
+
+    LaunchedEffect(selectedIndex, items.size) {
+        if (selectedIndex in items.indices) {
+            val target = (selectedIndex - 2).coerceAtLeast(0)
+            listState.animateScrollToItem(target)
+        }
+    }
+
+    Surface(
+        shape = MaterialTheme.shapes.extraLarge,
+        color = MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = 0.78f),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = Dimens.md)
+    ) {
+        LazyRow(
+            state = listState,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Dimens.xs),
+            contentPadding = PaddingValues(horizontal = Dimens.md, vertical = Dimens.sm),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            itemsIndexed(items, key = { _, item -> item.path }) { index, item ->
+                val selected = index == selectedIndex
+                val isVid = isVideoExtension(item.extension)
+                val thumbWidth by animateDpAsState(
+                    targetValue = if (selected) 68.dp else 48.dp,
+                    animationSpec = fastSpatialDp,
+                    label = "stripWidth"
+                )
+                val thumbHeight by animateDpAsState(
+                    targetValue = if (selected) 56.dp else 48.dp,
+                    animationSpec = fastSpatialDp,
+                    label = "stripHeight"
+                )
+                val itemAlpha by animateFloatAsState(
+                    targetValue = if (selected) 1f else 0.6f,
+                    animationSpec = fastEffects,
+                    label = "stripAlpha"
+                )
+                val shape = if (selected) MaterialTheme.shapes.medium else MaterialTheme.shapes.small
+
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(width = thumbWidth, height = thumbHeight)
+                        .clip(shape)
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                        .then(
+                            if (selected) {
+                                Modifier.border(
+                                    width = 2.5.dp,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    shape = shape
+                                )
+                            } else Modifier
+                        )
+                        .alpha(itemAlpha)
+                        .clickable { onSelect(index) }
+                ) {
+                    AsyncImage(
+                        model = remember(item.path, item.lastModified, isVid) {
+                            Thumb(item.path, item.lastModified, isVideo = isVid)
+                        },
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    if (isVid) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(Dimens.xxs)
+                                .size(18.dp)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.7f))
+                        ) {
+                            Icon(
+                                Icons.Rounded.PlayArrow,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.inverseOnSurface,
+                                modifier = Modifier.size(12.dp)
+                            )
                         }
                     }
-            ) {
-                AsyncImage(
-                    model = model,
-                    contentDescription = item.name,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer(
-                            scaleX = scale,
-                            scaleY = scale,
-                            translationX = offset.x,
-                            translationY = offset.y
-                        )
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Interactive zoomable, rotatable image page.
+ * Single-finger horizontal drags pass through to [HorizontalPager] when unzoomed (`scale <= 1.01f`),
+ * preventing gesture conflicts while preserving smooth pinch-to-zoom and pan.
+ */
+@Composable
+private fun MediaImageSlide(
+    item: StorageItem,
+    rotationDegrees: Float,
+    resetToken: Int,
+    onZoomChanged: (Boolean) -> Unit,
+    onToggleChrome: () -> Unit
+) {
+    val context = LocalContext.current
+    val isRemote = remember(item.path) { SmbPath.parse(item.path) != null }
+    val thumbModel = remember(item.path, item.lastModified) {
+        Thumb(item.path, item.lastModified, isVideo = false)
+    }
+    val fullModel = remember(item.path, item.size, isRemote) {
+        if (isRemote) context.contentUriFor(item.path, item.size) else File(item.path)
+    }
+
+    var scale by remember(item.path, resetToken) { mutableFloatStateOf(1f) }
+    var offset by remember(item.path, resetToken) { mutableStateOf(Offset.Zero) }
+    var containerSize by remember { mutableStateOf(IntSize.Zero) }
+
+    LaunchedEffect(scale) {
+        onZoomChanged(scale > 1.02f)
+    }
+
+    val animatedRotation by animateFloatAsState(
+        targetValue = rotationDegrees,
+        animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
+        label = "imageRotation"
+    )
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .onSizeChanged { containerSize = it }
+            .pointerInput(item.path, resetToken) {
+                detectTapGestures(
+                    onTap = { onToggleChrome() },
+                    onDoubleTap = {
+                        if (scale > 1.15f) {
+                            scale = 1f
+                            offset = Offset.Zero
+                        } else {
+                            scale = 2.5f
+                        }
+                    }
                 )
             }
+            .pointerInput(item.path, resetToken) {
+                awaitEachGesture {
+                    awaitFirstDown(requireUnconsumed = false)
+                    do {
+                        val event = awaitPointerEvent()
+                        val zoomChange = event.calculateZoom()
+                        val panChange = event.calculatePan()
+                        val pointerCount = event.changes.count { it.pressed }
 
-            // Top Bar
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(Color.Black.copy(alpha = 0.75f), Color.Transparent)
-                        )
-                    )
-                    .padding(horizontal = Dimens.lg, vertical = Dimens.md)
-                    .align(Alignment.TopCenter)
-            ) {
-                Column(Modifier.weight(1f)) {
-                    Text(
-                        text = item.name,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.White,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    meta?.let {
-                        Text(
-                            text = "${it.width} × ${it.height} · ${formatSize(item.size)}",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color.White.copy(alpha = 0.7f)
-                        )
-                    }
-                }
+                        if (pointerCount > 1 || scale > 1.01f) {
+                            val newScale = (scale * zoomChange).coerceIn(1f, 6f)
+                            val maxX = ((containerSize.width * (newScale - 1f)) / 2f).coerceAtLeast(0f)
+                            val maxY = ((containerSize.height * (newScale - 1f)) / 2f).coerceAtLeast(0f)
+                            val candidateX = offset.x + panChange.x
+                            val candidateY = offset.y + panChange.y
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    if (scale != 1f) {
-                        IconButton(onClick = { scale = 1f; offset = Offset.Zero }) {
-                            Icon(Icons.Rounded.Refresh, contentDescription = "Reset Zoom", tint = Color.White)
+                            val atHorizontalEdge = pointerCount == 1 &&
+                                newScale > 1.01f &&
+                                (candidateX > maxX + 8f || candidateX < -maxX - 8f)
+
+                            scale = newScale
+                            offset = if (newScale > 1.01f) {
+                                Offset(
+                                    x = candidateX.coerceIn(-maxX, maxX),
+                                    y = candidateY.coerceIn(-maxY, maxY)
+                                )
+                            } else {
+                                Offset.Zero
+                            }
+
+                            if (!atHorizontalEdge) {
+                                event.changes.forEach { change ->
+                                    if (change.positionChanged()) change.consume()
+                                }
+                            }
                         }
-                    }
-                    IconButton(onClick = onOpenExternal) {
-                        Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = stringResource(R.string.action_open), tint = Color.White)
-                    }
-                    IconButton(onClick = onDismiss) {
-                        Icon(Icons.Rounded.Close, contentDescription = stringResource(R.string.cd_close_details), tint = Color.White)
-                    }
+                    } while (event.changes.any { it.pressed })
                 }
             }
+    ) {
+        val layerModifier = Modifier
+            .fillMaxSize()
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+                translationX = offset.x
+                translationY = offset.y
+                rotationZ = animatedRotation
+            }
+        // Instant cached thumbnail layer underneath so remote SMB images never show a blank screen while streaming full-res
+        AsyncImage(
+            model = thumbModel,
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            modifier = layerModifier
+        )
+        AsyncImage(
+            model = fullModel,
+            contentDescription = item.name,
+            contentScale = ContentScale.Fit,
+            modifier = layerModifier
+        )
+    }
+}
 
-            // Bottom Hint
-            Surface(
-                shape = CircleShape,
-                color = Color.Black.copy(alpha = 0.6f),
+/**
+ * Video slide inside the built-in Media Viewer: shows the video frame thumbnail with a prominent
+ * inline Play button (streaming over SMB or playing locally) plus a one-tap option to open in an external video app.
+ */
+@Composable
+private fun MediaVideoSlide(
+    item: StorageItem,
+    isCurrentPage: Boolean,
+    onToggleChrome: () -> Unit,
+    onOpenExternal: () -> Unit,
+    onOpenInAnotherApp: () -> Unit
+) {
+    val context = LocalContext.current
+    var playingInline by remember(item.path) { mutableStateOf(false) }
+    var isPaused by remember(item.path) { mutableStateOf(false) }
+    var videoViewRef by remember(item.path) { mutableStateOf<VideoView?>(null) }
+
+    LaunchedEffect(isCurrentPage) {
+        if (!isCurrentPage && playingInline) {
+            runCatching { videoViewRef?.stopPlayback() }
+            playingInline = false
+            isPaused = false
+        }
+    }
+
+    DisposableEffect(item.path) {
+        onDispose {
+            runCatching { videoViewRef?.stopPlayback() }
+        }
+    }
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(
+                interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+                indication = null,
+                onClick = onToggleChrome
+            )
+    ) {
+        if (playingInline) {
+            val uri = remember(item.path, item.size) { context.contentUriFor(item.path, item.size) }
+            AndroidView(
+                factory = { ctx ->
+                    VideoView(ctx).apply {
+                        videoViewRef = this
+                        setVideoURI(uri)
+                        setOnPreparedListener { mp ->
+                            mp.isLooping = false
+                            start()
+                            isPaused = false
+                        }
+                        setOnCompletionListener {
+                            playingInline = false
+                            isPaused = false
+                        }
+                        setOnErrorListener { _, _, _ ->
+                            playingInline = false
+                            onOpenExternal()
+                            true
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            // Floating Play/Pause toggle in top-start or bottom-end of video when playing
+            FilledTonalIconButton(
+                onClick = {
+                    val vv = videoViewRef ?: return@FilledTonalIconButton
+                    if (vv.isPlaying) {
+                        vv.pause()
+                        isPaused = true
+                    } else {
+                        vv.start()
+                        isPaused = false
+                    }
+                },
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = Dimens.xl)
+                    .align(Alignment.Center)
+                    .size(56.dp)
+                    .alpha(if (isPaused) 0.95f else 0f)
             ) {
+                Icon(
+                    if (isPaused) Icons.Rounded.PlayArrow else Icons.Rounded.Pause,
+                    contentDescription = stringResource(if (isPaused) R.string.action_play else R.string.action_pause),
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+        } else {
+            AsyncImage(
+                model = remember(item.path, item.lastModified) {
+                    Thumb(item.path, item.lastModified, isVideo = true)
+                },
+                contentDescription = item.name,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.fillMaxSize()
+            )
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(Dimens.md)
+            ) {
+                FilledIconButton(
+                    onClick = { playingInline = true },
+                    modifier = Modifier.size(72.dp),
+                    colors = IconButtonDefaults.filledIconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                ) {
+                    Icon(
+                        Icons.Rounded.PlayArrow,
+                        contentDescription = stringResource(R.string.preview_play_video),
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
+
+                FilledTonalButton(onClick = onOpenExternal) {
+                    Icon(
+                        Icons.AutoMirrored.Rounded.OpenInNew,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(Modifier.width(Dimens.xs))
+                    Text(stringResource(R.string.action_open))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MediaViewerDetailsSheet(
+    item: StorageItem,
+    imageMeta: ImageMeta?,
+    onDismiss: () -> Unit
+) {
+    ModalBottomSheet(onDismissRequest = onDismiss) {
+        Column(
+            modifier = Modifier
+                .navigationBarsPadding()
+                .padding(horizontal = Dimens.xl)
+                .padding(bottom = Dimens.xl)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                FileThumbnail(
+                    path = item.path,
+                    isDirectory = false,
+                    extension = item.extension,
+                    size = 56.dp,
+                    lastModified = item.lastModified
+                )
+                Spacer(Modifier.width(Dimens.lg))
                 Text(
-                    text = stringResource(R.string.preview_zoom_hint),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color.White.copy(alpha = 0.8f),
-                    modifier = Modifier.padding(horizontal = Dimens.md, vertical = Dimens.xs)
+                    text = item.name,
+                    style = MaterialTheme.typography.titleLargeEmphasized,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Spacer(Modifier.height(Dimens.xl))
+            DetailLine(R.string.details_path, item.path)
+            DetailLine(R.string.details_size, formatSize(item.size))
+            DetailLine(R.string.details_modified, formatDate(item.lastModified))
+            DetailLine(R.string.details_type, item.mimeType ?: item.extension.uppercase())
+            imageMeta?.let { meta ->
+                DetailLine(
+                    R.string.details_dimensions,
+                    "${meta.width} × ${meta.height} (${String.format(Locale.ROOT, "%.1f MP", meta.megapixels)})"
                 )
             }
         }

@@ -54,16 +54,19 @@ import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.components.ShapeIcon
 import com.aiyu.findex.ui.components.icon
 import com.aiyu.findex.ui.components.CategoryShape
+import com.aiyu.findex.ui.components.isImageExtension
 import com.aiyu.findex.ui.components.titleRes
 import com.aiyu.findex.ui.explorer.DeleteDialog
 import com.aiyu.findex.ui.explorer.FileGrid
 import com.aiyu.findex.ui.explorer.FileList
 import com.aiyu.findex.ui.explorer.ItemAction
 import com.aiyu.findex.ui.explorer.ItemActionSheet
+import com.aiyu.findex.ui.explorer.MediaViewerDialog
 import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.theme.tone
 import com.aiyu.findex.ui.util.formatSize
 import com.aiyu.findex.ui.util.openFile
+import com.aiyu.findex.ui.util.openFileWithChooser
 import com.aiyu.findex.ui.util.shareFiles
 import java.io.File
 
@@ -79,16 +82,23 @@ fun CategoryScreen(
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     var actionsFor by remember { mutableStateOf<StorageItem?>(null) }
     var deletePaths by remember { mutableStateOf<List<String>?>(null) }
+    var viewerInitialPath by remember { mutableStateOf<String?>(null) }
     val fastEffects = MaterialTheme.motionScheme.fastEffectsSpec<Float>()
 
     BackHandler(enabled = state.selection.isNotEmpty()) { viewModel.clearSelection() }
 
     fun open(item: StorageItem) {
-        if (state.selection.isNotEmpty()) viewModel.toggle(item.path)
-        else if (item.isArchive) onOpenArchive(item.path)
-        else {
-            viewModel.onOpened(item.path)
-            context.openFile(item.path)
+        when {
+            state.selection.isNotEmpty() -> viewModel.toggle(item.path)
+            item.isArchive -> onOpenArchive(item.path)
+            isImageExtension(item.extension) -> {
+                viewModel.onOpened(item.path)
+                viewerInitialPath = item.path
+            }
+            else -> {
+                viewModel.onOpened(item.path)
+                context.openFile(item.path, item.size)
+            }
         }
     }
 
@@ -180,18 +190,30 @@ fun CategoryScreen(
     actionsFor?.let { item ->
         ItemActionSheet(
             item = item,
-            allowed = setOf(ItemAction.OPEN, ItemAction.SHARE, ItemAction.SHOW_IN_FOLDER, ItemAction.DELETE),
+            allowed = setOf(ItemAction.OPEN, ItemAction.OPEN_WITH, ItemAction.SHARE, ItemAction.SHOW_IN_FOLDER, ItemAction.DELETE),
             onDismiss = { actionsFor = null },
             onAction = { action ->
                 actionsFor = null
                 when (action) {
                     ItemAction.OPEN -> open(item)
+                    ItemAction.OPEN_WITH -> {
+                        viewModel.onOpened(item.path)
+                        context.openFileWithChooser(item.path, item.size)
+                    }
                     ItemAction.SHARE -> context.shareFiles(listOf(item.path))
                     ItemAction.SHOW_IN_FOLDER -> File(item.path).parent?.let(onOpenFolder)
                     ItemAction.DELETE -> deletePaths = listOf(item.path)
                     else -> Unit
                 }
             }
+        )
+    }
+    viewerInitialPath?.let { initialPath ->
+        MediaViewerDialog(
+            items = state.items,
+            initialPath = initialPath,
+            onDismiss = { viewerInitialPath = null },
+            onDelete = { target -> deletePaths = listOf(target.path) }
         )
     }
     deletePaths?.let { paths ->

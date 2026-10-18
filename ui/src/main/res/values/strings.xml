@@ -351,7 +351,11 @@
     <string name="details_calculating">Calculating…</string>
     <string name="details_copied_hash">Checksum copied to clipboard</string>
     <string name="preview_fullscreen">Fullscreen</string>
-    <string name="preview_zoom_hint">Pinch to zoom</string>
+    <string name="preview_zoom_hint">Pinch to zoom · Double-tap to zoom</string>
+    <string name="action_open_in_another_app">Open in another app</string>
+    <string name="action_rotate">Rotate</string>
+    <string name="action_reset_zoom">Reset zoom</string>
+    <string name="viewer_item_position">%1$d of %2$d</string>
     <string name="preview_copy_text">Copy content</string>
     <string name="preview_text_copied">Content copied to clipboard</string>
     <string name="preview_lines_count">%1$d lines</string>

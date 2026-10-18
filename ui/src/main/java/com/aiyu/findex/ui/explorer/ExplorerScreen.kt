@@ -131,8 +131,10 @@ import com.aiyu.findex.ui.tabs.NewTabSheet
 import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.components.OperationBanner
 import com.aiyu.findex.ui.components.ShapeIcon
+import com.aiyu.findex.ui.components.isImageExtension
 import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.util.openFile
+import com.aiyu.findex.ui.util.openFileWithChooser
 import com.aiyu.findex.ui.util.shareFiles
 import java.io.File
 import kotlinx.coroutines.launch
@@ -145,6 +147,7 @@ private sealed interface ExplorerModal {
     data class Extract(val item: StorageItem) : ExplorerModal
     data class Delete(val paths: List<String>) : ExplorerModal
     data class Details(val item: StorageItem) : ExplorerModal
+    data class MediaViewer(val initialPath: String) : ExplorerModal
     data object NewFolder : ExplorerModal
     data object Sort : ExplorerModal
 }
@@ -212,6 +215,10 @@ fun ExplorerScreen(
             state.inSelection -> viewModel.toggleSelection(item.path)
             item.isDirectory -> viewModel.openFolder(item.path)
             listDetail -> viewModel.focus(item.path)
+            isImageExtension(item.extension) -> {
+                if (SmbPath.parse(item.path) == null) viewModel.onFileOpened(item.path)
+                modal = ExplorerModal.MediaViewer(item.path)
+            }
             // Network files stream via SmbContentProvider; archives on a share open in an external app.
             SmbPath.parse(item.path) != null -> context.openFile(item.path, item.size)
             item.isArchive -> onOpenArchive(item.path)
@@ -427,11 +434,17 @@ fun ExplorerScreen(
                 folderName = tab?.let { if (it.path == it.root) it.rootName else File(it.path).name } ?: "",
                 folderItemCount = state.items.size,
                 load = viewModel::details,
+                galleryItems = state.items,
                 actions = DetailActions(
                     onOpen = {
                         focusedItem?.let {
-                            viewModel.onFileOpened(it.path)
-                            context.openFile(it.path, it.size)
+                            if (isImageExtension(it.extension)) {
+                                if (SmbPath.parse(it.path) == null) viewModel.onFileOpened(it.path)
+                                modal = ExplorerModal.MediaViewer(it.path)
+                            } else {
+                                if (SmbPath.parse(it.path) == null) viewModel.onFileOpened(it.path)
+                                context.openFile(it.path, it.size)
+                            }
                         }
                     },
                     onShare = { focusedItem?.let { context.shareFiles(listOf(it.path)) } },
@@ -471,9 +484,17 @@ fun ExplorerScreen(
                 when (action) {
                     ItemAction.OPEN -> when {
                         item.isDirectory -> viewModel.openFolder(item.path)
+                        isImageExtension(item.extension) -> {
+                            if (!state.isNetwork) viewModel.onFileOpened(item.path)
+                            modal = ExplorerModal.MediaViewer(item.path)
+                        }
                         state.isNetwork -> context.openFile(item.path, item.size)
                         item.isArchive -> onOpenArchive(item.path)
                         else -> open(item)
+                    }
+                    ItemAction.OPEN_WITH -> {
+                        if (!state.isNetwork) viewModel.onFileOpened(item.path)
+                        context.openFileWithChooser(item.path, item.size)
                     }
                     ItemAction.SHOW_IN_FOLDER, ItemAction.RESTORE -> Unit
                     ItemAction.OPEN_IN_NEW_TAB -> viewModel.openInNewTab(item.path)
@@ -521,6 +542,12 @@ fun ExplorerScreen(
             permanentOnly = state.isNetwork
         )
         is ExplorerModal.Details -> DetailsSheet(m.item, load = viewModel::details, onDismiss = { modal = null })
+        is ExplorerModal.MediaViewer -> MediaViewerDialog(
+            items = state.items,
+            initialPath = m.initialPath,
+            onDismiss = { modal = null },
+            onDelete = { target -> modal = ExplorerModal.Delete(listOf(target.path)) }
+        )
         ExplorerModal.Sort -> SortSheet(
             sort = state.settings.sort,
             showHidden = state.settings.showHidden,

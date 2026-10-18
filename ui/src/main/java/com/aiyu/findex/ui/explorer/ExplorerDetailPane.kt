@@ -121,7 +121,8 @@ fun ExplorerDetailPane(
     folderItemCount: Int,
     load: suspend (StorageItem) -> FileDetails,
     actions: DetailActions,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    galleryItems: List<StorageItem> = emptyList()
 ) {
     val fade = MaterialTheme.motionScheme.defaultEffectsSpec<Float>()
     Surface(
@@ -139,7 +140,7 @@ fun ExplorerDetailPane(
             if (current == null) {
                 EmptyDetail(folderName, folderItemCount, actions.onNewFolder)
             } else {
-                ItemDetail(current, load, actions)
+                ItemDetail(current, load, actions, galleryItems)
             }
         }
     }
@@ -204,7 +205,8 @@ private fun EmptyDetail(folderName: String, count: Int, onNewFolder: (() -> Unit
 private fun ItemDetail(
     item: StorageItem,
     load: suspend (StorageItem) -> FileDetails,
-    actions: DetailActions
+    actions: DetailActions,
+    galleryItems: List<StorageItem> = emptyList()
 ) {
     val details by produceState<FileDetails?>(null, item) { value = load(item) }
     val ext = item.extension.lowercase()
@@ -290,7 +292,12 @@ private fun ItemDetail(
 
         // 2. Hero preview, capped so metadata stays above the fold
         when {
-            isImg -> ImagePreviewCard(item = item, onOpenExternal = actions.onOpen)
+            isImg -> ImagePreviewCard(
+                item = item,
+                onOpenExternal = actions.onOpen,
+                galleryItems = galleryItems,
+                onDelete = { actions.onDelete() }
+            )
             isVid -> VideoPreviewCard(item = item, onPlay = actions.onOpen)
             isAud -> AudioPreviewCard(item = item, onOpenExternal = actions.onOpen)
             isTxt -> TextPreviewCard(item = item, onOpenExternal = actions.onOpen)
