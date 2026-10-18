@@ -9,3 +9,12 @@
 -dontwarn org.ietf.jgss.**
 -dontwarn javax.security.auth.**
 -dontwarn org.slf4j.**
+
+# JSch (SFTP): cipher, kex, mac, signature and compression algorithms are instantiated via Class.forName.
+-keep class com.jcraft.jsch.** { *; }
+-dontwarn com.jcraft.jsch.**
+-dontwarn org.newsclub.net.unix.**
+
+# Apache Commons Net (FTP / FTPS)
+-keep class org.apache.commons.net.** { *; }
+-dontwarn org.apache.commons.net.**

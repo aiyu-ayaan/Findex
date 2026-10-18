@@ -1,6 +1,7 @@
 package com.aiyu.findex.core.db
 
 import androidx.room.AutoMigration
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Entity
@@ -133,8 +134,9 @@ interface OpenTabDao {
 }
 
 /**
- * A saved SMB server. [passwordCipher] is the password encrypted with an Android Keystore key
- * (`CredentialCipher`); it is never stored in plain text. Null means guest or no password.
+ * A saved network storage server (SMB, SFTP, FTP, or WebDAV). [passwordCipher] is the password
+ * encrypted with an Android Keystore key (`CredentialCipher`); it is never stored in plain text.
+ * Null means guest or no password.
  */
 @Entity(tableName = "network_servers")
 data class NetworkServerEntity(
@@ -145,7 +147,9 @@ data class NetworkServerEntity(
     val username: String,
     val domain: String,
     val passwordCipher: String?,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    @ColumnInfo(defaultValue = "SMB") val protocol: String = "SMB",
+    @ColumnInfo(defaultValue = "0") val port: Int = 0
 )
 
 @Dao
@@ -165,9 +169,14 @@ interface NetworkServerDao {
 
 @Database(
     entities = [BookmarkEntity::class, RecentFileEntity::class, TrashEntity::class, OpenTabEntity::class, NetworkServerEntity::class],
-    version = 4,
+    version = 5,
     exportSchema = true,
-    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3), AutoMigration(from = 3, to = 4)]
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+        AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 3, to = 4),
+        AutoMigration(from = 4, to = 5)
+    ]
 )
 abstract class FindexDatabase : RoomDatabase() {
     abstract fun bookmarkDao(): BookmarkDao

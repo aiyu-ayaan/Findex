@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aiyu.findex.core.network.NetworkError
 import com.aiyu.findex.core.network.NetworkException
+import com.aiyu.findex.core.network.NetworkProtocol
 import com.aiyu.findex.core.network.NetworkServer
 import com.aiyu.findex.core.network.SmbRepository
 import com.aiyu.findex.ui.R
@@ -26,6 +27,14 @@ fun NetworkError.messageRes(): Int = when (this) {
     NetworkError.UNKNOWN -> R.string.network_error_unknown
 }
 
+fun NetworkProtocol.labelRes(): Int = when (this) {
+    NetworkProtocol.SMB -> R.string.network_protocol_smb
+    NetworkProtocol.SFTP -> R.string.network_protocol_sftp
+    NetworkProtocol.FTP -> R.string.network_protocol_ftp
+    NetworkProtocol.WEBDAV -> R.string.network_protocol_webdav
+    NetworkProtocol.WEBDAVS -> R.string.network_protocol_webdavs
+}
+
 private fun Throwable.networkError() = (this as? NetworkException)?.error ?: NetworkError.UNKNOWN
 
 data class AddServerState(val isConnecting: Boolean = false, val error: NetworkError? = null)
@@ -44,12 +53,21 @@ class NetworkViewModel @Inject constructor(
     /** Emits once a server connected and was saved, so the sheet can close. */
     val added = _added.receiveAsFlow()
 
-    fun addServer(name: String, host: String, share: String, username: String, domain: String, password: String) {
+    fun addServer(
+        name: String,
+        host: String,
+        share: String,
+        username: String,
+        domain: String,
+        password: String,
+        protocol: NetworkProtocol = NetworkProtocol.SMB,
+        port: Int = 0
+    ) {
         if (_add.value.isConnecting) return
         _add.value = AddServerState(isConnecting = true)
         viewModelScope.launch {
             try {
-                _added.send(smb.add(name, host, share, username, domain, password))
+                _added.send(smb.add(name, host, share, username, domain, password, protocol, port))
                 _add.value = AddServerState()
             } catch (e: Exception) {
                 _add.value = AddServerState(error = e.networkError())

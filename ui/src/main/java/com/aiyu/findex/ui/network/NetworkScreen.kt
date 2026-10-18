@@ -31,7 +31,9 @@ import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
@@ -44,6 +46,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.ToggleButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -67,6 +70,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.aiyu.findex.core.network.NetworkProtocol
 import com.aiyu.findex.core.network.NetworkServer
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.components.ShapeIcon
@@ -162,7 +166,7 @@ fun NetworkScreen(onBack: () -> Unit, onOpenServer: (Long) -> Unit, viewModel: N
     }
 }
 
-/** One saved share; also used on the Home "Network" tab. [onRemove] null hides the remove button. */
+/** One saved server; also used on the Home "Network" tab. [onRemove] null hides the remove button. */
 @Composable
 fun NetworkServerCard(server: NetworkServer, shape: Shape, onClick: () -> Unit, onRemove: (() -> Unit)? = null) {
     Surface(
@@ -171,7 +175,10 @@ fun NetworkServerCard(server: NetworkServer, shape: Shape, onClick: () -> Unit, 
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = Dimens.lg, end = Dimens.xs, top = Dimens.md, bottom = Dimens.md)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(start = Dimens.lg, end = Dimens.xs, top = Dimens.md, bottom = Dimens.md)
+        ) {
             ShapeIcon(
                 icon = Icons.Rounded.Dns,
                 shape = MaterialShapes.Pill,
@@ -182,17 +189,36 @@ fun NetworkServerCard(server: NetworkServer, shape: Shape, onClick: () -> Unit, 
             Column(Modifier.weight(1f)) {
                 Text(server.label, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(
-                    "\\\\${server.host}\\${server.share}",
+                    server.displayAddress,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.MiddleEllipsis
                 )
-                Text(
-                    server.username.ifEmpty { stringResource(R.string.network_guest) },
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                Spacer(Modifier.height(Dimens.xxs))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.xs)
+                ) {
+                    Surface(
+                        shape = MaterialTheme.shapes.extraSmall,
+                        color = MaterialTheme.colorScheme.secondaryContainer
+                    ) {
+                        Text(
+                            text = stringResource(server.protocol.labelRes()),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            modifier = Modifier.padding(horizontal = Dimens.xs, vertical = 2.dp)
+                        )
+                    }
+                    Text(
+                        server.username.ifEmpty { stringResource(R.string.network_guest) },
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
             if (onRemove != null) {
                 IconButton(onClick = onRemove) {
@@ -203,22 +229,59 @@ fun NetworkServerCard(server: NetworkServer, shape: Shape, onClick: () -> Unit, 
     }
 }
 
+private val protocolChoices = listOf(
+    NetworkProtocol.SMB,
+    NetworkProtocol.SFTP,
+    NetworkProtocol.FTP,
+    NetworkProtocol.WEBDAV
+)
+
 @Composable
 private fun AddServerSheet(viewModel: NetworkViewModel, onDismiss: () -> Unit) {
     val state by viewModel.add.collectAsStateWithLifecycle()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var baseProtocolName by rememberSaveable { mutableStateOf(NetworkProtocol.SMB.name) }
+    var webdavHttps by rememberSaveable { mutableStateOf(false) }
+    val selectedBase = NetworkProtocol.fromName(baseProtocolName)
+    val effectiveProtocol = if (selectedBase == NetworkProtocol.WEBDAV && webdavHttps) {
+        NetworkProtocol.WEBDAVS
+    } else {
+        selectedBase
+    }
+
     var name by rememberSaveable { mutableStateOf("") }
     var host by rememberSaveable { mutableStateOf("") }
+    var portText by rememberSaveable { mutableStateOf("") }
     var share by rememberSaveable { mutableStateOf("") }
     var user by rememberSaveable { mutableStateOf("") }
     // Not saveable: a password must not end up in the saved-instance-state bundle.
     var password by remember { mutableStateOf("") }
     var domain by rememberSaveable { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
+
     // Editing any field clears the last connection error.
-    LaunchedEffect(host, share, user, password, domain) { if (viewModel.add.value.error != null) viewModel.resetAdd() }
-    val canSubmit = host.isNotBlank() && share.isNotBlank() && !state.isConnecting
-    val submit = { if (canSubmit) viewModel.addServer(name, host, share, user, domain, password) }
+    LaunchedEffect(effectiveProtocol, host, portText, share, user, password, domain) {
+        if (viewModel.add.value.error != null) viewModel.resetAdd()
+    }
+
+    val requiresShare = effectiveProtocol == NetworkProtocol.SMB && !host.trim().replace('\\', '/').removePrefix("//").contains('/')
+    val parsedPort = portText.trim().toIntOrNull() ?: 0
+    val validPort = portText.isBlank() || (parsedPort in 1..65535)
+    val canSubmit = host.isNotBlank() && (!requiresShare || share.isNotBlank()) && validPort && !state.isConnecting
+    val submit = {
+        if (canSubmit) {
+            viewModel.addServer(
+                name = name,
+                host = host,
+                share = share,
+                username = user,
+                domain = domain,
+                password = password,
+                protocol = effectiveProtocol,
+                port = parsedPort
+            )
+        }
+    }
 
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
         Column(
@@ -231,9 +294,96 @@ private fun AddServerSheet(viewModel: NetworkViewModel, onDismiss: () -> Unit) {
                 .padding(bottom = Dimens.lg)
         ) {
             Text(stringResource(R.string.network_add_title), style = MaterialTheme.typography.headlineSmallEmphasized)
-            Field(host, { host = it }, R.string.network_field_host, R.string.network_field_host_help, KeyboardType.Uri, enabled = !state.isConnecting)
-            Field(share, { share = it }, R.string.network_field_share, R.string.network_field_share_help, enabled = !state.isConnecting)
-            Field(user, { user = it }, R.string.network_field_user, R.string.network_field_user_help, enabled = !state.isConnecting)
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                protocolChoices.forEachIndexed { index, choice ->
+                    ToggleButton(
+                        checked = selectedBase == choice,
+                        onCheckedChange = { baseProtocolName = choice.name },
+                        enabled = !state.isConnecting,
+                        shapes = when (index) {
+                            0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+                            protocolChoices.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                            else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+                        },
+                        contentPadding = PaddingValues(horizontal = Dimens.xs),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(stringResource(choice.labelRes()), maxLines = 1)
+                    }
+                }
+            }
+
+            if (selectedBase == NetworkProtocol.WEBDAV) {
+                FilterChip(
+                    selected = webdavHttps,
+                    onClick = { webdavHttps = !webdavHttps },
+                    enabled = !state.isConnecting,
+                    label = { Text(stringResource(R.string.network_webdav_https)) },
+                    leadingIcon = { Icon(Icons.Rounded.Lock, contentDescription = null, modifier = Modifier.size(18.dp)) }
+                )
+            }
+
+            Field(
+                value = host,
+                onValueChange = { host = it },
+                labelRes = R.string.network_field_host,
+                helpRes = R.string.network_field_host_help,
+                keyboardType = KeyboardType.Uri,
+                enabled = !state.isConnecting
+            )
+
+            OutlinedTextField(
+                value = portText,
+                onValueChange = { input -> portText = input.filter { it.isDigit() }.take(5) },
+                singleLine = true,
+                enabled = !state.isConnecting,
+                label = { Text(stringResource(R.string.network_field_port)) },
+                placeholder = { Text(stringResource(R.string.network_field_port_default, effectiveProtocol.defaultPort)) },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next,
+                    autoCorrectEnabled = false
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            val shareLabelRes = if (effectiveProtocol == NetworkProtocol.SMB) {
+                R.string.network_field_share
+            } else {
+                R.string.network_field_path
+            }
+            val shareHelpRes = when (effectiveProtocol) {
+                NetworkProtocol.SMB -> R.string.network_field_share_help
+                NetworkProtocol.SFTP -> R.string.network_field_path_help_sftp
+                NetworkProtocol.FTP -> R.string.network_field_path_help_ftp
+                NetworkProtocol.WEBDAV, NetworkProtocol.WEBDAVS -> R.string.network_field_path_help_webdav
+            }
+            Field(
+                value = share,
+                onValueChange = { share = it },
+                labelRes = shareLabelRes,
+                helpRes = shareHelpRes,
+                keyboardType = KeyboardType.Uri,
+                enabled = !state.isConnecting
+            )
+
+            val userHelpRes = if (effectiveProtocol == NetworkProtocol.SFTP) {
+                R.string.network_field_user_help_sftp
+            } else {
+                R.string.network_field_user_help
+            }
+            Field(
+                value = user,
+                onValueChange = { user = it },
+                labelRes = R.string.network_field_user,
+                helpRes = userHelpRes,
+                enabled = !state.isConnecting
+            )
+
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -254,8 +404,26 @@ private fun AddServerSheet(viewModel: NetworkViewModel, onDismiss: () -> Unit) {
                 supportingText = { Text(stringResource(R.string.network_password_note)) },
                 modifier = Modifier.fillMaxWidth()
             )
-            Field(domain, { domain = it }, R.string.network_field_domain, null, enabled = !state.isConnecting && user.isNotEmpty())
-            Field(name, { name = it }, R.string.network_field_name, null, imeAction = ImeAction.Done, onDone = submit, enabled = !state.isConnecting)
+
+            if (effectiveProtocol == NetworkProtocol.SMB) {
+                Field(
+                    value = domain,
+                    onValueChange = { domain = it },
+                    labelRes = R.string.network_field_domain,
+                    helpRes = null,
+                    enabled = !state.isConnecting && user.isNotEmpty()
+                )
+            }
+
+            Field(
+                value = name,
+                onValueChange = { name = it },
+                labelRes = R.string.network_field_name,
+                helpRes = null,
+                imeAction = ImeAction.Done,
+                onDone = submit,
+                enabled = !state.isConnecting
+            )
 
             state.error?.let { error ->
                 Surface(shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.errorContainer) {

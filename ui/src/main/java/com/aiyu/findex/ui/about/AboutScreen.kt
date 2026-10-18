@@ -68,6 +68,8 @@ private val libraries = listOf(
     Library("XZ for Java", "https://tukaani.org/xz/java.html", "0BSD"),
     Library("7-Zip-JBinding-4Android", "https://github.com/omicronapps/7-Zip-JBinding-4Android", "LGPL-2.1"),
     Library("smbj", "https://github.com/hierynomus/smbj"),
+    Library("JSch", "https://github.com/mwiede/jsch", "BSD-3-Clause"),
+    Library("Apache Commons Net", "https://commons.apache.org/proper/commons-net/"),
 )
 
 @Composable
