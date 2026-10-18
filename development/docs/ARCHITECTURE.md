@@ -244,27 +244,47 @@ flowchart TD
   (`dragToSelect` in `ExplorerContent.kt`) with edge auto-scroll; tap toggles while selecting.
 - **Clipboard** is app-wide (`FileClipboard`), so copy in one tab and paste in another.
 
-## 5b. Thumbnails & image loading
+## 5b. Universal Content Thumbnails & Built-in Media Viewer
 
-`findexImageLoader` (ui/components/Thumbnails.kt) is Coil's singleton loader, set in `FindexApp`. Every list/grid thumbnail goes through a `Thumb(path, lastModified, isVideo)` model instead of the raw file, so a full photo or a video frame is decoded only once for both local storage and SMB network shares.
+`findexImageLoader` (`ui/components/Thumbnails.kt`) is Coil's singleton loader, set in `FindexApp`. Every list/grid thumbnail goes through a `Thumb(path, lastModified, isVideo)` model instead of the raw file, so content previews (photos, video frames, audio cover art, PDF first pages, and APK app icons) are decoded only once for both local storage and SMB network shares.
 
 ```mermaid
 flowchart LR
     Row[FileThumbnail] -->|Thumb| Mem{Memory cache<br/>25% of heap}
     Mem -->|miss| Fetch[ThumbFetcher]
     Fetch -->|hit| Disk[(cache/thumbnails<br/>150 MB LRU)]
-    Fetch -->|miss, local path| Gen[ThumbnailUtils 256px<br/>API 26-28: sampled decode / frame]
-    Fetch -->|miss, smb:// path| RemoteGen[SmbRandomAccessFile<br/>EXIF thumb / sampled stream / MediaDataSource]
+    Fetch -->|miss, local path| Gen["ThumbnailUtils / PdfRenderer /<br/>PackageManager / MediaMetadataRetriever"]
+    Fetch -->|miss, smb:// path| RemoteGen["SmbRandomAccessFile<br/>EXIF thumb / sampled stream /<br/>MediaDataSource (video frame & audio art)"]
     Gen -->|WebP| Disk
     RemoteGen -->|WebP| Disk
     Disk --> Row
 ```
 
-- The disk cache key includes `lastModified`, so an edited file gets a new thumbnail; old entries are never read again and are evicted first once the cache reaches 150 MB (least-recently-used). Android may also clear `cacheDir` under storage pressure.
-- Generation runs on `Dispatchers.IO.limitedParallelism(3)` so a fling over hundreds of videos can't saturate the CPU and drop frames.
-- For SMB network shares (`smb://`), `ThumbFetcher` uses `SmbRandomAccessFile`: photos check embedded EXIF thumbnails in the first 256 KB chunk before falling back to a sampled stream decode, and videos extract a scaled sync frame via `MediaMetadataRetriever` + `MediaDataSource` without downloading the full video.
-- Requests are cancelled when a row scrolls off screen (Coil lifecycle), so only visible thumbnails are built.
-- Full-size previews (`ImagePreviewCard`, `VideoPreviewCard`) load local files directly (`VideoFrameDecoder` is registered for them) and use `Thumb` for SMB files.
+- **Supported Content Previews (`FileThumbnail` + `ThumbFetcher`)**:
+  - **Photos & Videos** (local + SMB): `ThumbnailUtils` locally; EXIF thumbnail or sampled stream / `MediaMetadataRetriever` over `SmbRandomAccessFile` on SMB shares. Video thumbnails display a corner play badge.
+  - **Audio Cover Art** (local + SMB): `MediaMetadataRetriever.embeddedPicture` extracts embedded album art; files without embedded art are recorded in an in-memory negative cache (`missingThumbKeys`) and fall back to the `FileCategory.AUDIO` tonal icon without re-probing on scroll.
+  - **PDF Documents** (local): `android.graphics.pdf.PdfRenderer` renders page `0` onto a 256 px bitmap.
+  - **APK Packages** (local): `PackageManager.getPackageArchiveInfo` extracts the application icon drawable and renders it at 256 px.
+- The disk cache key (`thumb-v2:<path>:<lastModified>`) includes `lastModified`, so an edited file gets a new thumbnail; old entries are evicted LRU once the cache reaches 150 MB.
+- Generation runs on `Dispatchers.IO.limitedParallelism(3)` so fast scrolling never saturates the CPU.
+
+### Built-in Media Gallery Viewer (`MediaViewerDialog`)
+
+Tapping an image in `ExplorerScreen`, `CategoryScreen`, `SearchScreen`, `HomeScreen` (Recents), or `ExplorerDetailPane` opens `MediaViewerDialog` (`ui/explorer/PreviewComponents.kt`), populated with all media items (both **images and videos**) from the active list:
+
+```mermaid
+flowchart TD
+    Tap[Tap image in Explorer / Category / Search / Home] --> Viewer[MediaViewerDialog]
+    Viewer --> Pager[HorizontalPager over all folder/list images + videos]
+    Pager -->|Image page| ImgSlide["MediaImageSlide<br/>Instant Thumb backdrop + Full-res File / SmbContentProvider URI<br/>Pinch-to-zoom, pan, double-tap zoom, 90° rotate"]
+    Pager -->|Video page| VidSlide["MediaVideoSlide<br/>Video Thumb + Inline VideoView playback (local & SMB)<br/>or one-tap Open in external player"]
+    Viewer --> Filmstrip["MediaFilmstripBar (Bottom LazyRow)<br/>Image-only thumbnail strip (no filenames)<br/>Spring-animated active border & size · Tap-to-jump"]
+    Viewer --> Actions["Top Bar & Bottom Action Pill<br/>Open in another app (openFileWithChooser)<br/>Share · Rotate · Details sheet · Delete"]
+```
+
+- **Gesture Harmony**: `MediaImageSlide` uses `awaitEachGesture` and only consumes pointer changes when `pointerCount > 1` (pinch-to-zoom) or `scale > 1.01f` (panning while zoomed, releasing at the horizontal edge), allowing single-finger horizontal swipes to pass cleanly to `HorizontalPager` when unzoomed.
+- **Bottom Filmstrip**: Displays a horizontal strip of small thumbnail cards for all images and videos in the current list with **only thumbnail images (no filenames)**, spring-animated active highlight (`MaterialTheme.motionScheme.fastSpatialSpec()`), and auto-scroll synchronization with the pager.
+- **Default App vs. Open in Another App**: Clicking non-image files (including videos in the file list) opens them directly in the default external app (`Context.openFile`, streaming via `SmbContentProvider` when on SMB), while the viewer and item action sheet (`ItemAction.OPEN_WITH`) offer **Open in another app** (`Context.openFileWithChooser`).
 
 ## 6. Tools
 

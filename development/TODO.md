@@ -109,6 +109,8 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] Duplicate finder (size → 64 KB head hash → full SHA-256; one copy always kept)
 - [x] Tab session persistence (Room `open_tabs`, restored on cold start)
 - [x] Tablet two-pane explorer
+- [x] Universal content thumbnail previews (photos, video frames with play badge, audio album art, PDF page 1, APK app icons)
+- [x] Built-in image & video gallery viewer with image-only bottom thumbnail filmstrip, zoom/rotate, inline video playback, and "Open in another app" chooser
 
 ### Performance
 - [x] Baseline + startup profile (`:baselineprofile` module, ProfileInstaller); cold start TTID 580 ms to 456 ms on API 37 emulator
