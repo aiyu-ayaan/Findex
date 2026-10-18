@@ -14,3 +14,4 @@ import kotlinx.serialization.Serializable
 @Serializable object RecycleBinRoute
 @Serializable object TabsRoute
 @Serializable object SearchRoute
+@Serializable object DuplicatesRoute

@@ -8,6 +8,7 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.security.MessageDigest
 import java.util.PriorityQueue
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,6 +16,12 @@ import javax.inject.Singleton
 enum class JunkType { EMPTY_FOLDERS, THUMBNAILS, TEMP_FILES, APK_FILES }
 
 enum class WhatsAppMediaType { IMAGES, VIDEOS, AUDIO, VOICE_NOTES, DOCUMENTS, STICKERS, GIFS, BACKUPS }
+
+/** Files with identical content; [wastedBytes] is what deleting all but one copy frees. */
+data class DuplicateSet(val hash: String, val files: List<StorageItem>) {
+    val size: Long get() = files.first().size
+    val wastedBytes: Long get() = size * (files.size - 1)
+}
 
 /** A cleanable group of files with their total size. */
 data class ScanGroup<T>(val type: T, val files: List<StorageItem>) {
@@ -85,6 +92,53 @@ class StorageScanner @Inject constructor() {
         }.filter { it.files.isNotEmpty() }
     }
 
+    /**
+     * Content duplicates on primary storage: group by size, then by a hash of the first 64 KB,
+     * then confirm with a full SHA-256, so only real collisions are read completely.
+     */
+    suspend fun findDuplicates(minSize: Long = 1024): List<DuplicateSet> = withContext(Dispatchers.IO) {
+        val bySize = HashMap<Long, MutableList<File>>()
+        for (file in walk()) {
+            currentCoroutineContext().ensureActive()
+            // Skip the bin: trashed copies are already on their way out.
+            if (file.isDirectory || file.absolutePath.contains("/.FindexTrash")) continue
+            val length = file.length()
+            if (length >= minSize) bySize.getOrPut(length) { mutableListOf() } += file
+        }
+        bySize.values.filter { it.size > 1 }
+            .flatMap { sameSize -> sameSize.groupBy { it.digest(HEAD_BYTES) }.toList() }
+            .filter { (head, files) -> head.isNotEmpty() && files.size > 1 }
+            .flatMap { (head, files) ->
+                // Files up to HEAD_BYTES were hashed whole already.
+                if (files.first().length() <= HEAD_BYTES) listOf(head to files)
+                else files.groupBy { it.digest(Long.MAX_VALUE) }.toList()
+            }
+            .filter { (hash, files) -> hash.isNotEmpty() && files.size > 1 }
+            .map { (hash, files) -> DuplicateSet(hash, files.map { it.toStorageItem() }.sortedBy { it.lastModified }) }
+            .sortedByDescending { it.wastedBytes }
+    }
+
+    /** SHA-256 of the first [limit] bytes; empty when the file can't be read. */
+    private suspend fun File.digest(limit: Long): String {
+        val md = MessageDigest.getInstance("SHA-256")
+        val buffer = ByteArray(64 * 1024)
+        return try {
+            inputStream().use { input ->
+                var remaining = limit
+                while (remaining > 0) {
+                    currentCoroutineContext().ensureActive()
+                    val read = input.read(buffer, 0, minOf(buffer.size.toLong(), remaining).toInt())
+                    if (read < 0) break
+                    md.update(buffer, 0, read)
+                    remaining -= read
+                }
+            }
+            md.digest().joinToString("") { "%02x".format(it) }
+        } catch (_: java.io.IOException) {
+            ""
+        }
+    }
+
     private fun WhatsAppMediaType.folders(base: File): List<File> {
         val media = File(base, "Media")
         fun m(name: String) = File(media, name)
@@ -108,6 +162,7 @@ class StorageScanner @Inject constructor() {
     private fun File.isTopLevelStandardDir() = parentFile == root
 
     private companion object {
+        const val HEAD_BYTES = 64L * 1024
         val TEMP_EXTENSIONS = setOf("tmp", "temp", "log", "bak", "old", "crdownload", "part")
     }
 }

@@ -41,6 +41,7 @@ import androidx.compose.ui.semantics.semantics
 import com.aiyu.findex.ui.components.MenuIcon
 import androidx.compose.material.icons.rounded.PieChart
 import androidx.compose.material.icons.rounded.SdCard
+import androidx.compose.material.icons.rounded.FileCopy
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Storage
@@ -105,6 +106,7 @@ import com.aiyu.findex.ui.navigation.AnalyzerRoute
 import com.aiyu.findex.ui.navigation.CategoryRoute
 import com.aiyu.findex.ui.navigation.CleanerRoute
 import com.aiyu.findex.ui.navigation.ExplorerRoute
+import com.aiyu.findex.ui.navigation.DuplicatesRoute
 import com.aiyu.findex.ui.navigation.SearchRoute
 import com.aiyu.findex.ui.navigation.SettingsRoute
 import com.aiyu.findex.ui.navigation.WhatsAppRoute
@@ -239,6 +241,7 @@ fun HomeScreen(
                     onClean = { onNavigate(CleanerRoute) },
                     onWhatsApp = { onNavigate(WhatsAppRoute) },
                     onAnalyze = { onNavigate(AnalyzerRoute) },
+                    onDuplicates = { onNavigate(DuplicatesRoute) },
                     modifier = Modifier.staggeredEnter(stagger, "tools", 2)
                 )
             }
@@ -465,42 +468,55 @@ private fun ToolsBento(
     onClean: () -> Unit,
     onWhatsApp: () -> Unit,
     onAnalyze: () -> Unit,
+    onDuplicates: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(horizontalArrangement = Arrangement.spacedBy(Dimens.sm), modifier = modifier.height(232.dp)) {
-        ToolTile(
-            title = stringResource(R.string.cleaner_title),
-            body = stringResource(R.string.cleaner_desc),
-            icon = Icons.Rounded.CleaningServices,
-            shape = MaterialShapes.Burst,
-            container = MaterialTheme.colorScheme.tertiaryContainer,
-            content = MaterialTheme.colorScheme.onTertiaryContainer,
-            onClick = onClean,
-            large = true,
-            modifier = Modifier.weight(1f).fillMaxHeight()
-        )
-        Column(verticalArrangement = Arrangement.spacedBy(Dimens.sm), modifier = Modifier.weight(1f)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Dimens.sm), modifier = modifier) {
+        Row(horizontalArrangement = Arrangement.spacedBy(Dimens.sm), modifier = Modifier.height(232.dp)) {
             ToolTile(
-                title = stringResource(R.string.whatsapp_cleaner_title),
-                body = null,
-                icon = Icons.Rounded.Forum,
-                shape = MaterialShapes.Clover4Leaf,
-                container = MaterialTheme.colorScheme.secondaryContainer,
-                content = MaterialTheme.colorScheme.onSecondaryContainer,
-                onClick = onWhatsApp,
-                modifier = Modifier.weight(1f).fillMaxWidth()
+                title = stringResource(R.string.cleaner_title),
+                body = stringResource(R.string.cleaner_desc),
+                icon = Icons.Rounded.CleaningServices,
+                shape = MaterialShapes.Burst,
+                container = MaterialTheme.colorScheme.tertiaryContainer,
+                content = MaterialTheme.colorScheme.onTertiaryContainer,
+                onClick = onClean,
+                large = true,
+                modifier = Modifier.weight(1f).fillMaxHeight()
             )
-            ToolTile(
-                title = stringResource(R.string.storage_graph_title),
-                body = null,
-                icon = Icons.Rounded.PieChart,
-                shape = MaterialShapes.Pentagon,
-                container = MaterialTheme.colorScheme.surfaceContainerHighest,
-                content = MaterialTheme.colorScheme.onSurface,
-                onClick = onAnalyze,
-                modifier = Modifier.weight(1f).fillMaxWidth()
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(Dimens.sm), modifier = Modifier.weight(1f)) {
+                ToolTile(
+                    title = stringResource(R.string.whatsapp_cleaner_title),
+                    body = null,
+                    icon = Icons.Rounded.Forum,
+                    shape = MaterialShapes.Clover4Leaf,
+                    container = MaterialTheme.colorScheme.secondaryContainer,
+                    content = MaterialTheme.colorScheme.onSecondaryContainer,
+                    onClick = onWhatsApp,
+                    modifier = Modifier.weight(1f).fillMaxWidth()
+                )
+                ToolTile(
+                    title = stringResource(R.string.storage_graph_title),
+                    body = null,
+                    icon = Icons.Rounded.PieChart,
+                    shape = MaterialShapes.Pentagon,
+                    container = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    content = MaterialTheme.colorScheme.onSurface,
+                    onClick = onAnalyze,
+                    modifier = Modifier.weight(1f).fillMaxWidth()
+                )
+            }
         }
+        ToolTile(
+            title = stringResource(R.string.dup_title),
+            body = null,
+            icon = Icons.Rounded.FileCopy,
+            shape = MaterialShapes.Cookie6Sided,
+            container = MaterialTheme.colorScheme.primaryContainer,
+            content = MaterialTheme.colorScheme.onPrimaryContainer,
+            onClick = onDuplicates,
+            modifier = Modifier.fillMaxWidth().height(112.dp)
+        )
     }
 }
 

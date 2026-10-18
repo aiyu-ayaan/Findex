@@ -333,4 +333,16 @@
     <string name="search_prompt">Find anything on your storage by name</string>
     <string name="search_no_results">No files match “%1$s”</string>
     <string name="cd_clear_search">Clear search</string>
+    <!-- Duplicate finder -->
+    <string name="nav_duplicates">Duplicate files</string>
+    <string name="dup_title">Duplicate files</string>
+    <string name="dup_desc">Identical copies wasting space</string>
+    <string name="dup_none">No duplicate files found</string>
+    <string name="dup_keep_hint">The oldest copy of each file is kept. At least one copy always stays.</string>
+    <string name="dup_delete_button">Delete %1$s</string>
+    <string name="dup_hashing">Comparing file contents…</string>
+    <plurals name="dup_copies">
+        <item quantity="one">%d copy</item>
+        <item quantity="other">%d copies</item>
+    </plurals>
 </resources>

@@ -19,6 +19,7 @@ import androidx.compose.material.icons.rounded.CleaningServices
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.CloudQueue
 import androidx.compose.material.icons.rounded.Folder
+import androidx.compose.material.icons.rounded.FileCopy
 import androidx.compose.material.icons.rounded.Forum
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.PieChart
@@ -39,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.navigation.AnalyzerRoute
 import com.aiyu.findex.ui.navigation.CleanerRoute
+import com.aiyu.findex.ui.navigation.DuplicatesRoute
 import com.aiyu.findex.ui.navigation.HomeRoute
 import com.aiyu.findex.ui.navigation.RecycleBinRoute
 import com.aiyu.findex.ui.navigation.SettingsRoute
@@ -53,6 +55,7 @@ private val mainEntries = listOf(
     DrawerEntry(R.string.nav_storage_graph, Icons.Rounded.PieChart, AnalyzerRoute),
     DrawerEntry(R.string.nav_storage_cleaner, Icons.Rounded.CleaningServices, CleanerRoute),
     DrawerEntry(R.string.nav_whatsapp_cleaner, Icons.Rounded.Forum, WhatsAppRoute),
+    DrawerEntry(R.string.nav_duplicates, Icons.Rounded.FileCopy, DuplicatesRoute),
     DrawerEntry(R.string.nav_recycle_bin, Icons.Rounded.Delete, RecycleBinRoute),
 )
 

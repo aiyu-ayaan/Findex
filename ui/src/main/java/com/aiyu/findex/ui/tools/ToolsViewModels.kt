@@ -10,11 +10,13 @@ import com.aiyu.findex.core.model.StorageDrive
 import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.core.operation.OperationManager
 import com.aiyu.findex.core.repository.StorageRepository
+import com.aiyu.findex.core.scanner.DuplicateSet
 import com.aiyu.findex.core.scanner.JunkType
 import com.aiyu.findex.core.scanner.ScanGroup
 import com.aiyu.findex.core.scanner.StorageScanner
 import com.aiyu.findex.core.scanner.WhatsAppMediaType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -112,5 +114,60 @@ class AnalyzerViewModel @Inject constructor(
             val largest = scanner.largestFiles()
             _uiState.update { it.copy(largest = largest, isScanning = false) }
         }
+    }
+}
+
+data class DuplicatesUiState(
+    val isScanning: Boolean = true,
+    val sets: List<DuplicateSet> = emptyList(),
+    /** Paths marked for deletion. */
+    val selected: Set<String> = emptySet()
+) {
+    val selectedBytes: Long get() = sets.sumOf { set -> set.files.filter { it.path in selected }.sumOf { it.size } }
+    val wastedBytes: Long get() = sets.sumOf { it.wastedBytes }
+}
+
+@HiltViewModel
+class DuplicatesViewModel @Inject constructor(
+    private val scanner: StorageScanner,
+    private val operationManager: OperationManager
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(DuplicatesUiState())
+    val uiState: StateFlow<DuplicatesUiState> = _uiState.asStateFlow()
+    private var scanJob: Job? = null
+
+    init {
+        rescan()
+        viewModelScope.launch {
+            operationManager.results.collect { result ->
+                val op = (result as? OperationResult.Success)?.operation
+                if (op is FileOperation.Trash || op is FileOperation.Delete) rescan()
+            }
+        }
+    }
+
+    fun rescan() {
+        scanJob?.cancel()
+        scanJob = viewModelScope.launch {
+            _uiState.update { it.copy(isScanning = true) }
+            val sets = scanner.findDuplicates()
+            // Keep the oldest copy (first, sets are sorted by date); mark the rest.
+            val selected = sets.flatMapTo(HashSet()) { set -> set.files.drop(1).map { it.path } }
+            _uiState.update { DuplicatesUiState(isScanning = false, sets = sets, selected = selected) }
+        }
+    }
+
+    /** Never lets every copy of a set be marked: one always survives. */
+    fun toggle(set: DuplicateSet, path: String) = _uiState.update { s ->
+        when {
+            path in s.selected -> s.copy(selected = s.selected - path)
+            set.files.count { it.path !in s.selected } <= 1 -> s
+            else -> s.copy(selected = s.selected + path)
+        }
+    }
+
+    fun delete(permanent: Boolean) {
+        val paths = _uiState.value.selected.toList()
+        if (paths.isNotEmpty()) operationManager.enqueue(if (permanent) FileOperation.Delete(paths) else FileOperation.Trash(paths))
     }
 }

@@ -209,9 +209,28 @@ flowchart TD
 | Storage Analyzer | `AnalyzerViewModel` | `StorageRepository.getCategoryStats()` + `StorageScanner.largestFiles()` |
 | Storage Cleaner | `CleanerViewModel : CleanViewModel<JunkType>` | `StorageScanner.scanJunk()` → `FileOperation.Clean` via FGS |
 | WhatsApp Cleaner | `WhatsAppViewModel : CleanViewModel<WhatsAppMediaType>` | `StorageScanner.scanWhatsApp()` → `FileOperation.Clean` via FGS |
+| Duplicate files | `DuplicatesViewModel` | `StorageScanner.findDuplicates()` → `FileOperation.Trash` / `Delete` via FGS |
 
 `StorageScanner` skips `Android/data` and `Android/obb` and never offers top-level standard
 folders (DCIM, Music…) as "empty folders".
+
+### Duplicate finder
+
+```mermaid
+flowchart LR
+    Walk[walk primary storage<br/>files >= 1 KB, skip .FindexTrash] --> Size[group by size]
+    Size -->|groups of 2+| Head[SHA-256 of first 64 KB]
+    Head -->|file <= 64 KB| Set[DuplicateSet]
+    Head -->|larger, same head| Full[full SHA-256]
+    Full --> Set
+    Set --> VM[DuplicatesViewModel<br/>mark all but the oldest copy]
+    VM -->|DeleteDialog: bin or permanent| Ops[OperationManager → FGS]
+    Ops -->|Trash/Delete success| VM
+```
+
+- Only real collisions are read fully; unique sizes are never opened.
+- `toggle` refuses to mark the last unmarked copy of a set, so one copy always survives.
+- Reachable from the drawer and the Home Quick Tools bento (the rail is already at MD3's 7-item limit).
 
 ## 7. Recycle Bin
 
