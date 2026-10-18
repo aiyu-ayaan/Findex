@@ -136,7 +136,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 ### Network
 - [ ] Folder sync / backup to a share (one-way, scheduled via WorkManager)
 - [ ] Local network discovery of SMB hosts and servers
-- [ ] Share this phone: built-in FTP / HTTP server for PC transfers
+- [x] Share this phone: LAN HTTP server (NanoHTTPD) with 6-digit PIN, M3 web app (media sections, file explorer, preview, download, upload, rename, delete to Recycle Bin), live per-permission access, idle auto-stop (default 5 min), foreground service
 - [ ] WebDAV provider presets (Nextcloud, Box, pCloud)
 
 ### Explorer

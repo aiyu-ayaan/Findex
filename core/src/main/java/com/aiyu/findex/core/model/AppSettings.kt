@@ -4,6 +4,24 @@ import com.aiyu.findex.core.update.UpdateChannel
 
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
 
+/** What a browser connected to "Share this phone" may do. */
+enum class SharePermission {
+    /** Photos, videos, audio, documents… sections. */
+    MEDIA,
+    /** Full folder browser over every storage volume. */
+    FILES,
+    /** Open, preview and download file contents. */
+    DOWNLOAD,
+    /** Upload files and create folders. */
+    UPLOAD,
+    /** Rename, and delete into the recycle bin. */
+    MODIFY;
+
+    companion object {
+        val DEFAULT = setOf(MEDIA, FILES, DOWNLOAD)
+    }
+}
+
 data class AppSettings(
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val dynamicColor: Boolean = true,
@@ -20,7 +38,10 @@ data class AppSettings(
     /** Soft wrap in the text viewer. */
     val textWrap: Boolean = true,
     /** Minutes in the background before the vault locks; 0 = as soon as the app leaves. */
-    val vaultAutoLockMinutes: Int = 1
+    val vaultAutoLockMinutes: Int = 1,
+    val shareAccess: Set<SharePermission> = SharePermission.DEFAULT,
+    /** Minutes without requests before the share server stops itself; 0 = never. */
+    val shareIdleMinutes: Int = 5
 )
 
 data class ClipboardContent(val paths: List<String>, val isCut: Boolean)

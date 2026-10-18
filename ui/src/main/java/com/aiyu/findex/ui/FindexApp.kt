@@ -61,6 +61,8 @@ import com.aiyu.findex.ui.archive.ArchiveScreen
 import com.aiyu.findex.ui.navigation.ArchiveRoute
 import com.aiyu.findex.ui.navigation.DuplicatesRoute
 import com.aiyu.findex.ui.navigation.NetworkRoute
+import com.aiyu.findex.ui.navigation.ShareRoute
+import com.aiyu.findex.ui.share.ShareScreen
 import com.aiyu.findex.ui.network.NetworkScreen
 import com.aiyu.findex.core.network.SmbPath
 import com.aiyu.findex.ui.navigation.SearchRoute
@@ -279,6 +281,7 @@ private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: N
     composable<ArchiveRoute> { ArchiveScreen(onBack = back) }
     // A share opens as a normal explorer tab, so copy / paste works between it and the device.
     composable<NetworkRoute> { NetworkScreen(onBack = back, onOpenServer = { navController.navigate(ExplorerRoute(SmbPath.of(it, ""))) }) }
+    composable<ShareRoute> { ShareScreen(onBack = back) }
     composable<CategoryRoute> { CategoryScreen(onBack = back, onOpenFolder = openFolder, onOpenArchive = openArchive, onOpenFile = openFile) }
     composable<AnalyzerRoute> { AnalyzerScreen(onBack = back, onOpenFolder = openFolder) }
     composable<CleanerRoute> { CleanerScreen(onBack = back) }

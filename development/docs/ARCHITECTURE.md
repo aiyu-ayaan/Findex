@@ -229,6 +229,33 @@ flowchart LR
 
 ---
 
+## 3b. Share this phone (LAN web server)
+
+Drawer → **Share this phone** (`ShareRoute` → `ShareScreen`) starts a web server so a browser on the same Wi-Fi or hotspot can browse, download and upload phone files.
+
+```mermaid
+flowchart LR
+    UI[ShareScreen / ShareViewModel] -->|start / stop| M[ShareServerManager<br/>StateFlow ShareState]
+    UI -->|access + idle minutes| DS[(SettingsRepository<br/>DataStore)]
+    M -->|startForegroundService| Svc[ShareServerService<br/>FGS dataSync + Wi-Fi/wake lock]
+    Svc -->|publish Running url, pin, clients| M
+    Svc --> Srv[ShareHttpServer<br/>NanoHTTPD bound to LAN IPv4]
+    DS -->|live StateFlow| Srv
+    Browser[Browser: assets/share/index.html] -->|PIN login, cookie| Srv
+    Srv --> SR[StorageRepository<br/>list, categories, mkdir, rename]
+    Srv --> Ex[FileOperationExecutor<br/>Trash into Recycle Bin]
+    Svc -->|watchdog 10 s| Idle{idle > N min<br/>or address gone?}
+    Idle -->|yes| Stop[stop server + service]
+```
+
+- **Server**: `core/share/ShareHttpServer` (NanoHTTPD). Bound to the site-local IPv4 of Wi-Fi / hotspot / Ethernet only (never mobile data or IPv6), port 8080–8090.
+- **Auth**: random 6-digit PIN per start, `POST /api/login` sets an `HttpOnly; SameSite=Strict` session cookie. Wrong PINs lock the IP using `VaultKeyManager.lockoutMs` (5 free, then 30 s doubling). Non-GET calls need `X-Findex: 1` (forces a CORS preflight, blocks cross-site posts).
+- **Access** (`SharePermission`: `MEDIA`, `FILES`, `DOWNLOAD`, `UPLOAD`, `MODIFY`) is read from settings on every request, so toggles on the phone apply to signed-in browsers at once. Presets View / Download / Full set the switches.
+- **Paths** are canonicalised and must stay inside a storage volume; `.FindexVault` and `.FindexTrash` are never listed or served. Inline HTML/SVG/XML is served as `text/plain`.
+- **API**: `/api/info`, `/api/list?path`, `/api/category?c`, `/api/file?path[&dl]` (Range support), `/api/thumb?path`, `PUT /api/upload?dir&name` (raw body, `.part` then rename, `name (n)` on conflict), `/api/mkdir`, `/api/rename`, `/api/delete` (moves to Recycle Bin through `FileOperationExecutor`, already inside a foreground service).
+- **Lifetime**: `ShareServerService` stops after `shareIdleMinutes` (default 5, 0 = never) with no request and no running transfer, when the LAN address disappears, from the notification's Stop action, or on Android 15's `dataSync` `onTimeout`.
+- **Web app**: one file, `ui/src/main/assets/share/index.html` (no external requests, CSP `'self'`). Tokens copy `Color.kt` and `CategoryTones.kt`, light/dark by `prefers-color-scheme`. Its texts are English-only for now; app strings stay in `ui/res`.
+
 ## 4. Standalone Runner (`run.sh`)
 
 For developers without Android Studio installed, `run.sh` provides a complete headless CLI build-and-run workflow:

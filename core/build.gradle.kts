@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.smbj) // SMB 2/3 client for Windows network shares
     implementation(libs.jsch) // SFTP client over SSH2
     implementation(libs.commons.net) // FTP / FTPS client
+    implementation(libs.nanohttpd) // LAN web server for "Share this phone"
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)

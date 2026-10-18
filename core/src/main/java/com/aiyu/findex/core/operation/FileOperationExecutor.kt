@@ -44,7 +44,7 @@ class FileOperationExecutor @Inject constructor(
     private val vaultOperations: VaultOperations
 ) {
 
-    private companion object {
+    internal companion object {
         const val BUFFER_SIZE = 256 * 1024
         const val REPORT_INTERVAL_MS = 120L
         const val TRASH_DIR = ".FindexTrash"

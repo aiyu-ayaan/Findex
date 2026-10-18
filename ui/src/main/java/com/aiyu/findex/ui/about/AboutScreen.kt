@@ -60,7 +60,7 @@ private val libraries = listOf(
     Library("kotlinx.serialization", "https://github.com/Kotlin/kotlinx.serialization"),
     Library("Jetpack Compose", "https://developer.android.com/jetpack/compose"),
     Library("Material 3 for Compose", "https://developer.android.com/jetpack/androidx/releases/compose-material3"),
-    Library("AndroidX Core, Lifecycle, Activity, Navigation, DataStore, Room", "https://developer.android.com/jetpack/androidx"),
+    Library("AndroidX Core, Lifecycle, Activity, Navigation, DataStore, Room, WorkManager, SplashScreen", "https://developer.android.com/jetpack/androidx"),
     Library("Hilt", "https://github.com/google/dagger"),
     Library("Coil", "https://github.com/coil-kt/coil"),
     Library("Zip4j", "https://github.com/srikanth-lingala/zip4j"),
@@ -70,6 +70,7 @@ private val libraries = listOf(
     Library("smbj", "https://github.com/hierynomus/smbj"),
     Library("JSch", "https://github.com/mwiede/jsch", "BSD-3-Clause"),
     Library("Apache Commons Net", "https://commons.apache.org/proper/commons-net/"),
+    Library("NanoHTTPD (Share this phone web server)", "https://github.com/NanoHttpd/nanohttpd", "BSD-3-Clause"),
 )
 
 @Composable

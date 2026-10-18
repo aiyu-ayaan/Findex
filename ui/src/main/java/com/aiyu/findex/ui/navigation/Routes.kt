@@ -18,6 +18,7 @@ import kotlinx.serialization.Serializable
 /** Browses the contents of the archive at [path] without extracting it. */
 @Serializable data class ArchiveRoute(val path: String)
 @Serializable object NetworkRoute
+@Serializable object ShareRoute
 @Serializable object AboutRoute
 @Serializable object AcknowledgementsRoute
 @Serializable object UpdatesRoute

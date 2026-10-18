@@ -17,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CleaningServices
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Devices
 import androidx.compose.material.icons.rounded.CloudQueue
 import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.FileCopy
@@ -53,6 +54,7 @@ import com.aiyu.findex.ui.navigation.NetworkRoute
 import com.aiyu.findex.ui.navigation.HomeRoute
 import com.aiyu.findex.ui.navigation.RecycleBinRoute
 import com.aiyu.findex.ui.navigation.SettingsRoute
+import com.aiyu.findex.ui.navigation.ShareRoute
 import com.aiyu.findex.ui.navigation.TabsRoute
 import com.aiyu.findex.ui.navigation.WhatsAppRoute
 import com.aiyu.findex.ui.theme.Dimens
@@ -153,6 +155,13 @@ fun FindexDrawerSheet(
                 label = { Text(stringResource(R.string.nav_network_storage)) },
                 selected = isCurrent(NetworkRoute),
                 onClick = { onNavigate(NetworkRoute) },
+                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+            )
+            NavigationDrawerItem(
+                icon = { Icon(Icons.Rounded.Devices, contentDescription = null) },
+                label = { Text(stringResource(R.string.nav_share_phone)) },
+                selected = isCurrent(ShareRoute),
+                onClick = { onNavigate(ShareRoute) },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
             )
             NavigationDrawerItem(

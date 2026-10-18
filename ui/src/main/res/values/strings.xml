@@ -707,4 +707,45 @@
     <string name="settings_storage_history">Storage history</string>
     <string name="settings_storage_history_desc">Keep daily storage snapshots for the growth chart</string>
     <!-- END recent-changes-growth -->
+    <!-- BEGIN share-phone -->
+    <string name="nav_share_phone">Share this phone</string>
+    <string name="share_channel_name">Share this phone</string>
+    <string name="share_notification_title">Sharing this phone</string>
+    <string name="share_notification_text">Open %1$s · PIN %2$s</string>
+    <string name="share_stop">Stop</string>
+    <string name="share_start">Start sharing</string>
+    <string name="share_starting">Starting…</string>
+    <string name="share_intro_title">Open your files on a computer</string>
+    <string name="share_intro_body">Findex starts a small web server on this phone. Any browser on the same Wi-Fi or hotspot can open it with a one-time PIN.</string>
+    <string name="share_no_network">Connect to Wi-Fi or turn on the hotspot first.</string>
+    <string name="share_open_url">Open in a browser on your computer</string>
+    <string name="share_pin">PIN</string>
+    <string name="share_copy_url">Copy address</string>
+    <string name="share_copied">Address copied</string>
+    <plurals name="share_clients">
+        <item quantity="one">%d browser signed in</item>
+        <item quantity="other">%d browsers signed in</item>
+    </plurals>
+    <string name="share_clients_none">No browser signed in yet</string>
+    <string name="share_access">Access</string>
+    <string name="share_access_hint">Changes apply right away, even to connected browsers.</string>
+    <string name="share_level_view">View</string>
+    <string name="share_level_download">Download</string>
+    <string name="share_level_full">Full</string>
+    <string name="share_perm_media">Media sections</string>
+    <string name="share_perm_media_desc">Photos, videos, audio, documents and more</string>
+    <string name="share_perm_files">File explorer</string>
+    <string name="share_perm_files_desc">Browse every folder on internal storage and SD card</string>
+    <string name="share_perm_download">Open and download</string>
+    <string name="share_perm_download_desc">Preview, stream and save files on the computer</string>
+    <string name="share_perm_upload">Upload</string>
+    <string name="share_perm_upload_desc">Add files and create folders from the computer</string>
+    <string name="share_perm_modify">Rename and delete</string>
+    <string name="share_perm_modify_desc">Deleted files go to the Recycle Bin</string>
+    <string name="share_auto_stop">Auto stop</string>
+    <string name="share_auto_stop_desc">Stop the server after this long without any request</string>
+    <string name="share_minutes">%d min</string>
+    <string name="share_never">Never</string>
+    <string name="share_security_note">Traffic is not encrypted. Share only on networks you trust.</string>
+    <!-- END share-phone -->
 </resources>

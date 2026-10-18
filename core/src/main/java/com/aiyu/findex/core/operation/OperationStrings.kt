@@ -19,4 +19,8 @@ interface OperationStrings {
     /** Short headline of a finished operation, e.g. "Copied 3 items". */
     fun resultTitle(result: OperationResult): String
     fun result(result: OperationResult): String
+    val shareChannelName: String
+    val shareTitle: String
+    val shareStop: String
+    fun shareText(url: String, pin: String): String
 }

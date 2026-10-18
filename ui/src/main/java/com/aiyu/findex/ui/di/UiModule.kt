@@ -42,6 +42,11 @@ class ResourceOperationStrings @Inject constructor(
         is OperationResult.Cancelled -> context.getString(R.string.operation_cancelled_body)
         is OperationResult.Failed -> context.getString(failureRes(result.reason))
     }
+
+    override val shareChannelName: String get() = context.getString(R.string.share_channel_name)
+    override val shareTitle: String get() = context.getString(R.string.share_notification_title)
+    override val shareStop: String get() = context.getString(R.string.share_stop)
+    override fun shareText(url: String, pin: String): String = context.getString(R.string.share_notification_text, url, pin)
 }
 
 fun operationTitleRes(operation: FileOperation): Int = when (operation) {

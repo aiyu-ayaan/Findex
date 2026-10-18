@@ -5,8 +5,10 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.aiyu.findex.core.model.AppSettings
+import com.aiyu.findex.core.model.SharePermission
 import com.aiyu.findex.core.model.SortBy
 import com.aiyu.findex.core.model.SortSpec
 import com.aiyu.findex.core.model.ThemeMode
@@ -38,6 +40,8 @@ class SettingsRepository @Inject constructor(
         val storageHistory = booleanPreferencesKey("storage_history")
         val textWrap = booleanPreferencesKey("text_wrap")
         val vaultAutoLockMinutes = intPreferencesKey("vault_auto_lock_minutes")
+        val shareAccess = stringSetPreferencesKey("share_access")
+        val shareIdleMinutes = intPreferencesKey("share_idle_minutes")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -52,7 +56,10 @@ class SettingsRepository @Inject constructor(
             updateChannel = p[Keys.updateChannel]?.let { n -> UpdateChannel.entries.firstOrNull { it.name == n } },
             storageHistory = p[Keys.storageHistory] ?: true,
             textWrap = p[Keys.textWrap] ?: true,
-            vaultAutoLockMinutes = p[Keys.vaultAutoLockMinutes] ?: 1
+            vaultAutoLockMinutes = p[Keys.vaultAutoLockMinutes] ?: 1,
+            shareAccess = p[Keys.shareAccess]?.mapNotNull { n -> SharePermission.entries.firstOrNull { it.name == n } }?.toSet()
+                ?: SharePermission.DEFAULT,
+            shareIdleMinutes = p[Keys.shareIdleMinutes] ?: 5
         )
     }
 
@@ -68,6 +75,8 @@ class SettingsRepository @Inject constructor(
     suspend fun setStorageHistory(enabled: Boolean) = edit { it[Keys.storageHistory] = enabled }
     suspend fun setTextWrap(enabled: Boolean) = edit { it[Keys.textWrap] = enabled }
     suspend fun setVaultAutoLockMinutes(minutes: Int) = edit { it[Keys.vaultAutoLockMinutes] = minutes }
+    suspend fun setShareAccess(access: Set<SharePermission>) = edit { it[Keys.shareAccess] = access.map { p -> p.name }.toSet() }
+    suspend fun setShareIdleMinutes(minutes: Int) = edit { it[Keys.shareIdleMinutes] = minutes }
     suspend fun setOnboardingDone() = edit { it[Keys.onboardingDone] = true }
     suspend fun setSort(sort: SortSpec) = edit {
         it[Keys.sortBy] = sort.by.name
