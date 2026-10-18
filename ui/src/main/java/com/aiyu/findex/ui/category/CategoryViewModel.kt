@@ -14,11 +14,13 @@ import com.aiyu.findex.core.repository.LibraryRepository
 import com.aiyu.findex.core.repository.StorageRepository
 import com.aiyu.findex.ui.navigation.CategoryRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
@@ -53,8 +55,9 @@ class CategoryViewModel @Inject constructor(
     fun load() {
         viewModelScope.launch {
             // MediaStore can lag behind deletes; drop entries whose file is gone.
-            val items = storageRepository.getCategoryFiles(category).filter { File(it.path).exists() }
-            _uiState.update { s -> s.copy(items = items, isLoading = false, selection = s.selection.filterTo(HashSet()) { p -> items.any { it.path == p } }) }
+            val items = withContext(Dispatchers.IO) { storageRepository.getCategoryFiles(category).filter { File(it.path).exists() } }
+            val paths = items.mapTo(HashSet()) { it.path }
+            _uiState.update { s -> s.copy(items = items, isLoading = false, selection = s.selection.filterTo(HashSet()) { it in paths }) }
         }
     }
 

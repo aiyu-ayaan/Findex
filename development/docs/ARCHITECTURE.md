@@ -228,6 +228,25 @@ flowchart TD
   (`dragToSelect` in `ExplorerContent.kt`) with edge auto-scroll; tap toggles while selecting.
 - **Clipboard** is app-wide (`FileClipboard`), so copy in one tab and paste in another.
 
+## 5b. Thumbnails & image loading
+
+`findexImageLoader` (ui/components/Thumbnails.kt) is Coil's singleton loader, set in `FindexApp`. Every list/grid thumbnail goes through a `Thumb(path, lastModified, isVideo)` model instead of the raw file, so a full photo or a video frame is decoded only once.
+
+```mermaid
+flowchart LR
+    Row[FileThumbnail] -->|Thumb| Mem{Memory cache<br/>25% of heap}
+    Mem -->|miss| Fetch[ThumbFetcher]
+    Fetch -->|hit| Disk[(cache/thumbnails<br/>150 MB LRU)]
+    Fetch -->|miss, max 3 at once| Gen[ThumbnailUtils 256px<br/>API 26-28: sampled decode / frame]
+    Gen -->|WebP| Disk
+    Disk --> Row
+```
+
+- The disk cache key includes `lastModified`, so an edited file gets a new thumbnail; old entries are never read again and are evicted first once the cache reaches 150 MB (least-recently-used). Android may also clear `cacheDir` under storage pressure.
+- Generation runs on `Dispatchers.IO.limitedParallelism(3)` so a fling over hundreds of videos can't saturate the CPU and drop frames.
+- Requests are cancelled when a row scrolls off screen (Coil lifecycle), so only visible thumbnails are built.
+- Full-size previews (`ImagePreviewCard`, `VideoPreviewCard`) still load the file directly; `VideoFrameDecoder` is registered for them.
+
 ## 6. Tools
 
 | Screen | ViewModel | Data |

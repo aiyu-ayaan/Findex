@@ -194,7 +194,7 @@ private fun DuplicateSetCard(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(start = Dimens.lg, end = Dimens.lg, top = Dimens.md, bottom = Dimens.sm)
             ) {
-                FileThumbnail(first.path, false, first.extension)
+                FileThumbnail(first.path, false, first.extension, lastModified = first.lastModified)
                 Spacer(Modifier.width(Dimens.md))
                 Column(Modifier.weight(1f)) {
                     Text(first.name, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.MiddleEllipsis)

@@ -29,7 +29,7 @@ import coil3.compose.AsyncImage
 import com.aiyu.findex.core.model.FileCategory
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.theme.tone
-import java.io.File
+import androidx.compose.runtime.remember
 
 private val IMAGE = setOf("jpg", "jpeg", "png", "gif", "webp", "heic", "heif", "bmp", "svg", "avif")
 private val VIDEO = setOf("mp4", "mkv", "webm", "avi", "mov", "3gp", "m4v", "ts")
@@ -82,7 +82,9 @@ fun FileThumbnail(
     isDirectory: Boolean,
     extension: String,
     modifier: Modifier = Modifier,
-    size: Dp = 44.dp
+    size: Dp = 44.dp,
+    /** Part of the thumbnail cache key; pass the file's date so edits refresh the thumbnail. */
+    lastModified: Long = 0L
 ) {
     if (isDirectory) {
         ShapeIcon(
@@ -107,7 +109,8 @@ fun FileThumbnail(
                 .background(tone.container)
         ) {
             AsyncImage(
-                model = File(path),
+                // Cached 256px thumbnail instead of decoding the full photo / a video frame on every bind.
+                model = remember(path, lastModified) { Thumb(path, lastModified, isVideo = category == FileCategory.VIDEOS) },
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(size)

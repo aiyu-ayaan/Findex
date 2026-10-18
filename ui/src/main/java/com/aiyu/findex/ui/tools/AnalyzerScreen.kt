@@ -177,7 +177,7 @@ fun AnalyzerScreen(
                             val folder = if (parent?.absolutePath == drive?.path) drive?.name else parent?.name
                             Text(folder.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis)
                         },
-                        leadingContent = { FileThumbnail(file.path, false, file.extension) },
+                        leadingContent = { FileThumbnail(file.path, false, file.extension, lastModified = file.lastModified) },
                         trailingContent = { Text(formatSize(file.size), style = MaterialTheme.typography.labelLarge) },
                         colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         modifier = Modifier

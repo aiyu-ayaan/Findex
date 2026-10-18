@@ -296,7 +296,7 @@ private fun FileRow(
                 .padding(start = Dimens.md, end = Dimens.xs, top = Dimens.sm, bottom = Dimens.sm)
         ) {
             Box(contentAlignment = Alignment.Center) {
-                FileThumbnail(item.path, item.isDirectory, item.extension)
+                FileThumbnail(item.path, item.isDirectory, item.extension, lastModified = item.lastModified)
                 SelectionBadge(selected)
             }
             Spacer(Modifier.width(Dimens.lg))
@@ -376,7 +376,7 @@ private fun FileCell(
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(Dimens.sm)) {
             Box(contentAlignment = Alignment.Center) {
-                FileThumbnail(item.path, item.isDirectory, item.extension, size = 72.dp)
+                FileThumbnail(item.path, item.isDirectory, item.extension, size = 72.dp, lastModified = item.lastModified)
                 if (selected) {
                     MorphingShapeIcon(
                         icon = Icons.Rounded.Check,

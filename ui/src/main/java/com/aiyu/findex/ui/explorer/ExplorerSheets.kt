@@ -103,7 +103,7 @@ fun ItemActionSheet(
             ListItem(
                 headlineContent = { Text(item.name, maxLines = 2, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleMedium) },
                 supportingContent = { Text(if (item.isDirectory) formatDate(item.lastModified) else formatSize(item.size) + " · " + formatDate(item.lastModified)) },
-                leadingContent = { FileThumbnail(item.path, item.isDirectory, item.extension, size = 52.dp) },
+                leadingContent = { FileThumbnail(item.path, item.isDirectory, item.extension, size = 52.dp, lastModified = item.lastModified) },
                 colors = ListItemDefaults.colors(containerColor = Color.Transparent)
             )
             HorizontalDivider(Modifier.padding(horizontal = Dimens.xl, vertical = Dimens.sm))

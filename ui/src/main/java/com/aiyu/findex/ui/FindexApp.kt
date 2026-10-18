@@ -44,7 +44,9 @@ import androidx.navigation.compose.rememberNavController
 import com.aiyu.findex.core.model.FileOperation
 import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.model.ThemeMode
+import coil3.compose.setSingletonImageLoaderFactory
 import com.aiyu.findex.ui.components.FindexDrawerSheet
+import com.aiyu.findex.ui.components.findexImageLoader
 import com.aiyu.findex.ui.components.PushDrawer
 import com.aiyu.findex.ui.components.FindexNavRail
 import com.aiyu.findex.ui.components.windowWidth
@@ -90,6 +92,7 @@ val LocalSnackbarHostState = staticCompositionLocalOf { SnackbarHostState() }
 
 @Composable
 fun FindexApp(onReady: () -> Unit = {}, viewModel: AppViewModel = hiltViewModel()) {
+    setSingletonImageLoaderFactory { context -> findexImageLoader(context) }
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val current = settings ?: return // the splash stays up until settings are known
     SideEffect(onReady)
