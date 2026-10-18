@@ -10,8 +10,12 @@ import com.aiyu.findex.core.model.StorageDrive
 import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.core.operation.OperationManager
 import com.aiyu.findex.core.repository.StorageRepository
+import com.aiyu.findex.core.scanner.AppJunkScanner
+import com.aiyu.findex.core.scanner.AppJunkType
+import com.aiyu.findex.core.scanner.AppMediaType
 import com.aiyu.findex.core.scanner.DuplicateSet
 import com.aiyu.findex.core.scanner.JunkType
+import com.aiyu.findex.core.scanner.MediaApp
 import com.aiyu.findex.core.scanner.ScanGroup
 import com.aiyu.findex.core.scanner.StorageScanner
 import com.aiyu.findex.core.scanner.WhatsAppMediaType
@@ -73,8 +77,8 @@ class CleanerViewModel @Inject constructor(
 ) : CleanViewModel<JunkType>(operationManager) {
     init { rescan() }
     override suspend fun scan() = scanner.scanJunk()
-    // APKs might still be wanted; let the user opt in.
-    override fun defaultSelected(groups: List<ScanGroup<JunkType>>) = groups.map { it.type }.toSet() - JunkType.APK_FILES
+    // APKs might still be wanted and empty files can be placeholders; let the user opt in.
+    override fun defaultSelected(groups: List<ScanGroup<JunkType>>) = groups.map { it.type }.toSet() - JunkType.APK_FILES - JunkType.ZERO_BYTE_FILES
 }
 
 @HiltViewModel
@@ -86,6 +90,36 @@ class WhatsAppViewModel @Inject constructor(
     override suspend fun scan() = scanner.scanWhatsApp()
     // Personal media is opt-in; nothing is pre-selected.
     override fun defaultSelected(groups: List<ScanGroup<WhatsAppMediaType>>) = emptySet<WhatsAppMediaType>()
+}
+
+/** Telegram / Instagram media, same flow as [WhatsAppViewModel]. */
+abstract class AppMediaViewModel(
+    val app: MediaApp,
+    private val scanner: StorageScanner,
+    operationManager: OperationManager
+) : CleanViewModel<AppMediaType>(operationManager) {
+    init { rescan() }
+    override suspend fun scan() = scanner.scanAppMedia(app)
+    override fun defaultSelected(groups: List<ScanGroup<AppMediaType>>) = emptySet<AppMediaType>()
+}
+
+@HiltViewModel
+class TelegramViewModel @Inject constructor(scanner: StorageScanner, operationManager: OperationManager) :
+    AppMediaViewModel(MediaApp.TELEGRAM, scanner, operationManager)
+
+@HiltViewModel
+class InstagramViewModel @Inject constructor(scanner: StorageScanner, operationManager: OperationManager) :
+    AppMediaViewModel(MediaApp.INSTAGRAM, scanner, operationManager)
+
+@HiltViewModel
+class AppCleanerViewModel @Inject constructor(
+    private val scanner: AppJunkScanner,
+    operationManager: OperationManager
+) : CleanViewModel<AppJunkType>(operationManager) {
+    init { rescan() }
+    override suspend fun scan() = scanner.scan()
+    // A removed app's folder can hold its media (WhatsApp keeps everything in Android/media); opt-in.
+    override fun defaultSelected(groups: List<ScanGroup<AppJunkType>>) = groups.map { it.type }.toSet() - AppJunkType.LEFTOVERS
 }
 
 data class AnalyzerUiState(

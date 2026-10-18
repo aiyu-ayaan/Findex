@@ -15,7 +15,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.CleaningServices
+import androidx.compose.material.icons.rounded.PhotoCamera
+import androidx.compose.material.icons.automirrored.rounded.Send
+import androidx.compose.material.icons.rounded.VerticalSplit
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Devices
 import androidx.compose.material.icons.rounded.CloudQueue
@@ -44,6 +48,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.navigation.AnalyzerRoute
+import com.aiyu.findex.ui.navigation.AppCleanerRoute
+import com.aiyu.findex.ui.navigation.InstagramRoute
+import com.aiyu.findex.ui.navigation.TelegramRoute
+import com.aiyu.findex.ui.navigation.DualPaneRoute
 import com.aiyu.findex.ui.navigation.CleanerRoute
 import com.aiyu.findex.ui.navigation.DuplicatesRoute
 import com.aiyu.findex.ui.navigation.FavoritesRoute
@@ -65,13 +73,17 @@ private val mainEntries = listOf(
     DrawerEntry(R.string.nav_home, Icons.Rounded.Home, HomeRoute),
     DrawerEntry(R.string.nav_storage_graph, Icons.Rounded.PieChart, AnalyzerRoute),
     DrawerEntry(R.string.nav_storage_cleaner, Icons.Rounded.CleaningServices, CleanerRoute),
+    DrawerEntry(R.string.nav_app_cleaner, Icons.Rounded.Apps, AppCleanerRoute),
     DrawerEntry(R.string.nav_whatsapp_cleaner, Icons.Rounded.Forum, WhatsAppRoute),
+    DrawerEntry(R.string.nav_telegram_cleaner, Icons.AutoMirrored.Rounded.Send, TelegramRoute),
+    DrawerEntry(R.string.nav_instagram_cleaner, Icons.Rounded.PhotoCamera, InstagramRoute),
     DrawerEntry(R.string.nav_duplicates, Icons.Rounded.FileCopy, DuplicatesRoute),
     DrawerEntry(R.string.nav_recycle_bin, Icons.Rounded.Delete, RecycleBinRoute),
 )
 
 private val moreEntries = listOf(
     DrawerEntry(R.string.nav_favorites, Icons.Rounded.Star, FavoritesRoute),
+    DrawerEntry(R.string.nav_dual_pane, Icons.Rounded.VerticalSplit, DualPaneRoute()),
     DrawerEntry(R.string.nav_large_files, Icons.Rounded.SdStorage, LargeFilesRoute),
     DrawerEntry(R.string.nav_recent_changes, Icons.Rounded.History, RecentChangesRoute),
     DrawerEntry(R.string.nav_vault, Icons.Rounded.Lock, VaultRoute()),

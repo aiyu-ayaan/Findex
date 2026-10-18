@@ -69,6 +69,7 @@ import androidx.compose.material.icons.rounded.SelectAll
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Tab
 import androidx.compose.material.icons.rounded.ViewAgenda
+import androidx.compose.material.icons.rounded.VerticalSplit
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -134,6 +135,7 @@ import com.aiyu.findex.ui.components.ShapeIcon
 import com.aiyu.findex.ui.components.isImageExtension
 import com.aiyu.findex.ui.components.isMediaExtension
 import com.aiyu.findex.ui.navigation.BatchRenameRoute
+import com.aiyu.findex.ui.navigation.DualPaneRoute
 import com.aiyu.findex.ui.navigation.ImageCompressRoute
 import com.aiyu.findex.ui.navigation.SelectionHandoff
 import com.aiyu.findex.ui.navigation.VaultRoute
@@ -271,6 +273,7 @@ fun ExplorerScreen(
                             onNewFolder = { modal = ExplorerModal.NewFolder },
                             tabCount = state.tabs.size,
                             onOpenTabs = onOpenTabs,
+                            onDualPane = { onFeatureRoute(DualPaneRoute(tab?.path)) },
                             scrollBehavior = scrollBehavior
                         )
                     }
@@ -628,6 +631,7 @@ private fun BrowseTopBar(
     onNewFolder: () -> Unit,
     tabCount: Int,
     onOpenTabs: () -> Unit,
+    onDualPane: () -> Unit,
     scrollBehavior: androidx.compose.material3.TopAppBarScrollBehavior
 ) {
     var menu by remember { mutableStateOf(false) }
@@ -670,6 +674,11 @@ private fun BrowseTopBar(
                         text = { Text(stringResource(R.string.action_new_tab)) },
                         leadingIcon = { Icon(Icons.Rounded.Tab, null) },
                         onClick = { menu = false; onNewTab() }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.nav_dual_pane)) },
+                        leadingIcon = { Icon(Icons.Rounded.VerticalSplit, null) },
+                        onClick = { menu = false; onDualPane() }
                     )
                 }
             }

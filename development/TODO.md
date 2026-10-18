@@ -142,14 +142,14 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 ### Explorer
 - [x] Text / code viewer and editor, PDF viewer, audio player
 - [x] Favorites and colored tags
-- [ ] Compare folders, dual-pane mode on phones
+- [x] Compare folders, dual-pane mode on phones (`DualPaneScreen`: stacked in portrait, side by side when wide; copy / move / delete across panes; `FolderCompare` marks only-here / newer / older / different / same, "select missing")
 - [x] Pinned folder shortcuts on the launcher
 - [x] Recent-changes view, storage growth history graph
 
 ### Cleaner
-- [ ] App cache and leftover folders of uninstalled apps
-- [ ] Telegram / Instagram media cleaner (same pattern as WhatsApp)
-- [ ] Empty folders and zero-byte files scanner
+- [x] App cache and leftover folders of uninstalled apps (`AppJunkScanner`, `QUERY_ALL_PACKAGES`; leftovers opt-in; other apps' private cache is out of reach on Android 11+)
+- [x] Telegram / Instagram media cleaner (same pattern as WhatsApp)
+- [x] Empty folders and zero-byte files scanner (nested empty trees, topmost folder only; empty files opt-in, dot-files kept)
 
 ### Polish
 - [ ] Localization (strings already centralized in `ui`)

@@ -23,6 +23,9 @@ import androidx.compose.material.icons.rounded.Description
 import androidx.compose.material.icons.rounded.EmojiEmotions
 import androidx.compose.material.icons.rounded.Gif
 import androidx.compose.material.icons.rounded.Android
+import androidx.compose.material.icons.rounded.Apps
+import androidx.compose.material.icons.rounded.Cached
+import androidx.compose.material.icons.automirrored.rounded.InsertDriveFile
 import androidx.compose.material.icons.rounded.FolderOff
 import androidx.compose.material.icons.rounded.Image
 import androidx.compose.material.icons.rounded.Mic
@@ -64,7 +67,10 @@ import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.aiyu.findex.core.scanner.AppJunkType
+import com.aiyu.findex.core.scanner.AppMediaType
 import com.aiyu.findex.core.scanner.JunkType
+import com.aiyu.findex.core.scanner.MediaApp
 import com.aiyu.findex.core.scanner.ScanGroup
 import com.aiyu.findex.core.scanner.WhatsAppMediaType
 import com.aiyu.findex.ui.R
@@ -92,6 +98,7 @@ fun CleanerScreen(onBack: () -> Unit, viewModel: CleanerViewModel = hiltViewMode
                 JunkType.TEMP_FILES -> GroupPresentation(R.string.junk_temp, R.string.junk_temp_desc, Icons.Rounded.Description, MaterialShapes.Cookie6Sided)
                 JunkType.APK_FILES -> GroupPresentation(R.string.junk_apks, R.string.junk_apks_desc, Icons.Rounded.Android, MaterialShapes.SoftBurst)
                 JunkType.EMPTY_FOLDERS -> GroupPresentation(R.string.junk_empty, R.string.junk_empty_desc, Icons.Rounded.FolderOff, MaterialShapes.Cookie4Sided)
+                JunkType.ZERO_BYTE_FILES -> GroupPresentation(R.string.junk_zero, R.string.junk_zero_desc, Icons.AutoMirrored.Rounded.InsertDriveFile, MaterialShapes.Clover4Leaf)
             }
         },
         onToggle = viewModel::toggle,
@@ -119,6 +126,57 @@ fun WhatsAppScreen(onBack: () -> Unit, viewModel: WhatsAppViewModel = hiltViewMo
                 WhatsAppMediaType.STICKERS -> GroupPresentation(R.string.wa_stickers, null, Icons.Rounded.EmojiEmotions, MaterialShapes.Clover4Leaf)
                 WhatsAppMediaType.GIFS -> GroupPresentation(R.string.wa_gifs, null, Icons.Rounded.Gif, MaterialShapes.SoftBurst)
                 WhatsAppMediaType.BACKUPS -> GroupPresentation(R.string.wa_backups, null, Icons.Rounded.Backup, MaterialShapes.Pentagon)
+            }
+        },
+        onToggle = viewModel::toggle,
+        onClean = viewModel::clean,
+        onRescan = viewModel::rescan,
+        onBack = onBack
+    )
+}
+
+@Composable
+fun TelegramScreen(onBack: () -> Unit, viewModel: TelegramViewModel = hiltViewModel()) = AppMediaScreen(onBack, viewModel)
+
+@Composable
+fun InstagramScreen(onBack: () -> Unit, viewModel: InstagramViewModel = hiltViewModel()) = AppMediaScreen(onBack, viewModel)
+
+@Composable
+private fun AppMediaScreen(onBack: () -> Unit, viewModel: AppMediaViewModel) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val telegram = viewModel.app == MediaApp.TELEGRAM
+    CleanScaffold(
+        title = stringResource(if (telegram) R.string.telegram_cleaner_title else R.string.instagram_cleaner_title),
+        hint = stringResource(if (telegram) R.string.tg_hint else R.string.ig_hint),
+        emptyText = stringResource(if (telegram) R.string.tg_not_found else R.string.ig_not_found),
+        state = state,
+        present = { type ->
+            when (type) {
+                AppMediaType.IMAGES -> GroupPresentation(R.string.wa_images, null, Icons.Rounded.Image, MaterialShapes.Cookie9Sided)
+                AppMediaType.VIDEOS -> GroupPresentation(R.string.wa_videos, null, Icons.Rounded.Movie, MaterialShapes.Cookie7Sided)
+                AppMediaType.AUDIO -> GroupPresentation(R.string.wa_audio, null, Icons.Rounded.MusicNote, MaterialShapes.Sunny)
+                AppMediaType.DOCUMENTS -> GroupPresentation(R.string.app_media_files, null, Icons.Rounded.Description, MaterialShapes.Cookie6Sided)
+            }
+        },
+        onToggle = viewModel::toggle,
+        onClean = viewModel::clean,
+        onRescan = viewModel::rescan,
+        onBack = onBack
+    )
+}
+
+@Composable
+fun AppCleanerScreen(onBack: () -> Unit, viewModel: AppCleanerViewModel = hiltViewModel()) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    CleanScaffold(
+        title = stringResource(R.string.app_cleaner_title),
+        hint = stringResource(R.string.app_cleaner_hint),
+        emptyText = stringResource(R.string.app_cleaner_empty),
+        state = state,
+        present = { type ->
+            when (type) {
+                AppJunkType.LEFTOVERS -> GroupPresentation(R.string.app_leftovers, R.string.app_leftovers_desc, Icons.Rounded.Apps, MaterialShapes.Cookie9Sided)
+                AppJunkType.APP_CACHE -> GroupPresentation(R.string.app_cache, R.string.app_cache_desc, Icons.Rounded.Cached, MaterialShapes.Cookie6Sided)
             }
         },
         onToggle = viewModel::toggle,

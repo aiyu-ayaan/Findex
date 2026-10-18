@@ -342,10 +342,48 @@ flowchart TD
 | Storage Analyzer | `AnalyzerViewModel` | `StorageRepository.getCategoryStats()` + `StorageScanner.largestFiles()` |
 | Storage Cleaner | `CleanerViewModel : CleanViewModel<JunkType>` | `StorageScanner.scanJunk()` → `FileOperation.Clean` via FGS |
 | WhatsApp Cleaner | `WhatsAppViewModel : CleanViewModel<WhatsAppMediaType>` | `StorageScanner.scanWhatsApp()` → `FileOperation.Clean` via FGS |
+| Telegram / Instagram Cleaner | `TelegramViewModel` / `InstagramViewModel : AppMediaViewModel` | `StorageScanner.scanAppMedia(MediaApp)` → `FileOperation.Clean` via FGS |
+| App Cleaner | `AppCleanerViewModel : CleanViewModel<AppJunkType>` | `AppJunkScanner.scan()` → `FileOperation.Clean` via FGS |
 | Duplicate files | `DuplicatesViewModel` | `StorageScanner.findDuplicates()` → `FileOperation.Trash` / `Delete` via FGS |
+| Dual pane | `DualPaneViewModel` | `StorageRepository.getFilesInDirectory()` ×2, `FolderCompare.compare()` → `Copy` / `Move` / `Trash` via FGS |
 
 `StorageScanner` skips `Android/data` and `Android/obb` and never offers top-level standard
-folders (DCIM, Music…) as "empty folders".
+folders (DCIM, Music…) or anything under `Android/` as "empty folders". Empty folders are whole
+empty trees (only the topmost folder is offered, re-checked on disk). Empty files skip dot-files
+such as `.nomedia` and are opt-in.
+
+### App cleaner
+
+```mermaid
+flowchart LR
+    PM[PackageManager<br/>QUERY_ALL_PACKAGES +<br/>MATCH_UNINSTALLED_PACKAGES] --> Installed[installed set]
+    Dirs[Android/media, data, obb<br/>package-named folders] --> Split{installed?}
+    Installed --> Split
+    Split -->|no| Left[LEFTOVERS, opt-in]
+    Split -->|yes, data/pkg/cache readable| Cache[APP_CACHE]
+    Left --> VM[AppCleanerViewModel]
+    Cache --> VM
+    VM --> Ops[OperationManager → FGS Clean]
+```
+
+- Without full package visibility an installed app would look removed, so the permission is required.
+- Android 11+ hides `Android/data` (and usually `obb`); those folders are skipped, never guessed.
+
+### Dual pane and folder compare
+
+```mermaid
+flowchart LR
+    Route[DualPaneRoute path?] --> VM[DualPaneViewModel<br/>two Pane states, one active]
+    VM -->|list| Repo[StorageRepository<br/>local + smb://]
+    VM -->|comparing| Cmp[FolderCompare<br/>match by name + kind]
+    Cmp -->|folders| Sig[local: file count + bytes<br/>smb: unknown = same]
+    Cmp --> Status[ONLY_HERE / NEWER / OLDER / DIFFERENT / SAME]
+    VM -->|copy / move to other pane, delete| Ops[OperationManager → FGS]
+    Ops -->|result| VM
+```
+
+- Stacked in portrait, side by side when the window is wider than tall. Opened from the drawer or the explorer overflow (starts at the tab's folder).
+- Files match when sizes are equal and times are within 2 s. "Select missing" picks `ONLY_HERE` items, so copying them never hits a name clash (the executor would add ` (1)`).
 
 ### Duplicate finder
 

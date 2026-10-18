@@ -14,9 +14,24 @@ import java.util.PriorityQueue
 import javax.inject.Inject
 import javax.inject.Singleton
 
-enum class JunkType { EMPTY_FOLDERS, THUMBNAILS, TEMP_FILES, APK_FILES }
+enum class JunkType { EMPTY_FOLDERS, ZERO_BYTE_FILES, THUMBNAILS, TEMP_FILES, APK_FILES }
 
 enum class WhatsAppMediaType { IMAGES, VIDEOS, AUDIO, VOICE_NOTES, DOCUMENTS, STICKERS, GIFS, BACKUPS }
+
+enum class AppMediaType { IMAGES, VIDEOS, AUDIO, DOCUMENTS }
+
+/** Apps whose shared media folders are cleaned like WhatsApp's; [folders] are relative to primary storage. */
+enum class MediaApp(val folders: List<String>) {
+    TELEGRAM(
+        listOf(
+            "Android/media/org.telegram.messenger/Telegram",
+            "Android/media/org.telegram.messenger.web/Telegram",
+            "Android/media/org.telegram.plus/Telegram",
+            "Telegram"
+        )
+    ),
+    INSTAGRAM(listOf("Pictures/Instagram", "Movies/Instagram", "DCIM/Instagram", "Android/media/com.instagram.android"))
+}
 
 /** Files with identical content; [wastedBytes] is what deleting all but one copy frees. */
 data class DuplicateSet(val hash: String, val files: List<StorageItem>) {
@@ -40,6 +55,9 @@ class StorageScanner @Inject constructor() {
     companion object {
         private const val HEAD_BYTES = 64L * 1024
         private val TEMP_EXTENSIONS = setOf("tmp", "temp", "log", "bak", "old", "crdownload", "part")
+        private val IMAGE_EXTENSIONS = setOf("jpg", "jpeg", "png", "gif", "webp", "heic", "heif", "bmp", "avif")
+        private val VIDEO_EXTENSIONS = setOf("mp4", "mkv", "webm", "avi", "mov", "3gp", "m4v")
+        private val AUDIO_EXTENSIONS = setOf("mp3", "m4a", "wav", "flac", "ogg", "aac", "opus", "amr")
 
         /**
          * Walks [root] while skipping private app directories, the recycle bin and the encrypted vault,
@@ -55,6 +73,63 @@ class StorageScanner @Inject constructor() {
                     f.absolutePath.startsWith(obbDir)
             return root.walkTopDown().onEnter { !isExcluded(it) }.filterNot(::isExcluded)
         }
+
+        internal suspend fun junkFiles(root: File): Map<JunkType, List<File>> {
+            val thumbs = mutableListOf<File>()
+            val temp = mutableListOf<File>()
+            val apks = mutableListOf<File>()
+            val zero = mutableListOf<File>()
+            val dirs = mutableListOf<File>()
+            // Folders with a file somewhere below them; every other folder is an empty tree.
+            val holdsFiles = HashSet<File>()
+            val android = File(root, "Android")
+            for (file in walk(root)) {
+                currentCoroutineContext().ensureActive()
+                if (file.isDirectory) {
+                    when {
+                        file == root -> Unit
+                        file.name == ".thumbnails" -> thumbs += file
+                        // Never offer the standard top-level folders (DCIM, Music, …) or app folders under Android/.
+                        file.parentFile != root && !file.startsWith(android) -> dirs += file
+                    }
+                    continue
+                }
+                var parent = file.parentFile
+                while (parent != null && holdsFiles.add(parent)) parent = parent.parentFile
+                val ext = file.extension.lowercase()
+                when {
+                    ext in TEMP_EXTENSIONS -> temp += file
+                    ext == "apk" -> apks += file
+                    // Dot-files such as .nomedia are empty on purpose.
+                    file.length() == 0L && !file.name.startsWith(".") -> zero += file
+                }
+            }
+            val emptyTrees = dirs.filterTo(HashSet()) { it !in holdsFiles }
+            // Only the topmost folder of an empty tree; re-checked on disk so skipped dirs (vault, bin) inside keep it.
+            val empty = emptyTrees.filter { it.parentFile !in emptyTrees && it.walkTopDown().none { f -> f.isFile } }
+            return mapOf(
+                JunkType.THUMBNAILS to thumbs,
+                JunkType.TEMP_FILES to temp,
+                JunkType.APK_FILES to apks,
+                JunkType.EMPTY_FOLDERS to empty.sortedBy { it.absolutePath },
+                JunkType.ZERO_BYTE_FILES to zero,
+            )
+        }
+
+        internal fun appMediaFiles(root: File, app: MediaApp): List<Pair<AppMediaType, List<File>>> =
+            app.folders.map { File(root, it) }.filter { it.isDirectory }
+                .flatMap { dir -> dir.walkTopDown().filter { it.isFile && it.name != ".nomedia" }.toList() }
+                .distinctBy { it.absolutePath }
+                .groupBy { appMediaTypeOf(it.extension) }
+                .toList()
+                .sortedBy { it.first.ordinal }
+
+        internal fun appMediaTypeOf(extension: String): AppMediaType = when (extension.lowercase()) {
+            in IMAGE_EXTENSIONS -> AppMediaType.IMAGES
+            in VIDEO_EXTENSIONS -> AppMediaType.VIDEOS
+            in AUDIO_EXTENSIONS -> AppMediaType.AUDIO
+            else -> AppMediaType.DOCUMENTS
+        }
     }
 
     suspend fun largestFiles(limit: Int = 30): List<StorageItem> = withContext(Dispatchers.IO) {
@@ -69,25 +144,19 @@ class StorageScanner @Inject constructor() {
     }
 
     suspend fun scanJunk(): List<ScanGroup<JunkType>> = withContext(Dispatchers.IO) {
-        val empty = mutableListOf<File>()
-        val thumbs = mutableListOf<File>()
-        val temp = mutableListOf<File>()
-        val apks = mutableListOf<File>()
-        for (file in walk()) {
-            currentCoroutineContext().ensureActive()
-            when {
-                file.isDirectory && file != root && file.name == ".thumbnails" -> thumbs += file
-                file.isDirectory && file != root && file.list()?.isEmpty() == true && !file.isTopLevelStandardDir() -> empty += file
-                file.isFile && file.extension.lowercase() in TEMP_EXTENSIONS -> temp += file
-                file.isFile && file.extension.equals("apk", ignoreCase = true) -> apks += file
-            }
-        }
+        val junk = junkFiles(root)
         listOf(
-            ScanGroup(JunkType.THUMBNAILS, thumbs.map { it.withTreeSize() }),
-            ScanGroup(JunkType.TEMP_FILES, temp.map { it.toStorageItem() }),
-            ScanGroup(JunkType.APK_FILES, apks.map { it.toStorageItem() }),
-            ScanGroup(JunkType.EMPTY_FOLDERS, empty.map { it.toStorageItem() }),
+            ScanGroup(JunkType.THUMBNAILS, junk[JunkType.THUMBNAILS].orEmpty().map { it.withTreeSize() }),
+            ScanGroup(JunkType.TEMP_FILES, junk[JunkType.TEMP_FILES].orEmpty().map { it.toStorageItem() }),
+            ScanGroup(JunkType.APK_FILES, junk[JunkType.APK_FILES].orEmpty().map { it.toStorageItem() }),
+            ScanGroup(JunkType.EMPTY_FOLDERS, junk[JunkType.EMPTY_FOLDERS].orEmpty().map { it.toStorageItem() }),
+            ScanGroup(JunkType.ZERO_BYTE_FILES, junk[JunkType.ZERO_BYTE_FILES].orEmpty().map { it.toStorageItem() }),
         ).filter { it.files.isNotEmpty() }
+    }
+
+    /** Shared media of [app] (sent and received), grouped by kind, largest first. */
+    suspend fun scanAppMedia(app: MediaApp): List<ScanGroup<AppMediaType>> = withContext(Dispatchers.IO) {
+        appMediaFiles(root, app).map { (type, files) -> ScanGroup(type, files.map { it.toStorageItem() }.sortedByDescending { it.size }) }
     }
 
     suspend fun scanWhatsApp(): List<ScanGroup<WhatsAppMediaType>> = withContext(Dispatchers.IO) {
@@ -173,7 +242,4 @@ class StorageScanner @Inject constructor() {
 
     private fun File.withTreeSize(): StorageItem =
         toStorageItem().copy(size = walkTopDown().filter { it.isFile }.sumOf { it.length() })
-
-    /** Never offer to delete the standard top-level folders (DCIM, Music, …) even when empty. */
-    private fun File.isTopLevelStandardDir() = parentFile == root
 }

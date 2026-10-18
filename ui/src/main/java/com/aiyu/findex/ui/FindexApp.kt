@@ -79,6 +79,14 @@ import com.aiyu.findex.ui.settings.SettingsScreen
 import com.aiyu.findex.ui.tools.AnalyzerScreen
 import com.aiyu.findex.ui.tools.CleanerScreen
 import com.aiyu.findex.ui.tools.WhatsAppScreen
+import com.aiyu.findex.ui.tools.TelegramScreen
+import com.aiyu.findex.ui.tools.InstagramScreen
+import com.aiyu.findex.ui.tools.AppCleanerScreen
+import com.aiyu.findex.ui.dualpane.DualPaneScreen
+import com.aiyu.findex.ui.navigation.TelegramRoute
+import com.aiyu.findex.ui.navigation.InstagramRoute
+import com.aiyu.findex.ui.navigation.AppCleanerRoute
+import com.aiyu.findex.ui.navigation.DualPaneRoute
 import com.aiyu.findex.ui.navigation.HomeRoute
 import com.aiyu.findex.ui.navigation.OnboardingRoute
 import com.aiyu.findex.ui.navigation.RecycleBinRoute
@@ -286,6 +294,10 @@ private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: N
     composable<AnalyzerRoute> { AnalyzerScreen(onBack = back, onOpenFolder = openFolder) }
     composable<CleanerRoute> { CleanerScreen(onBack = back) }
     composable<WhatsAppRoute> { WhatsAppScreen(onBack = back) }
+    composable<TelegramRoute> { TelegramScreen(onBack = back) }
+    composable<InstagramRoute> { InstagramScreen(onBack = back) }
+    composable<AppCleanerRoute> { AppCleanerScreen(onBack = back) }
+    composable<DualPaneRoute> { DualPaneScreen(onBack = back) }
     composable<SettingsRoute> { SettingsScreen(onBack = back, onOpenAbout = { navController.navigate(AboutRoute) }, onOpenUpdates = { navController.navigate(UpdatesRoute) }) }
     composable<UpdatesRoute> { UpdatesScreen(onBack = back) }
     composable<AboutRoute> { AboutScreen(onBack = back, onOpenAcknowledgements = { navController.navigate(AcknowledgementsRoute) }) }

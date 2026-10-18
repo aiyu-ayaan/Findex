@@ -36,3 +36,8 @@ import kotlinx.serialization.Serializable
 @Serializable object FavoritesRoute
 @Serializable data class TaggedFilesRoute(val tagId: Long)
 @Serializable object RecentChangesRoute
+@Serializable object TelegramRoute
+@Serializable object InstagramRoute
+@Serializable object AppCleanerRoute
+/** [path] opens the first pane there; null starts on primary storage. */
+@Serializable data class DualPaneRoute(val path: String? = null)
