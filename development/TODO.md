@@ -98,10 +98,10 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 
 ### Network Storage
 - [x] Windows Network Share (SMB) client (smbj; shares open as Explorer tabs)
-- [ ] WebDAV and FTP / SFTP
+- [x] WebDAV and FTP / SFTP (`WebDavSession`, `FtpSession` via Commons Net, `SftpSession` via JSch; Room schema v5 `protocol` + `port`)
 - [x] Credential manager (Keystore-encrypted passwords, add/remove shares)
 - [x] Copy / move / delete between device and shares (and share to share), New-tab location picker
-- [x] SMB image/video thumbnails (`ThumbFetcher` + `SmbRandomAccessFile`) and direct video streaming in default app (`SmbContentProvider` + `openProxyFileDescriptor`)
+- [x] SMB / SFTP / FTP / WebDAV image/video thumbnails (`ThumbFetcher` + `SmbRandomAccessFile`) and direct video streaming in default app (`SmbContentProvider` + `openProxyFileDescriptor`)
 
 ### Quality of life
 - [x] Recycle bin + undo delete (`.FindexTrash` per volume, 30-day purge, Undo snackbar)
@@ -119,4 +119,4 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 ### Updates and About
 - [x] Auto update from GitHub releases with release notes, global dialog, channel + toggle in Settings
 - [x] About screen with developer section and Acknowledgements
-- [ ] Background daily update check (WorkManager) and notification, not done: launch check only
+- [x] Background daily update check (`WorkManager` `UpdateCheckWorker` + `UpdateCheckScheduler`) and notification

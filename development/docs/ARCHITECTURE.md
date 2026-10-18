@@ -172,38 +172,45 @@ classDiagram
     StorageItem --> FileCategory
 ```
 
-### SMB network shares
+### Multi-protocol network storage (SMB, SFTP, FTP, WebDAV)
 
-Saved shares live in Room (`network_servers`). The password is sealed with AES-256-GCM using a key that never leaves the Android Keystore (`CredentialCipher`); the table only holds `iv + ciphertext`.
+Saved network servers live in Room (`network_servers`, schema v5 with `protocol` and `port`). The password is sealed with AES-256-GCM using a key that never leaves the Android Keystore (`CredentialCipher`); the table only holds `iv + ciphertext`.
 
-A share opens as a **normal Explorer tab** (root `smb://<server id>`), so the global tab strip, clipboard and operations work the same on the device and on the network.
+Every network server opens as a **normal Explorer tab** (`smb://<server id>`), so the global tab strip, clipboard, thumbnails, seekable streaming, and file operations work uniformly across SMB, SFTP, FTP, and WebDAV/WebDAVS.
 
 ```mermaid
 flowchart LR
     Entry[Network screen / Home Network toggle /<br/>New tab sheet] -->|ExplorerRoute smb://id| Tab[Explorer tab]
     Tab -->|list / rename / new folder| SR[StorageRepository]
-    SR -->|smb:// paths| Smb[SmbRepository]
+    SR -->|smb:// paths| Smb[SmbRepository<br/>NetworkSession pool]
     SR -->|local paths| FS[(java.io.File)]
     Tab -->|copy · cut · paste · delete| OM[OperationManager → FGS]
     OM --> Exec[FileOperationExecutor]
     Exec -->|any smb:// path| Remote[remoteTransfer / remoteDelete<br/>Node = LocalNode or SmbNode]
     Exec -->|local only| Local[transfer / trash / zip…]
     Remote -->|stream bytes| Smb
-    Smb -->|SMB 2/3| Smbj[smbj, cached DiskShare per server]
+    Smb -->|SMB 2/3| Smbj[SmbSession · smbj]
+    Smb -->|SFTP| Sftp[SftpSession · JSch]
+    Smb -->|FTP| Ftp[FtpSession · Commons Net]
+    Smb -->|WebDAV / HTTPS| WebDav[WebDavSession · PROPFIND / Range HTTP]
     Smb -->|password| CC[CredentialCipher · Keystore]
     Tab -->|open / share file| Viewer[openFile / shareFiles]
     Viewer -->|content://…smbprovider| Prov[SmbContentProvider<br/>openProxyFileDescriptor]
-    Prov -->|256 KB buffered seekable read| RAF[SmbRandomAccessFile] --> Smb
+    Prov -->|256 KB buffered seekable read| RAF[SmbRandomAccessFile<br/>RandomAccessHandle] --> Smb
 ```
 
-- Copy / move work in every direction: device → share, share → device, share → share. A move inside one share is a server-side rename; everything else streams with progress in the foreground service and deletes a half-written target on failure.
-- Delete on a share is always permanent (`DeleteDialog(permanentOnly)`); there is no recycle bin on the network.
-- Compress, extract, archive browse and checksums need local files and are hidden on shares; the executor also rejects them (`FailureReason.NOT_SUPPORTED`).
+- **Protocols & Default Ports (`NetworkProtocol`)**:
+  - `SMB` (`445`): Windows network shares via `smbj` (`SmbSession`), supporting optional subpaths inside a share.
+  - `SFTP` (`22`): SSH File Transfer Protocol via `com.github.mwiede:jsch` (`SftpSession`), with offset-based `ChannelSftp.get` for seekable reads.
+  - `FTP` (`21`): Passive binary UTF-8 FTP via Apache `commons-net` (`FtpSession`), with `restartOffset` seekable stream reads.
+  - `WEBDAV` (`80`) / `WEBDAVS` (`443`): HTTP/HTTPS WebDAV (`WebDavSession`) using SAX `PROPFIND` (Depth 1) multi-status XML parsing, `MKCOL`, `MOVE`, `DELETE`, `PUT`, and `Range: bytes=start-end` partial content requests for seekable streaming.
+- Copy / move work in every direction: device → server, server → device, server → server (even across different protocols). A move inside one server is a server-side rename/`MOVE`; everything else streams with progress in the foreground service and deletes a half-written target on failure.
+- Delete on a network server is always permanent (`DeleteDialog(permanentOnly)`); there is no recycle bin on the network.
+- Compress, extract, archive browse and checksums need local files and are hidden on network shares; the executor also rejects them (`FailureReason.NOT_SUPPORTED`).
 - Network errors map to `FailureReason.NETWORK` / `NetworkError` messages instead of crashing a listing.
-- `TabSession` restores share tabs while the share is still saved; their title is the share's label.
-- Opening or sharing a share file issues a seekable `content://<pkg>.smbprovider/<serverId>/<inner>?size=<bytes>` URI (`SmbContentProvider` + `StorageManager.openProxyFileDescriptor` backed by `SmbRandomAccessFile` with a 256 KB read-ahead window) so default external video/media players stream and seek directly over SMB without downloading the file first.
-- Room schema v4 adds `network_servers` through `AutoMigration(3, 4)`.
-- Not yet: share discovery, WebDAV / FTP / SFTP.
+- `TabSession` restores network tabs while the server is still saved; their title is the server's label.
+- Opening or sharing a network file issues a seekable `content://<pkg>.smbprovider/<serverId>/<inner>?size=<bytes>` URI (`SmbContentProvider` + `StorageManager.openProxyFileDescriptor` backed by `SmbRandomAccessFile` with a 256 KB read-ahead window) so default external video/media players stream and seek directly over SMB, SFTP, FTP, and WebDAV without downloading the file first.
+- Room schema v4 adds `network_servers` (`AutoMigration(3, 4)`); Room schema v5 adds `protocol` and `port` (`AutoMigration(4, 5)`).
 
 ---
 
@@ -489,6 +496,11 @@ flowchart TD
 flowchart TD
     Launch[App launch] --> VM[AppViewModel]
     Manual[Settings: Check for updates] --> Repo
+    VM -- autoUpdate toggle --> Sched[UpdateCheckScheduler<br/>WorkManager 24h periodic]
+    Sched -- NetworkType.CONNECTED --> Worker[UpdateCheckWorker]
+    Worker -- background check --> Repo
+    Worker -- new release & not notified --> Notif[System Notification<br/>channel: findex_updates]
+    Notif -- tap PendingIntent --> Launch
     VM -- autoUpdate on --> Repo[UpdateRepository<br/>core/update]
     Repo -- GET releases --> GH[(GitHub Releases)]
     Repo -- UpdateState --> Dialog[UpdateDialog in FindexApp<br/>global, shows release notes]
@@ -499,4 +511,7 @@ flowchart TD
     Recv -- confirm screen / failure reason --> Repo
 ```
 
-Settings → Updates opens `UpdatesScreen` (toggle, channel, manual check). Settings → About opens `AboutScreen` (app, developer, source) → `AcknowledgementsScreen`; both are nav destinations, so back is predictive.
+- **Background Daily Check (`UpdateCheckScheduler` + `UpdateCheckWorker`)**:
+  - `AppViewModel` observes `settings.autoUpdate` (`distinctUntilChanged`) and calls `UpdateCheckScheduler.sync(enabled)` to schedule or cancel the unique 24-hour periodic `WorkManager` job (`findex_daily_update_check`, constrained to `NetworkType.CONNECTED`).
+  - When `UpdateCheckWorker` finds `UpdateState.Available(release, asset)`, it checks `SettingsRepository.lastNotifiedUpdateVersion` so each release version only notifies once, and posts a notification on `findex_updates` (`NOTIFICATION_ID = 1003`) that launches `MainActivity` into `UpdateDialog`.
+- Settings → Updates opens `UpdatesScreen` (toggle, channel, manual check). Settings → About opens `AboutScreen` (app, developer, source) → `AcknowledgementsScreen`; both are nav destinations, so back is predictive.
