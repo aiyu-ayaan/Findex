@@ -52,6 +52,8 @@ import com.aiyu.findex.ui.components.rememberPushDrawerState
 import com.aiyu.findex.ui.di.failureRes
 import com.aiyu.findex.ui.explorer.ExplorerScreen
 import com.aiyu.findex.ui.home.HomeScreen
+import com.aiyu.findex.ui.archive.ArchiveScreen
+import com.aiyu.findex.ui.navigation.ArchiveRoute
 import com.aiyu.findex.ui.navigation.DuplicatesRoute
 import com.aiyu.findex.ui.navigation.SearchRoute
 import com.aiyu.findex.ui.tools.DuplicatesScreen
@@ -206,7 +208,14 @@ private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -
 private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: NavHostController) {
     val back: () -> Unit = { navController.popBackStack() }
     val openFolder: (String) -> Unit = { navController.navigate(ExplorerRoute(it)) }
-    composable<ExplorerRoute> { ExplorerScreen(onBack = back, onOpenTabs = { navController.navigate(TabsRoute) { launchSingleTop = true } }) }
+    composable<ExplorerRoute> {
+        ExplorerScreen(
+            onBack = back,
+            onOpenTabs = { navController.navigate(TabsRoute) { launchSingleTop = true } },
+            onOpenArchive = { navController.navigate(ArchiveRoute(it)) }
+        )
+    }
+    composable<ArchiveRoute> { ArchiveScreen(onBack = back) }
     composable<CategoryRoute> { CategoryScreen(onBack = back, onOpenFolder = openFolder) }
     composable<AnalyzerRoute> { AnalyzerScreen(onBack = back, onOpenFolder = openFolder) }
     composable<CleanerRoute> { CleanerScreen(onBack = back) }

@@ -313,6 +313,28 @@ flowchart LR
 - A failed or cancelled extract deletes the new destination folder, and a failed compress deletes the partial archive.
 - `uniqueTarget` keeps multi-part suffixes whole: `a (1).tar.gz`.
 
+### In-archive preview
+
+Archives open into `ArchiveScreen` instead of the extract dialog (phone tap, or **Browse contents** in the tablet inspector). Nothing is extracted until a file is opened.
+
+```mermaid
+flowchart LR
+    Explorer[Explorer tap / Browse contents] -->|ArchiveRoute path| AS[ArchiveScreen]
+    AS --> AVM[ArchiveViewModel<br/>dir · entries · password]
+    AVM -->|list| AB[ArchiveBrowser core]
+    AB -->|ArchiveCodecs.list| Codecs[7-Zip native / Commons Compress]
+    AVM -->|tap file| AB
+    AB -->|extractEntry → cache/archive-preview| Cache[(app cache)]
+    Cache -->|ready file| Intent[openFile / shareFiles via FileProvider]
+    AVM -->|WRONG_PASSWORD| PW[ArchivePasswordDialog] --> AVM
+    AS -->|Extract all| Ops[OperationManager → FGS]
+```
+
+- Rows use virtual `archive!/inner/path` paths (`ArchivePath`) so they reuse `FileList`.
+- The password is kept for the screen's lifetime once an entry opens with it.
+- Preview copies older than an hour are removed on the next extract.
+- Encrypted-header archives (RAR with `-hp`) can't be listed without a password; the screen says so and offers **Extract all**.
+
 ---
 
 ## 9. Adaptive Large-Screen & Tablet Architecture

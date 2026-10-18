@@ -93,7 +93,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 
 ### Archives+
 - [x] 7z / RAR / TAR extraction and creation (Commons Compress + xz; ZIP/RAR read via native 7-Zip incl. RAR5, 16 KB-aligned rebuild)
-- [ ] In-archive preview without full extraction
+- [x] In-archive preview without full extraction (browse entries, open single files via cache)
 
 ### Network Storage
 - [ ] Windows Network Share (SMB) client

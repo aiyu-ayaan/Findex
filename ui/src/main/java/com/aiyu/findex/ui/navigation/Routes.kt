@@ -15,3 +15,5 @@ import kotlinx.serialization.Serializable
 @Serializable object TabsRoute
 @Serializable object SearchRoute
 @Serializable object DuplicatesRoute
+/** Browses the contents of the archive at [path] without extracting it. */
+@Serializable data class ArchiveRoute(val path: String)

@@ -104,6 +104,8 @@ class DetailActions(
     val onDelete: () -> Unit,
     val onClose: () -> Unit,
     val onNewFolder: (() -> Unit)? = null,
+    /** Opens an archive's contents without extracting it. */
+    val onBrowse: () -> Unit = {},
     val onOpenFolder: ((String) -> Unit)? = null
 )
 
@@ -315,12 +317,12 @@ private fun ItemDetail(
 
         // 4. One primary action, the rest as a compact icon toolbar
         Button(
-            onClick = if (item.isArchive) actions.onExtract else openPrimary,
+            onClick = if (item.isArchive) actions.onBrowse else openPrimary,
             modifier = Modifier.fillMaxWidth()
         ) {
             Icon(
                 when {
-                    item.isArchive -> Icons.Rounded.Unarchive
+                    item.isArchive -> Icons.Rounded.FolderZip
                     item.isDirectory -> Icons.Rounded.FolderOpen
                     else -> Icons.AutoMirrored.Rounded.OpenInNew
                 },
@@ -331,7 +333,7 @@ private fun ItemDetail(
             Text(
                 stringResource(
                     when {
-                        item.isArchive -> R.string.action_extract
+                        item.isArchive -> R.string.action_browse
                         item.isDirectory -> R.string.action_open_folder
                         else -> R.string.action_open
                     }
@@ -351,7 +353,7 @@ private fun ItemDetail(
             ActionIcon(Icons.Rounded.ContentCut, R.string.action_cut, actions.onCut)
             ActionIcon(Icons.Rounded.DriveFileRenameOutline, R.string.action_rename, actions.onRename)
             if (item.isArchive) {
-                ActionIcon(Icons.AutoMirrored.Rounded.OpenInNew, R.string.action_open, actions.onOpen)
+                ActionIcon(Icons.Rounded.Unarchive, R.string.action_extract, actions.onExtract)
             } else {
                 ActionIcon(Icons.Rounded.FolderZip, R.string.action_compress, actions.onCompress)
             }

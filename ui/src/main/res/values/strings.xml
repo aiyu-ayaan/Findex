@@ -345,4 +345,14 @@
         <item quantity="one">%d copy</item>
         <item quantity="other">%d copies</item>
     </plurals>
+    <!-- Archive preview -->
+    <string name="action_browse">Browse contents</string>
+    <string name="archive_extract_all">Extract all</string>
+    <string name="archive_empty">This archive is empty</string>
+    <string name="archive_unreadable">This archive can’t be listed. It may be encrypted or damaged; try Extract all with its password.</string>
+    <string name="archive_password_title">Password required</string>
+    <string name="archive_password_body">“%1$s” is encrypted.</string>
+    <string name="archive_unlock">Unlock</string>
+    <string name="archive_password_label">Password</string>
+    <string name="archive_opening">Opening %1$s…</string>
 </resources>

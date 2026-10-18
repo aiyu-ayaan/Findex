@@ -360,6 +360,25 @@ fun ExtractDialog(
     )
 }
 
+/** Asks for the password of an encrypted archive entry before opening it. */
+@Composable
+fun ArchivePasswordDialog(entryName: String, onConfirm: (String) -> Unit, onDismiss: () -> Unit) {
+    var password by rememberSaveable { mutableStateOf("") }
+    var showPassword by rememberSaveable { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.archive_password_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(Dimens.md)) {
+                Text(stringResource(R.string.archive_password_body, entryName), style = MaterialTheme.typography.bodyMedium)
+                PasswordField(password, { password = it }, showPassword, { showPassword = it }, R.string.archive_password_label)
+            }
+        },
+        confirmButton = { TextButton(onClick = { onConfirm(password) }, enabled = password.isNotEmpty()) { Text(stringResource(R.string.archive_unlock)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
+    )
+}
+
 @Composable
 private fun PasswordField(
     value: String,

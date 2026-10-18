@@ -150,6 +150,7 @@ private sealed interface ExplorerModal {
 fun ExplorerScreen(
     onBack: () -> Unit,
     onOpenTabs: () -> Unit,
+    onOpenArchive: (String) -> Unit,
     viewModel: ExplorerViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -201,7 +202,7 @@ fun ExplorerScreen(
             state.inSelection -> viewModel.toggleSelection(item.path)
             item.isDirectory -> viewModel.openFolder(item.path)
             listDetail -> viewModel.focus(item.path)
-            item.isArchive -> modal = ExplorerModal.Extract(item)
+            item.isArchive -> onOpenArchive(item.path)
             else -> {
                 viewModel.onFileOpened(item.path)
                 context.openFile(item.path)
@@ -399,6 +400,7 @@ fun ExplorerScreen(
                     onRename = { focusedItem?.let { modal = ExplorerModal.Rename(it) } },
                     onCompress = { focusedItem?.let { modal = ExplorerModal.Compress(listOf(it.path), it.name.substringBeforeLast('.')) } },
                     onExtract = { focusedItem?.let { modal = ExplorerModal.Extract(it) } },
+                    onBrowse = { focusedItem?.let { onOpenArchive(it.path) } },
                     onDelete = { focusedItem?.let { modal = ExplorerModal.Delete(listOf(it.path)) } },
                     onClose = { viewModel.focus(null) },
                     onNewFolder = { modal = ExplorerModal.NewFolder },
