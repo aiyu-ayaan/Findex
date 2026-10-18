@@ -433,13 +433,14 @@ fun ExplorerScreen(
                     val name = state.selectedItems.singleOrNull()?.name?.substringBeforeLast('.') ?: File(tab?.path ?: "").name
                     modal = ExplorerModal.Compress(state.selection.toList(), name.ifEmpty { "archive" })
                 },
-                onShare = { context.shareFiles(state.selection.toList()) },
+                onShare = { context.shareFiles(state.selectedItems.filter { !it.isDirectory }.map { it.path }) },
                 onRename = { state.selectedItems.singleOrNull()?.let { modal = ExplorerModal.Rename(it) } },
                 onDetails = { state.selectedItems.singleOrNull()?.let { modal = ExplorerModal.Details(it) } },
                 onOpenInNewTab = { state.selectedItems.singleOrNull()?.let { viewModel.openInNewTab(it.path) } },
                 onExtract = { state.selectedItems.singleOrNull()?.let { viewModel.clearSelection(); modal = ExplorerModal.Extract(it) } },
                 onBrowse = { state.selectedItems.singleOrNull()?.let { viewModel.clearSelection(); onOpenArchive(it.path) } },
                 selectionCount = state.selection.size,
+                canShare = state.selectedItems.any { !it.isDirectory },
                 allImages = state.selectedItems.isNotEmpty() && state.selectedItems.all { !it.isDirectory && isImageExtension(it.extension) },
                 onFeature = { action ->
                     if (action == ItemAction.TAGS) { modal = ExplorerModal.Tags(state.selection.toList()); return@SelectionToolbar }
@@ -877,6 +878,7 @@ private fun SelectionToolbar(
     onBrowse: () -> Unit,
     selectionCount: Int,
     allImages: Boolean,
+    canShare: Boolean,
     /** [ItemAction.BATCH_RENAME], [ItemAction.MOVE_TO_VAULT] or [ItemAction.COMPRESS_IMAGE] on the whole selection. */
     onFeature: (ItemAction) -> Unit,
     modifier: Modifier = Modifier,
@@ -903,8 +905,8 @@ private fun SelectionToolbar(
             } else {
                 IconButton(onClick = onCompress) { Icon(Icons.Rounded.FolderZip, stringResource(R.string.action_compress)) }
             }
-            // Folders can't be shared as attachments.
-            if (singleSelected?.isDirectory != true && !network) {
+            // Folders can't be shared as attachments; network files stream through SmbContentProvider.
+            if (canShare) {
                 IconButton(onClick = onShare) { Icon(Icons.Rounded.Share, stringResource(R.string.action_share)) }
             }
             IconButton(onClick = onDelete) { Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete)) }
