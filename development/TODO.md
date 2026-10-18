@@ -104,5 +104,5 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] Recycle bin + undo delete (`.FindexTrash` per volume, 30-day purge, Undo snackbar)
 - [ ] Global search with index
 - [ ] Duplicate finder
-- [ ] Tab session persistence
+- [x] Tab session persistence (Room `open_tabs`, restored on cold start)
 - [x] Tablet two-pane explorer

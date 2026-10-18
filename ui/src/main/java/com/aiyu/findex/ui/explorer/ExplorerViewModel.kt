@@ -103,6 +103,7 @@ class ExplorerViewModel @Inject constructor(
             val initialSettings = settingsRepository.settings.first()
             _uiState.update { it.copy(settings = initialSettings) }
             // A path opens (or focuses) a tab; no path resumes the open tabs, starting fresh if there are none.
+            tabSession.awaitRestored()
             when {
                 startPath != null -> tabSession.open(startPath)
                 tabSession.state.value.tabs.isEmpty() -> tabSession.newTab(storageRepository.getStorageDrives().first().first().path)

@@ -1,11 +1,22 @@
 package com.aiyu.findex.ui.explorer
 
+import com.aiyu.findex.core.db.OpenTabDao
+import com.aiyu.findex.core.db.OpenTabEntity
 import com.aiyu.findex.core.repository.StorageRepository
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
@@ -17,16 +28,44 @@ data class TabsState(val tabs: List<ExplorerTab> = emptyList(), val active: Int 
 
 /**
  * Open explorer tabs, shared by every Explorer screen, the Tabs overview and the drawer badge.
- * shortcut: in memory only, lost on process death; persist to Room for the "Tab session persistence" item.
+ * Saved to Room (`open_tabs`) so tabs survive process death and app restarts.
  */
+@OptIn(FlowPreview::class)
 @Singleton
 class TabSession @Inject constructor(
-    private val storageRepository: StorageRepository
+    private val storageRepository: StorageRepository,
+    private val openTabDao: OpenTabDao
 ) {
     private val _state = MutableStateFlow(TabsState())
     val state: StateFlow<TabsState> = _state.asStateFlow()
 
     private val nextId = AtomicLong()
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    private val restored = CompletableDeferred<Unit>()
+
+    init {
+        scope.launch { restoreAndPersist() }
+    }
+
+    private suspend fun restoreAndPersist() {
+        // A removed SD card drops its tabs; a deleted folder falls back to its volume root.
+        val saved = runCatching { openTabDao.all() }.getOrDefault(emptyList()).filter { File(it.root).isDirectory }
+        val tabs = saved.map {
+            ExplorerTab(nextId.getAndIncrement(), it.root, it.rootName, if (File(it.path).isDirectory) it.path else it.root)
+        }
+        val active = saved.indexOfFirst { it.isActive }.coerceAtLeast(0)
+        // Tabs opened before the restore finished stay after the saved ones.
+        _state.update { s -> if (tabs.isEmpty()) s else TabsState(tabs + s.tabs, if (s.tabs.isEmpty()) active else tabs.size + s.active) }
+        restored.complete(Unit)
+        _state.drop(1).distinctUntilChanged().debounce(300).collect { s ->
+            openTabDao.replaceAll(s.tabs.mapIndexed { i, t -> OpenTabEntity(i, t.root, t.rootName, t.path, i == s.active) })
+        }
+    }
+
+    /** Suspends until saved tabs are loaded, so callers don't open a fresh tab over a restored session. */
+    suspend fun awaitRestored() = restored.await()
 
     /** Focuses a tab already showing [path], otherwise opens a new one there. */
     suspend fun open(path: String) {

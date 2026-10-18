@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.aiyu.findex.core.db.BookmarkDao
 import com.aiyu.findex.core.db.FindexDatabase
+import com.aiyu.findex.core.db.OpenTabDao
 import com.aiyu.findex.core.db.RecentFileDao
 import com.aiyu.findex.core.db.TrashDao
 import com.aiyu.findex.core.repository.StorageRepository
@@ -40,5 +41,8 @@ abstract class CoreModule {
 
         @Provides
         fun provideTrashDao(db: FindexDatabase): TrashDao = db.trashDao()
+
+        @Provides
+        fun provideOpenTabDao(db: FindexDatabase): OpenTabDao = db.openTabDao()
     }
 }

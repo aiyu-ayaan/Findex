@@ -27,7 +27,7 @@ graph TD
     subgraph ":core"
         StorageRepo[StorageRepository<br/>File + MediaStore]
         LibraryRepo[LibraryRepository]
-        DB[(Room / SQLite<br/>bookmarks · recent_files · trash)]
+        DB[(Room / SQLite<br/>bookmarks · recent_files · trash · open_tabs)]
         Settings[(DataStore<br/>config only)]
         OpMgr[OperationManager]
         Clip[FileClipboard]
@@ -233,6 +233,22 @@ flowchart LR
 - Deleting something that is already inside `.FindexTrash` is always permanent.
 - `RecycleBinViewModel` drops rows whose file vanished outside the app.
 - Room schema v2 adds `trash` through `AutoMigration(1, 2)`.
+
+## 7b. Tab session persistence
+
+`TabSession` (singleton) owns the open tabs. It restores them from the `open_tabs` table on creation and writes every change back, debounced by 300 ms.
+
+```mermaid
+flowchart LR
+    DB[(open_tabs<br/>position · root · rootName · path · isActive)] -->|1. restore on init| TS[TabSession]
+    TS -->|2. restored.complete| EVM[ExplorerViewModel<br/>awaitRestored then open / newTab]
+    TS -->|3. state changes, debounce 300ms<br/>replaceAll| DB
+    TS --> TabsUI[TabsScreen / drawer badge]
+```
+
+- Tabs whose volume is gone (SD card removed) are dropped; a tab whose folder was deleted falls back to its volume root.
+- `ExplorerViewModel` waits for `awaitRestored()` before deciding to open a fresh tab, so a cold start resumes the last session.
+- Room schema v3 adds `open_tabs` through `AutoMigration(2, 3)`.
 
 ## 8. Archives
 

@@ -104,14 +104,43 @@ interface TrashDao {
     suspend fun deleteByTrashPaths(paths: List<String>) = paths.chunked(500).forEach { deleteByTrashPathsChunk(it) }
 }
 
+/** An explorer tab saved across process death; [position] is its slot in the tab strip. */
+@Entity(tableName = "open_tabs")
+data class OpenTabEntity(
+    @PrimaryKey val position: Int,
+    val root: String,
+    val rootName: String,
+    val path: String,
+    val isActive: Boolean
+)
+
+@Dao
+interface OpenTabDao {
+    @Query("SELECT * FROM open_tabs ORDER BY position ASC")
+    suspend fun all(): List<OpenTabEntity>
+
+    @Query("DELETE FROM open_tabs")
+    suspend fun clear()
+
+    @Insert
+    suspend fun insert(tabs: List<OpenTabEntity>)
+
+    @Transaction
+    suspend fun replaceAll(tabs: List<OpenTabEntity>) {
+        clear()
+        insert(tabs)
+    }
+}
+
 @Database(
-    entities = [BookmarkEntity::class, RecentFileEntity::class, TrashEntity::class],
-    version = 2,
+    entities = [BookmarkEntity::class, RecentFileEntity::class, TrashEntity::class, OpenTabEntity::class],
+    version = 3,
     exportSchema = true,
-    autoMigrations = [AutoMigration(from = 1, to = 2)]
+    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)]
 )
 abstract class FindexDatabase : RoomDatabase() {
     abstract fun bookmarkDao(): BookmarkDao
     abstract fun recentFileDao(): RecentFileDao
     abstract fun trashDao(): TrashDao
+    abstract fun openTabDao(): OpenTabDao
 }
