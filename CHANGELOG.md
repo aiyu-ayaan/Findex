@@ -1,3 +1,16 @@
+## v0.0.1-alpha.3 (2026-10-18)
+
+- !alpha : Add intro video with GIF preview, Apache 2.0 license, dual pane, app and social cleaners
+- chore(License): Update to Apache License 2.0 and revise README for accuracy
+- feat(Tools) : Add dual pane with folder compare, app and social media cleaners
+- fix(Explorer) : Share only files from a selection, including network files
+- fix(Explorer) : Ignore edge presses so back-swipe does not start selection
+- docs(Readme) : Document network storage, sharing, vault and viewers
+- feat(Share) : Add Share this phone LAN web server with PIN, live permissions and idle auto-stop
+- ui(Operations) : Make file operation notifications read as status, not errors
+- fix(Explorer) : Keep folder scroll position while it stays on the back stack
+- fix(Network) : Reconnect after Wi-Fi changes, accept keyboard-interactive SFTP login and reuse saved passwords
+
 ## v0.0.1-alpha.2 (2026-10-18)
 
 - !alpha : Add encrypted vault, built-in viewers, multi-protocol network storage and batch tools
