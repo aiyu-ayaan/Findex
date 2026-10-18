@@ -71,8 +71,9 @@ class HomeViewModel @Inject constructor(
     suspend fun unlock(id: Long, password: String): NetworkError? =
         smbRepository.unlockOrError(id, password).also { if (it == null) probe(id) }
 
-    fun probe(id: Long) {
-        if (_uiState.value.networkStatus[id] == NetworkStatus.Checking) return
+    /** [force] re-probes even while a check is running, e.g. after the server was edited. */
+    fun probe(id: Long, force: Boolean = false) {
+        if (!force && _uiState.value.networkStatus[id] == NetworkStatus.Checking) return
         _uiState.update { it.copy(networkStatus = it.networkStatus + (id to NetworkStatus.Checking)) }
         viewModelScope.launch {
             val status = smbRepository.probe(id)

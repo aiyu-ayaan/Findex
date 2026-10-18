@@ -134,7 +134,7 @@ fun ItemActionSheet(
 }
 
 @Composable
-private fun ActionRow(icon: ImageVector, labelRes: Int, tint: Color = MaterialTheme.colorScheme.onSurface, onClick: () -> Unit) {
+internal fun ActionRow(icon: ImageVector, labelRes: Int, tint: Color = MaterialTheme.colorScheme.onSurface, onClick: () -> Unit) {
     ListItem(
         headlineContent = { Text(stringResource(labelRes), color = tint) },
         leadingContent = { Icon(icon, contentDescription = null, tint = tint) },

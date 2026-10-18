@@ -431,6 +431,10 @@
     <string name="network_guest">Guest</string>
     <string name="network_status_connected">Connected</string>
     <string name="network_remember_password">Remember password</string>
+    <string name="network_edit">Edit server</string>
+    <string name="network_edit_title">Edit network server</string>
+    <string name="network_save">Test and save</string>
+    <string name="network_password_keep_note">Leave empty to keep the current password.</string>
     <string name="network_password_not_saved_note">Not saved. You will be asked once each time you open Findex.</string>
     <string name="network_error_password_required">Password needed to connect</string>
     <string name="network_unlock">Unlock</string>

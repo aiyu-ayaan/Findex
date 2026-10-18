@@ -121,9 +121,16 @@ import com.aiyu.findex.ui.navigation.CategoryRoute
 import com.aiyu.findex.ui.navigation.CleanerRoute
 import com.aiyu.findex.ui.navigation.ExplorerRoute
 import com.aiyu.findex.ui.navigation.DuplicatesRoute
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.draw.alpha
+import com.aiyu.findex.ui.network.NetworkViewModel
+import com.aiyu.findex.ui.network.AddServerSheet
+import com.aiyu.findex.ui.network.ServerActionsSheet
+import com.aiyu.findex.ui.network.RemoveServerDialog
 import com.aiyu.findex.ui.network.labelRes
 import com.aiyu.findex.ui.network.messageRes
-import com.aiyu.findex.ui.navigation.NetworkRoute
 import com.aiyu.findex.core.network.NetworkServer
 import com.aiyu.findex.core.network.NetworkStatus
 import com.aiyu.findex.core.network.NetworkError
@@ -152,6 +159,18 @@ fun HomeScreen(
     val stagger = rememberStaggerState()
     var recentViewerPath by remember { androidx.compose.runtime.mutableStateOf<String?>(null) }
     var unlocking by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
+    var serverMenu by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
+    var editingServer by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
+    var addingServer by remember { androidx.compose.runtime.mutableStateOf(false) }
+    var removingServer by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
+    val networkViewModel: NetworkViewModel = hiltViewModel()
+    LaunchedEffect(Unit) {
+        networkViewModel.added.collect {
+            addingServer = false
+            editingServer = null
+            viewModel.probe(it.id, force = true)
+        }
+    }
 
     Scaffold(
         modifier = modifier
@@ -241,11 +260,12 @@ fun HomeScreen(
                         status = uiState.networkStatus[server.id] ?: NetworkStatus.Checking,
                         onClick = { onNavigate(ExplorerRoute(server.rootPath)) },
                         onRetry = { viewModel.probe(server.id) },
-                        onUnlock = { unlocking = server }
+                        onUnlock = { unlocking = server },
+                        onLongClick = { serverMenu = server }
                     )
                 }
                 item(key = "addServer") {
-                    OutlinedButton(onClick = { onNavigate(NetworkRoute) }, modifier = Modifier.fillMaxWidth().heightIn(min = Dimens.minTouch)) {
+                    OutlinedButton(onClick = { networkViewModel.resetAdd(); addingServer = true }, modifier = Modifier.fillMaxWidth().heightIn(min = Dimens.minTouch)) {
                         Icon(Icons.Rounded.Add, contentDescription = null, modifier = Modifier.padding(end = Dimens.sm))
                         Text(stringResource(R.string.network_add))
                     }
@@ -332,6 +352,20 @@ fun HomeScreen(
         }
     }
 
+    serverMenu?.let { server ->
+        ServerActionsSheet(
+            server = server,
+            onEdit = { serverMenu = null; networkViewModel.resetAdd(); editingServer = server },
+            onRemove = { serverMenu = null; removingServer = server },
+            onDismiss = { serverMenu = null }
+        )
+    }
+    if (addingServer || editingServer != null) {
+        AddServerSheet(viewModel = networkViewModel, editing = editingServer, onDismiss = { addingServer = false; editingServer = null })
+    }
+    removingServer?.let { server ->
+        RemoveServerDialog(server, onConfirm = { networkViewModel.remove(server.id); removingServer = null }, onDismiss = { removingServer = null })
+    }
     unlocking?.let { server ->
         UnlockServerDialog(
             server = server,
@@ -483,18 +517,35 @@ private fun DriveCard(drive: StorageDrive, onClick: () -> Unit) {
 
 /** Compact sibling of [DriveCard] for a saved server; disabled while the server can't be reached. */
 @Composable
-private fun NetworkDriveCard(server: NetworkServer, status: NetworkStatus, onClick: () -> Unit, onRetry: () -> Unit, onUnlock: () -> Unit) {
+private fun NetworkDriveCard(
+    server: NetworkServer,
+    status: NetworkStatus,
+    onClick: () -> Unit,
+    onRetry: () -> Unit,
+    onUnlock: () -> Unit,
+    onLongClick: () -> Unit
+) {
+    val haptics = LocalHapticFeedback.current
+    val online = status is NetworkStatus.Online
     val locked = (status as? NetworkStatus.Offline)?.error == NetworkError.PASSWORD_REQUIRED
     val offline = status is NetworkStatus.Offline && !locked
     Card(
-        onClick = onClick,
-        enabled = status is NetworkStatus.Online,
         shape = MaterialTheme.shapes.extraLarge,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(Dimens.lg)) {
+        // Long press works offline too, so a broken server can still be edited or removed.
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .combinedClickable(
+                    onClick = { if (online) onClick() },
+                    onLongClick = { haptics.performHapticFeedback(HapticFeedbackType.LongPress); onLongClick() }
+                )
+                .padding(Dimens.lg)
+        ) {
             ShapeIcon(
+                modifier = Modifier.alpha(if (online) 1f else DisabledAlpha),
                 icon = when {
                     locked -> Icons.Rounded.Lock
                     offline -> Icons.Rounded.CloudOff
@@ -505,7 +556,7 @@ private fun NetworkDriveCard(server: NetworkServer, status: NetworkStatus, onCli
                 content = if (offline) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSecondaryContainer
             )
             Spacer(Modifier.width(Dimens.lg))
-            Column(Modifier.weight(1f)) {
+            Column(Modifier.weight(1f).alpha(if (online) 1f else DisabledAlpha)) {
                 Text(server.label, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(
                     stringResource(server.protocol.labelRes()) + " · " + server.username.ifEmpty { stringResource(R.string.network_guest) } + " · " + server.displayAddress,
@@ -553,6 +604,8 @@ private fun NetworkDriveCard(server: NetworkServer, status: NetworkStatus, onCli
         }
     }
 }
+
+private const val DisabledAlpha = 0.6f
 
 private fun driveIcon(type: DriveType): ImageVector = when (type) {
     DriveType.INTERNAL -> Icons.Rounded.Storage

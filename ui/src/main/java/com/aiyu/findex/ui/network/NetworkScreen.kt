@@ -32,6 +32,15 @@ import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.ui.graphics.Color
+import androidx.compose.material.icons.rounded.Edit
+import com.aiyu.findex.ui.explorer.ActionRow
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonGroupDefaults
@@ -93,8 +102,15 @@ fun NetworkScreen(onBack: () -> Unit, onOpenServer: (Long) -> Unit, viewModel: N
     var adding by rememberSaveable { mutableStateOf(false) }
     var removing by remember { mutableStateOf<NetworkServer?>(null) }
     var unlocking by remember { mutableStateOf<NetworkServer?>(null) }
+    var editing by remember { mutableStateOf<NetworkServer?>(null) }
+    var menuFor by remember { mutableStateOf<NetworkServer?>(null) }
 
-    LaunchedEffect(Unit) { viewModel.added.collect { adding = false; onOpenServer(it.id) } }
+    LaunchedEffect(Unit) {
+        viewModel.added.collect {
+            adding = false
+            if (editing != null) editing = null else onOpenServer(it.id)
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -152,6 +168,7 @@ fun NetworkScreen(onBack: () -> Unit, onOpenServer: (Long) -> Unit, viewModel: N
                         server = server,
                         shape = groupedShape(index, list.size),
                         onClick = { if (viewModel.isLocked(server)) unlocking = server else onOpenServer(server.id) },
+                        onLongClick = { menuFor = server },
                         onRemove = { removing = server }
                     )
                 }
@@ -159,8 +176,16 @@ fun NetworkScreen(onBack: () -> Unit, onOpenServer: (Long) -> Unit, viewModel: N
         }
     }
 
-    if (adding) {
-        AddServerSheet(viewModel = viewModel, onDismiss = { adding = false })
+    if (adding || editing != null) {
+        AddServerSheet(viewModel = viewModel, editing = editing, onDismiss = { adding = false; editing = null })
+    }
+    menuFor?.let { server ->
+        ServerActionsSheet(
+            server = server,
+            onEdit = { menuFor = null; viewModel.resetAdd(); editing = server },
+            onRemove = { menuFor = null; removing = server },
+            onDismiss = { menuFor = null }
+        )
     }
     unlocking?.let { server ->
         UnlockServerDialog(
@@ -171,29 +196,70 @@ fun NetworkScreen(onBack: () -> Unit, onOpenServer: (Long) -> Unit, viewModel: N
         )
     }
     removing?.let { server ->
-        AlertDialog(
-            onDismissRequest = { removing = null },
-            icon = { Icon(Icons.Rounded.Delete, null) },
-            title = { Text(stringResource(R.string.network_remove_title, server.label)) },
-            text = { Text(stringResource(R.string.network_remove_body)) },
-            confirmButton = { TextButton(onClick = { viewModel.remove(server.id); removing = null }) { Text(stringResource(R.string.network_remove)) } },
-            dismissButton = { TextButton(onClick = { removing = null }) { Text(stringResource(R.string.cancel)) } }
-        )
+        RemoveServerDialog(server, onConfirm = { viewModel.remove(server.id); removing = null }, onDismiss = { removing = null })
     }
+}
+
+/** Long-press menu for a saved server. */
+@Composable
+fun ServerActionsSheet(server: NetworkServer, onEdit: () -> Unit, onRemove: () -> Unit, onDismiss: () -> Unit) {
+    ModalBottomSheet(onDismissRequest = onDismiss) {
+        Column(Modifier.navigationBarsPadding().padding(bottom = Dimens.lg)) {
+            ListItem(
+                headlineContent = { Text(server.label, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleMedium) },
+                supportingContent = { Text(server.displayAddress, maxLines = 1, overflow = TextOverflow.MiddleEllipsis) },
+                leadingContent = {
+                    ShapeIcon(
+                        icon = Icons.Rounded.Dns,
+                        shape = MaterialShapes.Pill,
+                        container = MaterialTheme.colorScheme.secondaryContainer,
+                        content = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                },
+                colors = ListItemDefaults.colors(containerColor = Color.Transparent)
+            )
+            HorizontalDivider(Modifier.padding(horizontal = Dimens.xl, vertical = Dimens.sm))
+            ActionRow(Icons.Rounded.Edit, R.string.network_edit, onClick = onEdit)
+            ActionRow(Icons.Rounded.Delete, R.string.network_remove, MaterialTheme.colorScheme.error, onClick = onRemove)
+        }
+    }
+}
+
+@Composable
+fun RemoveServerDialog(server: NetworkServer, onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.Delete, null) },
+        title = { Text(stringResource(R.string.network_remove_title, server.label)) },
+        text = { Text(stringResource(R.string.network_remove_body)) },
+        confirmButton = { TextButton(onClick = onConfirm) { Text(stringResource(R.string.network_remove)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
+    )
 }
 
 /** One saved server; also used on the Home "Network" tab. [onRemove] null hides the remove button. */
 @Composable
-fun NetworkServerCard(server: NetworkServer, shape: Shape, onClick: () -> Unit, onRemove: (() -> Unit)? = null) {
+fun NetworkServerCard(
+    server: NetworkServer,
+    shape: Shape,
+    onClick: () -> Unit,
+    onLongClick: (() -> Unit)? = null,
+    onRemove: (() -> Unit)? = null
+) {
+    val haptics = LocalHapticFeedback.current
     Surface(
-        onClick = onClick,
         shape = shape,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = Dimens.lg, end = Dimens.xs, top = Dimens.md, bottom = Dimens.md)
+            modifier = Modifier
+                .combinedClickable(
+                    onClick = onClick,
+                    onLongClick = onLongClick?.let { { haptics.performHapticFeedback(HapticFeedbackType.LongPress); it() } }
+                )
+                .padding(start = Dimens.lg, end = Dimens.xs, top = Dimens.md, bottom = Dimens.md)
         ) {
             ShapeIcon(
                 icon = Icons.Rounded.Dns,
@@ -252,12 +318,16 @@ private val protocolChoices = listOf(
     NetworkProtocol.WEBDAV
 )
 
+/** Adds a server, or edits [editing] in place (an empty password then keeps the saved one). */
 @Composable
-private fun AddServerSheet(viewModel: NetworkViewModel, onDismiss: () -> Unit) {
+fun AddServerSheet(viewModel: NetworkViewModel, editing: NetworkServer? = null, onDismiss: () -> Unit) {
     val state by viewModel.add.collectAsStateWithLifecycle()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var baseProtocolName by rememberSaveable { mutableStateOf(NetworkProtocol.SMB.name) }
-    var webdavHttps by rememberSaveable { mutableStateOf(false) }
+    val initialProtocol = editing?.protocol ?: NetworkProtocol.SMB
+    var baseProtocolName by rememberSaveable {
+        mutableStateOf((if (initialProtocol == NetworkProtocol.WEBDAVS) NetworkProtocol.WEBDAV else initialProtocol).name)
+    }
+    var webdavHttps by rememberSaveable { mutableStateOf(initialProtocol == NetworkProtocol.WEBDAVS) }
     val selectedBase = NetworkProtocol.fromName(baseProtocolName)
     val effectiveProtocol = if (selectedBase == NetworkProtocol.WEBDAV && webdavHttps) {
         NetworkProtocol.WEBDAVS
@@ -265,16 +335,16 @@ private fun AddServerSheet(viewModel: NetworkViewModel, onDismiss: () -> Unit) {
         selectedBase
     }
 
-    var name by rememberSaveable { mutableStateOf("") }
-    var host by rememberSaveable { mutableStateOf("") }
-    var portText by rememberSaveable { mutableStateOf("") }
-    var share by rememberSaveable { mutableStateOf("") }
-    var user by rememberSaveable { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf(editing?.name.orEmpty()) }
+    var host by rememberSaveable { mutableStateOf(editing?.host.orEmpty()) }
+    var portText by rememberSaveable { mutableStateOf(editing?.port?.takeIf { it > 0 }?.toString().orEmpty()) }
+    var share by rememberSaveable { mutableStateOf(editing?.share.orEmpty()) }
+    var user by rememberSaveable { mutableStateOf(editing?.username.orEmpty()) }
     // Not saveable: a password must not end up in the saved-instance-state bundle.
     var password by remember { mutableStateOf("") }
-    var domain by rememberSaveable { mutableStateOf("") }
+    var domain by rememberSaveable { mutableStateOf(editing?.domain.orEmpty()) }
     var showPassword by remember { mutableStateOf(false) }
-    var rememberPassword by rememberSaveable { mutableStateOf(true) }
+    var rememberPassword by rememberSaveable { mutableStateOf(editing?.rememberPassword ?: true) }
 
     // Editing any field clears the last connection error.
     LaunchedEffect(effectiveProtocol, host, portText, share, user, password, domain) {
@@ -296,7 +366,8 @@ private fun AddServerSheet(viewModel: NetworkViewModel, onDismiss: () -> Unit) {
                 password = password,
                 protocol = effectiveProtocol,
                 port = parsedPort,
-                rememberPassword = rememberPassword
+                rememberPassword = rememberPassword,
+                existingId = editing?.id
             )
         }
     }
@@ -311,7 +382,10 @@ private fun AddServerSheet(viewModel: NetworkViewModel, onDismiss: () -> Unit) {
                 .imePadding()
                 .padding(bottom = Dimens.lg)
         ) {
-            Text(stringResource(R.string.network_add_title), style = MaterialTheme.typography.headlineSmallEmphasized)
+            Text(
+                stringResource(if (editing != null) R.string.network_edit_title else R.string.network_add_title),
+                style = MaterialTheme.typography.headlineSmallEmphasized
+            )
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
@@ -420,7 +494,15 @@ private fun AddServerSheet(viewModel: NetworkViewModel, onDismiss: () -> Unit) {
                     }
                 },
                 supportingText = {
-                    Text(stringResource(if (rememberPassword) R.string.network_password_note else R.string.network_password_not_saved_note))
+                    Text(
+                        stringResource(
+                            when {
+                                editing != null -> R.string.network_password_keep_note
+                                rememberPassword -> R.string.network_password_note
+                                else -> R.string.network_password_not_saved_note
+                            }
+                        )
+                    )
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -479,7 +561,7 @@ private fun AddServerSheet(viewModel: NetworkViewModel, onDismiss: () -> Unit) {
                     Spacer(Modifier.width(Dimens.sm))
                     Text(stringResource(R.string.network_connecting))
                 } else {
-                    Text(stringResource(R.string.network_connect))
+                    Text(stringResource(if (editing != null) R.string.network_save else R.string.network_connect))
                 }
             }
         }

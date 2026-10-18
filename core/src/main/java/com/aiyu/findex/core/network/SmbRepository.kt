@@ -277,7 +277,10 @@ class SmbRepository @Inject constructor(
 
     val servers: Flow<List<NetworkServer>> = dao.observeAll().map { list -> list.map { it.toModel() } }
 
-    /** Connects once to check host, credentials and share/remote path, then saves the server. */
+    /**
+     * Connects once to check host, credentials and share/remote path, then saves the server.
+     * With [existingId] it updates that server in place; an empty [password] keeps its current one.
+     */
     suspend fun add(
         name: String,
         host: String,
@@ -287,27 +290,39 @@ class SmbRepository @Inject constructor(
         password: String,
         protocol: NetworkProtocol = NetworkProtocol.SMB,
         port: Int = 0,
-        rememberPassword: Boolean = true
+        rememberPassword: Boolean = true,
+        existingId: Long? = null
     ): NetworkServer = withContext(Dispatchers.IO) {
+        val old = existingId?.let { dao.byId(it) ?: throw NetworkException(NetworkError.UNKNOWN) }
+        // Not known (unsaved and not unlocked) falls back to empty, so the connect check reports AUTH_FAILED.
+        val effectivePassword = if (password.isEmpty() && old != null) runCatching { storedPassword(old) }.getOrDefault("") else password
         val norm = NetworkEndpoint.normalize(host, share, protocol, port)
         if (norm.host.isEmpty()) throw NetworkException(NetworkError.HOST_UNREACHABLE)
         if (norm.protocol == NetworkProtocol.SMB && norm.share.isEmpty()) {
             throw NetworkException(NetworkError.SHARE_NOT_FOUND)
         }
         val entity = NetworkServerEntity(
+            id = existingId ?: 0,
+            createdAt = old?.createdAt ?: System.currentTimeMillis(),
             name = name.trim(),
             host = norm.host,
             share = norm.share,
             username = username.trim(),
             domain = if (norm.protocol == NetworkProtocol.SMB) domain.trim() else "",
-            passwordCipher = password.takeIf { rememberPassword && it.isNotEmpty() }?.let(cipher::encrypt),
+            passwordCipher = effectivePassword.takeIf { rememberPassword && it.isNotEmpty() }?.let(cipher::encrypt),
             protocol = norm.protocol.name,
             port = norm.port,
             rememberPassword = rememberPassword
         )
-        open(entity, password).close()
-        val id = dao.upsert(entity)
-        if (!rememberPassword) sessionPasswords[id] = password
+        open(entity, effectivePassword).close()
+        // @Upsert returns -1 when it updated an existing row.
+        val id = dao.upsert(entity).let { existingId ?: it }
+        lock.withLock {
+            // Drop the session that still points at the old address or login.
+            sessions.remove(id)?.runCatching { close() }
+            if (rememberPassword) sessionPasswords.remove(id) else sessionPasswords[id] = effectivePassword
+        }
+        if (old != null) File(cacheRoot, id.toString()).deleteRecursively()
         entity.copy(id = id).toModel()
     }
 

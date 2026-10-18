@@ -71,13 +71,14 @@ class NetworkViewModel @Inject constructor(
         password: String,
         protocol: NetworkProtocol = NetworkProtocol.SMB,
         port: Int = 0,
-        rememberPassword: Boolean = true
+        rememberPassword: Boolean = true,
+        existingId: Long? = null
     ) {
         if (_add.value.isConnecting) return
         _add.value = AddServerState(isConnecting = true)
         viewModelScope.launch {
             try {
-                _added.send(smb.add(name, host, share, username, domain, password, protocol, port, rememberPassword))
+                _added.send(smb.add(name, host, share, username, domain, password, protocol, port, rememberPassword, existingId))
                 _add.value = AddServerState()
             } catch (e: Exception) {
                 _add.value = AddServerState(error = e.networkError())

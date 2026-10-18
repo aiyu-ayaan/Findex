@@ -224,6 +224,7 @@ flowchart LR
 ```
 
 - Room schema v4 adds `network_servers` (`AutoMigration(3, 4)`); Room schema v5 adds `protocol` and `port` (`AutoMigration(4, 5)`).
+- **Edit / remove**: long-press a server card (Home Network tab or Network screen, also while offline) for `ServerActionsSheet`. Edit reopens `AddServerSheet` prefilled and calls `SmbRepository.add(existingId = id)`, which re-tests the connection, keeps the current password when the field is left empty, drops the old session and clears the server's cache. Home also opens the add sheet in place instead of navigating to the Network screen.
 - **Remember password** (add sheet switch, default on). Off: `passwordCipher` stays null and `rememberPassword = false` (Room v6, `AutoMigration(5, 6)`). The password lives only in `SmbRepository.sessionPasswords` (process memory). Until it is entered, `open()` throws `NetworkError.PASSWORD_REQUIRED`; Home shows a locked card with **Unlock**, the Network screen asks on tap (`UnlockServerDialog` → `SmbRepository.unlock`), and Explorer shows the error as a snackbar.
 
 ---
