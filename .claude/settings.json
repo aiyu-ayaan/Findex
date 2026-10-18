@@ -19,6 +19,7 @@
   "enabledPlugins": {
     "material-3@material-3-skill": true,
     "ponytail@ponytail": true,
-    "superpowers@superpowers-marketplace": true
+    "superpowers@superpowers-marketplace": true,
+    "logo-design@logo-design-skill": true
   }
 }
