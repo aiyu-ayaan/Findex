@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Animated splash mark (API 31+; older versions show the static drawable/splash_icon).
+  Stem grows up from a dot, the two rows slide out of it, then the found-item dot springs in.
+  Paths morph with matching commands so the round caps never stretch. Starts 150ms in so the launcher's window reveal does not hide the stem. Total 950ms, matches
+  windowSplashScreenAnimationDuration.
+-->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="108dp"
+            android:height="108dp"
+            android:viewportWidth="108"
+            android:viewportHeight="108">
+            <group android:scaleX="0.3" android:scaleY="0.3" android:translateX="15" android:translateY="15.6">
+                <path android:name="top" android:fillColor="@color/splash_mark" android:fillAlpha="0"
+                    android:pathData="M88,48 H88 A20,20 0 0 1 88,88 H88 A20,20 0 0 1 88,48 Z" />
+                <path android:name="middle" android:fillColor="@color/splash_mark" android:fillAlpha="0"
+                    android:pathData="M88,118 H88 A20,20 0 0 1 88,158 H88 A20,20 0 0 1 88,118 Z" />
+                <path android:name="stem" android:fillColor="@color/splash_mark" android:fillAlpha="0"
+                    android:pathData="M68,188 A20,20 0 0 1 108,188 V188 A20,20 0 0 1 68,188 Z" />
+                <group android:name="dot" android:pivotX="172" android:pivotY="138"
+                    android:scaleX="0" android:scaleY="0">
+                    <path android:fillColor="@color/splash_accent" android:pathData="M152,138 A20,20 0 1 1 192,138 A20,20 0 1 1 152,138 Z" />
+                </group>
+            </group>
+        </vector>
+    </aapt:attr>
+
+    <target android:name="stem">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator android:propertyName="fillAlpha" android:startOffset="150" android:duration="100"
+                    android:valueFrom="0" android:valueTo="1"
+                    android:interpolator="@android:interpolator/linear" />
+                <objectAnimator android:propertyName="pathData" android:startOffset="150" android:duration="350"
+                    android:valueType="pathType"
+                    android:valueFrom="M68,188 A20,20 0 0 1 108,188 V188 A20,20 0 0 1 68,188 Z"
+                    android:valueTo="M68,68 A20,20 0 0 1 108,68 V188 A20,20 0 0 1 68,188 Z"
+                    android:interpolator="@interpolator/emphasized_decelerate" />
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="top">
+        <aapt:attr name="android:animation">
+            <set>
+            <!-- Appears only once the stem has grown over it, so the start dot is never seen. -->
+            <objectAnimator android:propertyName="fillAlpha" android:startOffset="380" android:duration="0"
+                android:valueFrom="0" android:valueTo="1" />
+            <objectAnimator android:propertyName="pathData" android:startOffset="380" android:duration="350"
+                android:valueType="pathType"
+                android:valueFrom="M88,48 H88 A20,20 0 0 1 88,88 H88 A20,20 0 0 1 88,48 Z"
+                android:valueTo="M88,48 H176 A20,20 0 0 1 176,88 H88 A20,20 0 0 1 88,48 Z"
+                android:interpolator="@interpolator/emphasized_decelerate" />
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="middle">
+        <aapt:attr name="android:animation">
+            <set>
+            <!-- Appears only once the stem has grown over it, so the start dot is never seen. -->
+            <objectAnimator android:propertyName="fillAlpha" android:startOffset="450" android:duration="0"
+                android:valueFrom="0" android:valueTo="1" />
+            <objectAnimator android:propertyName="pathData" android:startOffset="450" android:duration="350"
+                android:valueType="pathType"
+                android:valueFrom="M88,118 H88 A20,20 0 0 1 88,158 H88 A20,20 0 0 1 88,118 Z"
+                android:valueTo="M88,118 H124 A20,20 0 0 1 124,158 H88 A20,20 0 0 1 88,118 Z"
+                android:interpolator="@interpolator/emphasized_decelerate" />
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="dot">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator android:propertyName="scaleX" android:startOffset="620" android:duration="330"
+                    android:valueFrom="0" android:valueTo="1"
+                    android:interpolator="@interpolator/expressive_spatial" />
+                <objectAnimator android:propertyName="scaleY" android:startOffset="620" android:duration="330"
+                    android:valueFrom="0" android:valueTo="1"
+                    android:interpolator="@interpolator/expressive_spatial" />
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>

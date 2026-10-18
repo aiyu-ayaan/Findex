@@ -47,6 +47,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] All-files-access onboarding screen
 - [x] Drawer routes wired
 - [x] Adaptive launcher icon (themed/monochrome), splash screen, FileProvider
+- [x] Brand mark ("Index F") for launcher, themed icon and README; animated splash with M3 motion and a timed exit
 
 ### M4 — Home
 - [x] Storage hero card with wavy progress

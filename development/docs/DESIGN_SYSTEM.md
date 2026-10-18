@@ -175,6 +175,28 @@ Every gesture has a button alternative (select all, per-row checkbox).
 
 ---
 
+## 9b. Brand mark & splash
+
+The mark is an **F built from list rows**; the orange dot after the second row is the item you found. Masters live in
+`development/docs/brand/` (`logo-symbol.svg`, `logo-mono.svg`, `app-icon.svg`), drawn on a 256 grid with 40-unit strokes
+and 20-unit round caps.
+
+| Use | Mark | Accent | Background |
+|---|---|---|---|
+| Launcher (adaptive) | `#065C54` | `#EA580C` | `#A9F0E5` |
+| Themed / monochrome icon | white | white | system |
+| Splash light | `#1E6A62` (primary) | `#EA580C` | `#F6FAF8` (surface) |
+| Splash dark | `#9CD1C8` (primary) | `#FF9D76` (tertiary) | `#0A0F0E` (surface) |
+
+- Keep the dot separate from the second row; never recolour the F orange or the dot teal.
+- Splash (API 31+, `drawable-v31/splash_icon.xml`, 950 ms): the stem grows up from a dot, both rows slide out of it
+  (M3 emphasized decelerate), then the dot springs in (`expressive_spatial`, one small overshoot). Paths morph with matching
+  commands so the round caps never stretch. Older versions show the static `drawable/splash_icon.xml`.
+- Exit: after the icon animation finishes, the icon and background fade together while the icon scales to 0.9
+  (200 ms, emphasized accelerate). The icon has to fade on its own because it is a separate surface on API 31+.
+
+---
+
 ## 10. Large-Screen & Tablet Design
 
 - **Navigation**:

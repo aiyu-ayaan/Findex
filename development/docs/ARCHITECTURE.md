@@ -387,6 +387,25 @@ flowchart LR
 
 ---
 
+## 8b. Launch & splash hand-off
+
+```mermaid
+sequenceDiagram
+    participant L as Launcher
+    participant S as System splash (Theme.Findex.Splash)
+    participant A as MainActivity
+    participant C as FindexApp (Compose)
+    L->>S: tap icon, window reveal
+    S->>S: play splash_icon AVD (950 ms)
+    S->>A: onCreate, installSplashScreen()
+    A->>C: setContent
+    C-->>A: onReady once settings load (keep-on-screen ends)
+    A->>S: exit listener waits for the rest of the AVD
+    S-->>C: icon + background fade 200 ms, provider.remove()
+```
+
+---
+
 ## 9. Adaptive Large-Screen & Tablet Architecture
 
 Findex dynamically adapts between compact phones, foldable devices, and expanded tablets:

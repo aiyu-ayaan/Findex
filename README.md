@@ -1,4 +1,14 @@
-# Findex 📁
+<img src="development/docs/brand/app-icon.svg" alt="Findex logo" width="72" />
+
+# Findex
+
+[![Last commit](https://img.shields.io/github/last-commit/aiyu-ayaan/Findex/master)](https://github.com/aiyu-ayaan/Findex/commits/master)
+[![License](https://img.shields.io/github/license/aiyu-ayaan/Findex)](LICENSE)
+
+![Kotlin](https://img.shields.io/badge/language-Kotlin-7F52FF?logo=kotlin&logoColor=white)
+![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?logo=jetpackcompose&logoColor=white)
+![Material 3 Expressive](https://img.shields.io/badge/design-Material%203%20Expressive-0D9488?logo=materialdesign&logoColor=white)
+![Min SDK](https://img.shields.io/badge/minSdk-26-3DDC84?logo=android&logoColor=white)
 
 A modern, native Android file explorer built with **Jetpack Compose** and **Material 3 Expressive** design. Findex combines fluid motion, expressive shape morphing, multi-tab multitasking, deep storage analytics, and powerful archive utilities into a fast, privacy-respecting file manager.
 
