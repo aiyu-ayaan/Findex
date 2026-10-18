@@ -184,8 +184,8 @@ fun ExplorerScreen(
     // Back: close FAB menu → clear selection → parent folder (predictive) → leave screen (NavHost predictive pop).
     var backProgress by remember { mutableFloatStateOf(0f) }
     var backFromLeft by remember { mutableStateOf(true) }
-    val goingUp = !fabMenuOpen && !state.inSelection && state.canGoUp
-    PredictiveBackHandler(enabled = fabMenuOpen || state.inSelection || state.canGoUp) { events ->
+    val goingUp = modal == null && !fabMenuOpen && !state.inSelection && state.canGoUp
+    PredictiveBackHandler(enabled = modal == null && (fabMenuOpen || state.inSelection || state.canGoUp)) { events ->
         try {
             events.collect { event ->
                 if (goingUp) {

@@ -117,8 +117,10 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
+import androidx.activity.BackEventCompat
+import androidx.activity.compose.PredictiveBackHandler
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.zIndex
 import coil3.compose.AsyncImage
 import com.aiyu.findex.core.model.FileCategory
 import com.aiyu.findex.core.model.StorageItem
@@ -162,7 +164,6 @@ fun ImagePreviewCard(
     val meta by produceState<ImageMeta?>(null, item.path) {
         if (!isRemote) value = FileInspector.inspectImage(file)
     }
-    var showLightbox by remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier
@@ -182,20 +183,21 @@ fun ImagePreviewCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = 140.dp, max = 220.dp)
-                .clickable { showLightbox = true }
+                .clickable(onClick = onOpenExternal)
                 .padding(Dimens.xs)
         )
 
         // Overlay top-end: Fullscreen action button
         Surface(
             shape = CircleShape,
-            color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f),
+            color = MaterialTheme.colorScheme.surfaceContainer,
+            contentColor = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(Dimens.sm)
         ) {
             IconButton(
-                onClick = { showLightbox = true },
+                onClick = onOpenExternal,
                 modifier = Modifier.size(36.dp)
             ) {
                 Icon(
@@ -210,7 +212,8 @@ fun ImagePreviewCard(
         meta?.let { m ->
             Surface(
                 shape = MaterialTheme.shapes.small,
-                color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f),
+                color = MaterialTheme.colorScheme.surfaceContainer,
+                contentColor = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(Dimens.sm)
@@ -226,26 +229,18 @@ fun ImagePreviewCard(
         // Overlay bottom-end: File size
         Surface(
             shape = MaterialTheme.shapes.small,
-            color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f),
+            color = MaterialTheme.colorScheme.surfaceContainer,
+            contentColor = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(Dimens.sm)
-            ) {
+        ) {
             Text(
                 text = formatSize(item.size),
                 style = MaterialTheme.typography.labelSmall,
                 modifier = Modifier.padding(horizontal = Dimens.sm, vertical = Dimens.xs)
             )
         }
-    }
-
-    if (showLightbox) {
-        MediaViewerDialog(
-            items = galleryItems.ifEmpty { listOf(item) },
-            initialPath = item.path,
-            onDismiss = { showLightbox = false },
-            onDelete = onDelete
-        )
     }
 }
 
@@ -265,6 +260,7 @@ fun ImageLightboxDialog(
 
 /**
  * Full-screen Material 3 Expressive media gallery viewer supporting both images and videos:
+ * - Predictive back gesture (`PredictiveBackHandler`) that smoothly scales, shifts, and rounds the viewer over the underlying screen
  * - Horizontal swipe paging across all images and videos in the current folder/list
  * - Pinch-to-zoom, double-tap zoom, pan, and 90° rotation for images (without blocking pager swipe when unzoomed)
  * - Inline video playback (local & SMB stream) or one-tap external video player launch
@@ -307,6 +303,31 @@ fun MediaViewerDialog(
     var resetZoomToken by remember(currentItem.path) { mutableIntStateOf(0) }
     var isCurrentZoomed by remember(currentItem.path) { mutableStateOf(false) }
 
+    // Predictive back gesture state: first resets zoom if zoomed in, otherwise shrinks & dismisses the viewer
+    var backProgress by remember { mutableFloatStateOf(0f) }
+    var backFromLeft by remember { mutableStateOf(true) }
+    PredictiveBackHandler(enabled = !showDetailsSheet) { events ->
+        try {
+            events.collect { event ->
+                backProgress = event.progress
+                backFromLeft = event.swipeEdge == BackEventCompat.EDGE_LEFT
+            }
+            if (isCurrentZoomed || pageRotation != 0f) {
+                pageRotation = 0f
+                resetZoomToken++
+            } else {
+                onDismiss()
+            }
+        } finally {
+            backProgress = 0f
+        }
+    }
+    val backScale by animateFloatAsState(
+        targetValue = 1f - 0.12f * backProgress,
+        animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
+        label = "viewerBackScale"
+    )
+
     val imageMeta by produceState<ImageMeta?>(null, currentItem.path) {
         if (!isRemote && !isVideo) value = FileInspector.inspectImage(File(currentItem.path))
     }
@@ -314,18 +335,23 @@ fun MediaViewerDialog(
     val effectsSpec = MaterialTheme.motionScheme.defaultEffectsSpec<Float>()
     val spatialSpec = MaterialTheme.motionScheme.defaultSpatialSpec<androidx.compose.ui.unit.IntOffset>()
 
-    Dialog(
-        onDismissRequest = onDismiss,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false,
-            decorFitsSystemWindows = false
-        )
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceContainerLowest,
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        shape = RoundedCornerShape((28f * backProgress).dp),
+        tonalElevation = 2.dp,
+        shadowElevation = (16f * backProgress).dp,
+        modifier = Modifier
+            .fillMaxSize()
+            .zIndex(20f)
+            .graphicsLayer {
+                scaleX = backScale
+                scaleY = backScale
+                translationX = (if (backFromLeft) 1 else -1) * backProgress * 40.dp.toPx()
+                alpha = 1f - 0.2f * backProgress
+            }
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.97f))
-        ) {
+        Box(modifier = Modifier.fillMaxSize()) {
             // Main Pager: swipe through images and videos
             HorizontalPager(
                 state = pagerState,
@@ -362,153 +388,151 @@ fun MediaViewerDialog(
                 exit = fadeOut(effectsSpec) + slideOutVertically(spatialSpec) { -it / 2 },
                 modifier = Modifier.align(Alignment.TopCenter)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            Brush.verticalGradient(
-                                listOf(
-                                    MaterialTheme.colorScheme.scrim.copy(alpha = 0.82f),
-                                    Color.Transparent
-                                )
-                            )
-                        )
-                        .statusBarsPadding()
-                        .padding(horizontal = Dimens.sm, vertical = Dimens.sm)
+                Surface(
+                    color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.94f),
+                    contentColor = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    IconButton(onClick = onDismiss) {
-                        Icon(
-                            Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.cd_back),
-                            tint = MaterialTheme.colorScheme.inverseOnSurface
-                        )
-                    }
-                    Column(
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(horizontal = Dimens.xs)
+                            .fillMaxWidth()
+                            .statusBarsPadding()
+                            .padding(horizontal = Dimens.sm, vertical = Dimens.xs)
                     ) {
-                        Text(
-                            text = currentItem.name,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.inverseOnSurface,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        val posText = stringResource(R.string.viewer_item_position, currentIndex + 1, mediaItems.size)
-                        val dimText = imageMeta?.let { " · ${it.width} × ${it.height}" }.orEmpty()
-                        Text(
-                            text = "$posText$dimText · ${formatSize(currentItem.size)}",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.78f),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
+                        IconButton(onClick = onDismiss) {
+                            Icon(
+                                Icons.AutoMirrored.Rounded.ArrowBack,
+                                contentDescription = stringResource(R.string.cd_back),
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(horizontal = Dimens.xs)
+                        ) {
+                            Text(
+                                text = currentItem.name,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            val posText = stringResource(R.string.viewer_item_position, currentIndex + 1, mediaItems.size)
+                            val dimText = imageMeta?.let { " · ${it.width} × ${it.height}" }.orEmpty()
+                            Text(
+                                text = "$posText$dimText · ${formatSize(currentItem.size)}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
 
-                    if (!isVideo && (isCurrentZoomed || pageRotation != 0f)) {
+                        if (!isVideo && (isCurrentZoomed || pageRotation != 0f)) {
+                            IconButton(
+                                onClick = {
+                                    pageRotation = 0f
+                                    resetZoomToken++
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Rounded.Refresh,
+                                    contentDescription = stringResource(R.string.action_reset_zoom),
+                                    tint = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+
+                        if (!isVideo) {
+                            IconButton(onClick = { pageRotation = (pageRotation + 90f) % 360f }) {
+                                Icon(
+                                    Icons.AutoMirrored.Rounded.RotateRight,
+                                    contentDescription = stringResource(R.string.action_rotate),
+                                    tint = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+
                         IconButton(
-                            onClick = {
-                                pageRotation = 0f
-                                resetZoomToken++
-                            }
+                            onClick = { context.openFileWithChooser(currentItem.path, currentItem.size) }
                         ) {
                             Icon(
-                                Icons.Rounded.Refresh,
-                                contentDescription = stringResource(R.string.action_reset_zoom),
-                                tint = MaterialTheme.colorScheme.inverseOnSurface
+                                Icons.AutoMirrored.Rounded.OpenInNew,
+                                contentDescription = stringResource(R.string.action_open_in_another_app),
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
-                    }
 
-                    if (!isVideo) {
-                        IconButton(onClick = { pageRotation = (pageRotation + 90f) % 360f }) {
-                            Icon(
-                                Icons.AutoMirrored.Rounded.RotateRight,
-                                contentDescription = stringResource(R.string.action_rotate),
-                                tint = MaterialTheme.colorScheme.inverseOnSurface
-                            )
-                        }
-                    }
-
-                    IconButton(
-                        onClick = { context.openFileWithChooser(currentItem.path, currentItem.size) }
-                    ) {
-                        Icon(
-                            Icons.AutoMirrored.Rounded.OpenInNew,
-                            contentDescription = stringResource(R.string.action_open_in_another_app),
-                            tint = MaterialTheme.colorScheme.inverseOnSurface
-                        )
-                    }
-
-                    Box {
-                        IconButton(onClick = { overflowMenuOpen = true }) {
-                            Icon(
-                                Icons.Rounded.MoreVert,
-                                contentDescription = stringResource(R.string.cd_more_options),
-                                tint = MaterialTheme.colorScheme.inverseOnSurface
-                            )
-                        }
-                        DropdownMenu(
-                            expanded = overflowMenuOpen,
-                            onDismissRequest = { overflowMenuOpen = false },
-                            shape = MaterialTheme.shapes.large
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.action_open_in_another_app)) },
-                                leadingIcon = { Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = null) },
-                                onClick = {
-                                    overflowMenuOpen = false
-                                    context.openFileWithChooser(currentItem.path, currentItem.size)
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.action_share)) },
-                                leadingIcon = { Icon(Icons.Rounded.Share, contentDescription = null) },
-                                onClick = {
-                                    overflowMenuOpen = false
-                                    context.shareFiles(listOf(currentItem.path))
-                                }
-                            )
-                            if (!isVideo) {
-                                DropdownMenuItem(
-                                    text = { Text(stringResource(R.string.action_rotate)) },
-                                    leadingIcon = { Icon(Icons.AutoMirrored.Rounded.RotateRight, contentDescription = null) },
-                                    onClick = {
-                                        overflowMenuOpen = false
-                                        pageRotation = (pageRotation + 90f) % 360f
-                                    }
+                        Box {
+                            IconButton(onClick = { overflowMenuOpen = true }) {
+                                Icon(
+                                    Icons.Rounded.MoreVert,
+                                    contentDescription = stringResource(R.string.cd_more_options),
+                                    tint = MaterialTheme.colorScheme.onSurface
                                 )
                             }
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.action_details)) },
-                                leadingIcon = { Icon(Icons.Rounded.Info, contentDescription = null) },
-                                onClick = {
-                                    overflowMenuOpen = false
-                                    showDetailsSheet = true
-                                }
-                            )
-                            if (onDelete != null) {
+                            DropdownMenu(
+                                expanded = overflowMenuOpen,
+                                onDismissRequest = { overflowMenuOpen = false },
+                                shape = MaterialTheme.shapes.large
+                            ) {
                                 DropdownMenuItem(
-                                    text = {
-                                        Text(
-                                            stringResource(R.string.action_delete),
-                                            color = MaterialTheme.colorScheme.error
-                                        )
-                                    },
-                                    leadingIcon = {
-                                        Icon(
-                                            Icons.Rounded.Delete,
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.error
-                                        )
-                                    },
+                                    text = { Text(stringResource(R.string.action_open_in_another_app)) },
+                                    leadingIcon = { Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = null) },
                                     onClick = {
                                         overflowMenuOpen = false
-                                        onDelete(currentItem)
+                                        context.openFileWithChooser(currentItem.path, currentItem.size)
                                     }
                                 )
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.action_share)) },
+                                    leadingIcon = { Icon(Icons.Rounded.Share, contentDescription = null) },
+                                    onClick = {
+                                        overflowMenuOpen = false
+                                        context.shareFiles(listOf(currentItem.path))
+                                    }
+                                )
+                                if (!isVideo) {
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(R.string.action_rotate)) },
+                                        leadingIcon = { Icon(Icons.AutoMirrored.Rounded.RotateRight, contentDescription = null) },
+                                        onClick = {
+                                            overflowMenuOpen = false
+                                            pageRotation = (pageRotation + 90f) % 360f
+                                        }
+                                    )
+                                }
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.action_details)) },
+                                    leadingIcon = { Icon(Icons.Rounded.Info, contentDescription = null) },
+                                    onClick = {
+                                        overflowMenuOpen = false
+                                        showDetailsSheet = true
+                                    }
+                                )
+                                if (onDelete != null) {
+                                    DropdownMenuItem(
+                                        text = {
+                                            Text(
+                                                stringResource(R.string.action_delete),
+                                                color = MaterialTheme.colorScheme.error
+                                            )
+                                        },
+                                        leadingIcon = {
+                                            Icon(
+                                                Icons.Rounded.Delete,
+                                                contentDescription = null,
+                                                tint = MaterialTheme.colorScheme.error
+                                            )
+                                        },
+                                        onClick = {
+                                            overflowMenuOpen = false
+                                            onDelete(currentItem)
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
@@ -526,31 +550,30 @@ fun MediaViewerDialog(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(
-                            Brush.verticalGradient(
-                                listOf(
-                                    Color.Transparent,
-                                    MaterialTheme.colorScheme.scrim.copy(alpha = 0.88f)
-                                )
-                            )
-                        )
                         .navigationBarsPadding()
-                        .padding(top = Dimens.md, bottom = Dimens.md)
+                        .padding(top = Dimens.sm, bottom = Dimens.md)
                 ) {
-                    // Quick Action Pill Bar
+                    // Quick Action Pill Bar — opaque M3 surfaceContainerHigh with explicit contentColor & tonal icon buttons
                     Surface(
                         shape = MaterialTheme.shapes.extraLarge,
-                        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.92f),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        contentColor = MaterialTheme.colorScheme.onSurface,
+                        tonalElevation = 4.dp,
+                        shadowElevation = 6.dp,
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)),
                         modifier = Modifier.padding(horizontal = Dimens.lg)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(Dimens.xs),
-                            modifier = Modifier.padding(horizontal = Dimens.sm, vertical = Dimens.xxs)
+                            modifier = Modifier.padding(horizontal = Dimens.sm, vertical = Dimens.xs)
                         ) {
                             FilledTonalButton(
                                 onClick = { context.openFileWithChooser(currentItem.path, currentItem.size) },
+                                colors = ButtonDefaults.filledTonalButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                ),
                                 contentPadding = PaddingValues(horizontal = Dimens.md, vertical = Dimens.xs)
                             ) {
                                 Icon(
@@ -565,14 +588,26 @@ fun MediaViewerDialog(
                                 )
                             }
 
-                            IconButton(onClick = { context.shareFiles(listOf(currentItem.path)) }) {
+                            FilledTonalIconButton(
+                                onClick = { context.shareFiles(listOf(currentItem.path)) },
+                                colors = IconButtonDefaults.filledTonalIconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                )
+                            ) {
                                 Icon(
                                     Icons.Rounded.Share,
                                     contentDescription = stringResource(R.string.action_share)
                                 )
                             }
 
-                            IconButton(onClick = { showDetailsSheet = true }) {
+                            FilledTonalIconButton(
+                                onClick = { showDetailsSheet = true },
+                                colors = IconButtonDefaults.filledTonalIconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                )
+                            ) {
                                 Icon(
                                     Icons.Rounded.Info,
                                     contentDescription = stringResource(R.string.action_details)
@@ -580,11 +615,16 @@ fun MediaViewerDialog(
                             }
 
                             if (onDelete != null) {
-                                IconButton(onClick = { onDelete(currentItem) }) {
+                                FilledTonalIconButton(
+                                    onClick = { onDelete(currentItem) },
+                                    colors = IconButtonDefaults.filledTonalIconButtonColors(
+                                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                                        contentColor = MaterialTheme.colorScheme.onErrorContainer
+                                    )
+                                ) {
                                     Icon(
                                         Icons.Rounded.Delete,
-                                        contentDescription = stringResource(R.string.action_delete),
-                                        tint = MaterialTheme.colorScheme.error
+                                        contentDescription = stringResource(R.string.action_delete)
                                     )
                                 }
                             }
@@ -592,7 +632,7 @@ fun MediaViewerDialog(
                     }
 
                     if (mediaItems.size > 1) {
-                        Spacer(Modifier.height(Dimens.md))
+                        Spacer(Modifier.height(Dimens.sm))
                         MediaFilmstripBar(
                             items = mediaItems,
                             selectedIndex = currentIndex,
@@ -638,8 +678,11 @@ private fun MediaFilmstripBar(
 
     Surface(
         shape = MaterialTheme.shapes.extraLarge,
-        color = MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = 0.78f),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f)),
+        color = MaterialTheme.colorScheme.surfaceContainer,
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        tonalElevation = 2.dp,
+        shadowElevation = 4.dp,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = Dimens.md)

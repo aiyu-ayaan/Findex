@@ -85,7 +85,7 @@ fun CategoryScreen(
     var viewerInitialPath by remember { mutableStateOf<String?>(null) }
     val fastEffects = MaterialTheme.motionScheme.fastEffectsSpec<Float>()
 
-    BackHandler(enabled = state.selection.isNotEmpty()) { viewModel.clearSelection() }
+    BackHandler(enabled = viewerInitialPath == null && state.selection.isNotEmpty()) { viewModel.clearSelection() }
 
     fun open(item: StorageItem) {
         when {
