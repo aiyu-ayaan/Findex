@@ -112,3 +112,8 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 ### Performance
 - [x] Baseline + startup profile (`:baselineprofile` module, ProfileInstaller); cold start TTID 580 ms to 456 ms on API 37 emulator
 - [x] Splash exits as soon as content is ready (no longer waits out the 950 ms logo animation)
+
+### Updates and About
+- [x] Auto update from GitHub releases with release notes, global dialog, channel + toggle in Settings
+- [x] About screen with developer section and Acknowledgements
+- [ ] Background daily update check (WorkManager) and notification, not done: launch check only

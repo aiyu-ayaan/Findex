@@ -82,6 +82,11 @@ import com.aiyu.findex.ui.tabs.TabsScreen
 import com.aiyu.findex.ui.trash.RecycleBinScreen
 import com.aiyu.findex.ui.onboarding.OnboardingScreen
 import com.aiyu.findex.ui.theme.FindexTheme
+import com.aiyu.findex.ui.update.UpdateDialog
+import com.aiyu.findex.ui.about.AboutScreen
+import com.aiyu.findex.ui.about.AcknowledgementsScreen
+import com.aiyu.findex.ui.navigation.AboutRoute
+import com.aiyu.findex.ui.navigation.AcknowledgementsRoute
 import com.aiyu.findex.ui.util.hasNotificationAccess
 import com.aiyu.findex.ui.util.hasStorageAccess
 import kotlinx.coroutines.launch
@@ -129,6 +134,14 @@ fun FindexApp(onReady: () -> Unit = {}, viewModel: AppViewModel = hiltViewModel(
         CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
             Box(Modifier.fillMaxSize()) {
                 val tabCount by viewModel.tabCount.collectAsStateWithLifecycle()
+                val updateState by viewModel.updateState.collectAsStateWithLifecycle()
+                UpdateDialog(
+                    state = updateState,
+                    installed = viewModel.installedVersion,
+                    canInstall = viewModel.canInstall(),
+                    onInstall = viewModel::installUpdate,
+                    onDismiss = viewModel::dismissUpdate
+                )
                 FindexNavigation(onboardingDone = current.onboardingDone, onOnboardingFinished = viewModel::completeOnboarding, tabCount = tabCount)
                 SnackbarHost(
                     hostState = snackbarHostState,
@@ -229,7 +242,9 @@ private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: N
     composable<AnalyzerRoute> { AnalyzerScreen(onBack = back, onOpenFolder = openFolder) }
     composable<CleanerRoute> { CleanerScreen(onBack = back) }
     composable<WhatsAppRoute> { WhatsAppScreen(onBack = back) }
-    composable<SettingsRoute> { SettingsScreen(onBack = back) }
+    composable<SettingsRoute> { SettingsScreen(onBack = back, onOpenAbout = { navController.navigate(AboutRoute) }) }
+    composable<AboutRoute> { AboutScreen(onBack = back, onOpenAcknowledgements = { navController.navigate(AcknowledgementsRoute) }) }
+    composable<AcknowledgementsRoute> { AcknowledgementsScreen(onBack = back) }
     composable<RecycleBinRoute> { RecycleBinScreen(onBack = back) }
     composable<DuplicatesRoute> { DuplicatesScreen(onBack = back, onOpenFolder = openFolder) }
     composable<SearchRoute> { SearchScreen(onBack = back, onOpenFolder = openFolder, onOpenArchive = openArchive) }

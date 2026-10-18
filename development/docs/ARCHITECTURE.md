@@ -455,3 +455,23 @@ flowchart TD
    - `readableGutter()` automatically centers content with standard margins on extra-wide screens up to `Dimens.contentMaxWidth = 840.dp`.
 
 
+
+## In-app updates
+
+`UpdateRepository` (core) reads the GitHub releases of `aiyu-ayaan/Findex`, picks the newest one on the user's channel (stable / beta / alpha, by version not date), downloads `Findex-<version>.apk` to the cache and hands it to a `PackageInstaller` session. The release body (the CHANGELOG entry) is the release notes. `UpdateDialog` is hosted once in `FindexApp`, so it appears on any screen.
+
+```mermaid
+flowchart TD
+    Launch[App launch] --> VM[AppViewModel]
+    Manual[Settings: Check for updates] --> Repo
+    VM -- autoUpdate on --> Repo[UpdateRepository<br/>core/update]
+    Repo -- GET releases --> GH[(GitHub Releases)]
+    Repo -- UpdateState --> Dialog[UpdateDialog in FindexApp<br/>global, shows release notes]
+    Dialog -- Install --> Repo
+    Repo -- download APK --> Cache[cacheDir/updates]
+    Repo -- session.commit --> PI[PackageInstaller]
+    PI -- status --> Recv[UpdateInstallReceiver]
+    Recv -- confirm screen / failure reason --> Repo
+```
+
+Settings → About opens `AboutScreen` (app, developer, source) → `AcknowledgementsScreen`; both are nav destinations, so back is predictive.
