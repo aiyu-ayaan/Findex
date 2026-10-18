@@ -25,8 +25,10 @@ android {
         applicationId = "com.aiyu.findex"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        // Written by scripts/set-version.mjs in the release PR.
+        val version = Properties().apply { rootProject.file("version.properties").inputStream().use(::load) }
+        versionCode = version.getProperty("build").toInt()
+        versionName = version.getProperty("version")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -53,6 +53,7 @@ on one item and then click items individuall both will do the same  select proce
 - `development/docs/DESIGN_SYSTEM.md` — colors, shapes, motion, spacing, selection gestures. All UI must follow it.
 - `development/docs/ARCHITECTURE.md` — module + flow diagrams. Update the diagrams with every structural change.
 - `development/TODO.md` — tick items as milestones land.
+- `development/docs/RELEASE.md` — release markers (`!alpha`, `!fix`, …), CI flow, GitHub secrets.
 
 ## Conventions
 
