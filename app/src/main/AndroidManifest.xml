@@ -42,6 +42,12 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <provider
+            android:name="com.aiyu.findex.core.network.SmbContentProvider"
+            android:authorities="${applicationId}.smbprovider"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+
     </application>
 
 </manifest>

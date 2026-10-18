@@ -212,12 +212,12 @@ fun ExplorerScreen(
             state.inSelection -> viewModel.toggleSelection(item.path)
             item.isDirectory -> viewModel.openFolder(item.path)
             listDetail -> viewModel.focus(item.path)
-            // Network files are downloaded first; archives on a share open in an external app.
-            SmbPath.parse(item.path) != null -> viewModel.openRemote(item)
+            // Network files stream via SmbContentProvider; archives on a share open in an external app.
+            SmbPath.parse(item.path) != null -> context.openFile(item.path, item.size)
             item.isArchive -> onOpenArchive(item.path)
             else -> {
                 viewModel.onFileOpened(item.path)
-                context.openFile(item.path)
+                context.openFile(item.path, item.size)
             }
         }
     }
@@ -430,10 +430,11 @@ fun ExplorerScreen(
                 actions = DetailActions(
                     onOpen = {
                         focusedItem?.let {
-                            if (state.isNetwork) viewModel.openRemote(it) else { viewModel.onFileOpened(it.path); context.openFile(it.path) }
+                            viewModel.onFileOpened(it.path)
+                            context.openFile(it.path, it.size)
                         }
                     },
-                    onShare = { focusedItem?.let { if (state.isNetwork) viewModel.openRemote(it, share = true) else context.shareFiles(listOf(it.path)) } },
+                    onShare = { focusedItem?.let { context.shareFiles(listOf(it.path)) } },
                     onCopy = { focusedItem?.let { viewModel.copySelection(listOf(it.path)) } },
                     onCut = { focusedItem?.let { viewModel.cutSelection(listOf(it.path)) } },
                     onRename = { focusedItem?.let { modal = ExplorerModal.Rename(it) } },
@@ -469,13 +470,14 @@ fun ExplorerScreen(
                 val item = m.item
                 when (action) {
                     ItemAction.OPEN -> when {
-                        state.isNetwork -> viewModel.openRemote(item)
+                        item.isDirectory -> viewModel.openFolder(item.path)
+                        state.isNetwork -> context.openFile(item.path, item.size)
                         item.isArchive -> onOpenArchive(item.path)
                         else -> open(item)
                     }
                     ItemAction.SHOW_IN_FOLDER, ItemAction.RESTORE -> Unit
                     ItemAction.OPEN_IN_NEW_TAB -> viewModel.openInNewTab(item.path)
-                    ItemAction.SHARE -> if (state.isNetwork) viewModel.openRemote(item, share = true) else context.shareFiles(listOf(item.path))
+                    ItemAction.SHARE -> context.shareFiles(listOf(item.path))
                     ItemAction.COPY -> viewModel.copySelection(listOf(item.path))
                     ItemAction.CUT -> viewModel.cutSelection(listOf(item.path))
                     ItemAction.RENAME -> modal = ExplorerModal.Rename(item)
