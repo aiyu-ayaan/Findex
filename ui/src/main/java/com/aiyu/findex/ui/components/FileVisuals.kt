@@ -13,10 +13,15 @@ import androidx.compose.material.icons.rounded.FolderZip
 import androidx.compose.material.icons.rounded.Image
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.MusicNote
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,7 +34,6 @@ import coil3.compose.AsyncImage
 import com.aiyu.findex.core.model.FileCategory
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.theme.tone
-import androidx.compose.runtime.remember
 
 private val IMAGE = setOf("jpg", "jpeg", "png", "gif", "webp", "heic", "heif", "bmp", "svg", "avif")
 private val VIDEO = setOf("mp4", "mkv", "webm", "avi", "mov", "3gp", "m4v", "ts")
@@ -101,6 +105,7 @@ fun FileThumbnail(
     val category = categoryOf(extension)
     if (category == FileCategory.PHOTOS || category == FileCategory.VIDEOS) {
         val tone = category.tone
+        var loaded by remember(path, lastModified) { mutableStateOf(false) }
         Box(
             contentAlignment = Alignment.Center,
             modifier = modifier
@@ -108,11 +113,20 @@ fun FileThumbnail(
                 .clip(MaterialShapes.Square.toShape())
                 .background(tone.container)
         ) {
+            if (!loaded) {
+                Icon(
+                    imageVector = category.icon,
+                    contentDescription = null,
+                    tint = tone.onContainer,
+                    modifier = Modifier.size(size / 2)
+                )
+            }
             AsyncImage(
                 // Cached 256px thumbnail instead of decoding the full photo / a video frame on every bind.
                 model = remember(path, lastModified) { Thumb(path, lastModified, isVideo = category == FileCategory.VIDEOS) },
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
+                onSuccess = { loaded = true },
                 modifier = Modifier.size(size)
             )
         }

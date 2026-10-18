@@ -91,10 +91,12 @@ import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
 import com.aiyu.findex.core.model.FileCategory
 import com.aiyu.findex.core.model.StorageItem
+import com.aiyu.findex.core.network.SmbPath
 import com.aiyu.findex.ui.LocalSnackbarHostState
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.components.CategoryShape
 import com.aiyu.findex.ui.components.ShapeIcon
+import com.aiyu.findex.ui.components.Thumb
 import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.theme.tone
 import com.aiyu.findex.ui.util.formatSize
@@ -111,9 +113,13 @@ fun ImagePreviewCard(
     onOpenExternal: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isRemote = remember(item.path) { SmbPath.parse(item.path) != null }
     val file = remember(item.path) { File(item.path) }
+    val model = remember(item.path, item.lastModified) {
+        if (isRemote) Thumb(item.path, item.lastModified, isVideo = false) else file
+    }
     val meta by produceState<ImageMeta?>(null, item.path) {
-        value = FileInspector.inspectImage(file)
+        if (!isRemote) value = FileInspector.inspectImage(file)
     }
     var showLightbox by remember { mutableStateOf(false) }
 
@@ -129,7 +135,7 @@ fun ImagePreviewCard(
             )
     ) {
         AsyncImage(
-            model = file,
+            model = model,
             contentDescription = item.name,
             contentScale = ContentScale.Fit,
             modifier = Modifier
@@ -209,7 +215,9 @@ fun ImageLightboxDialog(
     onDismiss: () -> Unit,
     onOpenExternal: () -> Unit
 ) {
-    val file = remember(item.path) { File(item.path) }
+    val model = remember(item.path, item.lastModified) {
+        if (SmbPath.parse(item.path) != null) Thumb(item.path, item.lastModified, isVideo = false) else File(item.path)
+    }
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
 
@@ -247,7 +255,7 @@ fun ImageLightboxDialog(
                     }
             ) {
                 AsyncImage(
-                    model = file,
+                    model = model,
                     contentDescription = item.name,
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
@@ -336,9 +344,13 @@ fun VideoPreviewCard(
     onPlay: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isRemote = remember(item.path) { SmbPath.parse(item.path) != null }
     val file = remember(item.path) { File(item.path) }
+    val model = remember(item.path, item.lastModified) {
+        if (isRemote) Thumb(item.path, item.lastModified, isVideo = true) else file
+    }
     val meta by produceState<VideoMeta?>(null, item.path) {
-        value = FileInspector.inspectVideo(file)
+        if (!isRemote) value = FileInspector.inspectVideo(file)
     }
 
     Box(
@@ -357,7 +369,7 @@ fun VideoPreviewCard(
             .clickable(onClick = onPlay)
     ) {
         AsyncImage(
-            model = file,
+            model = model,
             contentDescription = item.name,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()

@@ -208,10 +208,10 @@ private fun ItemDetail(
 ) {
     val details by produceState<FileDetails?>(null, item) { value = load(item) }
     val ext = item.extension.lowercase()
-    // Rich previews read the file directly; network files get the generic card until opened.
+    // Image and video previews work over SMB via ThumbFetcher; audio/text readers require local files.
     val local = SmbPath.parse(item.path) == null
-    val isImg = local && ext in IMAGE_EXTENSIONS
-    val isVid = local && ext in VIDEO_EXTENSIONS
+    val isImg = ext in IMAGE_EXTENSIONS
+    val isVid = ext in VIDEO_EXTENSIONS
     val isAud = local && ext in AUDIO_EXTENSIONS
     val isTxt = local && ext in TEXT_EXTENSIONS
     val category = categoryOf(item.extension)
@@ -224,10 +224,10 @@ private fun ItemDetail(
 
     // Media metadata extraction
     val imageMeta by produceState<ImageMeta?>(null, item.path) {
-        if (isImg) value = FileInspector.inspectImage(file)
+        if (local && isImg) value = FileInspector.inspectImage(file)
     }
     val videoMeta by produceState<VideoMeta?>(null, item.path) {
-        if (isVid) value = FileInspector.inspectVideo(file)
+        if (local && isVid) value = FileInspector.inspectVideo(file)
     }
     val audioMeta by produceState<AudioMeta?>(null, item.path) {
         if (isAud) value = FileInspector.inspectAudio(file)

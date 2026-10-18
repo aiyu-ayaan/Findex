@@ -3,6 +3,9 @@ package com.aiyu.findex.ui.components
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
+import android.media.MediaDataSource
 import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
 import android.os.Build
@@ -21,15 +24,27 @@ import coil3.memory.MemoryCache
 import coil3.request.Options
 import coil3.request.crossfade
 import coil3.video.VideoFrameDecoder
+import com.aiyu.findex.core.network.SmbPath
+import com.aiyu.findex.core.network.SmbRepository
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.Path.Companion.toOkioPath
 import java.io.File
 import java.io.IOException
 
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+internal interface ThumbEntryPoint {
+    fun smbRepository(): SmbRepository
+}
+
 /**
- * A small list/grid thumbnail of a local image or video. [lastModified] is part of the cache key,
- * so an edited file gets a new thumbnail and the stale one ages out of the disk cache.
+ * A small list/grid thumbnail of a local or network image or video. [lastModified] is part of the
+ * cache key, so an edited file gets a new thumbnail and the stale one ages out of the disk cache.
  */
 data class Thumb(val path: String, val lastModified: Long, val isVideo: Boolean)
 
@@ -44,11 +59,13 @@ private class ThumbKeyer : Keyer<Thumb> {
 }
 
 /**
- * Serves thumbnails from Coil's disk cache; on a miss builds one with [ThumbnailUtils] (which reuses
- * EXIF/embedded thumbnails when present), stores it as WebP, then serves that.
+ * Serves thumbnails from Coil's disk cache; on a miss builds one with [ThumbnailUtils] (for local
+ * files) or over a seekable SMB reader (for network shares, reusing EXIF thumbnails or reading only
+ * the video container header + first keyframe), stores it as WebP, then serves that.
  */
 private class ThumbFetcher(
     private val thumb: Thumb,
+    private val smb: SmbRepository,
     private val diskCache: () -> DiskCache?
 ) : Fetcher {
 
@@ -76,7 +93,10 @@ private class ThumbFetcher(
         return ImageFetchResult(bitmap.asImage(), isSampled = true, dataSource = DataSource.DISK)
     }
 
-    private fun generate(): Bitmap? {
+    private suspend fun generate(): Bitmap? {
+        SmbPath.parse(thumb.path)?.let { (serverId, inner) ->
+            return generateRemote(serverId, inner)
+        }
         val file = File(thumb.path)
         if (!file.isFile) return null
         return try {
@@ -105,9 +125,75 @@ private class ThumbFetcher(
         }
     }
 
-    class Factory : Fetcher.Factory<Thumb> {
+    private suspend fun generateRemote(serverId: Long, inner: String): Bitmap? = try {
+        smb.openRandomAccess(serverId, inner).use { raf ->
+            if (thumb.isVideo) {
+                val dataSource = object : MediaDataSource() {
+                    override fun getSize(): Long = raf.size
+                    override fun readAt(position: Long, buffer: ByteArray, offset: Int, size: Int): Int =
+                        raf.readAt(position, buffer, offset, size)
+                    override fun close() {}
+                }
+                MediaMetadataRetriever().run {
+                    try {
+                        setDataSource(dataSource)
+                        val frame = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                            getScaledFrameAtTime(-1L, MediaMetadataRetriever.OPTION_CLOSEST_SYNC, THUMB_PX, THUMB_PX)
+                                ?: getFrameAtTime(-1L, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+                        } else {
+                            getFrameAtTime(-1L, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+                        } ?: getFrameAtTime(0L, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+                        frame?.let { ThumbnailUtils.extractThumbnail(it, THUMB_PX, THUMB_PX, ThumbnailUtils.OPTIONS_RECYCLE_INPUT) }
+                    } finally {
+                        runCatching { release() }
+                    }
+                }
+            } else {
+                val exif = runCatching { ExifInterface(raf.asInputStream(0L)) }.getOrNull()
+                val rotation = when (exif?.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
+                    ExifInterface.ORIENTATION_ROTATE_90 -> 90f
+                    ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+                    ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+                    else -> 0f
+                }
+                val embedded = exif?.let { if (it.hasThumbnail()) it.thumbnailBitmap else null }
+                if (embedded != null) {
+                    return@use embedded.rotate(rotation).let {
+                        ThumbnailUtils.extractThumbnail(it, THUMB_PX, THUMB_PX, ThumbnailUtils.OPTIONS_RECYCLE_INPUT)
+                    }
+                }
+                val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                BitmapFactory.decodeStream(raf.asInputStream(0L), null, bounds)
+                if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return@use null
+                var sample = 1
+                while (bounds.outWidth / (sample * 2) >= THUMB_PX && bounds.outHeight / (sample * 2) >= THUMB_PX) {
+                    sample *= 2
+                }
+                val decoded = BitmapFactory.decodeStream(
+                    raf.asInputStream(0L),
+                    null,
+                    BitmapFactory.Options().apply { inSampleSize = sample }
+                ) ?: return@use null
+                decoded.rotate(rotation).let {
+                    ThumbnailUtils.extractThumbnail(it, THUMB_PX, THUMB_PX, ThumbnailUtils.OPTIONS_RECYCLE_INPUT)
+                }
+            }
+        }
+    } catch (_: Exception) {
+        null
+    }
+
+    private fun Bitmap.rotate(degrees: Float): Bitmap {
+        if (degrees == 0f) return this
+        val m = Matrix().apply { postRotate(degrees) }
+        val rotated = Bitmap.createBitmap(this, 0, 0, width, height, m, true)
+        if (rotated !== this) recycle()
+        return rotated
+    }
+
+    class Factory(private val smb: SmbRepository) : Fetcher.Factory<Thumb> {
         override fun create(data: Thumb, options: Options, imageLoader: ImageLoader): Fetcher =
-            ThumbFetcher(data) { imageLoader.diskCache }
+            ThumbFetcher(data, smb) { imageLoader.diskCache }
     }
 
     private companion object {
@@ -121,20 +207,26 @@ private class ThumbFetcher(
  * thumbnails are deleted first and the folder never grows past [THUMB_CACHE_BYTES]), a memory cache,
  * and video frame decoding for full-size previews.
  */
-fun findexImageLoader(context: Context): ImageLoader = ImageLoader.Builder(context)
-    .components {
-        add(ThumbKeyer())
-        add(ThumbFetcher.Factory())
-        add(VideoFrameDecoder.Factory())
-    }
-    .memoryCache { MemoryCache.Builder().maxSizePercent(context, 0.25).build() }
-    .diskCache {
-        DiskCache.Builder()
-            .directory(File(context.cacheDir, "thumbnails").toOkioPath())
-            .maxSizeBytes(THUMB_CACHE_BYTES)
-            .build()
-    }
-    .crossfade(true)
-    .build()
+fun findexImageLoader(context: Context): ImageLoader {
+    val smb = EntryPointAccessors.fromApplication(
+        context.applicationContext,
+        ThumbEntryPoint::class.java
+    ).smbRepository()
+    return ImageLoader.Builder(context)
+        .components {
+            add(ThumbKeyer())
+            add(ThumbFetcher.Factory(smb))
+            add(VideoFrameDecoder.Factory())
+        }
+        .memoryCache { MemoryCache.Builder().maxSizePercent(context, 0.25).build() }
+        .diskCache {
+            DiskCache.Builder()
+                .directory(File(context.cacheDir, "thumbnails").toOkioPath())
+                .maxSizeBytes(THUMB_CACHE_BYTES)
+                .build()
+        }
+        .crossfade(true)
+        .build()
+}
 
 private const val THUMB_CACHE_BYTES = 150L * 1024 * 1024
