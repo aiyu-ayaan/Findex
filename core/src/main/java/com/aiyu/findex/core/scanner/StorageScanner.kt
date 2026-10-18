@@ -3,6 +3,7 @@ package com.aiyu.findex.core.scanner
 import android.os.Environment
 import com.aiyu.findex.core.model.StorageItem
 import com.aiyu.findex.core.repository.toStorageItem
+import com.aiyu.findex.core.vault.VaultKeyManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -34,12 +35,27 @@ class StorageScanner @Inject constructor() {
 
     private val root: File get() = Environment.getExternalStorageDirectory()
 
-    /** Android/data and Android/obb are private to other apps and mostly unreadable. */
-    private fun File.isPrivateAppDir() =
-        absolutePath.startsWith(File(root, "Android/data").absolutePath) ||
-            absolutePath.startsWith(File(root, "Android/obb").absolutePath)
+    private fun walk(): Sequence<File> = walk(root)
 
-    private fun walk(): Sequence<File> = root.walkTopDown().onEnter { !it.isPrivateAppDir() }
+    companion object {
+        private const val HEAD_BYTES = 64L * 1024
+        private val TEMP_EXTENSIONS = setOf("tmp", "temp", "log", "bak", "old", "crdownload", "part")
+
+        /**
+         * Walks [root] while skipping private app directories, the recycle bin and the encrypted vault,
+         * so cleaner, duplicate finder and large-files finder never touch `.FindexVault` or `.FindexTrash`.
+         */
+        internal fun walk(root: File): Sequence<File> {
+            val dataDir = File(root, "Android/data").absolutePath
+            val obbDir = File(root, "Android/obb").absolutePath
+            fun isExcluded(f: File): Boolean =
+                f.name == VaultKeyManager.DIR_NAME ||
+                    f.name == ".FindexTrash" ||
+                    f.absolutePath.startsWith(dataDir) ||
+                    f.absolutePath.startsWith(obbDir)
+            return root.walkTopDown().onEnter { !isExcluded(it) }.filterNot(::isExcluded)
+        }
+    }
 
     suspend fun largestFiles(limit: Int = 30): List<StorageItem> = withContext(Dispatchers.IO) {
         val heap = PriorityQueue<File>(limit + 1, compareBy { it.length() })
@@ -160,9 +176,4 @@ class StorageScanner @Inject constructor() {
 
     /** Never offer to delete the standard top-level folders (DCIM, Music, …) even when empty. */
     private fun File.isTopLevelStandardDir() = parentFile == root
-
-    private companion object {
-        const val HEAD_BYTES = 64L * 1024
-        val TEMP_EXTENSIONS = setOf("tmp", "temp", "log", "bak", "old", "crdownload", "part")
-    }
 }

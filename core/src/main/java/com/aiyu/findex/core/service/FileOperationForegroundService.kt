@@ -96,10 +96,12 @@ class FileOperationForegroundService : Service() {
         notificationManager.notify(NOTIFICATION_ID, buildProgressNotification(initial))
 
         var failure: FailureReason? = null
+        var lastProgress = initial.progress
         val job = scope.launch {
             try {
                 val touched = withContext(Dispatchers.IO) {
                     executor.execute(operation) { progress ->
+                        lastProgress = progress
                         val active = ActiveOperation(operation, progress)
                         manager.publish(active)
                         throttledNotify(active)
@@ -120,10 +122,13 @@ class FileOperationForegroundService : Service() {
         currentJob = job
         job.join()
         currentJob = null
+        val skipped = if (operation is FileOperation.ImageTransform && lastProgress.totalItems > lastProgress.processedItems) {
+            lastProgress.totalItems - lastProgress.processedItems
+        } else 0
         val result = when {
             failure != null -> OperationResult.Failed(operation, failure!!)
             job.isCancelled -> OperationResult.Cancelled(operation)
-            else -> OperationResult.Success(operation)
+            else -> OperationResult.Success(operation, skipped = skipped)
         }
         manager.publish(result)
         showResultNotification(result)

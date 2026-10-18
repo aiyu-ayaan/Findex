@@ -1,6 +1,7 @@
 package com.aiyu.findex.core.operation
 
 import android.content.Context
+import com.aiyu.findex.core.db.PathIndexDao
 import com.aiyu.findex.core.db.TrashDao
 import com.aiyu.findex.core.db.TrashEntity
 import com.aiyu.findex.core.model.ArchiveFormat
@@ -36,7 +37,11 @@ import javax.inject.Singleton
 class FileOperationExecutor @Inject constructor(
     @ApplicationContext private val context: Context,
     private val trashDao: TrashDao,
-    private val smb: SmbRepository
+    private val smb: SmbRepository,
+    private val pathIndex: PathIndexDao,
+    private val batchRenamer: BatchRenamer,
+    private val imageTransformer: ImageTransformer,
+    private val vaultOperations: VaultOperations
 ) {
 
     private companion object {
@@ -51,7 +56,8 @@ class FileOperationExecutor @Inject constructor(
         try {
             val remote = operation.paths().any { SmbPath.parse(it) != null }
             when {
-                remote && (operation is FileOperation.Compress || operation is FileOperation.Extract || operation is FileOperation.Restore) ->
+                remote && (operation is FileOperation.Compress || operation is FileOperation.Extract || operation is FileOperation.Restore ||
+                    operation is FileOperation.ImageTransform || operation is FileOperation.VaultImport || operation is FileOperation.VaultExport) ->
                     throw FileOperationException(FailureReason.NOT_SUPPORTED)
                 remote && operation is FileOperation.Copy -> remoteTransfer(operation.id, operation.sources, operation.destinationDir, move = false, touched, report)
                 remote && operation is FileOperation.Move -> remoteTransfer(operation.id, operation.sources, operation.destinationDir, move = true, touched, report)
@@ -85,6 +91,12 @@ class FileOperationExecutor @Inject constructor(
             is FileOperation.Compress -> compress(operation, report).also { touched += operation.destinationArchive }
             is FileOperation.Extract -> extract(operation, report)
                 .also { File(operation.destinationDir).walkTopDown().mapTo(touched) { it.absolutePath } }
+            // BatchRename also lands here for smb:// paths; BatchRenamer handles both.
+            is FileOperation.BatchRename -> batchRenamer.run(operation, touched, report)
+            is FileOperation.ImageTransform -> imageTransformer.run(operation, touched, report)
+            is FileOperation.VaultImport -> vaultOperations.import(operation, touched, report)
+            is FileOperation.VaultExport -> vaultOperations.export(operation, touched, report)
+            is FileOperation.VaultDelete -> vaultOperations.delete(operation, touched, report)
         }
     }
 
@@ -97,6 +109,11 @@ class FileOperationExecutor @Inject constructor(
         is FileOperation.Compress -> targets + destinationArchive
         is FileOperation.Extract -> listOf(archivePath, destinationDir)
         is FileOperation.Restore -> emptyList()
+        is FileOperation.BatchRename -> renames.map { it.path }
+        is FileOperation.ImageTransform -> sources + listOfNotNull(spec.outputDir)
+        is FileOperation.VaultImport -> sources
+        is FileOperation.VaultExport -> listOf(destinationDir)
+        is FileOperation.VaultDelete -> emptyList()
     }
 
     // region Network (SMB) transfers
@@ -288,13 +305,14 @@ class FileOperationExecutor @Inject constructor(
             val target = uniqueTarget(destDir, src.name)
             if (move) src.walkTopDown().mapTo(touched) { it.absolutePath }
             if (move && src.renameTo(target)) {
+                pathIndex.onMoved(src.absolutePath, target.absolutePath)
                 target.walkTopDown().mapTo(touched) { it.absolutePath }
                 tracker.addItems(src.name, items = target.walkTopDown().count(), bytes = target.totalSize())
                 continue
             }
             copyRecursively(src, target, tracker)
             target.walkTopDown().mapTo(touched) { it.absolutePath }
-            if (move) src.deleteRecursively()
+            if (move && src.deleteRecursively()) pathIndex.onMoved(src.absolutePath, target.absolutePath)
         }
         tracker.finish()
     }
