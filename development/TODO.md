@@ -85,7 +85,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] Status bar icons follow the in-app theme, not the system theme
 - [x] Discord-style push drawer + modern menu icon
 - [x] Unified scalloped category shapes
-- [ ] Verify drag-to-select on a physical device
+- [x] Verify drag-to-select on a physical device
 - [x] Large-screen (tablet) layout pass
 
 ---
@@ -120,3 +120,40 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] Auto update from GitHub releases with release notes, global dialog, channel + toggle in Settings
 - [x] About screen with developer section and Acknowledgements
 - [x] Background daily update check (`WorkManager` `UpdateCheckWorker` + `UpdateCheckScheduler`) and notification
+
+---
+
+## Next ideas (no console or API keys needed)
+
+> Design for the 12 items below (schema v7, contracts, 5 workstreams, cut line): `development/docs/NEXT_FEATURES_DESIGN.md`.
+
+### High value
+- [x] Batch rename (pattern, counter, find/replace, preview before apply)
+- [x] Secure vault (password + biometric, files encrypted at rest)
+- [x] Large and old files finder (size / age filter, bulk delete to bin)
+- [x] Image compress and resize as a foreground-service operation
+
+### Network
+- [ ] Folder sync / backup to a share (one-way, scheduled via WorkManager)
+- [ ] Local network discovery of SMB hosts and servers
+- [ ] Share this phone: built-in FTP / HTTP server for PC transfers
+- [ ] WebDAV provider presets (Nextcloud, Box, pCloud)
+
+### Explorer
+- [x] Text / code viewer and editor, PDF viewer, audio player
+- [x] Favorites and colored tags
+- [ ] Compare folders, dual-pane mode on phones
+- [x] Pinned folder shortcuts on the launcher
+- [x] Recent-changes view, storage growth history graph
+
+### Cleaner
+- [ ] App cache and leftover folders of uninstalled apps
+- [ ] Telegram / Instagram media cleaner (same pattern as WhatsApp)
+- [ ] Empty folders and zero-byte files scanner
+
+### Polish
+- [ ] Localization (strings already centralized in `ui`)
+- [ ] Unit tests for `FileOperationExecutor` and `OperationManager`
+
+### Needs console setup (parked)
+- [ ] Cloud storage via OAuth (Drive, Dropbox, OneDrive); needs Google Cloud / Dropbox / Azure app registration and CI secrets

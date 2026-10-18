@@ -1,25 +1,26 @@
 # Findex
 
-Fidex is the file explorer is an android app, build on top on material-3-expressiove. It features all stuff needed for file explorer like have storage graph, storage cleaner,
+Findex is an Android file explorer built on Material 3 Expressive. It features all stuff needed for file explorer like have storage graph, storage cleaner,
 whatsapp cleaner, all time or archive extractor (7zip,rar,zip) and also have abitilty to create archive but with extra features like tab support to multitasking. 
-Multitasking can be help in copy pasting. Also have option to connect to network storage same like windows.. 
+Multitasking can be help in copy pasting. Also connects to network storage (SMB, WebDAV, FTP, SFTP) like Windows. 
 
 
-## Stact 
+## Stack 
 
 Build with native android so kotlin
 
 Package name will be `com.aiyu.findex`
 
-App will have 3 modules 
+App has 4 modules 
 
 - app => Entry point of the application
 - core => will have all db or core releated stuff 
-- ui => ui related stuff.. 
+- ui => ui related stuff..
+- baselineprofile => baseline + startup profile generation (not shipped)
 
 Note ui module have all the string.xml no core or app have string.xml, its because in future want to make application localalize, ui will hold all the strings.
 
-## Design design 
+## Design 
 
 - On Start it will use the `hilt` for dependencies injection. 
 - For any long task it will use the foreground service like copy pasting or unzipping or zipping task or cleaning task.
@@ -41,11 +42,10 @@ on one item and then click items individuall both will do the same  select proce
 
 - Never add yourself as co-auther in any project.
 - Commit message will able have the `scope(Change) : Message` structure
-- @Development folder is for you. Add all the docs over their in @docs folder and for any tracking task I have created a @Development/TODO.md file track over their or create a new one if needed.
+- `development/` folder is for you. Put docs in `development/docs/`; track tasks in `development/TODO.md` (create a new one if needed).
 - You are allow to update the claude.md file or any other file releated to ai brain.
 - Always use `codegraph` to scan the code. 
-- For achitecture always or any changes make sure always add a achitecture diagram in docs.
-- This app targets the most efficient home automaction solution.
+- For architecture changes, always add or update an architecture diagram in docs.
 
 ## Working Docs (read before UI or architecture work)
 

@@ -530,3 +530,177 @@ flowchart TD
   - `AppViewModel` observes `settings.autoUpdate` (`distinctUntilChanged`) and calls `UpdateCheckScheduler.sync(enabled)` to schedule or cancel the unique 24-hour periodic `WorkManager` job (`findex_daily_update_check`, constrained to `NetworkType.CONNECTED`).
   - When `UpdateCheckWorker` finds `UpdateState.Available(release, asset)`, it checks `SettingsRepository.lastNotifiedUpdateVersion` so each release version only notifies once, and posts a notification on `findex_updates` (`NOTIFICATION_ID = 1003`) that launches `MainActivity` into `UpdateDialog`.
 - Settings → Updates opens `UpdatesScreen` (toggle, channel, manual check). Settings → About opens `AboutScreen` (app, developer, source) → `AcknowledgementsScreen`; both are nav destinations, so back is predictive.
+
+---
+
+## 10. Next features (planned, not built yet)
+
+Full design, schema, contracts and workstream split: [`NEXT_FEATURES_DESIGN.md`](NEXT_FEATURES_DESIGN.md).
+Each workstream appends its own subsection here when its feature lands.
+
+### Module view of the new pieces
+
+```mermaid
+graph TD
+    subgraph ":app"
+        MainAct[MainActivity<br/>OPEN_FOLDER shortcut intent]
+    end
+
+    subgraph ":ui"
+        Nav[FindexNavHost<br/>+14 routes · SelectionHandoff · LaunchRequests]
+        Explorer[Explorer<br/>ItemAction: tags · pin · vault · image · compare · backup · batch rename]
+        RenameUI[BatchRenameScreen]
+        VaultUI[VaultScreen<br/>FLAG_SECURE · BiometricPrompt]
+        ToolsUI[LargeFiles · ImageCompressDialog · Compare · GrowthCard]
+        NetUI[SyncJobs · SyncJobEdit · DiscoverySheet · ShareServerScreen]
+        Viewers[Text · PDF · Audio viewers<br/>InAppViewers.routeFor]
+        Library[Favorites · Tags · RecentChanges · DualPane · FolderShortcuts]
+        StringsB[ServerStrings / OperationStrings impls]
+    end
+
+    subgraph ":core"
+        Exec[FileOperationExecutor<br/>dispatch only]
+        Renamer[BatchRenamer + RenamePlanner]
+        ImgT[ImageTransformer]
+        VaultOps[VaultOperations]
+        Vault[vault: VaultFormat · VaultKeyManager · VaultSession · VaultContentProvider]
+        Sync[sync: SyncEngine · SyncPlanner · SyncScheduler · SyncWorker]
+        Disc[NetworkDiscovery<br/>NSD + subnet probe]
+        Share[share: ShareServer · ShareServerService]
+        Finder[LargeFileFinder · FolderComparer · RecentChangesRepository]
+        History[StorageSnapshotWorker · StorageHistoryRepository]
+        Tags[TagRepository · PathIndexDao]
+        Smb[SmbRepository]
+        DB[(Room v7<br/>+ tags · file_tags · vault_meta · vault_items<br/>sync_jobs · sync_file_state · storage_snapshots)]
+        KS[[Android Keystore]]
+        WM[[WorkManager]]
+    end
+
+    MainAct --> Nav
+    Nav --> Explorer & RenameUI & VaultUI & ToolsUI & NetUI & Viewers & Library
+    Explorer -->|OperationManager| Exec
+    RenameUI -->|BatchRename| Exec
+    ToolsUI -->|ImageTransform / Trash / Copy| Exec
+    VaultUI -->|VaultImport / Export / Delete| Exec
+    NetUI -->|Sync now| Exec
+    Exec --> Renamer & ImgT & VaultOps & Sync
+    VaultOps --> Vault --> KS
+    Vault --> DB
+    Sync --> Smb
+    Sync --> DB
+    WM --> Sync
+    WM --> History --> DB
+    NetUI --> Disc
+    NetUI --> Share
+    Library --> Tags --> DB
+    Renamer --> Tags
+    StringsB -. Hilt @Binds .-> Share
+```
+
+### Long-work paths
+
+```mermaid
+flowchart LR
+    UI[UI action] -->|enqueue| OM[OperationManager] --> FGS[FileOperationForegroundService] --> Exec[FileOperationExecutor]
+    Exec --> H[BatchRenamer · ImageTransformer · VaultOperations · SyncEngine.runManual]
+    Sched[SyncScheduler<br/>unique periodic findex_sync_id] --> W[SyncWorker<br/>setForeground dataSync] --> SE[SyncEngine.run<br/>per-job Mutex]
+    H -.same engine.-> SE
+    Start[ShareServerScreen Start] --> SS[ShareServerService<br/>own FGS, foreground start only] --> Srv[ShareServer<br/>Wi-Fi IP · PIN · path guard]
+```
+
+- Scheduled sync runs in WorkManager's foreground worker, not `OperationManager`: Android 12+ blocks
+  starting a foreground service from the background. Manual sync uses the normal queue.
+- The share server is a listener, not a queued operation, so it has its own foreground service.
+
+### Vault unlock and file format
+
+```mermaid
+flowchart TD
+    PW[Password] -->|PBKDF2-SHA256, salt, calibrated iterations| KEK
+    KEK -->|AES-GCM unwrap| DEK[(DEK in VaultSession memory)]
+    Bio[BiometricPrompt + CryptoObject] -->|Keystore key, auth-bound| DEK
+    DEK -->|HKDF fileSalt| FK[per-file key]
+    FK --> Blob[".fdxv: header + 64 KiB AES-GCM chunks<br/>nonce = prefix · counter · last flag"]
+    DEK -->|HKDF index| IDX[vault_items name / path cipher]
+    Blob --> Prov[VaultContentProvider<br/>openProxyFileDescriptor, decrypt on read]
+```
+
+### Foundation (W1) as built
+
+Scope of this pass is design ranks 1–9 minus discovery. The foundation therefore ships **only** the
+pieces for batch rename, large files, image compress, vault (no share server) and the W5 library and
+viewers. Deviations from `NEXT_FEATURES_DESIGN.md` §0:
+
+- **Room v7** adds `tags`, `file_tags`, `vault_meta`, `vault_items`, `storage_snapshots` (no
+  `sync_jobs` / `sync_file_state`; sync gets its own `AutoMigration(7, 8)` when it is picked up).
+  `PathIndexDao.onMoved` is called from `FileOperationExecutor.transfer(move = true)` and
+  `StorageRepositoryImpl.rename`; `likePrefix(dir)` builds the escaped `LIKE` prefix.
+- **No** `FileOperation.Sync`, `SyncEngine`, sync `OperationStrings` members, `ShareServerService`,
+  `SystemForegroundService` merge, `ACCESS_WIFI_STATE`, `dualPane` / `shareServer*` settings,
+  `SyncJobs*`, `ShareServer`, `Compare` routes, or `COMPARE` / `BACKUP_TO_SERVER` item actions.
+- `LaunchRequests.folder` is a `MutableStateFlow<String?>`, not a `SharedFlow`: a cold start from a
+  pinned shortcut emits before the NavHost collects, and a replay-less `SharedFlow` would drop it.
+  The NavHost resets it to `null` after navigating, and only collects once onboarding is done.
+- `FailureReason.INVALID_NAME` maps to `error_op_invalid_name` (`error_invalid_name` already existed).
+- `FavoritesScreen.onOpenFile` is `(Any) -> Unit`: it takes a viewer route; the screen handles the
+  external-app fallback itself.
+- `AppViewModel` calls `StorageHistoryScheduler.sync(storageHistory)` (W5 stub, no-op until it lands).
+- Selection-toolbar overflow carries Batch rename (2+ items), Compress images (all images, local) and
+  Move to vault (local). The item sheet carries Tags, Pin shortcut (folders), Compress images and Move to vault.
+
+```mermaid
+flowchart LR
+    subgraph Stubs["W1 stubs, bodies owned by"]
+        W2s[W2: VaultOperations · VaultContentProvider · VaultScreen/VM]
+        W4s[W4: BatchRenamer · ImageTransformer · BatchRenameScreen/VM · ImageCompressDialog/VM · LargeFilesScreen/VM]
+        W5s[W5: StorageHistoryScheduler · InAppViewers · FolderShortcuts · Text/Pdf/Audio viewers · Favorites · TaggedFiles · RecentChanges]
+    end
+    Explorer[Explorer ItemAction] -->|SelectionHandoff token| Routes[Routes.kt]
+    Drawer[Drawer 'More' group] --> Routes
+    Shortcut[Pinned shortcut intent] --> MainActivity --> LR[LaunchRequests.folder] --> NavHost
+    Routes --> NavHost --> Stubs
+    Exec[FileOperationExecutor] --> W2s & W4s
+    DB[(Room v7: tags · file_tags · vault_meta · vault_items · storage_snapshots)] --> W2s & W5s
+```
+
+### Secure vault (W2) as built
+
+Blobs and `vault.key` live in `<primary storage>/.FindexVault/` (with `.nomedia`). Classes in
+`core/vault/`: `VaultFormat` (pure JVM crypto, unit-tested), `VaultKeyManager` (PBKDF2 + Keystore
+wraps, persistent lockout: 5 free attempts, then 30 s doubling), `VaultSession` (DEK in memory,
+auto-lock via `ActivityLifecycleCallbacks`), `VaultRepository` (decrypted list, index rebuild after
+reinstall), `VaultContentProvider` (proxy FD, decrypt on read). Deviations from the design:
+
+- Biometric is enrolled after setup with a second prompt (an auth-bound Keystore key needs auth to
+  encrypt too), so `create(password)` takes no biometric flag.
+- `VaultSession.hold()` returns a `Hold` with a private DEK copy, zeroed on close; long ops never
+  lock the session monitor while streaming.
+- "Add files" launches the system multi-document picker (`OpenMultipleDocuments`) and maps device storage URIs to paths for `VaultImport` (falling back to the Explorer hint for non-local providers); the main entry path is Explorer `MOVE_TO_VAULT`. Items open through the provider in another app after a warning.
+- `.FindexVault` (along with `.FindexTrash`) is excluded from `StorageScanner.walk`, `StorageRepositoryImpl.search` and `RecentChangesRepository.changes`.
+- "Restore to original location" removes items from the vault; "Choose folder" (SAF tree mapped to a
+  path) saves copies and keeps them in the vault.
+
+```mermaid
+flowchart LR
+    Explorer[Explorer MOVE_TO_VAULT] -->|SelectionHandoff token| VS[VaultScreen / VaultViewModel]
+    VS -->|password / BiometricPrompt| KM[VaultKeyManager] --> Sess[VaultSession DEK]
+    VS -->|VaultImport · VaultExport · VaultDelete| OM[OperationManager] --> FGS[Foreground service] --> VO[VaultOperations]
+    VO -->|hold: DEK copy| Sess
+    VO --> Dir[(.FindexVault/*.fdxv + vault.key)]
+    VO --> DB[(vault_items · vault_meta)]
+    VS -->|content://pkg.vaultprovider/id| Prov[VaultContentProvider] --> Dir
+    Prov -->|withKey| Sess
+```
+
+### Batch rename, large files and image compress (W4) as built
+
+- `RenamePlanner` (pure JVM, unit-tested) computes token expansion (`{name}`, `{ext}`, `{n}`, `{date}`, `{parent}`), regex/literal find-replace, case transforms, nested-selection rejection and case-aware sibling clash detection; `RenameSchedule` plans two-phase moves through `.fdxrn-<tag>-<i>` temporary names so swaps and chains never clobber files or `PathIndexDao` rows (`onMovedAll`). `BatchRenameViewModel` loads sibling names for both local folders and `smb://` shares.
+- `LargeFilesViewModel` reuses `StorageScanner.largestFiles` (2,000-file top heap, skipping `.FindexVault`, `.FindexTrash`, `Android/data`, `Android/obb`) and filters in memory by size, age, category and hidden-path toggle.
+- `ImageTransformer` decodes with power-of-two `inSampleSize` (capped at 48 MP), applies EXIF orientation, skips animated GIF and animated WebP (RIFF/WEBP `VP8X` animation flag), and reports skipped count through `OperationResult.Success(skipped)` to the app-wide snackbar.
+
+### Viewers, tags, shortcuts and history (W5) as built
+
+- `InAppViewers.routeFor` routes local text/code, PDF and audio files from Explorer, Category, Search, Home (bookmarks and recents), Favorites, TaggedFiles and RecentChanges to `TextViewerScreen`, `PdfViewerScreen` and `AudioPlayerScreen`.
+- `TagRepository` + `TagDao` persist up to 8-tone tags (`TagTones`) and `file_tags`; `TagDots` render in both `FileList` and `FileGrid`.
+- `FolderShortcuts` pins launcher shortcuts targeting `MainActivity` (`ACTION_OPEN_FOLDER` -> `LaunchRequests.folder`).
+- `StorageHistoryScheduler` + `StorageSnapshotWorker` record daily volume snapshots into `storage_snapshots`, rendered by `GrowthCard` on `AnalyzerScreen`.

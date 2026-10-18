@@ -92,3 +92,7 @@ flowchart LR
 4. Global search with indexing.
 5. Duplicate finder.
 6. Tab persistence, tablet two-pane explorer.
+
+### Next (after Post-MVP)
+
+Tracked in [`../TODO.md`](../TODO.md) under "Next ideas". Planned order: batch rename, large/old files finder, secure vault, then network sync and discovery. Cloud OAuth providers are parked: they need console registration and signing-key setup first.
