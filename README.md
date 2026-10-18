@@ -15,6 +15,14 @@ A modern, native Android file explorer built with **Jetpack Compose** and **Mate
 
 ---
 
+## 🎬 Intro video
+
+<p align="center">
+  <a href="intro-video.mp4"><img src="intro-video.gif" width="30%" alt="Findex intro video (click for the full MP4)" /></a>
+</p>
+
+---
+
 ## 📸 Screenshots
 
 <p align="center">
