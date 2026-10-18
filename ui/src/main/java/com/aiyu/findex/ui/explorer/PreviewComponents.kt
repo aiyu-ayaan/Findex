@@ -512,13 +512,12 @@ fun AudioPreviewCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                ShapeIcon(
-                    icon = Icons.Rounded.MusicNote,
-                    shape = MaterialShapes.Cookie9Sided,
-                    container = tone.container,
-                    content = tone.onContainer,
+                com.aiyu.findex.ui.components.FileThumbnail(
+                    path = item.path,
+                    isDirectory = false,
+                    extension = item.extension,
                     size = 56.dp,
-                    iconSize = 28.dp
+                    lastModified = item.lastModified
                 )
 
                 Column(
@@ -939,13 +938,12 @@ fun GenericPreviewCard(
             .clickable(onClick = onOpen)
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            ShapeIcon(
-                icon = Icons.AutoMirrored.Rounded.InsertDriveFile,
-                shape = MaterialShapes.Square,
-                container = MaterialTheme.colorScheme.surfaceContainerHighest,
-                content = MaterialTheme.colorScheme.onSurfaceVariant,
-                size = 56.dp,
-                iconSize = 28.dp
+            com.aiyu.findex.ui.components.FileThumbnail(
+                path = item.path,
+                isDirectory = item.isDirectory,
+                extension = item.extension,
+                size = 64.dp,
+                lastModified = item.lastModified
             )
             Spacer(Modifier.height(Dimens.md))
             Surface(

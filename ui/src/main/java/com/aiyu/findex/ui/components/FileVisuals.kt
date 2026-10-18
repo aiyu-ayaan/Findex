@@ -2,7 +2,9 @@ package com.aiyu.findex.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.InsertDriveFile
 import androidx.compose.material.icons.rounded.Android
@@ -13,6 +15,7 @@ import androidx.compose.material.icons.rounded.FolderZip
 import androidx.compose.material.icons.rounded.Image
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.MusicNote
+import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +43,18 @@ private val VIDEO = setOf("mp4", "mkv", "webm", "avi", "mov", "3gp", "m4v", "ts"
 private val AUDIO = setOf("mp3", "m4a", "wav", "flac", "ogg", "aac", "opus", "amr", "mid")
 private val DOCS = setOf("pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "rtf", "csv", "odt", "ods", "odp", "md", "epub", "json", "xml", "html")
 private val ARCHIVES = setOf("zip", "7z", "rar", "tar", "gz", "tgz", "bz2", "xz")
+
+fun isImageExtension(extension: String): Boolean = extension.lowercase() in IMAGE
+fun isVideoExtension(extension: String): Boolean = extension.lowercase() in VIDEO
+fun isMediaExtension(extension: String): Boolean {
+    val ext = extension.lowercase()
+    return ext in IMAGE || ext in VIDEO
+}
+
+fun hasContentPreview(extension: String): Boolean {
+    val ext = extension.lowercase()
+    return ext in IMAGE || ext in VIDEO || ext in AUDIO || ext == "pdf" || ext == "apk"
+}
 
 fun categoryOf(extension: String): FileCategory? = when (extension.lowercase()) {
     in IMAGE -> FileCategory.PHOTOS
@@ -77,8 +92,9 @@ val FileCategory.titleRes: Int
     }
 
 /**
- * Leading visual for a file row: a real thumbnail for images/videos, otherwise a
- * category-toned shape icon. Folders use the primary container.
+ * Leading visual for a file row or grid cell: a real content thumbnail for images, videos,
+ * audio cover art, PDF first pages, and APK app icons; otherwise a category-toned shape icon.
+ * Folders use the primary container.
  */
 @Composable
 fun FileThumbnail(
@@ -103,8 +119,11 @@ fun FileThumbnail(
         return
     }
     val category = categoryOf(extension)
-    if (category == FileCategory.PHOTOS || category == FileCategory.VIDEOS) {
+    val ext = extension.lowercase()
+    if (category != null && hasContentPreview(ext)) {
         val tone = category.tone
+        val isVideo = category == FileCategory.VIDEOS
+        val isApk = category == FileCategory.APKS
         var loaded by remember(path, lastModified) { mutableStateOf(false) }
         Box(
             contentAlignment = Alignment.Center,
@@ -122,13 +141,32 @@ fun FileThumbnail(
                 )
             }
             AsyncImage(
-                // Cached 256px thumbnail instead of decoding the full photo / a video frame on every bind.
-                model = remember(path, lastModified) { Thumb(path, lastModified, isVideo = category == FileCategory.VIDEOS) },
+                // Cached 256px thumbnail instead of decoding the full file on every bind.
+                model = remember(path, lastModified, isVideo) { Thumb(path, lastModified, isVideo = isVideo) },
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
+                contentScale = if (isApk) ContentScale.Fit else ContentScale.Crop,
                 onSuccess = { loaded = true },
-                modifier = Modifier.size(size)
+                modifier = if (isApk) Modifier.size(size).padding(size * 0.1f) else Modifier.size(size)
             )
+            if (isVideo && loaded) {
+                val badgeSize = (size * 0.38f).coerceIn(16.dp, 26.dp)
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(2.dp)
+                        .size(badgeSize)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.65f))
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.PlayArrow,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.inverseOnSurface,
+                        modifier = Modifier.size(badgeSize * 0.7f)
+                    )
+                }
+            }
         }
         return
     }
