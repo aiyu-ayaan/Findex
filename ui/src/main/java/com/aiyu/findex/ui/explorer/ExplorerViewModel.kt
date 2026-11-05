@@ -301,6 +301,14 @@ class ExplorerViewModel @Inject constructor(
 
     fun selectTab(index: Int) = tabSession.select(index)
 
+    /** Swipe on the listing (ES File Explorer style): [step] +1 is the next tab, -1 the previous one. */
+    fun swipeTab(step: Int) {
+        val target = _uiState.value.activeTab + step
+        if (target !in _uiState.value.tabs.indices) return
+        _uiState.update { it.copy(forward = step > 0, focused = null) }
+        tabSession.select(target)
+    }
+
     /** The Explorer keeps its last tab; closing everything is done from the Tabs screen. */
     fun closeTab(index: Int) {
         if (_uiState.value.tabs.size > 1) tabSession.close(index)

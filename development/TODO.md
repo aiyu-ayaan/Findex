@@ -149,7 +149,8 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] Open with Findex from other apps (archives, text, PDF, audio; `IncomingFiles`)
 - [x] Tabs as ES File Explorer windows: per-tab back history, one Explorer on the back stack
 - [x] PDF dark pages, Open in another app in every viewer, Settings > Built-in viewers
-- [ ] Swipe between tabs (ES style); needs care with drag-to-select
+- [x] Swipe between tabs (ES style); drag-to-select keeps working
+- [x] Save to Findex (share sheet), launcher shortcuts, Share this phone tile, cleanup reminder, storage widget
 
 ### Cleaner
 - [x] App cache and leftover folders of uninstalled apps (`AppJunkScanner`, `QUERY_ALL_PACKAGES`; leftovers opt-in; other apps' private cache is out of reach on Android 11+)

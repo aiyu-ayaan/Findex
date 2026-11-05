@@ -122,6 +122,8 @@ import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aiyu.findex.core.model.StorageItem
@@ -336,7 +338,9 @@ fun ExplorerScreen(
                 },
                 contentKey = { it.first to it.second },
                 label = "folder",
-                modifier = Modifier.graphicsLayer {
+                modifier = Modifier
+                    .tabSwipe(enabled = { viewModel.uiState.value.let { it.tabs.size > 1 && !it.inSelection } }, onSwipe = viewModel::swipeTab)
+                    .graphicsLayer {
                     // Predictive back preview: the folder shrinks and slides toward the swipe direction.
                     scaleX = backScale
                     scaleY = backScale
@@ -1012,3 +1016,25 @@ private fun TabCountButton(count: Int, onClick: () -> Unit) {
         }
     }
 }
+
+/**
+ * Horizontal swipe on the listing switches tabs: left for the next, right for the previous. Runs in the Main
+ * pass, after the rows and drag-to-select, so a long-press drag (which consumes) never turns into a tab switch.
+ *
+ * [enabled] is read per gesture: toggling the modifier itself when a selection starts would reset the
+ * pointer-input chain mid-gesture and cut drag-to-select short.
+ */
+private fun Modifier.tabSwipe(enabled: () -> Boolean, onSwipe: (Int) -> Unit): Modifier =
+    pointerInput(Unit) {
+        val threshold = 96.dp.toPx()
+        var total = 0f
+        detectHorizontalDragGestures(
+            onDragStart = { total = 0f },
+            onDragEnd = { if (enabled() && kotlin.math.abs(total) > threshold) onSwipe(if (total < 0) 1 else -1) },
+            onHorizontalDrag = { change, dx ->
+                if (!enabled()) return@detectHorizontalDragGestures
+                change.consume()
+                total += dx
+            }
+        )
+    }
