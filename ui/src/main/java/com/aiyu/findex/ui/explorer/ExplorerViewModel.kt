@@ -48,7 +48,14 @@ import java.io.File
 import javax.inject.Inject
 
 /** One browsing tab, owned by [TabSession]. [root] is the storage volume the tab lives on; up-navigation stops there. */
-data class ExplorerTab(val id: Long, val root: String, val rootName: String, val path: String)
+data class ExplorerTab(
+    val id: Long,
+    val root: String,
+    val rootName: String,
+    val path: String,
+    /** Folders this tab came from, oldest first; Back walks it before going up. */
+    val history: List<TabPlace> = emptyList()
+)
 
 data class ExplorerUiState(
     val tabs: List<ExplorerTab> = emptyList(),
@@ -76,6 +83,7 @@ data class ExplorerUiState(
     val tab: ExplorerTab? get() = tabs.getOrNull(activeTab)
     val inSelection: Boolean get() = selection.isNotEmpty()
     val canGoUp: Boolean get() = tab?.let { it.path != it.root } ?: false
+    val canGoBack: Boolean get() = canGoUp || tab?.history?.any { it.path != tab?.path } == true
     val selectedItems: List<StorageItem> get() = items.filter { it.path in selection }
 }
 
@@ -96,6 +104,9 @@ class ExplorerViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val startPath: String? = savedStateHandle.toRoute<ExplorerRoute>().path
+        // Applied once: after process death the tab may have moved on from it.
+        ?.takeIf { savedStateHandle.get<Boolean>(KEY_START_APPLIED) != true }
+        .also { savedStateHandle[KEY_START_APPLIED] = true }
 
     private val _uiState = MutableStateFlow(ExplorerUiState())
     val uiState: StateFlow<ExplorerUiState> = _uiState.asStateFlow()
@@ -202,9 +213,9 @@ class ExplorerViewModel @Inject constructor(
 
     // region Navigation
 
-    private fun setPath(path: String, forward: Boolean) {
+    private fun setPath(path: String, forward: Boolean, record: Boolean = true) {
         _uiState.update { it.copy(selection = emptySet(), forward = forward, focused = null) }
-        tabSession.setActivePath(path) // the session collector reloads
+        tabSession.setActivePath(path, record) // the session collector reloads
     }
 
     fun openFolder(path: String) = setPath(path, forward = true)
@@ -242,8 +253,15 @@ class ExplorerViewModel @Inject constructor(
         val tab = s.tab ?: return false
         if (!s.canGoUp) return false
         // String parent works for both "/storage/…" and "smb://id/…" paths.
-        setPath(tab.path.substringBeforeLast('/').takeIf { it.length >= tab.root.length } ?: tab.root, forward = false)
+        // Not recorded: Back falls back to going up, and recording would bounce it into the child again.
+        setPath(tab.path.substringBeforeLast('/').takeIf { it.length >= tab.root.length } ?: tab.root, forward = false, record = false)
         return true
+    }
+
+    /** Back in this tab: its own history first (ES File Explorer style), then up to the volume root. @return false to leave the screen. */
+    fun back(): Boolean {
+        _uiState.update { it.copy(selection = emptySet(), forward = false, focused = null) }
+        return tabSession.back() || goUp()
     }
 
     fun onFileOpened(path: String) {
@@ -412,4 +430,8 @@ class ExplorerViewModel @Inject constructor(
     fun setShowHidden(show: Boolean) = viewModelScope.launch { settingsRepository.setShowHidden(show) }
 
     // endregion
+
+    private companion object {
+        const val KEY_START_APPLIED = "start_applied"
+    }
 }

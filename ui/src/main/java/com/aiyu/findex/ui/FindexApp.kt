@@ -288,7 +288,7 @@ private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -
                     // A permanent drawer or rail is always visible, so Home has no menu button then.
                     onOpenDrawer = if (permanentDrawer || useRail) null else ({ scope.launch { drawerState.open() } }),
                     drawerProgress = { drawerState.fraction },
-                    onNavigate = { navController.navigate(it) }
+                    onNavigate = { if (it is ExplorerRoute) navController.openExplorer(it.path) else navController.navigate(it) }
                 )
             }
             appDestinations(navController)
@@ -296,10 +296,17 @@ private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -
     }
 }
 
+/**
+ * One Explorer on the back stack, like ES File Explorer's single browser with windows: a folder opened from
+ * Home, search or a tool replaces any Explorer (and the screens above it); the tab's own history handles Back.
+ */
+private fun NavHostController.openExplorer(path: String?) =
+    navigate(ExplorerRoute(path)) { popUpTo<ExplorerRoute> { inclusive = true } }
+
 /** Feature destinations; each milestone registers its screens here. */
 private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: NavHostController) {
     val back: () -> Unit = { navController.popBackStack() }
-    val openFolder: (String) -> Unit = { navController.navigate(ExplorerRoute(it)) }
+    val openFolder: (String) -> Unit = { navController.openExplorer(it) }
     val openArchive: (String) -> Unit = { navController.navigate(ArchiveRoute(it)) }
     val openFile: (Any) -> Unit = { navController.navigate(it) }
     composable<ExplorerRoute> {
@@ -312,7 +319,7 @@ private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: N
     }
     composable<ArchiveRoute> { ArchiveScreen(onBack = back) }
     // A share opens as a normal explorer tab, so copy / paste works between it and the device.
-    composable<NetworkRoute> { NetworkScreen(onBack = back, onOpenServer = { navController.navigate(ExplorerRoute(SmbPath.of(it, ""))) }) }
+    composable<NetworkRoute> { NetworkScreen(onBack = back, onOpenServer = { navController.openExplorer(SmbPath.of(it, "")) }) }
     composable<ShareRoute> { ShareScreen(onBack = back) }
     composable<CategoryRoute> { CategoryScreen(onBack = back, onOpenFolder = openFolder, onOpenArchive = openArchive, onOpenFile = openFile) }
     composable<AnalyzerRoute> { AnalyzerScreen(onBack = back, onOpenFolder = openFolder) }

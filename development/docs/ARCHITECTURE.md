@@ -440,6 +440,27 @@ flowchart LR
 - `ExplorerViewModel` waits for `awaitRestored()` before deciding to open a fresh tab, so a cold start resumes the last session.
 - Room schema v3 adds `open_tabs` through `AutoMigration(2, 3)`.
 
+### Tab model (ES File Explorer style windows)
+
+Each tab is a window with its **own back history** (`ExplorerTab.history`, in memory, capped at 50). Only one Explorer destination sits on the nav back stack (`openExplorer` pops any older one, and the screens above it).
+
+```mermaid
+flowchart TD
+    Out[Home / search / category / tools /<br/>network server] -->|openExplorer path<br/>popUpTo ExplorerRoute inclusive| EVM[ExplorerViewModel]
+    EVM -->|TabSession.open| Q{a tab already<br/>shows path?}
+    Q -->|yes| Focus[focus that tab]
+    Q -->|no| Visit[active tab visits path<br/>old folder pushed on its history]
+    In[tap folder / breadcrumb] -->|setActivePath record=true| Visit
+    Back[Back gesture / toolbar back] --> B1{tab history?}
+    B1 -->|yes| Pop[stepBack: previous folder,<br/>volume restored]
+    B1 -->|no| B2{below volume root?}
+    B2 -->|yes| Up[goUp, not recorded]
+    B2 -->|no| Leave[pop Explorer screen]
+    New[New tab / Open in new tab] --> NewTab[TabSession.newTab: fresh history]
+```
+
+- The route's `path` is applied once (`SavedStateHandle` flag), so process death does not drag the tab back to it.
+
 ## 7c. Global search
 
 Search uses the MediaStore `Files` table as its index: no second index to build or keep fresh. With all-files access it covers every file and folder MediaStore has scanned on every volume.
@@ -509,6 +530,20 @@ flowchart LR
 ---
 
 ## 8b. Launch & splash hand-off
+
+"Open with Findex" (`ACTION_VIEW` filter on `MainActivity`: archives, `text/*`, PDF, audio, `application/octet-stream`):
+
+```mermaid
+flowchart LR
+    App[Other app] -->|ACTION_VIEW uri| A[MainActivity<br/>per-activity viewRequests]
+    A --> R[IncomingFiles.resolve]
+    R -->|externalstorage document id| Real[real path, read in place]
+    R -->|other content / file uri| Copy[cache/incoming copy]
+    Real & Copy --> Route{type}
+    Route -->|archive| AR[ArchiveRoute<br/>Extract all of a copy → Downloads]
+    Route -->|text / pdf / audio| V[InAppViewers route]
+    Route -->|other| Toast[can't open toast]
+```
 
 ```mermaid
 sequenceDiagram

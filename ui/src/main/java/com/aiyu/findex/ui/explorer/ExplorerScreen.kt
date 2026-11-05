@@ -199,11 +199,11 @@ fun ExplorerScreen(
     val downloading by viewModel.downloading.collectAsStateWithLifecycle()
     var newTabSheet by rememberSaveable { mutableStateOf(false) }
 
-    // Back: close FAB menu → clear selection → parent folder (predictive) → leave screen (NavHost predictive pop).
+    // Back: close FAB menu → clear selection → this tab's history → parent folder (predictive) → leave screen (NavHost predictive pop).
     var backProgress by remember { mutableFloatStateOf(0f) }
     var backFromLeft by remember { mutableStateOf(true) }
-    val goingUp = modal == null && !fabMenuOpen && !state.inSelection && state.canGoUp
-    PredictiveBackHandler(enabled = modal == null && (fabMenuOpen || state.inSelection || state.canGoUp)) { events ->
+    val goingUp = modal == null && !fabMenuOpen && !state.inSelection && state.canGoBack
+    PredictiveBackHandler(enabled = modal == null && (fabMenuOpen || state.inSelection || state.canGoBack)) { events ->
         try {
             events.collect { event ->
                 if (goingUp) {
@@ -214,7 +214,7 @@ fun ExplorerScreen(
             when {
                 fabMenuOpen -> fabMenuOpen = false
                 state.inSelection -> viewModel.clearSelection()
-                else -> viewModel.goUp()
+                else -> viewModel.back()
             }
         } finally {
             backProgress = 0f
@@ -265,7 +265,7 @@ fun ExplorerScreen(
                             title = tab?.let { if (it.path == it.root) it.rootName else File(it.path).name } ?: "",
                             isBookmarked = state.isBookmarked,
                             gridView = state.settings.gridView,
-                            onBack = { if (!viewModel.goUp()) onBack() },
+                            onBack = { if (!viewModel.back()) onBack() },
                             onBookmark = { viewModel.toggleBookmark() },
                             onToggleView = { viewModel.setGridView(!state.settings.gridView) },
                             onSort = { modal = ExplorerModal.Sort },
