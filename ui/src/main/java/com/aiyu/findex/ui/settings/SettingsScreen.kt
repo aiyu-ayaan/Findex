@@ -17,6 +17,7 @@ import androidx.compose.material.icons.rounded.Contrast
 import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.rounded.Preview
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.LightMode
 import androidx.compose.material.icons.rounded.Palette
@@ -74,6 +75,7 @@ class SettingsViewModel @Inject constructor(private val repo: SettingsRepository
     fun setHidden(on: Boolean) = viewModelScope.launch { repo.setShowHidden(on) }
     fun setStorageHistory(on: Boolean) = viewModelScope.launch { repo.setStorageHistory(on) }
     fun setGrid(on: Boolean) = viewModelScope.launch { repo.setGridView(on) }
+    fun setBuiltInViewers(on: Boolean) = viewModelScope.launch { repo.setBuiltInViewers(on) }
 }
 
 @Composable
@@ -137,9 +139,10 @@ fun SettingsScreen(onBack: () -> Unit, onOpenAbout: () -> Unit, onOpenUpdates: (
                 }
             }
             item { SectionHeader(stringResource(R.string.settings_files)) }
-            item { SwitchRow(Icons.Rounded.Visibility, R.string.show_hidden_files, R.string.settings_show_hidden_desc, settings.showHidden, viewModel::setHidden, groupedShape(0, 3)) }
-            item { SwitchRow(Icons.Rounded.GridView, R.string.settings_grid, R.string.settings_grid_desc, settings.gridView, viewModel::setGrid, groupedShape(1, 3)) }
-            item { SwitchRow(Icons.Rounded.History, R.string.settings_storage_history, R.string.settings_storage_history_desc, settings.storageHistory, viewModel::setStorageHistory, groupedShape(2, 3)) }
+            item { SwitchRow(Icons.Rounded.Visibility, R.string.show_hidden_files, R.string.settings_show_hidden_desc, settings.showHidden, viewModel::setHidden, groupedShape(0, 4)) }
+            item { SwitchRow(Icons.Rounded.GridView, R.string.settings_grid, R.string.settings_grid_desc, settings.gridView, viewModel::setGrid, groupedShape(1, 4)) }
+            item { SwitchRow(Icons.Rounded.Preview, R.string.settings_builtin_viewers, R.string.settings_builtin_viewers_desc, settings.builtInViewers, viewModel::setBuiltInViewers, groupedShape(2, 4)) }
+            item { SwitchRow(Icons.Rounded.History, R.string.settings_storage_history, R.string.settings_storage_history_desc, settings.storageHistory, viewModel::setStorageHistory, groupedShape(3, 4)) }
             item { SectionHeader(stringResource(R.string.settings_updates)) }
             item {
                 SettingItem(

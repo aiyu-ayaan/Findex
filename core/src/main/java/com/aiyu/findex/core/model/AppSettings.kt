@@ -35,6 +35,8 @@ data class AppSettings(
     val updateChannel: UpdateChannel? = null,
     /** Daily storage snapshots for the growth graph. */
     val storageHistory: Boolean = true,
+    /** Open photos, videos, PDF, text and audio in Findex's own viewers; off uses the default app. */
+    val builtInViewers: Boolean = true,
     /** Soft wrap in the text viewer. */
     val textWrap: Boolean = true,
     /** Minutes in the background before the vault locks; 0 = as soon as the app leaves. */

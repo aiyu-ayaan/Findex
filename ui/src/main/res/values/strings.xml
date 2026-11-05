@@ -736,6 +736,9 @@
     <string name="growth_delta_up">Up %1$s</string>
     <string name="growth_delta_down">Down %1$s</string>
     <string name="growth_empty">Not enough history yet. Findex records storage daily.</string>
+    <string name="viewer_pdf_dark_pages">Dark pages</string>
+    <string name="settings_builtin_viewers">Built-in viewers</string>
+    <string name="settings_builtin_viewers_desc">Open photos, videos, PDFs, text and audio in Findex. Off uses your default apps</string>
     <string name="settings_storage_history">Storage history</string>
     <string name="settings_storage_history_desc">Keep daily storage snapshots for the growth chart</string>
     <!-- END recent-changes-growth -->

@@ -39,6 +39,7 @@ class SettingsRepository @Inject constructor(
         val lastNotifiedUpdateVersion = stringPreferencesKey("last_notified_update_version")
         val storageHistory = booleanPreferencesKey("storage_history")
         val textWrap = booleanPreferencesKey("text_wrap")
+        val builtInViewers = booleanPreferencesKey("built_in_viewers")
         val vaultAutoLockMinutes = intPreferencesKey("vault_auto_lock_minutes")
         val shareAccess = stringSetPreferencesKey("share_access")
         val shareIdleMinutes = intPreferencesKey("share_idle_minutes")
@@ -56,6 +57,7 @@ class SettingsRepository @Inject constructor(
             updateChannel = p[Keys.updateChannel]?.let { n -> UpdateChannel.entries.firstOrNull { it.name == n } },
             storageHistory = p[Keys.storageHistory] ?: true,
             textWrap = p[Keys.textWrap] ?: true,
+            builtInViewers = p[Keys.builtInViewers] ?: true,
             vaultAutoLockMinutes = p[Keys.vaultAutoLockMinutes] ?: 1,
             shareAccess = p[Keys.shareAccess]?.mapNotNull { n -> SharePermission.entries.firstOrNull { it.name == n } }?.toSet()
                 ?: SharePermission.DEFAULT,
@@ -74,6 +76,7 @@ class SettingsRepository @Inject constructor(
     suspend fun setLastNotifiedUpdateVersion(version: String) = edit { it[Keys.lastNotifiedUpdateVersion] = version }
     suspend fun setStorageHistory(enabled: Boolean) = edit { it[Keys.storageHistory] = enabled }
     suspend fun setTextWrap(enabled: Boolean) = edit { it[Keys.textWrap] = enabled }
+    suspend fun setBuiltInViewers(enabled: Boolean) = edit { it[Keys.builtInViewers] = enabled }
     suspend fun setVaultAutoLockMinutes(minutes: Int) = edit { it[Keys.vaultAutoLockMinutes] = minutes }
     suspend fun setShareAccess(access: Set<SharePermission>) = edit { it[Keys.shareAccess] = access.map { p -> p.name }.toSet() }
     suspend fun setShareIdleMinutes(minutes: Int) = edit { it[Keys.shareIdleMinutes] = minutes }

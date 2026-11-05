@@ -84,7 +84,7 @@ fun SearchScreen(
         when {
             item.isDirectory -> onOpenFolder(item.path)
             item.isArchive -> onOpenArchive(item.path)
-            isMediaExtension(item.extension) -> {
+            InAppViewers.opensMedia(item.extension) -> {
                 viewModel.onOpened(item.path)
                 viewerInitialPath = item.path
             }

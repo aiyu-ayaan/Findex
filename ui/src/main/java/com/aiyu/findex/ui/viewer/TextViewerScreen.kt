@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.automirrored.rounded.Redo
 import androidx.compose.material.icons.automirrored.rounded.Undo
 import androidx.compose.material.icons.automirrored.rounded.WrapText
@@ -52,6 +53,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aiyu.findex.ui.LocalSnackbarHostState
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.theme.Dimens
+import com.aiyu.findex.ui.util.openFileWithChooser
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,6 +82,9 @@ fun TextViewerScreen(onBack: () -> Unit, viewModel: TextViewerViewModel = hiltVi
                         IconButton(onClick = { editor.undoState.undo() }, enabled = editor.undoState.canUndo) { Icon(Icons.AutoMirrored.Rounded.Undo, stringResource(R.string.viewer_text_undo)) }
                         IconButton(onClick = { editor.undoState.redo() }, enabled = editor.undoState.canRedo) { Icon(Icons.AutoMirrored.Rounded.Redo, stringResource(R.string.viewer_text_redo)) }
                         IconToggleButton(checked = wrap, onCheckedChange = { viewModel.toggleWrap() }) { Icon(Icons.AutoMirrored.Rounded.WrapText, stringResource(R.string.viewer_text_wrap)) }
+                    }
+                    IconButton(onClick = { context.openFileWithChooser(viewModel.route.path) }) {
+                        Icon(Icons.AutoMirrored.Rounded.OpenInNew, stringResource(R.string.action_open_in_another_app))
                     }
                 }
             )

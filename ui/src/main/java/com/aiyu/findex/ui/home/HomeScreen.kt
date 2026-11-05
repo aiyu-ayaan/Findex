@@ -309,7 +309,7 @@ fun HomeScreen(
                                 // Bookmarked files open like recents; folders and smb paths browse.
                                 if (!bookmark.path.startsWith("smb://") && file.isFile) {
                                     val ext = file.extension
-                                    if (com.aiyu.findex.ui.components.isMediaExtension(ext)) recentViewerPath = bookmark.path
+                                    if (com.aiyu.findex.ui.viewer.InAppViewers.opensMedia(ext)) recentViewerPath = bookmark.path
                                     else com.aiyu.findex.ui.viewer.InAppViewers.routeFor(
                                         com.aiyu.findex.core.model.StorageItem(path = bookmark.path, name = bookmark.name, size = file.length(), extension = ext.lowercase())
                                     )?.let(onNavigate) ?: context.openFile(bookmark.path, file.length())
@@ -350,7 +350,7 @@ fun HomeScreen(
                                     .clip(groupedShape(index, uiState.recents.size))
                                     .clickable {
                                         viewModel.onRecentOpened(recent.path)
-                                        if (com.aiyu.findex.ui.components.isMediaExtension(ext)) {
+                                        if (com.aiyu.findex.ui.viewer.InAppViewers.opensMedia(ext)) {
                                             recentViewerPath = recent.path
                                         } else {
                                             val item = com.aiyu.findex.core.model.StorageItem(path = recent.path, name = recent.name, size = recent.size, extension = ext.lowercase())

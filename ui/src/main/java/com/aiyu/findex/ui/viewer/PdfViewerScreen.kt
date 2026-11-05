@@ -41,6 +41,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.material.icons.rounded.DarkMode
+import androidx.compose.material.icons.rounded.LightMode
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.positionChanged
@@ -66,6 +73,9 @@ fun PdfViewerScreen(onBack: () -> Unit, viewModel: PdfViewerViewModel = hiltView
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
     var goTo by remember { mutableStateOf(false) }
+    // Dark pages follow the app theme at first; white paper glares in a dark UI.
+    val darkTheme = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+    var darkPages by rememberSaveable { mutableStateOf(darkTheme) }
 
     Scaffold(
         topBar = {
@@ -73,6 +83,9 @@ fun PdfViewerScreen(onBack: () -> Unit, viewModel: PdfViewerViewModel = hiltView
                 title = { Text(File(viewModel.route.path).name, maxLines = 1, overflow = TextOverflow.MiddleEllipsis) },
                 navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back)) } },
                 actions = {
+                    IconToggleButton(checked = darkPages, onCheckedChange = { darkPages = it }) {
+                        Icon(if (darkPages) Icons.Rounded.LightMode else Icons.Rounded.DarkMode, stringResource(R.string.viewer_pdf_dark_pages))
+                    }
                     IconButton(onClick = { context.openFileWithChooser(viewModel.route.path) }) { Icon(Icons.AutoMirrored.Rounded.OpenInNew, stringResource(R.string.action_open_in_another_app)) }
                 }
             )
@@ -111,7 +124,7 @@ fun PdfViewerScreen(onBack: () -> Unit, viewModel: PdfViewerViewModel = hiltView
                             .graphicsLayer { scaleX = zoom; scaleY = zoom; translationX = panX }
                     ) {
                         items(s.pages) { index ->
-                            PdfPage(viewModel, index, widthPx)
+                            PdfPage(viewModel, index, widthPx, if (darkPages) InvertColors else null)
                         }
                     }
                     val current = listState.firstVisibleItemIndex + 1
@@ -131,18 +144,23 @@ fun PdfViewerScreen(onBack: () -> Unit, viewModel: PdfViewerViewModel = hiltView
 }
 
 @Composable
-private fun PdfPage(viewModel: PdfViewerViewModel, index: Int, widthPx: Int) {
+private fun PdfPage(viewModel: PdfViewerViewModel, index: Int, widthPx: Int, colorFilter: ColorFilter?) {
     if (widthPx <= 0) return
     // Rendering is cheap to cancel: leaving the viewport cancels this producer.
     val bitmap by produceState<Bitmap?>(null, index, widthPx) { value = viewModel.page(index, widthPx) }
     val ratio by produceState(1.414f, index) { value = viewModel.ratio(index) }
     val bmp = bitmap
     if (bmp != null) {
-        Image(bmp.asImageBitmap(), contentDescription = null, modifier = Modifier.fillMaxWidth().aspectRatio(1f / ratio))
+        Image(bmp.asImageBitmap(), contentDescription = null, colorFilter = colorFilter, modifier = Modifier.fillMaxWidth().aspectRatio(1f / ratio))
     } else {
         Box(Modifier.fillMaxWidth().aspectRatio(1f / ratio))
     }
 }
+
+// White paper becomes near-black, black text becomes white; images invert too (reader "night mode").
+private val InvertColors = ColorFilter.colorMatrix(
+    ColorMatrix(floatArrayOf(-1f, 0f, 0f, 0f, 255f, 0f, -1f, 0f, 0f, 255f, 0f, 0f, -1f, 0f, 255f, 0f, 0f, 0f, 1f, 0f))
+)
 
 @Composable
 private fun ProtectedPdf(s: PdfState.Protected, onPassword: (String) -> Unit, onOpenWith: () -> Unit) {

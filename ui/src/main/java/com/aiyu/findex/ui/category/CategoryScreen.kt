@@ -93,7 +93,7 @@ fun CategoryScreen(
         when {
             state.selection.isNotEmpty() -> viewModel.toggle(item.path)
             item.isArchive -> onOpenArchive(item.path)
-            isMediaExtension(item.extension) -> {
+            InAppViewers.opensMedia(item.extension) -> {
                 viewModel.onOpened(item.path)
                 viewerInitialPath = item.path
             }

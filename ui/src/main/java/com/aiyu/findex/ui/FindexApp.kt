@@ -150,6 +150,7 @@ fun FindexApp(
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val current = settings ?: return // the splash stays up until settings are known
     SideEffect(onReady)
+    SideEffect { InAppViewers.enabled = current.builtInViewers }
 
     val dark = when (current.themeMode) {
         ThemeMode.SYSTEM -> isSystemInDarkTheme()
@@ -247,7 +248,7 @@ private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -
             viewRequests.filterNotNull().collect { uri ->
                 viewRequests.value = null
                 val path = withContext(Dispatchers.IO) { IncomingFiles.resolve(context, uri) }
-                val route = path?.let { if (ArchiveFormat.of(it) != null) ArchiveRoute(it) else InAppViewers.routeFor(it) }
+                val route = path?.let { if (ArchiveFormat.of(it) != null) ArchiveRoute(it) else InAppViewers.routeFor(it, force = true) }
                 if (route != null) navController.navigate(route)
                 else Toast.makeText(context, R.string.error_open_unsupported, Toast.LENGTH_SHORT).show()
             }

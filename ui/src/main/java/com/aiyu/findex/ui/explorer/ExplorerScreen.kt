@@ -231,7 +231,7 @@ fun ExplorerScreen(
             state.inSelection -> viewModel.toggleSelection(item.path)
             item.isDirectory -> viewModel.openFolder(item.path)
             listDetail -> viewModel.focus(item.path)
-            isMediaExtension(item.extension) -> {
+            InAppViewers.opensMedia(item.extension) -> {
                 if (SmbPath.parse(item.path) == null) viewModel.onFileOpened(item.path)
                 modal = ExplorerModal.MediaViewer(item.path)
             }
@@ -481,7 +481,7 @@ fun ExplorerScreen(
                 actions = DetailActions(
                     onOpen = {
                         focusedItem?.let {
-                            if (isMediaExtension(it.extension)) {
+                            if (InAppViewers.opensMedia(it.extension)) {
                                 if (SmbPath.parse(it.path) == null) viewModel.onFileOpened(it.path)
                                 modal = ExplorerModal.MediaViewer(it.path)
                             } else {
@@ -527,7 +527,7 @@ fun ExplorerScreen(
                 when (action) {
                     ItemAction.OPEN -> when {
                         item.isDirectory -> viewModel.openFolder(item.path)
-                        isMediaExtension(item.extension) -> {
+                        InAppViewers.opensMedia(item.extension) -> {
                             if (!state.isNetwork) viewModel.onFileOpened(item.path)
                             modal = ExplorerModal.MediaViewer(item.path)
                         }

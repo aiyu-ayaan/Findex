@@ -12,6 +12,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.OpenInNew
+import androidx.compose.ui.platform.LocalContext
+import com.aiyu.findex.ui.util.openFileWithChooser
 import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Repeat
@@ -54,7 +57,13 @@ fun AudioPlayerScreen(onBack: () -> Unit, viewModel: AudioPlayerViewModel = hilt
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.viewer_audio_queue)) },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back)) } }
+                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back)) } },
+                actions = {
+                    val context = LocalContext.current
+                    IconButton(onClick = { context.openFileWithChooser(s.current ?: viewModel.route.path) }) {
+                        Icon(Icons.AutoMirrored.Rounded.OpenInNew, stringResource(R.string.action_open_in_another_app))
+                    }
+                }
             )
         }
     ) { padding ->
