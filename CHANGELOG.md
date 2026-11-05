@@ -1,3 +1,17 @@
+## v0.0.1-alpha.4 (2026-11-05)
+
+- !alpha : Add open with, save to Findex, ES-style tabs, widget, tile and launcher shortcuts
+- ui(Tabs) : Swipe the listing to switch tabs
+- feat(Widget) : Add home screen storage widget
+- feat(Cleaner) : Add opt-in weekly cleanup reminder
+- feat(Share) : Add Quick Settings tile and shorter share address
+- feat(Shortcuts) : Add Search, Downloads, Recent and Clean launcher shortcuts
+- feat(Share) : Add Save to Findex from other apps' share sheet
+- docs(Todo) : Track open-with, tab model and viewer work
+- ui(Viewers) : Add dark PDF pages, open in another app and built-in viewers setting
+- ui(Tabs) : Give each tab its own back history and keep one Explorer
+- feat(OpenWith) : Open archives, text, PDF and audio from other apps
+
 ## v0.0.1-alpha.3 (2026-10-18)
 
 - !alpha : Add intro video with GIF preview, Apache 2.0 license, dual pane, app and social cleaners
