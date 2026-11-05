@@ -33,6 +33,8 @@ data class AppSettings(
     val autoUpdate: Boolean = true,
     /** Null until chosen: the channel then follows the installed build (see UpdateChannel.forVersion). */
     val updateChannel: UpdateChannel? = null,
+    /** Weekly junk scan that notifies when there is a lot to free. Opt-in. */
+    val cleanupReminder: Boolean = false,
     /** Daily storage snapshots for the growth graph. */
     val storageHistory: Boolean = true,
     /** Open photos, videos, PDF, text and audio in Findex's own viewers; off uses the default app. */

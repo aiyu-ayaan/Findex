@@ -37,6 +37,7 @@ kotlin {
 
 dependencies {
     implementation(project(":core"))
+    implementation(libs.androidx.work.runtime.ktx) // cleanup reminder worker
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime)

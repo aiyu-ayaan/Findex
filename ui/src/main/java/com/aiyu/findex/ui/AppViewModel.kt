@@ -7,6 +7,7 @@ import com.aiyu.findex.core.model.AppSettings
 import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.operation.OperationManager
 import com.aiyu.findex.core.operation.FileClipboard
+import com.aiyu.findex.ui.reminder.CleanupReminderScheduler
 import com.aiyu.findex.core.repository.TrashRepository
 import com.aiyu.findex.ui.explorer.TabSession
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -34,7 +35,8 @@ class AppViewModel @Inject constructor(
     private val updates: UpdateRepository,
     private val updateCheckScheduler: UpdateCheckScheduler,
     private val storageHistoryScheduler: StorageHistoryScheduler,
-    private val clipboard: FileClipboard
+    private val clipboard: FileClipboard,
+    private val cleanupReminderScheduler: CleanupReminderScheduler
 ) : ViewModel() {
     val tabCount: StateFlow<Int> = tabSession.state.map { it.tabs.size }.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
 
@@ -65,6 +67,12 @@ class AppViewModel @Inject constructor(
                 .map { it.storageHistory }
                 .distinctUntilChanged()
                 .collect { enabled -> storageHistoryScheduler.sync(enabled) }
+        }
+        viewModelScope.launch {
+            settingsRepository.settings
+                .map { it.cleanupReminder }
+                .distinctUntilChanged()
+                .collect { enabled -> cleanupReminderScheduler.sync(enabled) }
         }
     }
 
