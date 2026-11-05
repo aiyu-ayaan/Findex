@@ -66,10 +66,10 @@ class MainActivity : ComponentActivity() {
         forwardFolder(intent)
     }
 
-    /** Pinned folder shortcuts carry the folder path; "Open with" and "Save to Findex" go to the NavHost as is. */
+    /** Shortcuts, "Open with" and "Save to Findex" go to this activity's NavHost as is. */
     private fun forwardFolder(intent: Intent?) {
-        intent?.getStringExtra(LaunchRequests.EXTRA_FOLDER_PATH)?.let { LaunchRequests.folder.value = it }
-        if (intent?.action in EXTERNAL_ACTIONS) externalIntents.value = intent
+        val fromShortcut = intent?.hasExtra(LaunchRequests.EXTRA_FOLDER_PATH) == true || intent?.hasExtra(LaunchRequests.EXTRA_SCREEN) == true
+        if (fromShortcut || intent?.action in EXTERNAL_ACTIONS) externalIntents.value = intent
     }
 
     private companion object {

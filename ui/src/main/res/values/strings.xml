@@ -30,6 +30,7 @@
     <string name="nav_settings">Settings</string>
     <string name="nav_recycle_bin">Recycle bin</string>
     <string name="nav_tabs">Tabs</string>
+    <string name="nav_search">Search</string>
     <plurals name="tabs_open_count">
         <item quantity="one">%d open tab</item>
         <item quantity="other">%d open tabs</item>

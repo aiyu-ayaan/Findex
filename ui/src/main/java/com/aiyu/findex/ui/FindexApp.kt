@@ -135,6 +135,7 @@ import androidx.core.content.IntentCompat
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.aiyu.findex.core.model.ArchiveFormat
 import com.aiyu.findex.ui.util.IncomingFiles
+import com.aiyu.findex.ui.shortcuts.AppShortcut
 import com.aiyu.findex.ui.viewer.InAppViewers
 import kotlinx.coroutines.launch
 
@@ -143,8 +144,8 @@ val LocalSnackbarHostState = staticCompositionLocalOf { SnackbarHostState() }
 
 @Composable
 /**
- * [externalIntents] carries VIEW ("Open with") and SEND ("Save to Findex") intents other apps sent to this
- * activity; it is per activity, not global.
+ * [externalIntents] carries intents from outside the app: VIEW ("Open with"), SEND ("Save to Findex"), folder
+ * and screen shortcuts. Per activity, not global: a recreated or second instance must not lose them to an older one.
  */
 fun FindexApp(
     onReady: () -> Unit = {},
@@ -239,18 +240,32 @@ private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -
         if (route == HomeRoute) navController.popBackStack(HomeRoute, inclusive = false)
         else navController.navigate(route) { launchSingleTop = true; popUpTo<HomeRoute>() }
     }
-    // Pinned folder shortcuts. Skipped until onboarding has granted storage access.
+    // Requests from outside the app, per activity. Skipped until onboarding has granted storage access.
     if (startDestination == HomeRoute) {
-        LaunchedEffect(navController) {
-            LaunchRequests.folder.filterNotNull().collect { path ->
-                LaunchRequests.folder.value = null
-                navController.navigate(ExplorerRoute(path)) { launchSingleTop = true; popUpTo<HomeRoute>() }
-            }
-        }
         LaunchedEffect(navController) {
             val context = navController.context
             externalIntents.filterNotNull().collect { intent ->
                 externalIntents.value = null
+                // Pinned folder shortcuts.
+                intent.getStringExtra(LaunchRequests.EXTRA_FOLDER_PATH)?.let { path ->
+                    navController.navigate(ExplorerRoute(path)) { launchSingleTop = true; popUpTo<HomeRoute>() }
+                    return@collect
+                }
+                // Launcher shortcuts, the widget, notifications and the Quick Settings tile.
+                intent.getStringExtra(LaunchRequests.EXTRA_SCREEN)?.let { name ->
+                    val route: Any = when (runCatching { AppShortcut.valueOf(name) }.getOrNull()) {
+                        AppShortcut.SEARCH -> SearchRoute
+                        AppShortcut.DOWNLOADS -> ExplorerRoute(
+                            android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS).path
+                        )
+                        AppShortcut.RECENT -> RecentChangesRoute
+                        AppShortcut.CLEAN -> CleanerRoute
+                        AppShortcut.SHARE -> ShareRoute
+                        null -> return@collect
+                    }
+                    navController.navigate(route) { launchSingleTop = true; popUpTo<HomeRoute>() }
+                    return@collect
+                }
                 // "Save to Findex": the shared files wait on the clipboard; the user browses to a folder and taps Save.
                 val shared = intent.sharedUris()
                 if (shared.isNotEmpty()) {
