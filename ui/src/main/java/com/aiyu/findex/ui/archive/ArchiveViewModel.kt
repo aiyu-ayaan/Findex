@@ -15,6 +15,7 @@ import com.aiyu.findex.core.operation.ArchiveBrowser
 import com.aiyu.findex.core.operation.OperationManager
 import com.aiyu.findex.core.operation.uniqueTarget
 import com.aiyu.findex.ui.navigation.ArchiveRoute
+import com.aiyu.findex.ui.util.IncomingFiles
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -145,7 +146,7 @@ class ArchiveViewModel @Inject constructor(
     /** Full extraction still runs through the foreground service, like the Explorer's Extract. */
     fun extractAll(password: String?) {
         val archive = File(_uiState.value.archivePath)
-        val dest = uniqueTarget(archive.parentFile ?: return, ArchiveFormat.baseName(archive.name))
+        val dest = uniqueTarget(IncomingFiles.extractParent(archive) ?: return, ArchiveFormat.baseName(archive.name))
         operationManager.enqueue(FileOperation.Extract(archive.absolutePath, dest.absolutePath, password ?: this.password))
     }
 }

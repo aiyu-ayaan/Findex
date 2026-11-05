@@ -14,12 +14,14 @@ object InAppViewers {
     val AUDIO = setOf("mp3", "m4a", "wav", "flac", "ogg", "aac", "opus")
 
     /** TextViewerRoute / PdfViewerRoute / AudioPlayerRoute, or null to open in another app as today. Local files only. */
-    fun routeFor(item: StorageItem): Any? {
-        if (item.isDirectory || "://" in item.path) return null
-        return when (item.extension.lowercase()) {
-            in TEXT -> TextViewerRoute(item.path)
-            "pdf" -> PdfViewerRoute(item.path)
-            in AUDIO -> AudioPlayerRoute(item.path)
+    fun routeFor(item: StorageItem): Any? = if (item.isDirectory) null else routeFor(item.path)
+
+    fun routeFor(path: String): Any? {
+        if ("://" in path) return null
+        return when (path.substringAfterLast('/').substringAfterLast('.', "").lowercase()) {
+            in TEXT -> TextViewerRoute(path)
+            "pdf" -> PdfViewerRoute(path)
+            in AUDIO -> AudioPlayerRoute(path)
             else -> null
         }
     }

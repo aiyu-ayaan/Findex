@@ -1,6 +1,7 @@
 package com.aiyu.findex
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import androidx.activity.ComponentActivity
@@ -12,10 +13,15 @@ import com.aiyu.findex.ui.FindexApp
 import com.aiyu.findex.ui.navigation.LaunchRequests
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject lateinit var vaultSession: VaultSession
+
+    // Per activity: another app's "Open with" starts a fresh instance in its own task, and a shared state
+    // would let an older Findex instance consume the request instead.
+    private val viewRequests = MutableStateFlow<Uri?>(null)
 
     // Read on the main thread only, by the splash screen's pre-draw check.
     private var contentReady = false
@@ -41,7 +47,7 @@ class MainActivity : ComponentActivity() {
         }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent { FindexApp(onReady = { contentReady = true }) }
+        setContent { FindexApp(onReady = { contentReady = true }, viewRequests = viewRequests) }
         if (savedInstanceState == null) forwardFolder(intent)
     }
 
@@ -61,9 +67,10 @@ class MainActivity : ComponentActivity() {
         forwardFolder(intent)
     }
 
-    /** Pinned folder shortcuts carry the folder path; the NavHost opens it. */
+    /** Pinned folder shortcuts carry the folder path, "Open with" carries a file URI; the NavHost opens either. */
     private fun forwardFolder(intent: Intent?) {
         intent?.getStringExtra(LaunchRequests.EXTRA_FOLDER_PATH)?.let { LaunchRequests.folder.value = it }
+        if (intent?.action == Intent.ACTION_VIEW) intent.data?.let { viewRequests.value = it }
     }
 
     private companion object {

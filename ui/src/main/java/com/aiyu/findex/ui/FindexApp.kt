@@ -126,13 +126,26 @@ import com.aiyu.findex.ui.viewer.AudioPlayerScreen
 import com.aiyu.findex.ui.viewer.PdfViewerScreen
 import com.aiyu.findex.ui.viewer.TextViewerScreen
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import android.widget.Toast
+import android.net.Uri
+import kotlinx.coroutines.flow.MutableStateFlow
+import com.aiyu.findex.core.model.ArchiveFormat
+import com.aiyu.findex.ui.util.IncomingFiles
+import com.aiyu.findex.ui.viewer.InAppViewers
 import kotlinx.coroutines.launch
 
 /** App-wide snackbar so results of background operations show on whatever screen is visible. */
 val LocalSnackbarHostState = staticCompositionLocalOf { SnackbarHostState() }
 
 @Composable
-fun FindexApp(onReady: () -> Unit = {}, viewModel: AppViewModel = hiltViewModel()) {
+/** [viewRequests] carries files other apps opened with this activity ("Open with"); it is per activity, not global. */
+fun FindexApp(
+    onReady: () -> Unit = {},
+    viewRequests: MutableStateFlow<Uri?> = MutableStateFlow(null),
+    viewModel: AppViewModel = hiltViewModel()
+) {
     setSingletonImageLoaderFactory { context -> findexImageLoader(context) }
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val current = settings ?: return // the splash stays up until settings are known
@@ -182,7 +195,7 @@ fun FindexApp(onReady: () -> Unit = {}, viewModel: AppViewModel = hiltViewModel(
                     onInstall = viewModel::installUpdate,
                     onDismiss = viewModel::dismissUpdate
                 )
-                FindexNavigation(onboardingDone = current.onboardingDone, onOnboardingFinished = viewModel::completeOnboarding, tabCount = tabCount)
+                FindexNavigation(onboardingDone = current.onboardingDone, onOnboardingFinished = viewModel::completeOnboarding, tabCount = tabCount, viewRequests = viewRequests)
                 SnackbarHost(
                     hostState = snackbarHostState,
                     modifier = Modifier
@@ -196,7 +209,7 @@ fun FindexApp(onReady: () -> Unit = {}, viewModel: AppViewModel = hiltViewModel(
 }
 
 @Composable
-private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -> Unit, tabCount: Int) {
+private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -> Unit, tabCount: Int, viewRequests: MutableStateFlow<Uri?>) {
     val navController = rememberNavController()
     val drawerState = rememberPushDrawerState()
     val scope = rememberCoroutineScope()
@@ -226,6 +239,17 @@ private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -
             LaunchRequests.folder.filterNotNull().collect { path ->
                 LaunchRequests.folder.value = null
                 navController.navigate(ExplorerRoute(path)) { launchSingleTop = true; popUpTo<HomeRoute>() }
+            }
+        }
+        // "Open with Findex" from another app: archives open in the archive browser, the rest in a built-in viewer.
+        LaunchedEffect(navController) {
+            val context = navController.context
+            viewRequests.filterNotNull().collect { uri ->
+                viewRequests.value = null
+                val path = withContext(Dispatchers.IO) { IncomingFiles.resolve(context, uri) }
+                val route = path?.let { if (ArchiveFormat.of(it) != null) ArchiveRoute(it) else InAppViewers.routeFor(it) }
+                if (route != null) navController.navigate(route)
+                else Toast.makeText(context, R.string.error_open_unsupported, Toast.LENGTH_SHORT).show()
             }
         }
     }

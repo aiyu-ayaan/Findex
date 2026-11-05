@@ -58,6 +58,7 @@
     <string name="onboarding_storage_required">Allow all files access to continue</string>
     <string name="onboarding_notify_hint">Without notifications, progress shows only inside Findex</string>
     <string name="error_no_app">No app can open this file</string>
+    <string name="error_open_unsupported">Findex can\'t open this file</string>
 
     <!-- Tabs -->
     <string name="tab_device">Device</string>
