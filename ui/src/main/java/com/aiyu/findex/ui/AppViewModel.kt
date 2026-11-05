@@ -25,6 +25,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import android.content.Context
+import com.aiyu.findex.core.repository.LibraryRepository
+import com.aiyu.findex.ui.widget.StorageWidget
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.merge
 
 @HiltViewModel
 class AppViewModel @Inject constructor(
@@ -36,7 +41,9 @@ class AppViewModel @Inject constructor(
     private val updateCheckScheduler: UpdateCheckScheduler,
     private val storageHistoryScheduler: StorageHistoryScheduler,
     private val clipboard: FileClipboard,
-    private val cleanupReminderScheduler: CleanupReminderScheduler
+    private val cleanupReminderScheduler: CleanupReminderScheduler,
+    libraryRepository: LibraryRepository,
+    @ApplicationContext context: Context
 ) : ViewModel() {
     val tabCount: StateFlow<Int> = tabSession.state.map { it.tabs.size }.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
 
@@ -50,6 +57,11 @@ class AppViewModel @Inject constructor(
     val installedVersion: String get() = updates.installedName
 
     init {
+        // The home screen widget shows bookmarks and free space: redraw it when either can have changed.
+        viewModelScope.launch {
+            merge(libraryRepository.bookmarks.distinctUntilChanged().map { }, operationManager.results.map { })
+                .collect { StorageWidget.refresh(context) }
+        }
         viewModelScope.launch { trashRepository.purgeExpired() }
         // Once per process: the global update dialog appears when this finds a newer release.
         viewModelScope.launch {

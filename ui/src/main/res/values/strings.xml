@@ -746,6 +746,10 @@
     <string name="viewer_pdf_dark_pages">Dark pages</string>
     <string name="settings_builtin_viewers">Built-in viewers</string>
     <string name="settings_builtin_viewers_desc">Open photos, videos, PDFs, text and audio in Findex. Off uses your default apps</string>
+    <string name="widget_label">Findex storage</string>
+    <string name="widget_description">Storage use, quick clean and your bookmarked folders</string>
+    <string name="widget_used">%1$d%% used</string>
+    <string name="widget_free">%1$s free of %2$s</string>
     <string name="settings_cleanup_reminder">Cleanup reminder</string>
     <string name="settings_cleanup_reminder_desc">Once a week, tell me when there is junk worth cleaning</string>
     <string name="cleanup_reminder_channel">Cleanup reminders</string>

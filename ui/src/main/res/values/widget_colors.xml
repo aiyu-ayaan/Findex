@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Home screen widget only (RemoteViews can't read the Compose theme). API 31+ uses the wallpaper palette instead. -->
+<resources>
+    <color name="widget_surface">#FFF4FBF8</color>
+    <color name="widget_on_surface">#FF171D1B</color>
+    <color name="widget_on_surface_variant">#FF3F4946</color>
+    <color name="widget_primary">#FF006A60</color>
+    <color name="widget_on_primary">#FFFFFFFF</color>
+    <color name="widget_track">#FFCCE8E2</color>
+    <color name="widget_chip">#FFE3EAE7</color>
+</resources>

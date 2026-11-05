@@ -14,11 +14,7 @@ fun Context.canPinShortcuts(): Boolean = ShortcutManagerCompat.isRequestPinShort
 
 /** @return true when the launcher accepted the pin request. Also keeps it as a dynamic shortcut (long-press app icon). */
 fun Context.pinFolderShortcut(path: String, label: String): Boolean {
-    val launch = packageManager.getLaunchIntentForPackage(packageName) ?: return false
-    val intent = Intent(launch)
-        .setAction(LaunchRequests.ACTION_OPEN_FOLDER)
-        .putExtra(LaunchRequests.EXTRA_FOLDER_PATH, path)
-        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    val intent = folderIntent(path) ?: return false
     val id = "folder:" + MessageDigest.getInstance("SHA-1").digest(path.toByteArray()).joinToString("") { "%02x".format(it) }
     val info = ShortcutInfoCompat.Builder(this, id)
         .setShortLabel(label.take(16).ifEmpty { path })
@@ -29,4 +25,12 @@ fun Context.pinFolderShortcut(path: String, label: String): Boolean {
     // Dynamic shortcuts are capped (usually 4 to 5); the pinned copy is what matters, so ignore a failure here.
     runCatching { ShortcutManagerCompat.pushDynamicShortcut(this, info) }
     return ShortcutManagerCompat.requestPinShortcut(this, info, null)
+}
+
+/** Intent that opens [path] in the Explorer, for shortcuts and the widget. */
+fun Context.folderIntent(path: String): Intent? = packageManager.getLaunchIntentForPackage(packageName)?.let { launch ->
+    Intent(launch)
+        .setAction(LaunchRequests.ACTION_OPEN_FOLDER)
+        .putExtra(LaunchRequests.EXTRA_FOLDER_PATH, path)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
 }
