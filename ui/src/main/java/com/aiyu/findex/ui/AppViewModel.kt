@@ -6,6 +6,7 @@ import com.aiyu.findex.core.history.StorageHistoryScheduler
 import com.aiyu.findex.core.model.AppSettings
 import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.operation.OperationManager
+import com.aiyu.findex.core.operation.FileClipboard
 import com.aiyu.findex.core.repository.TrashRepository
 import com.aiyu.findex.ui.explorer.TabSession
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -32,7 +33,8 @@ class AppViewModel @Inject constructor(
     tabSession: TabSession,
     private val updates: UpdateRepository,
     private val updateCheckScheduler: UpdateCheckScheduler,
-    private val storageHistoryScheduler: StorageHistoryScheduler
+    private val storageHistoryScheduler: StorageHistoryScheduler,
+    private val clipboard: FileClipboard
 ) : ViewModel() {
     val tabCount: StateFlow<Int> = tabSession.state.map { it.tabs.size }.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
 
@@ -90,4 +92,7 @@ class AppViewModel @Inject constructor(
     fun undoTrash(trashOperationId: String) {
         viewModelScope.launch { trashRepository.undo(trashOperationId) }
     }
+
+    /** "Save to Findex": shared URIs wait on the clipboard until the user pastes them into a folder. */
+    fun importShared(uris: List<String>) = clipboard.import(uris)
 }

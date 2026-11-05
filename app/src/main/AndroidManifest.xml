@@ -63,6 +63,13 @@
                 <!-- Many senders label archives as raw bytes; non-archives then get a "can't open" toast. -->
                 <data android:mimeType="application/octet-stream" />
             </intent-filter>
+            <!-- "Save to Findex" from any app's share sheet (FindexApp sharedUris → FileClipboard.import). -->
+            <intent-filter android:label="@string/save_to_findex">
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
         </activity>
 
         <provider

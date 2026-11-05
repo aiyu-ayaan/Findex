@@ -46,7 +46,8 @@ data class AppSettings(
     val shareIdleMinutes: Int = 5
 )
 
-data class ClipboardContent(val paths: List<String>, val isCut: Boolean)
+/** [isImport]: [paths] are `content://` URIs another app shared ("Save to Findex"); pasting saves copies once. */
+data class ClipboardContent(val paths: List<String>, val isCut: Boolean, val isImport: Boolean = false)
 
 data class Bookmark(val path: String, val name: String)
 

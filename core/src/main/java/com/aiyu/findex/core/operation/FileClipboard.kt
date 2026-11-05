@@ -20,6 +20,9 @@ class FileClipboard @Inject constructor(
 
     fun cut(paths: List<String>) { _content.value = ClipboardContent(paths, isCut = true) }
 
+    /** Files shared into Findex: the user browses to a folder and pastes ("Save here"). */
+    fun import(uris: List<String>) { _content.value = ClipboardContent(uris, isCut = false, isImport = true) }
+
     fun clear() { _content.value = null }
 
     fun paste(destinationDir: String) {
@@ -28,7 +31,7 @@ class FileClipboard @Inject constructor(
             if (clip.isCut) FileOperation.Move(clip.paths, destinationDir)
             else FileOperation.Copy(clip.paths, destinationDir)
         )
-        // A cut can only be pasted once; a copy stays available for more pastes.
-        if (clip.isCut) clear()
+        // A cut or a shared import can only be pasted once; a copy stays available for more pastes.
+        if (clip.isCut || clip.isImport) clear()
     }
 }

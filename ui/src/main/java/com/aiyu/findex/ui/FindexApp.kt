@@ -130,6 +130,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import android.widget.Toast
 import android.net.Uri
+import android.content.Intent
+import androidx.core.content.IntentCompat
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.aiyu.findex.core.model.ArchiveFormat
 import com.aiyu.findex.ui.util.IncomingFiles
@@ -140,10 +142,13 @@ import kotlinx.coroutines.launch
 val LocalSnackbarHostState = staticCompositionLocalOf { SnackbarHostState() }
 
 @Composable
-/** [viewRequests] carries files other apps opened with this activity ("Open with"); it is per activity, not global. */
+/**
+ * [externalIntents] carries VIEW ("Open with") and SEND ("Save to Findex") intents other apps sent to this
+ * activity; it is per activity, not global.
+ */
 fun FindexApp(
     onReady: () -> Unit = {},
-    viewRequests: MutableStateFlow<Uri?> = MutableStateFlow(null),
+    externalIntents: MutableStateFlow<Intent?> = MutableStateFlow(null),
     viewModel: AppViewModel = hiltViewModel()
 ) {
     setSingletonImageLoaderFactory { context -> findexImageLoader(context) }
@@ -196,7 +201,7 @@ fun FindexApp(
                     onInstall = viewModel::installUpdate,
                     onDismiss = viewModel::dismissUpdate
                 )
-                FindexNavigation(onboardingDone = current.onboardingDone, onOnboardingFinished = viewModel::completeOnboarding, tabCount = tabCount, viewRequests = viewRequests)
+                FindexNavigation(onboardingDone = current.onboardingDone, onOnboardingFinished = viewModel::completeOnboarding, tabCount = tabCount, externalIntents = externalIntents, onImport = viewModel::importShared)
                 SnackbarHost(
                     hostState = snackbarHostState,
                     modifier = Modifier
@@ -210,7 +215,7 @@ fun FindexApp(
 }
 
 @Composable
-private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -> Unit, tabCount: Int, viewRequests: MutableStateFlow<Uri?>) {
+private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -> Unit, tabCount: Int, externalIntents: MutableStateFlow<Intent?>, onImport: (List<String>) -> Unit) {
     val navController = rememberNavController()
     val drawerState = rememberPushDrawerState()
     val scope = rememberCoroutineScope()
@@ -242,11 +247,20 @@ private fun FindexNavigation(onboardingDone: Boolean, onOnboardingFinished: () -
                 navController.navigate(ExplorerRoute(path)) { launchSingleTop = true; popUpTo<HomeRoute>() }
             }
         }
-        // "Open with Findex" from another app: archives open in the archive browser, the rest in a built-in viewer.
         LaunchedEffect(navController) {
             val context = navController.context
-            viewRequests.filterNotNull().collect { uri ->
-                viewRequests.value = null
+            externalIntents.filterNotNull().collect { intent ->
+                externalIntents.value = null
+                // "Save to Findex": the shared files wait on the clipboard; the user browses to a folder and taps Save.
+                val shared = intent.sharedUris()
+                if (shared.isNotEmpty()) {
+                    onImport(shared.map { it.toString() })
+                    navController.openExplorer(null)
+                    Toast.makeText(context, R.string.save_to_findex_hint, Toast.LENGTH_LONG).show()
+                    return@collect
+                }
+                // "Open with Findex": archives open in the archive browser, the rest in a built-in viewer.
+                val uri = intent.data ?: return@collect
                 val path = withContext(Dispatchers.IO) { IncomingFiles.resolve(context, uri) }
                 val route = path?.let { if (ArchiveFormat.of(it) != null) ArchiveRoute(it) else InAppViewers.routeFor(it, force = true) }
                 if (route != null) navController.navigate(route)
@@ -371,3 +385,10 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.sharedAxisEnter(
 private fun AnimatedContentTransitionScope<NavBackStackEntry>.sharedAxisExit(
     spatial: FiniteAnimationSpec<IntOffset>, effects: FiniteAnimationSpec<Float>, forward: Boolean
 ): ExitTransition = slideOutHorizontally(spatial) { w -> if (forward) -w / 10 else w / 10 } + fadeOut(effects)
+
+/** Content URIs in an ACTION_SEND / ACTION_SEND_MULTIPLE intent. */
+private fun Intent.sharedUris(): List<Uri> = when (action) {
+    Intent.ACTION_SEND -> listOfNotNull(IntentCompat.getParcelableExtra(this, Intent.EXTRA_STREAM, Uri::class.java))
+    Intent.ACTION_SEND_MULTIPLE -> IntentCompat.getParcelableArrayListExtra(this, Intent.EXTRA_STREAM, Uri::class.java).orEmpty()
+    else -> emptyList()
+}.filter { it.scheme == "content" }

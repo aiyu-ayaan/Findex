@@ -295,6 +295,7 @@ fun ExplorerScreen(
                     visible = !state.inSelection,
                     clipboardCount = state.clipboard?.paths?.size ?: 0,
                     isCut = state.clipboard?.isCut == true,
+                    isImport = state.clipboard?.isImport == true,
                     menuOpen = fabMenuOpen,
                     onMenuOpenChange = { fabMenuOpen = it },
                     onPaste = viewModel::paste,
@@ -393,6 +394,7 @@ fun ExplorerScreen(
                     visible = !state.inSelection,
                     clipboardCount = state.clipboard?.paths?.size ?: 0,
                     isCut = state.clipboard?.isCut == true,
+                    isImport = state.clipboard?.isImport == true,
                     menuOpen = fabMenuOpen,
                     onMenuOpenChange = { fabMenuOpen = it },
                     onPaste = viewModel::paste,
@@ -812,6 +814,7 @@ private fun ExplorerFab(
     visible: Boolean,
     clipboardCount: Int,
     isCut: Boolean,
+    isImport: Boolean,
     menuOpen: Boolean,
     onMenuOpenChange: (Boolean) -> Unit,
     onPaste: () -> Unit,
@@ -832,7 +835,14 @@ private fun ExplorerFab(
             ExtendedFloatingActionButton(
                 onClick = onPaste,
                 icon = { Icon(Icons.Rounded.ContentPaste, null) },
-                text = { Text(pluralStringResource(if (isCut) R.plurals.move_here else R.plurals.paste_here, clipboardCount, clipboardCount)) },
+                text = {
+                    val label = when {
+                        isImport -> R.plurals.save_here
+                        isCut -> R.plurals.move_here
+                        else -> R.plurals.paste_here
+                    }
+                    Text(pluralStringResource(label, clipboardCount, clipboardCount))
+                },
                 modifier = Modifier.animateFloatingActionButton(visible, Alignment.BottomEnd)
             )
         }

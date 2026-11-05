@@ -48,6 +48,7 @@ class FileOperationExecutor @Inject constructor(
         const val BUFFER_SIZE = 256 * 1024
         const val REPORT_INTERVAL_MS = 120L
         const val TRASH_DIR = ".FindexTrash"
+        const val CONTENT_SCHEME = "content://"
     }
 
     /** @return every path created or removed, so the caller can refresh MediaStore. */
@@ -55,7 +56,10 @@ class FileOperationExecutor @Inject constructor(
         val touched = mutableListOf<String>()
         try {
             val remote = operation.paths().any { SmbPath.parse(it) != null }
+            val shared = operation is FileOperation.Copy && operation.sources.any { it.startsWith(CONTENT_SCHEME) }
             when {
+                shared && remote -> throw FileOperationException(FailureReason.NOT_SUPPORTED)
+                shared -> importShared(operation.id, (operation as FileOperation.Copy).sources, operation.destinationDir, touched, report)
                 remote && (operation is FileOperation.Compress || operation is FileOperation.Extract || operation is FileOperation.Restore ||
                     operation is FileOperation.ImageTransform || operation is FileOperation.VaultImport || operation is FileOperation.VaultExport) ->
                     throw FileOperationException(FailureReason.NOT_SUPPORTED)
@@ -313,6 +317,60 @@ class FileOperationExecutor @Inject constructor(
             copyRecursively(src, target, tracker)
             target.walkTopDown().mapTo(touched) { it.absolutePath }
             if (move && src.deleteRecursively()) pathIndex.onMoved(src.absolutePath, target.absolutePath)
+        }
+        tracker.finish()
+    }
+
+    /**
+     * "Save to Findex": copies `content://` URIs another app shared into [destinationDir].
+     * shortcut: the read grant lasts while the receiving activity lives; a long import after the user leaves can fail with ACCESS_DENIED.
+     */
+    private suspend fun importShared(
+        id: String,
+        uris: List<String>,
+        destinationDir: String,
+        touched: MutableList<String>,
+        report: (OperationProgress) -> Unit
+    ) {
+        val resolver = context.contentResolver
+        val destDir = File(destinationDir)
+        report(OperationProgress(id, isIndeterminate = true))
+        val entries = uris.map { raw ->
+            val uri = android.net.Uri.parse(raw)
+            var name: String? = null
+            var size = 0L
+            resolver.query(uri, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME, android.provider.OpenableColumns.SIZE), null, null, null)?.use { c ->
+                if (c.moveToFirst()) {
+                    name = c.getString(0)
+                    size = if (c.isNull(1)) 0L else c.getLong(1)
+                }
+            }
+            // A sender-chosen name must not climb out of the destination folder.
+            Triple(uri, name?.substringAfterLast('/')?.takeIf { it.isNotBlank() && it != "." && it != ".." } ?: "shared_${System.currentTimeMillis()}", size)
+        }
+        val tracker = ProgressTracker(id, entries.sumOf { it.third }, entries.size, report)
+        for ((uri, name, _) in entries) {
+            currentCoroutineContext().ensureActive()
+            val target = uniqueTarget(destDir, name)
+            try {
+                (resolver.openInputStream(uri) ?: throw IOException("no stream: $uri")).use { input ->
+                    target.outputStream().use { output ->
+                        val buffer = ByteArray(BUFFER_SIZE)
+                        while (true) {
+                            currentCoroutineContext().ensureActive()
+                            val read = input.read(buffer)
+                            if (read < 0) break
+                            output.write(buffer, 0, read)
+                            tracker.addBytes(name, read.toLong())
+                        }
+                    }
+                }
+            } catch (e: Throwable) {
+                target.delete() // a half-copied file is worse than none
+                throw e
+            }
+            tracker.addItems(name, items = 1, bytes = 0)
+            touched += target.absolutePath
         }
         tracker.finish()
     }

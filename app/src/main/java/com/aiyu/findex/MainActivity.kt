@@ -1,7 +1,6 @@
 package com.aiyu.findex
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import androidx.activity.ComponentActivity
@@ -21,7 +20,7 @@ class MainActivity : ComponentActivity() {
 
     // Per activity: another app's "Open with" starts a fresh instance in its own task, and a shared state
     // would let an older Findex instance consume the request instead.
-    private val viewRequests = MutableStateFlow<Uri?>(null)
+    private val externalIntents = MutableStateFlow<Intent?>(null)
 
     // Read on the main thread only, by the splash screen's pre-draw check.
     private var contentReady = false
@@ -47,7 +46,7 @@ class MainActivity : ComponentActivity() {
         }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent { FindexApp(onReady = { contentReady = true }, viewRequests = viewRequests) }
+        setContent { FindexApp(onReady = { contentReady = true }, externalIntents = externalIntents) }
         if (savedInstanceState == null) forwardFolder(intent)
     }
 
@@ -67,13 +66,14 @@ class MainActivity : ComponentActivity() {
         forwardFolder(intent)
     }
 
-    /** Pinned folder shortcuts carry the folder path, "Open with" carries a file URI; the NavHost opens either. */
+    /** Pinned folder shortcuts carry the folder path; "Open with" and "Save to Findex" go to the NavHost as is. */
     private fun forwardFolder(intent: Intent?) {
         intent?.getStringExtra(LaunchRequests.EXTRA_FOLDER_PATH)?.let { LaunchRequests.folder.value = it }
-        if (intent?.action == Intent.ACTION_VIEW) intent.data?.let { viewRequests.value = it }
+        if (intent?.action in EXTERNAL_ACTIONS) externalIntents.value = intent
     }
 
     private companion object {
         const val SPLASH_EXIT_MS = 200L // M3 emphasized accelerate exit duration
+        val EXTERNAL_ACTIONS = setOf(Intent.ACTION_VIEW, Intent.ACTION_SEND, Intent.ACTION_SEND_MULTIPLE)
     }
 }

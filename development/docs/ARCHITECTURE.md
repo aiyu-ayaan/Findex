@@ -545,6 +545,17 @@ flowchart LR
     Route -->|other| Toast[can't open toast]
 ```
 
+"Save to Findex" (`ACTION_SEND` / `SEND_MULTIPLE`, any type) reuses the Explorer as the folder picker:
+
+```mermaid
+flowchart LR
+    Share[Other app share sheet] -->|EXTRA_STREAM uris| A[MainActivity externalIntents]
+    A --> Clip[FileClipboard.import<br/>isImport = true]
+    Clip --> E[Explorer: user browses<br/>FAB 'Save N files here']
+    E -->|paste| Op[FileOperation.Copy content:// sources]
+    Op --> Exec[FileOperationExecutor.importShared<br/>FGS, progress, unique names]
+```
+
 ```mermaid
 sequenceDiagram
     participant L as Launcher

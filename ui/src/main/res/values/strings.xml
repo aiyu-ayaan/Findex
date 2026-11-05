@@ -58,6 +58,8 @@
     <string name="onboarding_storage_required">Allow all files access to continue</string>
     <string name="onboarding_notify_hint">Without notifications, progress shows only inside Findex</string>
     <string name="error_no_app">No app can open this file</string>
+    <string name="save_to_findex">Save to Findex</string>
+    <string name="save_to_findex_hint">Open a folder, then tap Save</string>
     <string name="error_open_unsupported">Findex can\'t open this file</string>
 
     <!-- Tabs -->
@@ -194,6 +196,10 @@
     <plurals name="paste_here">
         <item quantity="one">Paste %d item</item>
         <item quantity="other">Paste %d items</item>
+    </plurals>
+    <plurals name="save_here">
+        <item quantity="one">Save %d file here</item>
+        <item quantity="other">Save %d files here</item>
     </plurals>
     <plurals name="move_here">
         <item quantity="one">Move %d item here</item>
