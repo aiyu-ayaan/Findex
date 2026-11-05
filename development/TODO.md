@@ -146,6 +146,11 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] Pinned folder shortcuts on the launcher
 - [x] Recent-changes view, storage growth history graph
 
+- [x] Open with Findex from other apps (archives, text, PDF, audio; `IncomingFiles`)
+- [x] Tabs as ES File Explorer windows: per-tab back history, one Explorer on the back stack
+- [x] PDF dark pages, Open in another app in every viewer, Settings > Built-in viewers
+- [ ] Swipe between tabs (ES style); needs care with drag-to-select
+
 ### Cleaner
 - [x] App cache and leftover folders of uninstalled apps (`AppJunkScanner`, `QUERY_ALL_PACKAGES`; leftovers opt-in; other apps' private cache is out of reach on Android 11+)
 - [x] Telegram / Instagram media cleaner (same pattern as WhatsApp)
