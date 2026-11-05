@@ -751,6 +751,10 @@
     <!-- END recent-changes-growth -->
     <!-- BEGIN share-phone -->
     <string name="nav_share_phone">Share this phone</string>
+    <string name="share_tile_running">%1$s · PIN %2$s</string>
+    <string name="share_tile_starting">Starting…</string>
+    <string name="share_tile_no_network">No Wi-Fi</string>
+    <string name="share_tile_off">Off</string>
     <string name="share_channel_name">Share this phone</string>
     <string name="share_notification_title">Sharing this phone</string>
     <string name="share_notification_text">Open %1$s · PIN %2$s</string>

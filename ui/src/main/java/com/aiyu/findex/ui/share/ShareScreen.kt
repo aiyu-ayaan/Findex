@@ -256,8 +256,9 @@ private fun RunningCard(state: ShareState.Running, onStop: () -> Unit) {
             Text(stringResource(R.string.share_open_url), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    state.url,
-                    style = MaterialTheme.typography.titleLarge.copy(fontFamily = FontFamily.Monospace),
+                    // Browsers add http:// themselves; typing just "10.0.2.16:8080" is enough. Copy keeps the full URL.
+                    state.url.removePrefix("http://"),
+                    style = MaterialTheme.typography.headlineSmall.copy(fontFamily = FontFamily.Monospace),
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.weight(1f)
                 )

@@ -192,7 +192,7 @@ class ShareServerService : Service() {
             .setSmallIcon(R.drawable.ic_stat_file_operation)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .setContentTitle(strings.shareTitle)
-            .setContentText(running?.let { strings.shareText(it.url, it.pin) })
+            .setContentText(running?.let { strings.shareText(it.url.removePrefix("http://"), it.pin) })
             .setOngoing(true)
             .setOnlyAlertOnce(true)
             .setSilent(true)
