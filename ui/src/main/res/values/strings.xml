@@ -1,10 +1,10 @@
 <resources>
     <!-- App & Branding -->
-    <string name="app_name">Findex</string>
+    <string name="app_name" translatable="false">Findex</string>
     <string name="app_tagline">Material 3 Expressive File Explorer</string>
 
     <!-- Navigation Drawer -->
-    <string name="drawer_title">Findex</string>
+    <string name="drawer_title" translatable="false">Findex</string>
     <string name="drawer_subtitle">Files &amp; Cloud Storage</string>
     <string name="nav_home">Home</string>
     <string name="nav_storage_graph">Storage Graph</string>
@@ -269,6 +269,8 @@
     <string name="settings_theme_dark">Dark</string>
     <string name="settings_dynamic_color">Dynamic color</string>
     <string name="settings_dynamic_color_desc">Match colors to your wallpaper</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_system">System default</string>
     <string name="settings_files">Files</string>
     <string name="settings_show_hidden_desc">Show files and folders starting with a dot</string>
     <string name="settings_grid">Grid view by default</string>
@@ -307,7 +309,7 @@
     <string name="about_source_code">Source code</string>
     <string name="about_section_developer">Developer</string>
     <string name="about_developer_tagline">Designed and built by one developer.</string>
-    <string name="about_github">GitHub</string>
+    <string name="about_github" translatable="false">GitHub</string>
     <string name="about_portfolio">Portfolio</string>
     <string name="about_section_open_source">Open source</string>
     <string name="about_acknowledgements">Acknowledgements</string>
@@ -315,10 +317,10 @@
 
     <!-- Compression & Extraction -->
     <string name="compress_dialog_title">Create Archive</string>
-    <string name="compress_format_zip">ZIP</string>
-    <string name="compress_format_7z">7Z</string>
-    <string name="compress_format_tar">TAR</string>
-    <string name="compress_format_tar_gz">TAR.GZ</string>
+    <string name="compress_format_zip" translatable="false">ZIP</string>
+    <string name="compress_format_7z" translatable="false">7Z</string>
+    <string name="compress_format_tar" translatable="false">TAR</string>
+    <string name="compress_format_tar_gz" translatable="false">TAR.GZ</string>
     <string name="compress_format_label">Format</string>
     <string name="compress_password_zip_only">Password protection is available for ZIP only.</string>
     <string name="compress_password_hint">Password (optional)</string>
@@ -456,11 +458,11 @@
     <string name="network_add">Add server</string>
     <string name="network_add_title">Add network server</string>
     <string name="network_protocol_label">Protocol</string>
-    <string name="network_protocol_smb">SMB</string>
-    <string name="network_protocol_sftp">SFTP</string>
-    <string name="network_protocol_ftp">FTP</string>
-    <string name="network_protocol_webdav">WebDAV</string>
-    <string name="network_protocol_webdavs">WebDAVS</string>
+    <string name="network_protocol_smb" translatable="false">SMB</string>
+    <string name="network_protocol_sftp" translatable="false">SFTP</string>
+    <string name="network_protocol_ftp" translatable="false">FTP</string>
+    <string name="network_protocol_webdav" translatable="false">WebDAV</string>
+    <string name="network_protocol_webdavs" translatable="false">WebDAVS</string>
     <string name="network_webdav_https">Use HTTPS (TLS)</string>
     <string name="network_field_name">Display name (optional)</string>
     <string name="network_field_host">Host or IP address</string>
@@ -593,9 +595,9 @@
     <string name="imgc_scale_percent">Scale (%)</string>
     <string name="imgc_quality">Quality</string>
     <string name="imgc_format_keep">Keep original</string>
-    <string name="imgc_format_jpeg">JPEG</string>
-    <string name="imgc_format_webp">WebP</string>
-    <string name="imgc_format_png">PNG</string>
+    <string name="imgc_format_jpeg" translatable="false">JPEG</string>
+    <string name="imgc_format_webp" translatable="false">WebP</string>
+    <string name="imgc_format_png" translatable="false">PNG</string>
     <string name="imgc_output_copy">Save as copy</string>
     <string name="imgc_output_replace">Replace originals</string>
     <string name="imgc_output_folder">Save to folder</string>
