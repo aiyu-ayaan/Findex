@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App & Branding -->
+    <string name="app_tagline">Material 3 Expressive ફાઇલ એક્સપ્લોરર</string>
+
+    <!-- Navigation Drawer -->
+    <string name="drawer_subtitle">ફાઇલો અને ક્લાઉડ સ્ટોરેજ</string>
+    <string name="nav_home">હોમ</string>
+    <string name="nav_storage_graph">સ્ટોરેજ ગ્રાફ</string>
+    <string name="nav_storage_cleaner">સ્ટોરેજ ક્લીનર</string>
+    <string name="nav_whatsapp_cleaner">WhatsApp ક્લીનર</string>
+    <string name="nav_telegram_cleaner">Telegram ક્લીનર</string>
+    <string name="nav_instagram_cleaner">Instagram ક્લીનર</string>
+    <string name="nav_app_cleaner">એપ ક્લીનર</string>
+    <string name="nav_dual_pane">ડ્યુઅલ પેન</string>
+    <string name="dual_compare">ફોલ્ડર્સની સરખામણી કરો</string>
+    <string name="dual_swap">પેન અદલાબદલી કરો</string>
+    <string name="dual_select_missing">બીજા પેનમાં ન હોય તેવી વસ્તુઓ પસંદ કરો</string>
+    <string name="dual_copy_to">બીજા પેનમાં કૉપિ કરો</string>
+    <string name="dual_move_to">બીજા પેનમાં ખસેડો</string>
+    <string name="dual_up">એક ફોલ્ડર ઉપર</string>
+    <string name="cmp_only_here">માત્ર અહીં</string>
+    <string name="cmp_newer">અહીં નવું</string>
+    <string name="cmp_older">અહીં જૂનું</string>
+    <string name="cmp_different">અલગ</string>
+    <string name="cmp_same">સમાન</string>
+    <string name="nav_archive_manager">આર્કાઇવ મેનેજર</string>
+    <string name="nav_network_storage">નેટવર્ક સ્ટોરેજ</string>
+    <string name="nav_settings">સેટિંગ્સ</string>
+    <string name="nav_recycle_bin">રિસાયકલ બિન</string>
+    <string name="nav_tabs">ટેબ્સ</string>
+    <string name="nav_search">શોધો</string>
+    <plurals name="tabs_open_count">
+        <item quantity="one">%d ખુલ્લો ટેબ</item>
+        <item quantity="other">%d ખુલ્લા ટેબ</item>
+    </plurals>
+    <string name="tabs_close_all">બધા ટેબ બંધ કરો</string>
+    <string name="tabs_empty_title">કોઈ ખુલ્લો ટેબ નથી</string>
+    <string name="tabs_empty_body">તમારી ફાઇલો બ્રાઉઝ કરવા માટે નવો ટેબ શરૂ કરો</string>
+    <string name="tabs_current">વર્તમાન ટેબ</string>
+    <string name="cd_close_tab">ટેબ %1$s બંધ કરો</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">તમારી ફાઇલો, સુંદર રીતે ગોઠવાયેલી</string>
+    <string name="onboarding_body">તમારું સ્ટોરેજ બ્રાઉઝ કરવા, કૉપિ કરવા, કમ્પ્રેસ કરવા અને સાફ કરવા માટે Findex ને બધી ફાઇલોની ઍક્સેસ જરૂરી છે.</string>
+    <string name="onboarding_point_access">દરેક ફોલ્ડર, SD કાર્ડ અને USB ડ્રાઇવ બ્રાઉઝ કરો</string>
+    <string name="onboarding_point_fast">બૅકગ્રાઉન્ડમાં કૉપિ, મૂવ અને ઝિપ કરો</string>
+    <string name="onboarding_point_private">બધું તમારા ડિવાઇસ પર જ રહે છે</string>
+    <string name="onboarding_permissions">પરવાનગીઓ</string>
+    <string name="onboarding_storage_title">બધી ફાઇલોની ઍક્સેસ</string>
+    <string name="onboarding_storage_body">તમારી ફાઇલો બ્રાઉઝ અને મેનેજ કરવા માટે જરૂરી</string>
+    <string name="onboarding_notify_title">સૂચનાઓ</string>
+    <string name="onboarding_notify_body">જ્યારે તમે અન્ય એપ્સ વાપરતા હોવ ત્યારે કૉપિ, મૂવ, કમ્પ્રેસ અને ક્લીનની પ્રગતિ બતાવે છે</string>
+    <string name="onboarding_allow">મંજૂરી આપો</string>
+    <string name="onboarding_granted">મંજૂરી મળી</string>
+    <string name="onboarding_continue">ચાલુ રાખો</string>
+    <string name="onboarding_storage_required">ચાલુ રાખવા માટે બધી ફાઇલોની ઍક્સેસની મંજૂરી આપો</string>
+    <string name="onboarding_notify_hint">સૂચનાઓ વિના, પ્રગતિ માત્ર Findex ની અંદર જ દેખાશે</string>
+    <string name="error_no_app">કોઈ એપ આ ફાઇલ ખોલી શકતી નથી</string>
+    <string name="save_to_findex">Findex માં સાચવો</string>
+    <string name="save_to_findex_hint">ફોલ્ડર ખોલો, પછી સાચવો પર ટૅપ કરો</string>
+    <string name="error_open_unsupported">Findex આ ફાઇલ ખોલી શકતું નથી</string>
+
+    <!-- Tabs -->
+    <string name="tab_device">ડિવાઇસ</string>
+    <string name="tab_network">નેટવર્ક</string>
+
+    <!-- Storage Drives -->
+    <string name="storage_internal">આંતરિક સ્ટોરેજ</string>
+    <string name="storage_sdcard">SD કાર્ડ</string>
+    <string name="storage_network">નેટવર્ક સ્ટોરેજ</string>
+    <string name="storage_usb">USB ડ્રાઇવ</string>
+    <string name="storage_used_of">%2$s માંથી %1$s વપરાયેલ</string>
+    <string name="storage_free_space">%1$s ખાલી</string>
+    <string name="storage_scanning">સ્ટોરેજ સ્કેન થઈ રહ્યું છે…</string>
+    <string name="storage_no_network_drives">કોઈ નેટવર્ક ડ્રાઇવ કનેક્ટ નથી. SMB / WebDAV / FTP દ્વારા કનેક્ટ કરવા + પર ટૅપ કરો.</string>
+    <string name="storage_add_network">નેટવર્ક ડ્રાઇવ ઉમેરો</string>
+    <string name="storage_used_label">વપરાયેલ</string>
+
+    <!-- Home -->
+    <string name="home_subtitle">તમારી ફાઇલો, ગોઠવાયેલી</string>
+    <string name="section_categories">શ્રેણીઓ</string>
+    <string name="section_bookmarks">બુકમાર્ક્સ</string>
+    <string name="section_recents">તાજેતરની ફાઇલો</string>
+    <string name="cd_open_drawer">નેવિગેશન ડ્રોઅર ખોલો</string>
+    <string name="cd_browse_drive">સ્ટોરેજ બ્રાઉઝ કરો</string>
+    <plurals name="item_count">
+        <item quantity="one">%d વસ્તુ</item>
+        <item quantity="other">%d વસ્તુઓ</item>
+    </plurals>
+
+    <!-- File Categories -->
+    <string name="category_photos">ફોટા</string>
+    <string name="category_videos">વીડિયો</string>
+    <string name="category_audio">ઑડિયો</string>
+    <string name="category_documents">દસ્તાવેજો</string>
+    <string name="category_downloads">ડાઉનલોડ્સ</string>
+    <string name="category_archives">આર્કાઇવ્સ</string>
+    <string name="category_apks">APK</string>
+
+    <!-- Quick Suggestions & Tools -->
+    <string name="section_suggestions">ઝડપી ટૂલ્સ</string>
+    <string name="cleaner_title">સ્ટોરેજ ક્લીનર</string>
+    <string name="cleaner_desc">જંક અને અસ્થાયી કેશ સાફ કરીને જગ્યા ખાલી કરો</string>
+    <string name="whatsapp_cleaner_title">WhatsApp ક્લીનર</string>
+    <string name="whatsapp_cleaner_desc">મોકલેલા મીડિયા, વૉઇસ નોટ્સ, સ્ટિકર્સ અને બેકઅપ સાફ કરો</string>
+    <string name="storage_graph_title">સ્ટોરેજ વિશ્લેષક</string>
+    <string name="storage_graph_desc">મોટી ફાઇલો અને ફોલ્ડર જગ્યાની વહેંચણી જુઓ</string>
+
+    <!-- File Actions -->
+    <string name="action_cut">કટ</string>
+    <string name="action_copy">કૉપિ</string>
+    <string name="action_paste">પેસ્ટ</string>
+    <string name="action_delete">કાઢી નાખો</string>
+    <string name="action_rename">નામ બદલો</string>
+    <string name="action_details">વિગતો</string>
+    <string name="action_compress">કમ્પ્રેસ</string>
+    <string name="action_extract">એક્સ્ટ્રેક્ટ</string>
+    <string name="action_share">શેર કરો</string>
+    <string name="action_select_all">બધું પસંદ કરો</string>
+    <string name="action_deselect_all">પસંદગી રદ કરો</string>
+    <string name="action_search">ફાઇલો શોધો</string>
+    <string name="action_clean">હમણાં સાફ કરો</string>
+    <string name="action_new_folder">નવું ફોલ્ડર</string>
+    <string name="action_new_tab">નવો ટેબ</string>
+    <string name="action_close_tab">ટેબ બંધ કરો</string>
+    <string name="action_open_in_new_tab">નવા ટેબમાં ખોલો</string>
+    <string name="detail_empty_hint">અહીં પૂર્વાવલોકન અને વિગતો જોવા માટે ફાઇલ પસંદ કરો</string>
+    <string name="cd_close_details">વિગતો બંધ કરો</string>
+    <string name="rail_graph">ગ્રાફ</string>
+    <string name="rail_cleaner">ક્લીનર</string>
+    <string name="rail_whatsapp">WhatsApp</string>
+    <string name="rail_bin">બિન</string>
+    <string name="action_copy_path">પાથ કૉપિ કરો</string>
+    <string name="path_copied">પાથ ક્લિપબોર્ડ પર કૉપિ થયો</string>
+    <string name="preview_file">પૂર્વાવલોકન</string>
+    <string name="preview_play_video">વીડિયો ચલાવો</string>
+    <string name="preview_play_audio">ઑડિયો ચલાવો</string>
+    <string name="preview_lines_truncated">%1$d લીટીઓ બતાવેલ છે</string>
+    <string name="preview_empty_file">ખાલી ફાઇલ</string>
+    <string name="details_item_info">વસ્તુની વિગતો</string>
+    <string name="action_open">ખોલો</string>
+    <string name="action_create">બનાવો</string>
+    <string name="action_bookmark">બુકમાર્ક ઉમેરો</string>
+    <string name="action_remove_bookmark">બુકમાર્ક દૂર કરો</string>
+    <string name="bookmark_added">બુકમાર્ક ઉમેર્યો</string>
+    <string name="bookmark_removed">બુકમાર્ક દૂર કર્યો</string>
+
+    <!-- Explorer -->
+    <string name="cd_back">પાછળ</string>
+    <string name="cd_more_options">વધુ વિકલ્પો</string>
+    <string name="cd_more_actions">%1$s માટે વધુ ક્રિયાઓ</string>
+    <string name="cd_grid_view">ગ્રિડ વ્યૂ</string>
+    <string name="cd_list_view">સૂચિ વ્યૂ</string>
+    <string name="cd_clear_selection">પસંદગી સાફ કરો</string>
+    <string name="cd_clear_clipboard">ક્લિપબોર્ડ સાફ કરો</string>
+    <string name="cd_create_menu">બનાવો</string>
+    <string name="cd_show_password">પાસવર્ડ બતાવો</string>
+    <string name="cd_hide_password">પાસવર્ડ છુપાવો</string>
+    <string name="empty_folder_title">આ ફોલ્ડર ખાલી છે</string>
+    <string name="empty_folder_body">અહીં ફાઇલો પેસ્ટ કરો અથવા નવું ફોલ્ડર બનાવો.</string>
+    <string name="label_name">નામ</string>
+    <string name="label_archive_name">આર્કાઇવનું નામ</string>
+    <string name="error_invalid_name">નામમાં “/” હોઈ શકે નહીં</string>
+    <string name="error_rename">નામ બદલી શકાયું નહીં — નામ પહેલેથી અસ્તિત્વમાં હોઈ શકે છે</string>
+    <string name="error_new_folder">ફોલ્ડર બનાવી શકાયું નહીં — નામ પહેલેથી અસ્તિત્વમાં હોઈ શકે છે</string>
+    <string name="sort_title">ક્રમબદ્ધ અને વ્યૂ</string>
+    <string name="sort_name">નામ</string>
+    <string name="sort_date">ફેરફારની તારીખ</string>
+    <string name="sort_size">કદ</string>
+    <string name="sort_type">પ્રકાર</string>
+    <string name="sort_ascending">ચડતો ક્રમ</string>
+    <string name="sort_descending">ઉતરતો ક્રમ</string>
+    <string name="show_hidden_files">છુપાયેલી ફાઇલો બતાવો</string>
+    <string name="details_path">સ્થાન</string>
+    <string name="details_modified">ફેરફાર કરેલ</string>
+    <string name="details_type">પ્રકાર</string>
+    <string name="details_size">કદ</string>
+    <string name="details_contains">સમાવે છે</string>
+    <string name="delete_body">આ ક્રિયા પાછી ખેંચી શકાતી નથી.</string>
+    <plurals name="delete_title">
+        <item quantity="one">%d વસ્તુ કાઢી નાખવી?</item>
+        <item quantity="other">%d વસ્તુઓ કાઢી નાખવી?</item>
+    </plurals>
+    <plurals name="file_count">
+        <item quantity="one">%d ફાઇલ</item>
+        <item quantity="other">%d ફાઇલો</item>
+    </plurals>
+    <plurals name="folder_count">
+        <item quantity="one">%d ફોલ્ડર</item>
+        <item quantity="other">%d ફોલ્ડર્સ</item>
+    </plurals>
+    <plurals name="paste_here">
+        <item quantity="one">%d વસ્તુ પેસ્ટ કરો</item>
+        <item quantity="other">%d વસ્તુઓ પેસ્ટ કરો</item>
+    </plurals>
+    <plurals name="save_here">
+        <item quantity="one">%d ફાઇલ અહીં સાચવો</item>
+        <item quantity="other">%d ફાઇલો અહીં સાચવો</item>
+    </plurals>
+    <plurals name="move_here">
+        <item quantity="one">%d વસ્તુ અહીં ખસેડો</item>
+        <item quantity="other">%d વસ્તુઓ અહીં ખસેડો</item>
+    </plurals>
+    <string name="action_show_in_folder">ફોલ્ડરમાં બતાવો</string>
+    <string name="category_empty">અહીં હજી કંઈ નથી</string>
+
+    <!-- Tools -->
+    <string name="scanning">સ્ટોરેજ સ્કેન થઈ રહ્યું છે…</string>
+    <string name="tool_can_free">ખાલી કરી શકાય છે</string>
+    <string name="tool_selected_of">%2$s માંથી %1$s પસંદ કરેલ</string>
+    <string name="tool_all_clean_title">બધું સાફ છે</string>
+    <string name="tool_all_clean_body">હમણાં દૂર કરવા માટે કંઈ નથી.</string>
+    <string name="tool_clean_confirm_title">%1$s સાફ કરવું?</string>
+    <string name="tool_clean_confirm_body">પસંદ કરેલી ફાઇલો કાયમી ધોરણે કાઢી નાખવામાં આવશે.</string>
+    <string name="tool_clean_button">%1$s સાફ કરો</string>
+    <string name="tool_rescan">ફરીથી સ્કેન કરો</string>
+    <string name="junk_thumbnails">થંબનેલ કેશ</string>
+    <string name="junk_thumbnails_desc">પૂર્વાવલોકન છબીઓ જે એપ્સ આપમેળે ફરી બનાવે છે</string>
+    <string name="junk_temp">અસ્થાયી અને લૉગ ફાઇલો</string>
+    <string name="junk_temp_desc">.tmp, .log, .bak અને અધૂરા ડાઉનલોડ્સ</string>
+    <string name="junk_apks">ઇન્સ્ટોલેશન ફાઇલો</string>
+    <string name="junk_apks_desc">તમે ઇન્સ્ટોલ કરી ચૂક્યા હોવ તેવી એપ્સની APK ફાઇલો</string>
+    <string name="junk_empty">ખાલી ફોલ્ડર્સ</string>
+    <string name="junk_empty_desc">અંદર કંઈ ન હોય તેવા ફોલ્ડર્સ</string>
+    <string name="junk_zero">ખાલી ફાઇલો</string>
+    <string name="junk_zero_desc">0 બાઇટની ફાઇલો; છુપાયેલી માર્કર ફાઇલો રાખવામાં આવે છે</string>
+    <string name="telegram_cleaner_title">Telegram ક્લીનર</string>
+    <string name="instagram_cleaner_title">Instagram ક્લીનર</string>
+    <string name="tg_hint">ડાઉનલોડ કરેલ અને મોકલેલ મીડિયા અને ફાઇલો.</string>
+    <string name="ig_hint">આ ડિવાઇસ પર Instagram દ્વારા સાચવેલા ફોટા અને વીડિયો.</string>
+    <string name="tg_not_found">આ ડિવાઇસ પર Telegram મીડિયા મળ્યું નથી.</string>
+    <string name="ig_not_found">આ ડિવાઇસ પર Instagram મીડિયા મળ્યું નથી.</string>
+    <string name="app_media_files">દસ્તાવેજો અને અન્ય ફાઇલો</string>
+    <string name="app_cleaner_title">એપ ક્લીનર</string>
+    <string name="app_cleaner_hint">દૂર કરેલી એપ્સના અવશેષો અને Findex પહોંચી શકે તેવો કેશ.</string>
+    <string name="app_cleaner_empty">કોઈ અવશેષો મળ્યા નથી. Android 11 અને તે પછીના વર્ઝન અન્ય એપ્સના ખાનગી કેશને સુરક્ષિત રાખે છે.</string>
+    <string name="app_leftovers">બાકી રહેલા ફોલ્ડર્સ</string>
+    <string name="app_leftovers_desc">Android/media, data અને obb માં અનઇન્સ્ટોલ કરેલી એપ્સના ફોલ્ડર્સ</string>
+    <string name="app_cache">એપ કેશ</string>
+    <string name="app_cache_desc">ઇન્સ્ટોલ કરેલી એપ્સનો બાહ્ય કેશ; એપ્સ તેને ફરી બનાવે છે</string>
+    <string name="wa_images">છબીઓ</string>
+    <string name="wa_videos">વીડિયો</string>
+    <string name="wa_audio">ઑડિયો</string>
+    <string name="wa_voice">વૉઇસ નોટ્સ</string>
+    <string name="wa_documents">દસ્તાવેજો</string>
+    <string name="wa_stickers">સ્ટિકર્સ</string>
+    <string name="wa_gifs">GIF</string>
+    <string name="wa_backups">બેકઅપ અને ડેટાબેઝ</string>
+    <string name="wa_not_found">આ ડિવાઇસ પર WhatsApp મીડિયા મળ્યું નથી.</string>
+    <string name="wa_hint">ખાનગી ફોલ્ડર્સ સહિત પ્રાપ્ત અને મોકલેલ મીડિયા.</string>
+    <string name="analyzer_used">વપરાયેલ</string>
+    <string name="analyzer_other">અન્ય ફાઇલો અને એપ્સ</string>
+    <string name="analyzer_free">ખાલી</string>
+    <string name="analyzer_breakdown">વિગતવાર વહેંચણી</string>
+    <string name="analyzer_largest">સૌથી મોટી ફાઇલો</string>
+    <string name="analyzer_chart_desc">સ્ટોરેજ ચાર્ટ: %2$s માંથી %1$s વપરાયેલ</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">દેખાવ</string>
+    <string name="settings_theme">થીમ</string>
+    <string name="settings_theme_system">સિસ્ટમ</string>
+    <string name="settings_theme_light">લાઇટ</string>
+    <string name="settings_theme_dark">ડાર્ક</string>
+    <string name="settings_dynamic_color">ડાયનેમિક રંગ</string>
+    <string name="settings_dynamic_color_desc">તમારા વૉલપેપર સાથે રંગો મેળવો</string>
+    <string name="settings_language">ભાષા</string>
+    <string name="settings_language_system">સિસ્ટમ ડિફૉલ્ટ</string>
+    <string name="settings_files">ફાઇલો</string>
+    <string name="settings_show_hidden_desc">ટપકાં (.) થી શરૂ થતી ફાઇલો અને ફોલ્ડર્સ બતાવો</string>
+    <string name="settings_grid">ડિફૉલ્ટ રૂપે ગ્રિડ વ્યૂ</string>
+    <string name="settings_grid_desc">ફોલ્ડર્સને થંબનેલ ગ્રિડ તરીકે બતાવો</string>
+    <string name="settings_about">વિશે</string>
+    <string name="settings_version">આવૃત્તિ</string>
+    <string name="settings_updates">અપડેટ્સ</string>
+    <string name="settings_updates_subtitle">આપમેળે અપડેટ્સ, રિલીઝ ચેનલ અને નવી આવૃત્તિ તપાસવી</string>
+    <string name="settings_auto_update">આપમેળે અપડેટ્સ</string>
+    <string name="settings_auto_update_desc">બૅકગ્રાઉન્ડમાં દરરોજ અને Findex ખૂલે ત્યારે GitHub તપાસો</string>
+    <string name="updates_title">અપડેટ્સ</string>
+    <string name="updates_current">ઇન્સ્ટોલ કરેલ આવૃત્તિ %1$s</string>
+    <string name="settings_channel">રિલીઝ ચેનલ</string>
+    <string name="channel_stable">સ્ટેબલ</string>
+    <string name="channel_beta">બીટા</string>
+    <string name="channel_alpha">આલ્ફા</string>
+    <string name="settings_check_updates">અપડેટ્સ તપાસો</string>
+    <string name="update_checking">તપાસી રહ્યું છે…</string>
+    <string name="update_up_to_date">તમે નવીનતમ આવૃત્તિ પર છો</string>
+    <string name="update_available_row">આવૃત્તિ %1$s ઉપલબ્ધ છે</string>
+    <string name="settings_about_subtitle">આવૃત્તિ %1$s, ડેવલપર અને આભાર</string>
+    <string name="update_title">અપડેટ ઉપલબ્ધ છે</string>
+    <string name="update_subtitle">%1$s · તમે %2$s પર છો</string>
+    <string name="update_whats_new">નવું શું છે</string>
+    <string name="update_install">ઇન્સ્ટોલ કરો</string>
+    <string name="update_allow_install">ઇન્સ્ટોલ કરવાની મંજૂરી આપો</string>
+    <string name="update_downloading">ડાઉનલોડ થઈ રહ્યું છે… %1$d%%</string>
+    <string name="update_not_now">હમણાં નહીં</string>
+    <string name="update_failed">અપડેટ નિષ્ફળ ગયું</string>
+    <string name="update_notification_channel_name">એપ અપડેટ્સ</string>
+    <string name="update_notification_title">અપડેટ ઉપલબ્ધ: %1$s</string>
+    <string name="update_notification_body">રિલીઝ નોટ્સ જોવા અને ઇન્સ્ટોલ કરવા ટૅપ કરો</string>
+    <string name="about_title">Findex વિશે</string>
+    <string name="about_section_app">એપ</string>
+    <string name="about_version_build">આવૃત્તિ %1$s · બિલ્ડ %2$d</string>
+    <string name="about_source_code">સોર્સ કોડ</string>
+    <string name="about_section_developer">ડેવલપર</string>
+    <string name="about_developer_tagline">એક જ ડેવલપર દ્વારા ડિઝાઇન અને નિર્મિત.</string>
+    <string name="about_portfolio">પોર્ટફોલિયો</string>
+    <string name="about_section_open_source">ઓપન સોર્સ</string>
+    <string name="about_acknowledgements">આભાર</string>
+    <string name="about_acknowledgements_subtitle">લાઇબ્રેરીઓ અને પ્રોજેક્ટ્સ જેના પર Findex બનેલ છે</string>
+
+    <!-- Compression & Extraction -->
+    <string name="compress_dialog_title">આર્કાઇવ બનાવો</string>
+    <string name="compress_format_label">ફૉર્મેટ</string>
+    <string name="compress_password_zip_only">પાસવર્ડ સુરક્ષા માત્ર ZIP માટે ઉપલબ્ધ છે.</string>
+    <string name="compress_password_hint">પાસવર્ડ (વૈકલ્પિક)</string>
+    <string name="compress_password_help">પાસવર્ડ સાથે આર્કાઇવ AES-256 વડે એન્ક્રિપ્ટ થાય છે.</string>
+    <string name="extract_password_hint">પાસવર્ડ (જો સુરક્ષિત હોય તો)</string>
+    <string name="extract_dialog_body">“%1$s” ને તેની બાજુમાં નવા ફોલ્ડરમાં એક્સ્ટ્રેક્ટ કરો.</string>
+    <string name="compress_button">કમ્પ્રેસ કરો</string>
+    <string name="extract_dialog_title">આર્કાઇવ એક્સ્ટ્રેક્ટ કરો</string>
+    <string name="extract_button">એક્સ્ટ્રેક્ટ કરો</string>
+
+    <!-- Multitasking & Selection -->
+    <string name="selected_count">%1$d પસંદ કરેલ</string>
+    <string name="tabs_header">ટેબ્સ</string>
+
+    <!-- Notifications & Services -->
+    <string name="notification_channel_name">ફાઇલ ક્રિયાઓ</string>
+    <string name="notification_channel_description">કૉપિ, મૂવ, કાઢી નાખવા અને આર્કાઇવ કાર્યોની પ્રગતિ અને પરિણામો</string>
+    <string name="operation_in_progress">કાર્ય ચાલુ છે…</string>
+    <string name="operation_completed">કાર્ય પૂર્ણ થયું</string>
+    <string name="operation_failed">કાર્ય નિષ્ફળ ગયું</string>
+    <string name="operation_cancelled">કાર્ય રદ થયું</string>
+    <string name="operation_progress">%1$d%% · %2$s</string>
+    <plurals name="operation_queued">
+        <item quantity="one">%1$s · %2$d વધુ કતારમાં</item>
+        <item quantity="other">%1$s · %2$d વધુ કતારમાં</item>
+    </plurals>
+    <string name="op_title_copy">%1$s વસ્તુ(ઓ) કૉપિ થઈ રહી છે</string>
+    <string name="op_title_move">%1$s વસ્તુ(ઓ) ખસેડાઈ રહી છે</string>
+    <string name="op_title_delete">%1$s વસ્તુ(ઓ) કાઢી નખાઈ રહી છે</string>
+    <string name="op_title_trash">%1$s વસ્તુ(ઓ) રિસાયકલ બિનમાં ખસેડાઈ રહી છે</string>
+    <string name="op_title_restore">%1$s વસ્તુ(ઓ) પુનઃસ્થાપિત થઈ રહી છે</string>
+    <string name="op_title_clean">%1$s વસ્તુ(ઓ) સાફ થઈ રહી છે</string>
+    <string name="op_title_compress">%1$s માં કમ્પ્રેસ થઈ રહ્યું છે</string>
+    <string name="op_title_extract">%1$s એક્સ્ટ્રેક્ટ થઈ રહ્યું છે</string>
+    <string name="op_done_copy">%1$s વસ્તુ(ઓ) કૉપિ થઈ</string>
+    <string name="op_done_move">%1$s વસ્તુ(ઓ) ખસેડાઈ</string>
+    <string name="op_done_delete">%1$s વસ્તુ(ઓ) કાઢી નખાઈ</string>
+    <string name="op_done_trash">%1$s વસ્તુ(ઓ) રિસાયકલ બિનમાં ખસેડાઈ</string>
+    <string name="op_done_restore">%1$s વસ્તુ(ઓ) પુનઃસ્થાપિત થઈ</string>
+    <string name="op_done_clean">%1$s વસ્તુ(ઓ) સાફ થઈ</string>
+    <string name="op_done_compress">%1$s બનાવ્યું</string>
+    <string name="op_done_extract">%1$s એક્સ્ટ્રેક્ટ થયું</string>
+    <string name="op_done_batch_rename">%1$s વસ્તુ(ઓ)નું નામ બદલાયું</string>
+    <string name="op_done_image_transform">%1$s છબી(ઓ) કમ્પ્રેસ થઈ</string>
+    <string name="op_done_vault_import">%1$s વસ્તુ(ઓ) વૉલ્ટમાં ખસેડાઈ</string>
+    <string name="op_done_vault_export">%1$s વસ્તુ(ઓ) વૉલ્ટમાંથી પુનઃસ્થાપિત થઈ</string>
+    <string name="op_done_vault_delete">%1$s વસ્તુ(ઓ) વૉલ્ટમાંથી કાઢી નખાઈ</string>
+    <string name="operation_cancelled_body">પૂર્ણ થતાં પહેલાં રોકાયું</string>
+    <string name="error_wrong_password">ખોટો અથવા ખૂટતો પાસવર્ડ</string>
+    <string name="error_unsupported_archive">આ આર્કાઇવ ફૉર્મેટ અથવા આવૃત્તિ સમર્થિત નથી</string>
+    <string name="error_no_space">પૂરતી સ્ટોરેજ જગ્યા નથી</string>
+    <string name="error_into_itself">ફોલ્ડરને તેની પોતાની અંદર કૉપિ કરી શકાતું નથી</string>
+    <string name="error_access_denied">આ સ્થાન માટે પરવાનગી નકારાઈ</string>
+    <string name="cancel">રદ કરો</string>
+    <string name="confirm">પુષ્ટિ કરો</string>
+
+    <!-- Recycle bin -->
+    <plurals name="trash_title">
+        <item quantity="one">%d વસ્તુ રિસાયકલ બિનમાં ખસેડવી?</item>
+        <item quantity="other">%d વસ્તુઓ રિસાયકલ બિનમાં ખસેડવી?</item>
+    </plurals>
+    <string name="trash_body">તમે તેને 30 દિવસ સુધી રિસાયકલ બિનમાંથી પુનઃસ્થાપિત કરી શકો છો.</string>
+    <string name="delete_permanently">કાયમી ધોરણે કાઢી નાખો</string>
+    <string name="action_move_to_bin">બિનમાં ખસેડો</string>
+    <string name="action_restore">પુનઃસ્થાપિત કરો</string>
+    <string name="action_empty_bin">બિન ખાલી કરો</string>
+    <string name="undo">પાછું લાવો</string>
+    <plurals name="moved_to_bin">
+        <item quantity="one">%d વસ્તુ રિસાયકલ બિનમાં ખસેડાઈ</item>
+        <item quantity="other">%d વસ્તુઓ રિસાયકલ બિનમાં ખસેડાઈ</item>
+    </plurals>
+    <string name="recycle_bin_hint">30 દિવસ પછી વસ્તુઓ કાયમ માટે કાઢી નાખવામાં આવે છે</string>
+    <string name="recycle_bin_empty">રિસાયકલ બિન ખાલી છે</string>
+
+    <!-- File Inspector & Preview -->
+    <string name="details_dimensions">પરિમાણો</string>
+    <string name="details_resolution">રિઝોલ્યુશન</string>
+    <string name="details_duration">અવધિ</string>
+    <string name="details_megapixels">%1$.1f MP</string>
+    <string name="details_artist">કલાકાર</string>
+    <string name="details_album">આલ્બમ</string>
+    <string name="details_package">પેકેજ</string>
+    <string name="details_version">આવૃત્તિ</string>
+    <string name="details_checksums">ચેકસમ</string>
+    <string name="details_calculate_hash">ચેકસમ ગણો</string>
+    <string name="details_calculating">ગણતરી થઈ રહી છે…</string>
+    <string name="details_copied_hash">ચેકસમ ક્લિપબોર્ડ પર કૉપિ થયો</string>
+    <string name="preview_fullscreen">પૂર્ણ સ્ક્રીન</string>
+    <string name="preview_zoom_hint">ઝૂમ કરવા પિંચ કરો · ઝૂમ કરવા બે વાર ટૅપ કરો</string>
+    <string name="action_open_in_another_app">બીજી એપમાં ખોલો</string>
+    <string name="action_rotate">ફેરવો</string>
+    <string name="action_reset_zoom">ઝૂમ રીસેટ કરો</string>
+    <string name="viewer_item_position">%2$d માંથી %1$d</string>
+    <string name="preview_copy_text">સામગ્રી કૉપિ કરો</string>
+    <string name="preview_text_copied">સામગ્રી ક્લિપબોર્ડ પર કૉપિ થઈ</string>
+    <string name="preview_lines_count">%1$d લીટીઓ</string>
+    <string name="action_install">ઇન્સ્ટોલ કરો</string>
+    <string name="action_play">ચલાવો</string>
+    <string name="action_pause">થોભાવો</string>
+    <string name="action_open_folder">ફોલ્ડર ખોલો</string>
+    <string name="details_overview">ઝાંખી</string>
+    <string name="details_exact_bytes">%1$s બાઇટ્સ</string>
+
+    <!-- Search -->
+    <string name="search_hint">ફાઇલો અને ફોલ્ડર્સ શોધો</string>
+    <string name="search_prompt">તમારા સ્ટોરેજમાં નામથી કંઈપણ શોધો</string>
+    <string name="search_no_results">“%1$s” સાથે મેળ ખાતી કોઈ ફાઇલ નથી</string>
+    <string name="cd_clear_search">શોધ સાફ કરો</string>
+
+    <!-- Duplicate finder -->
+    <string name="nav_duplicates">ડુપ્લિકેટ ફાઇલો</string>
+    <string name="dup_title">ડુપ્લિકેટ ફાઇલો</string>
+    <string name="dup_desc">જગ્યા બગાડતી સમાન નકલો</string>
+    <string name="dup_none">કોઈ ડુપ્લિકેટ ફાઇલ મળી નથી</string>
+    <string name="dup_keep_hint">દરેક ફાઇલની સૌથી જૂની નકલ રાખવામાં આવે છે. ઓછામાં ઓછી એક નકલ હંમેશા રહે છે.</string>
+    <string name="dup_delete_button">%1$s કાઢી નાખો</string>
+    <string name="dup_hashing">ફાઇલની સામગ્રી સરખાવી રહ્યા છીએ…</string>
+    <plurals name="dup_copies">
+        <item quantity="one">%d નકલ</item>
+        <item quantity="other">%d નકલો</item>
+    </plurals>
+
+    <!-- Archive preview -->
+    <string name="action_browse">સામગ્રી બ્રાઉઝ કરો</string>
+    <string name="archive_extract_all">બધું એક્સ્ટ્રેક્ટ કરો</string>
+    <string name="archive_empty">આ આર્કાઇવ ખાલી છે</string>
+    <string name="archive_unreadable">આ આર્કાઇવની યાદી બતાવી શકાતી નથી. તે એન્ક્રિપ્ટેડ અથવા ક્ષતિગ્રસ્ત હોઈ શકે છે; તેના પાસવર્ડ સાથે «બધું એક્સ્ટ્રેક્ટ કરો» અજમાવો.</string>
+    <string name="archive_password_title">પાસવર્ડ જરૂરી છે</string>
+    <string name="archive_password_body">“%1$s” એન્ક્રિપ્ટેડ છે.</string>
+    <string name="archive_unlock">અનલૉક કરો</string>
+    <string name="archive_password_label">પાસવર્ડ</string>
+    <string name="archive_opening">%1$s ખોલી રહ્યા છીએ…</string>
+
+    <!-- Network storage (SMB / SFTP / FTP / WebDAV) -->
+    <string name="network_title">નેટવર્ક સ્ટોરેજ</string>
+    <string name="network_subtitle">તમારા નેટવર્ક પર SMB, SFTP, FTP અને WebDAV સર્વર્સ</string>
+    <string name="network_empty_title">હજી કોઈ સર્વર નથી</string>
+    <string name="network_empty_body">અહીં બ્રાઉઝ કરવા માટે PC, NAS અથવા સર્વરમાંથી શેર કરેલું ફોલ્ડર ઉમેરો.</string>
+    <string name="network_add">સર્વર ઉમેરો</string>
+    <string name="network_add_title">નેટવર્ક સર્વર ઉમેરો</string>
+    <string name="network_protocol_label">પ્રોટોકોલ</string>
+    <string name="network_webdav_https">HTTPS (TLS) વાપરો</string>
+    <string name="network_field_name">દર્શાવવાનું નામ (વૈકલ્પિક)</string>
+    <string name="network_field_host">હોસ્ટ અથવા IP સરનામું</string>
+    <string name="network_field_host_help">ઉદાહરણ તરીકે 192.168.1.20 અથવા my-nas.local</string>
+    <string name="network_field_port">પોર્ટ (વૈકલ્પિક)</string>
+    <string name="network_field_port_default">ડિફૉલ્ટ %1$d</string>
+    <string name="network_field_share">શેરનું નામ</string>
+    <string name="network_field_share_help">શેર કરેલું ફોલ્ડર, ઉદાહરણ તરીકે Public</string>
+    <string name="network_field_path">રિમોટ પાથ (વૈકલ્પિક)</string>
+    <string name="network_field_path_help_sftp">હોમ ફોલ્ડર માટે ખાલી છોડો, અથવા /mnt/media જેવો પાથ દાખલ કરો</string>
+    <string name="network_field_path_help_ftp">રૂટ ફોલ્ડર માટે ખાલી છોડો, અથવા /pub જેવો પાથ દાખલ કરો</string>
+    <string name="network_field_path_help_webdav">એન્ડપોઇન્ટ પાથ, ઉદાહરણ તરીકે /dav અથવા /remote.php/dav/files/user</string>
+    <string name="network_field_user">વપરાશકર્તા નામ</string>
+    <string name="network_field_user_help">મહેમાન તરીકે કનેક્ટ કરવા ખાલી છોડો</string>
+    <string name="network_field_user_help_sftp">સર્વર પર SSH વપરાશકર્તા નામ</string>
+    <string name="network_field_password">પાસવર્ડ</string>
+    <string name="network_field_domain">ડોમેન અથવા વર્કગ્રુપ (વૈકલ્પિક)</string>
+    <string name="network_connect">કનેક્ટ કરો અને સાચવો</string>
+    <string name="network_connecting">કનેક્ટ થઈ રહ્યું છે…</string>
+    <string name="network_password_note">Android Keystore માં રાખેલી કી વડે એન્ક્રિપ્ટ કરેલ. આ વપરાશકર્તા નામ માટે સાચવેલો પાસવર્ડ ફરી વાપરવા ખાલી છોડો.</string>
+    <string name="network_guest">મહેમાન</string>
+    <string name="network_status_connected">કનેક્ટેડ</string>
+    <string name="network_remember_password">પાસવર્ડ યાદ રાખો</string>
+    <string name="network_edit">સર્વર સંપાદિત કરો</string>
+    <string name="network_edit_title">નેટવર્ક સર્વર સંપાદિત કરો</string>
+    <string name="network_save">ચકાસો અને સાચવો</string>
+    <string name="network_password_keep_note">વર્તમાન પાસવર્ડ જાળવી રાખવા ખાલી છોડો.</string>
+    <string name="network_password_not_saved_note">સાચવેલ નથી. દર વખતે Findex ખોલો ત્યારે તમને એક વાર પૂછવામાં આવશે.</string>
+    <string name="network_error_password_required">કનેક્ટ કરવા માટે પાસવર્ડ જરૂરી છે</string>
+    <string name="network_unlock">અનલૉક કરો</string>
+    <string name="network_unlock_title">“%1$s” સાથે કનેક્ટ કરો</string>
+    <string name="network_unlock_body">%1$s માટે પાસવર્ડ. તમે Findex બંધ ન કરો ત્યાં સુધી સાચવેલો રહેશે.</string>
+    <string name="network_status_offline">ડિસ્કનેક્ટેડ. %1$s</string>
+    <string name="network_retry">ફરી કનેક્ટ કરો</string>
+    <string name="network_remove">સર્વર દૂર કરો</string>
+    <string name="network_remove_title">“%1$s” દૂર કરવું?</string>
+    <string name="network_remove_body">સાચવેલું લૉગિન અને કોઈપણ ડાઉનલોડ કરેલી નકલો કાઢી નાખવામાં આવશે. સર્વર પરની ફાઇલોને સ્પર્શ કરવામાં આવશે નહીં.</string>
+    <string name="network_error_host">સર્વર સુધી પહોંચી શકાયું નહીં. સરનામું, પોર્ટ અને તમે એક જ નેટવર્ક પર છો તે તપાસો.</string>
+    <string name="network_error_auth">સાઇન-ઇન નિષ્ફળ ગયું. વપરાશકર્તા નામ અને પાસવર્ડ તપાસો.</string>
+    <string name="network_error_share">આ સર્વર પર આ નામનો કોઈ શેર અથવા રિમોટ પાથ નથી.</string>
+    <string name="network_error_denied">આ ખાતા માટે ઍક્સેસ નકારાઈ.</string>
+    <string name="network_error_unknown">સર્વર સાથે વાત કરતી વખતે કંઈક ખોટું થયું.</string>
+    <string name="rail_network">નેટવર્ક</string>
+    <string name="new_tab_title">અહીં નવો ટેબ ખોલો</string>
+    <string name="error_network">નેટવર્ક શેર સુધી પહોંચી શકાયું નહીં</string>
+    <string name="error_not_supported_network">નેટવર્ક શેર પર ઉપલબ્ધ નથી</string>
+    <string name="network_opening_remote">%1$s ડાઉનલોડ થઈ રહ્યું છે…</string>
+
+    <!-- BEGIN foundation (W1: drawer, entry actions, operation titles, failures) -->
+    <string name="drawer_section_more">વધુ</string>
+    <string name="nav_favorites">મનપસંદ</string>
+    <string name="nav_large_files">મોટી ફાઇલો</string>
+    <string name="nav_recent_changes">તાજેતરના ફેરફારો</string>
+    <string name="nav_vault">વૉલ્ટ</string>
+    <string name="action_batch_rename">બેચ નામ બદલો</string>
+    <string name="action_move_to_vault">વૉલ્ટમાં ખસેડો</string>
+    <string name="action_compress_image">છબીઓ કમ્પ્રેસ કરો</string>
+    <string name="action_tags">ટૅગ્સ</string>
+    <string name="action_pin_shortcut">હોમ સ્ક્રીન પર ઉમેરો</string>
+    <string name="op_title_batch_rename">%1$s વસ્તુ(ઓ)નું નામ બદલાઈ રહ્યું છે</string>
+    <string name="op_title_image_transform">%1$s છબી(ઓ) કમ્પ્રેસ થઈ રહી છે</string>
+    <string name="op_title_vault_import">%1$s વસ્તુ(ઓ) વૉલ્ટમાં ખસેડાઈ રહી છે</string>
+    <string name="op_title_vault_export">%1$s વસ્તુ(ઓ) વૉલ્ટમાંથી પુનઃસ્થાપિત થઈ રહી છે</string>
+    <string name="op_title_vault_delete">%1$s વસ્તુ(ઓ) વૉલ્ટમાંથી કાઢી નખાઈ રહી છે</string>
+    <string name="error_vault_locked">વૉલ્ટ લૉક છે</string>
+    <string name="error_nested_selection">ફોલ્ડર અને તેની અંદરની વસ્તુઓનું નામ એકસાથે બદલી શકાતું નથી. તેમને અલગથી બદલો.</string>
+    <string name="error_name_conflict">આ નામની ફાઇલ પહેલેથી અસ્તિત્વમાં છે</string>
+    <string name="error_op_invalid_name">તે નામને મંજૂરી નથી</string>
+    <string name="error_unsupported_image">આ છબી ફૉર્મેટ સમર્થિત નથી</string>
+    <string name="placeholder_coming_soon">ટૂંક સમયમાં આવી રહ્યું છે</string>
+    <string name="selection_expired">પસંદગીની સમયસીમા સમાપ્ત થઈ ગઈ. ફાઇલો ફરીથી પસંદ કરો.</string>
+    <!-- END foundation -->
+
+    <!-- BEGIN batch-rename -->
+    <string name="rename_title">બેચ નામ બદલો</string>
+    <string name="rename_pattern_label">નામની પેટર્ન</string>
+    <string name="rename_token_name">નામ</string>
+    <string name="rename_token_ext">એક્સ્ટેંશન</string>
+    <string name="rename_token_counter">કાઉન્ટર</string>
+    <string name="rename_token_date">તારીખ</string>
+    <string name="rename_token_parent">મૂળ ફોલ્ડર</string>
+    <string name="rename_find_label">શોધો</string>
+    <string name="rename_replace_label">આનાથી બદલો</string>
+    <string name="rename_regex">રેગ્યુલર એક્સપ્રેશન વાપરો</string>
+    <string name="rename_ignore_case">કેસ અવગણો</string>
+    <string name="rename_case_none">કેસ જાળવી રાખો</string>
+    <string name="rename_case_lower">લોઅરકેસ</string>
+    <string name="rename_case_upper">અપરકેસ</string>
+    <string name="rename_case_title">શીર્ષક કેસ</string>
+    <string name="rename_counter_start">અહીંથી શરૂ કરો</string>
+    <string name="rename_counter_step">પગલું</string>
+    <string name="rename_counter_pad">અંકો</string>
+    <string name="rename_touch_extension">એક્સ્ટેંશન પણ બદલો</string>
+    <string name="rename_status_unchanged">અપરિવર્તિત</string>
+    <string name="rename_status_duplicate">ડુપ્લિકેટ નામ</string>
+    <string name="rename_status_exists">નામ પહેલેથી અસ્તિત્વમાં છે</string>
+    <string name="rename_status_invalid">અમાન્ય નામ</string>
+    <string name="rename_status_bad_regex">અમાન્ય પેટર્ન</string>
+    <string name="rename_apply">નામ બદલો</string>
+    <plurals name="rename_summary">
+        <item quantity="one">%d વસ્તુનું નામ બદલાશે</item>
+        <item quantity="other">%d વસ્તુઓના નામ બદલાશે</item>
+    </plurals>
+    <!-- END batch-rename -->
+
+    <!-- BEGIN large-files -->
+    <string name="bigfiles_title">મોટી અને જૂની ફાઇલો</string>
+    <string name="bigfiles_size_any">કોઈપણ કદ</string>
+    <string name="bigfiles_size_100mb">100 MB થી વધુ</string>
+    <string name="bigfiles_size_500mb">500 MB થી વધુ</string>
+    <string name="bigfiles_size_1gb">1 GB થી વધુ</string>
+    <string name="bigfiles_age_any">કોઈપણ ઉંમર</string>
+    <string name="bigfiles_age_30d">30 દિવસથી જૂની</string>
+    <string name="bigfiles_age_90d">90 દિવસથી જૂની</string>
+    <string name="bigfiles_age_6mo">6 મહિનાથી જૂની</string>
+    <string name="bigfiles_age_1y">1 વર્ષથી જૂની</string>
+    <string name="bigfiles_category_any">કોઈપણ પ્રકાર</string>
+    <string name="bigfiles_include_hidden">છુપાયેલી ફાઇલો સામેલ કરો</string>
+    <string name="bigfiles_hint_modified">ઉંમર છેલ્લા ફેરફારની તારીખ પર આધારિત છે</string>
+    <string name="bigfiles_empty">આ ફિલ્ટર્સ સાથે કોઈ ફાઇલ મેળ ખાતી નથી</string>
+    <plurals name="bigfiles_selected">
+        <item quantity="one">%d ફાઇલ પસંદ કરેલ</item>
+        <item quantity="other">%d ફાઇલો પસંદ કરેલ</item>
+    </plurals>
+    <!-- END large-files -->
+
+    <!-- BEGIN image-compress -->
+    <string name="imgc_title">છબીઓ કમ્પ્રેસ કરો</string>
+    <string name="imgc_preset_small">નાનું</string>
+    <string name="imgc_preset_medium">મધ્યમ</string>
+    <string name="imgc_preset_large">મોટું</string>
+    <string name="imgc_preset_custom">કસ્ટમ</string>
+    <string name="imgc_max_edge">સૌથી લાંબી બાજુ (px)</string>
+    <string name="imgc_scale_percent">સ્કેલ (%)</string>
+    <string name="imgc_quality">ગુણવત્તા</string>
+    <string name="imgc_format_keep">મૂળ રાખો</string>
+    <string name="imgc_output_copy">નકલ તરીકે સાચવો</string>
+    <string name="imgc_output_replace">મૂળ ફાઇલો બદલો</string>
+    <string name="imgc_output_folder">ફોલ્ડરમાં સાચવો</string>
+    <string name="imgc_keep_metadata">સ્થાન અને કૅમેરા માહિતી રાખો</string>
+    <string name="imgc_estimate">અંદાજિત કદ: %1$s</string>
+    <string name="imgc_replace_warning">મૂળ ફાઇલો ઓવરરાઇટ થઈ જશે અને તેને પાછી લાવી શકાશે નહીં.</string>
+    <plurals name="imgc_skipped">
+        <item quantity="one">%d છબી છોડી દેવાઈ</item>
+        <item quantity="other">%d છબીઓ છોડી દેવાઈ</item>
+    </plurals>
+    <!-- END image-compress -->
+
+    <!-- BEGIN vault -->
+    <string name="vault_title">વૉલ્ટ</string>
+    <string name="vault_setup_title">તમારું વૉલ્ટ સેટ કરો</string>
+    <string name="vault_setup_password">વૉલ્ટ પાસવર્ડ</string>
+    <string name="vault_setup_confirm">પાસવર્ડની પુષ્ટિ કરો</string>
+    <string name="vault_setup_mismatch">પાસવર્ડ મેળ ખાતા નથી</string>
+    <string name="vault_setup_strength_weak">નબળો</string>
+    <string name="vault_setup_strength_fair">ઠીક</string>
+    <string name="vault_setup_strength_strong">મજબૂત</string>
+    <string name="vault_setup_biometric">ફિંગરપ્રિન્ટ અથવા ચહેરા વડે અનલૉક કરો</string>
+    <string name="vault_setup_warning_no_recovery">કોઈ પાસવર્ડ રિકવરી નથી. જો તમે પાસવર્ડ ભૂલી જશો, તો તમારી ફાઇલો ખોવાઈ જશે.</string>
+    <string name="vault_setup_warning_not_secure_erase">મૂળ ફાઇલો સામાન્ય રીતે દૂર થાય છે, સુરક્ષિત રીતે ભૂંસાતી નથી. કાઢી નાખેલો ડેટા સ્ટોરેજમાંથી પુનઃપ્રાપ્ત થઈ શકે છે.</string>
+    <string name="vault_setup_acknowledge">હું જોખમો સમજું છું</string>
+    <string name="vault_setup_create">વૉલ્ટ બનાવો</string>
+    <string name="vault_unlock_title">વૉલ્ટ અનલૉક કરો</string>
+    <string name="vault_unlock_password">પાસવર્ડ</string>
+    <string name="vault_unlock_biometric">ફિંગરપ્રિન્ટ અથવા ચહેરો વાપરો</string>
+    <string name="vault_unlock_wrong_password">ખોટો પાસવર્ડ</string>
+    <string name="vault_unlock_lockout">ઘણા બધા પ્રયાસો. %1$s માં ફરી પ્રયાસ કરો.</string>
+    <string name="vault_biometric_prompt_title">વૉલ્ટ અનલૉક કરો</string>
+    <string name="vault_biometric_prompt_subtitle">ખાતરી કરો કે આ તમે જ છો</string>
+    <string name="vault_biometric_prompt_negative">પાસવર્ડ વાપરો</string>
+    <string name="vault_biometric_invalidated">ફિંગરપ્રિન્ટ અથવા ચહેરો બદલાયો છે. તમારા પાસવર્ડથી અનલૉક કરો અને બાયોમેટ્રિક્સ ફરીથી સેટ કરો.</string>
+    <string name="vault_add_files">ફાઇલો ઉમેરો</string>
+    <string name="vault_import_confirm">વૉલ્ટમાં ખસેડવું? મૂળ ફાઇલો કાયમી ધોરણે કાઢી નખાય છે, બિનમાં મોકલાતી નથી.</string>
+    <string name="vault_export_original">મૂળ સ્થાને પુનઃસ્થાપિત કરો</string>
+    <string name="vault_export_choose_folder">ફોલ્ડર પસંદ કરો</string>
+    <string name="vault_open_external_warning">વૉલ્ટની બહાર ખોલવાથી આ ડિવાઇસ પર બિન-એન્ક્રિપ્ટેડ નકલ રહી જાય છે.</string>
+    <string name="vault_menu_change_password">પાસવર્ડ બદલો</string>
+    <string name="vault_menu_biometric">ફિંગરપ્રિન્ટ અથવા ચહેરાથી અનલૉક</string>
+    <string name="vault_menu_auto_lock">ઑટો-લૉક</string>
+    <string name="vault_menu_lock_now">હમણાં લૉક કરો</string>
+    <string name="vault_auto_lock_immediately">તરત જ</string>
+    <string name="vault_auto_lock_1min">1 મિનિટ પછી</string>
+    <string name="vault_auto_lock_5min">5 મિનિટ પછી</string>
+    <string name="vault_auto_lock_screen_off">જ્યારે સ્ક્રીન બંધ થાય</string>
+    <string name="vault_restore_title">મૂળ સ્થાને પુનઃસ્થાપિત કરવું?</string>
+    <string name="vault_restore_body">ફાઇલો ડિક્રિપ્ટ થાય છે અને તેમના મૂળ ફોલ્ડર્સમાં પાછી ખસેડાય છે. ખૂટતા ફોલ્ડર્સ ફરીથી બનાવવામાં આવે છે.</string>
+    <string name="vault_restore_action">પુનઃસ્થાપિત કરો</string>
+    <string name="vault_empty">તમારું વૉલ્ટ ખાલી છે</string>
+    <string name="vault_locked_banner">વૉલ્ટ લૉક છે. તમારી ફાઇલો જોવા માટે તેને અનલૉક કરો.</string>
+    <string name="cd_vault_lock">વૉલ્ટ લૉક કરો</string>
+    <string name="vault_setup_min_length">ઓછામાં ઓછા 8 અક્ષરો વાપરો</string>
+    <string name="vault_unlock_action">અનલૉક કરો</string>
+    <string name="vault_password_current">વર્તમાન પાસવર્ડ</string>
+    <string name="vault_password_new">નવો પાસવર્ડ</string>
+    <string name="vault_password_changed">પાસવર્ડ બદલાયો</string>
+    <string name="vault_unreadable_title">વૉલ્ટ કી વાંચી શકાતી નથી</string>
+    <string name="vault_unreadable_body">એન્ક્રિપ્ટેડ ફાઇલો .FindexVault ફોલ્ડરમાં છે, પરંતુ તેની vault.key ફાઇલ ખૂટે છે અથવા ક્ષતિગ્રસ્ત છે. તેમને ખોલવા માટે બેકઅપમાંથી vault.key પુનઃસ્થાપિત કરો. નવું વૉલ્ટ બનાવવામાં આવ્યું નથી જેથી ફાઇલો પુનઃપ્રાપ્ત કરી શકાય.</string>
+    <string name="vault_rebuild_title">અગાઉના ઇન્સ્ટોલની ફાઇલો</string>
+    <string name="vault_rebuild_body">વૉલ્ટ ફોલ્ડરમાં એન્ક્રિપ્ટેડ ફાઇલો મળી. તેમને સૂચિમાં પુનઃસ્થાપિત કરવી?</string>
+    <string name="vault_rebuild_action">સૂચિ પુનઃસ્થાપિત કરો</string>
+    <string name="vault_add_files_hint">એક્સપ્લોરરમાં, ફાઇલો અથવા ફોલ્ડર્સને લાંબા સમય સુધી દબાવી રાખો અને વૉલ્ટમાં ખસેડો પસંદ કરો.</string>
+    <string name="vault_delete_confirm">વૉલ્ટમાંથી %1$d વસ્તુ(ઓ) કાઢી નાખવી? તેમને પુનઃપ્રાપ્ત કરી શકાતી નથી.</string>
+    <string name="vault_biometric_error">ફિંગરપ્રિન્ટ અથવા ચહેરાથી અનલૉક ઉપલબ્ધ નથી</string>
+    <string name="vault_import_ready">%1$d વસ્તુ(ઓ) એન્ક્રિપ્ટ થશે. મૂળ ફાઇલો કાયમી ધોરણે કાઢી નખાય છે, બિનમાં મોકલાતી નથી.</string>
+    <!-- END vault -->
+
+    <!-- BEGIN viewers -->
+    <string name="viewer_text_save">સાચવો</string>
+    <string name="viewer_text_saved">સાચવ્યું</string>
+    <string name="viewer_text_unsaved_title">ફેરફારો છોડી દેવા?</string>
+    <string name="viewer_text_unsaved_body">તમારા ફેરફારો ખોવાઈ જશે.</string>
+    <string name="viewer_text_discard">છોડી દો</string>
+    <string name="viewer_text_conflict_title">ડિસ્ક પર ફાઇલ બદલાઈ ગઈ</string>
+    <string name="viewer_text_conflict_body">તમે ખોલી ત્યારથી અન્ય એપે આ ફાઇલ બદલી છે.</string>
+    <string name="viewer_text_overwrite">ઓવરરાઇટ કરો</string>
+    <string name="viewer_text_read_only">માત્ર વાંચવા માટે</string>
+    <string name="viewer_text_truncated">ફાઇલ ઘણી મોટી છે. પ્રથમ ભાગ બતાવી રહ્યા છીએ.</string>
+    <string name="viewer_text_not_text">આ ફાઇલ સાદો ટેક્સ્ટ નથી.</string>
+    <string name="viewer_text_find">શોધો</string>
+    <string name="viewer_text_wrap">લીટીઓ લપેટો</string>
+    <string name="viewer_text_undo">પાછું લાવો</string>
+    <string name="viewer_text_redo">ફરી કરો</string>
+    <string name="viewer_text_encoding">એન્કોડિંગ</string>
+    <string name="viewer_pdf_page_of">પાનું %1$d / %2$d</string>
+    <string name="viewer_pdf_go_to_page">પાના પર જાઓ</string>
+    <string name="viewer_pdf_protected">આ PDF પાસવર્ડથી સુરક્ષિત છે</string>
+    <string name="viewer_pdf_password">પાસવર્ડ</string>
+    <string name="viewer_pdf_downloading">PDF ડાઉનલોડ થઈ રહ્યું છે…</string>
+    <string name="viewer_pdf_error">આ PDF ખોલી શકાયું નહીં</string>
+    <string name="viewer_audio_play">ચલાવો</string>
+    <string name="viewer_audio_pause">થોભાવો</string>
+    <string name="viewer_audio_next">આગળનો ટ્રૅક</string>
+    <string name="viewer_audio_previous">પાછલો ટ્રૅક</string>
+    <string name="viewer_audio_repeat">પુનરાવર્તન</string>
+    <string name="viewer_audio_shuffle">શફલ</string>
+    <string name="viewer_audio_queue">કતાર</string>
+    <string name="viewer_audio_error">આ ફાઇલ ચલાવી શકાઈ નહીં</string>
+    <string name="viewer_text_error">આ ફાઇલ વાંચી અથવા સાચવી શકાઈ નહીં</string>
+    <!-- END viewers -->
+
+    <!-- BEGIN tags-favorites -->
+    <string name="tags_title">ટૅગ્સ</string>
+    <string name="tags_new">નવો ટૅગ</string>
+    <string name="tags_name_hint">ટૅગનું નામ</string>
+    <string name="tags_color_red">લાલ</string>
+    <string name="tags_color_orange">નારંગી</string>
+    <string name="tags_color_yellow">પીળો</string>
+    <string name="tags_color_green">લીલો</string>
+    <string name="tags_color_teal">ટીલ</string>
+    <string name="tags_color_blue">વાદળી</string>
+    <string name="tags_color_purple">જાંબલી</string>
+    <string name="tags_color_pink">ગુલાબી</string>
+    <string name="tags_rename">ટૅગનું નામ બદલો</string>
+    <string name="tags_delete_title">ટૅગ “%1$s” કાઢી નાખવો?</string>
+    <string name="tags_delete_body">ફાઇલો તેમનો ડેટા જાળવી રાખે છે. માત્ર ટૅગ દૂર થાય છે.</string>
+    <string name="tags_empty">હજી કોઈ ટૅગ નથી</string>
+    <string name="favorites_title">મનપસંદ</string>
+    <string name="favorites_folders">ફોલ્ડર્સ</string>
+    <string name="favorites_files">ફાઇલો</string>
+    <string name="favorites_tags">ટૅગ્સ</string>
+    <string name="favorites_empty">હજી કંઈ સાચવ્યું નથી</string>
+    <string name="tags_apply">લાગુ કરો</string>
+    <string name="tags_save">સાચવો</string>
+    <string name="tags_files_empty">આ ટૅગ સાથે કોઈ ફાઇલ નથી</string>
+    <!-- END tags-favorites -->
+
+    <!-- BEGIN shortcuts -->
+    <string name="shortcut_pinned">હોમ સ્ક્રીન પર શૉર્ટકટ ઉમેર્યો</string>
+    <string name="shortcut_unsupported">તમારું લૉન્ચર શૉર્ટકટને સપોર્ટ કરતું નથી</string>
+    <string name="shortcut_folder_missing">આ ફોલ્ડર હવે અસ્તિત્વમાં નથી</string>
+    <!-- END shortcuts -->
+
+    <!-- BEGIN recent-changes-growth -->
+    <string name="changes_title">તાજેતરના ફેરફારો</string>
+    <string name="changes_today">આજે</string>
+    <string name="changes_yesterday">ગઈકાલે</string>
+    <string name="changes_range_1d">છેલ્લા 24 કલાક</string>
+    <string name="changes_range_7d">છેલ્લા 7 દિવસ</string>
+    <string name="changes_range_30d">છેલ્લા 30 દિવસ</string>
+    <string name="changes_empty">તાજેતરમાં કોઈ ફેરફાર નથી</string>
+    <string name="changes_limit_hint">માત્ર નવીનતમ ફેરફારો બતાવી રહ્યા છીએ.</string>
+    <string name="growth_title">સ્ટોરેજ વૃદ્ધિ</string>
+    <string name="growth_range_30d">30 દિવસ</string>
+    <string name="growth_range_90d">90 દિવસ</string>
+    <string name="growth_range_1y">1 વર્ષ</string>
+    <string name="growth_delta_up">%1$s વધ્યું</string>
+    <string name="growth_delta_down">%1$s ઘટ્યું</string>
+    <string name="growth_empty">હજી પૂરતો ઇતિહાસ નથી. Findex દરરોજ સ્ટોરેજ નોંધે છે.</string>
+    <string name="viewer_pdf_dark_pages">ડાર્ક પાનાં</string>
+    <string name="settings_builtin_viewers">ઇનબિલ્ટ વ્યૂઅર્સ</string>
+    <string name="settings_builtin_viewers_desc">Findex માં ફોટા, વીડિયો, PDF, ટેક્સ્ટ અને ઑડિયો ખોલો. બંધ કરવાથી તમારી ડિફૉલ્ટ એપ્સ વપરાશે</string>
+    <string name="widget_label">Findex સ્ટોરેજ</string>
+    <string name="widget_description">સ્ટોરેજ વપરાશ, ઝડપી સફાઈ અને તમારા બુકમાર્ક કરેલા ફોલ્ડર્સ</string>
+    <string name="widget_used">%1$d%% વપરાયેલ</string>
+    <string name="widget_free">%2$s માંથી %1$s ખાલી</string>
+    <string name="settings_cleanup_reminder">સફાઈ રિમાઇન્ડર</string>
+    <string name="settings_cleanup_reminder_desc">અઠવાડિયામાં એકવાર, સાફ કરવા જેવો જંક હોય ત્યારે મને જણાવો</string>
+    <string name="cleanup_reminder_channel">સફાઈ રિમાઇન્ડર્સ</string>
+    <string name="cleanup_reminder_title">%1$s ખાલી કરી શકાય છે</string>
+    <string name="cleanup_reminder_text">થંબનેલ્સ, અસ્થાયી ફાઇલો અને અવશેષો જે તમે સાફ કરી શકો છો</string>
+    <string name="cleanup_reminder_action">સાફ કરો</string>
+    <string name="settings_storage_history">સ્ટોરેજ ઇતિહાસ</string>
+    <string name="settings_storage_history_desc">વૃદ્ધિ ચાર્ટ માટે દૈનિક સ્ટોરેજ સ્નૅપશૉટ્સ રાખો</string>
+    <!-- END recent-changes-growth -->
+
+    <!-- BEGIN share-phone -->
+    <string name="nav_share_phone">આ ફોન શેર કરો</string>
+    <string name="share_tile_running">%1$s · PIN %2$s</string>
+    <string name="share_tile_starting">શરૂ થઈ રહ્યું છે…</string>
+    <string name="share_tile_no_network">Wi-Fi નથી</string>
+    <string name="share_tile_off">બંધ</string>
+    <string name="share_channel_name">આ ફોન શેર કરો</string>
+    <string name="share_notification_title">આ ફોન શેર થઈ રહ્યો છે</string>
+    <string name="share_notification_text">%1$s ખોલો · PIN %2$s</string>
+    <string name="share_stop">રોકો</string>
+    <string name="share_start">શેર કરવાનું શરૂ કરો</string>
+    <string name="share_starting">શરૂ થઈ રહ્યું છે…</string>
+    <string name="share_intro_title">કમ્પ્યુટર પર તમારી ફાઇલો ખોલો</string>
+    <string name="share_intro_body">Findex આ ફોન પર એક નાનું વેબ સર્વર શરૂ કરે છે. તે જ Wi-Fi અથવા હૉટસ્પૉટ પર કોઈપણ બ્રાઉઝર વન-ટાઇમ PIN વડે તેને ખોલી શકે છે.</string>
+    <string name="share_no_network">પહેલાં Wi-Fi થી કનેક્ટ કરો અથવા હૉટસ્પૉટ ચાલુ કરો.</string>
+    <string name="share_open_url">તમારા કમ્પ્યુટર પર બ્રાઉઝરમાં ખોલો</string>
+    <string name="share_pin">PIN</string>
+    <string name="share_copy_url">સરનામું કૉપિ કરો</string>
+    <string name="share_copied">સરનામું કૉપિ થયું</string>
+    <plurals name="share_clients">
+        <item quantity="one">%d બ્રાઉઝર સાઇન ઇન છે</item>
+        <item quantity="other">%d બ્રાઉઝર સાઇન ઇન છે</item>
+    </plurals>
+    <string name="share_clients_none">હજી કોઈ બ્રાઉઝર સાઇન ઇન નથી</string>
+    <string name="share_access">ઍક્સેસ</string>
+    <string name="share_access_hint">ફેરફારો તરત જ લાગુ થાય છે, કનેક્ટેડ બ્રાઉઝર્સ પર પણ.</string>
+    <string name="share_level_view">જુઓ</string>
+    <string name="share_level_download">ડાઉનલોડ</string>
+    <string name="share_level_full">પૂર્ણ</string>
+    <string name="share_perm_media">મીડિયા વિભાગો</string>
+    <string name="share_perm_media_desc">ફોટા, વીડિયો, ઑડિયો, દસ્તાવેજો અને વધુ</string>
+    <string name="share_perm_files">ફાઇલ એક્સપ્લોરર</string>
+    <string name="share_perm_files_desc">આંતરિક સ્ટોરેજ અને SD કાર્ડ પરનું દરેક ફોલ્ડર બ્રાઉઝ કરો</string>
+    <string name="share_perm_download">ખોલો અને ડાઉનલોડ કરો</string>
+    <string name="share_perm_download_desc">કમ્પ્યુટર પર ફાઇલોનું પૂર્વાવલોકન, સ્ટ્રીમ અને સેવ કરો</string>
+    <string name="share_perm_upload">અપલોડ કરો</string>
+    <string name="share_perm_upload_desc">કમ્પ્યુટરથી ફાઇલો ઉમેરો અને ફોલ્ડર્સ બનાવો</string>
+    <string name="share_perm_modify">નામ બદલો અને કાઢી નાખો</string>
+    <string name="share_perm_modify_desc">કાઢી નાખેલી ફાઇલો રિસાયકલ બિનમાં જાય છે</string>
+    <string name="share_auto_stop">ઑટો સ્ટોપ</string>
+    <string name="share_auto_stop_desc">કોઈપણ વિનંતી વિના આટલા સમય પછી સર્વર બંધ કરો</string>
+    <string name="share_minutes">%d મિનિટ</string>
+    <string name="share_never">ક્યારેય નહીં</string>
+    <string name="share_security_note">ટ્રાફિક એન્ક્રિપ્ટેડ નથી. માત્ર વિશ્વાસપાત્ર નેટવર્ક પર જ શેર કરો.</string>
+    <!-- END share-phone -->
+</resources>

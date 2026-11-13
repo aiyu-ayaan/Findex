@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App & Branding -->
+    <string name="app_tagline">Material 3 Expressive கோப்பு உலாவி</string>
+
+    <!-- Navigation Drawer -->
+    <string name="drawer_subtitle">கோப்புகள் &amp; மேகக்கணி சேமிப்பகம்</string>
+    <string name="nav_home">முகப்பு</string>
+    <string name="nav_storage_graph">சேமிப்பக வரைபடம்</string>
+    <string name="nav_storage_cleaner">சேமிப்பகத் துப்புரவி</string>
+    <string name="nav_whatsapp_cleaner">WhatsApp துப்புரவி</string>
+    <string name="nav_telegram_cleaner">Telegram துப்புரவி</string>
+    <string name="nav_instagram_cleaner">Instagram துப்புரவி</string>
+    <string name="nav_app_cleaner">செயலித் துப்புரவி</string>
+    <string name="nav_dual_pane">இரட்டைப் பலகம்</string>
+    <string name="dual_compare">கோப்புறைகளை ஒப்பிடு</string>
+    <string name="dual_swap">பலகங்களை மாற்று</string>
+    <string name="dual_select_missing">மற்ற பலகத்தில் இல்லாதவற்றைத் தேர்ந்தெடு</string>
+    <string name="dual_copy_to">மற்ற பலகத்திற்கு நகலெடு</string>
+    <string name="dual_move_to">மற்ற பலகத்திற்கு நகர்த்து</string>
+    <string name="dual_up">ஒரு கோப்புறை மேலே செல்</string>
+    <string name="cmp_only_here">இங்கே மட்டும்</string>
+    <string name="cmp_newer">இங்கே புதியது</string>
+    <string name="cmp_older">இங்கே பழையது</string>
+    <string name="cmp_different">வேறுபட்டது</string>
+    <string name="cmp_same">ஒரே மாதிரி</string>
+    <string name="nav_archive_manager">காப்பக மேலாளர்</string>
+    <string name="nav_network_storage">பிணையச் சேமிப்பகம்</string>
+    <string name="nav_settings">அமைப்புகள்</string>
+    <string name="nav_recycle_bin">மறுசுழற்சிக் கூடை</string>
+    <string name="nav_tabs">தாவல்கள்</string>
+    <string name="nav_search">தேடல்</string>
+    <plurals name="tabs_open_count">
+        <item quantity="one">%d திறந்த தாவல்</item>
+        <item quantity="other">%d திறந்த தாவல்கள்</item>
+    </plurals>
+    <string name="tabs_close_all">அனைத்து தாவல்களையும் மூடு</string>
+    <string name="tabs_empty_title">திறந்த தாவல்கள் இல்லை</string>
+    <string name="tabs_empty_body">உங்கள் கோப்புகளை உலாவ புதிய தாவலைத் தொடங்குங்கள்</string>
+    <string name="tabs_current">தற்போதைய தாவல்</string>
+    <string name="cd_close_tab">%1$s தாவலை மூடு</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">உங்கள் கோப்புகள், அழகாக ஒழுங்கமைக்கப்பட்டுள்ளன</string>
+    <string name="onboarding_body">உங்கள் சேமிப்பகத்தை உலாவ, நகலெடுக்க, சுருக்க மற்றும் சுத்தம் செய்ய அனைத்து கோப்புகளுக்கும் Findex க்கு அணுகல் தேவை.</string>
+    <string name="onboarding_point_access">ஒவ்வொரு கோப்புறை, SD கார்டு மற்றும் USB இயக்ககத்தையும் உலாவுங்கள்</string>
+    <string name="onboarding_point_fast">பின்னணியில் நகலெடுக்கவும், நகர்த்தவும் மற்றும் சுருக்கவும்</string>
+    <string name="onboarding_point_private">எல்லாம் உங்கள் சாதனத்திலேயே இருக்கும்</string>
+    <string name="onboarding_permissions">அனுமதிகள்</string>
+    <string name="onboarding_storage_title">அனைத்து கோப்புகள் அணுகல்</string>
+    <string name="onboarding_storage_body">உங்கள் கோப்புகளை உலாவவும் நிர்வகிக்கவும் தேவை</string>
+    <string name="onboarding_notify_title">அறிவிப்புகள்</string>
+    <string name="onboarding_notify_body">நீங்கள் மற்ற செயலிகளைப் பயன்படுத்தும்போது நகலெடுத்தல், நகர்த்துதல், சுருக்குதல் மற்றும் சுத்தம் செய்தல் ஆகியவற்றின் முன்னேற்றத்தைக் காட்டும்</string>
+    <string name="onboarding_allow">அனுமதி</string>
+    <string name="onboarding_granted">அனுமதிக்கப்பட்டது</string>
+    <string name="onboarding_continue">தொடரவும்</string>
+    <string name="onboarding_storage_required">தொடர அனைத்து கோப்புகள் அணுகலை அனுமதிக்கவும்</string>
+    <string name="onboarding_notify_hint">அறிவிப்புகள் இல்லாமல், முன்னேற்றம் Findex உள்ளே மட்டுமே காட்டப்படும்</string>
+    <string name="error_no_app">இந்தக் கோப்பைத் திறக்க எந்த செயலியும் இல்லை</string>
+    <string name="save_to_findex">Findex இல் சேமி</string>
+    <string name="save_to_findex_hint">ஒரு கோப்புறையைத் திறந்து, சேமி என்பதைத் தட்டவும்</string>
+    <string name="error_open_unsupported">Findex ஆல் இந்தக் கோப்பைத் திறக்க முடியவில்லை</string>
+
+    <!-- Tabs -->
+    <string name="tab_device">சாதனம்</string>
+    <string name="tab_network">பிணையம்</string>
+
+    <!-- Storage Drives -->
+    <string name="storage_internal">உள்ளகச் சேமிப்பகம்</string>
+    <string name="storage_sdcard">SD கார்டு</string>
+    <string name="storage_network">பிணையச் சேமிப்பகம்</string>
+    <string name="storage_usb">USB இயக்ககம்</string>
+    <string name="storage_used_of">%2$s இல் %1$s பயன்படுத்தப்பட்டது</string>
+    <string name="storage_free_space">%1$s காலி</string>
+    <string name="storage_scanning">சேமிப்பகம் வருடப்படுகிறது…</string>
+    <string name="storage_no_network_drives">பிணைய இயக்ககங்கள் எதுவும் இணைக்கப்படவில்லை. SMB / WebDAV / FTP வழியாக இணைக்க + ஐத் தட்டவும்.</string>
+    <string name="storage_add_network">பிணைய இயக்ககத்தைச் சேர்</string>
+    <string name="storage_used_label">பயன்படுத்தப்பட்டது</string>
+
+    <!-- Home -->
+    <string name="home_subtitle">உங்கள் கோப்புகள், ஒழுங்கமைக்கப்பட்டுள்ளன</string>
+    <string name="section_categories">வகைகள்</string>
+    <string name="section_bookmarks">புத்தகக்குறிகள்</string>
+    <string name="section_recents">சமீபத்திய கோப்புகள்</string>
+    <string name="cd_open_drawer">வழிசெலுத்தல் பலகத்தைத் திற</string>
+    <string name="cd_browse_drive">சேமிப்பகத்தை உலாவு</string>
+    <plurals name="item_count">
+        <item quantity="one">%d உருப்படி</item>
+        <item quantity="other">%d உருப்படிகள்</item>
+    </plurals>
+
+    <!-- File Categories -->
+    <string name="category_photos">புகைப்படங்கள்</string>
+    <string name="category_videos">காணொளிகள்</string>
+    <string name="category_audio">ஒலி</string>
+    <string name="category_documents">ஆவணங்கள்</string>
+    <string name="category_downloads">பதிவிறக்கங்கள்</string>
+    <string name="category_archives">காப்பகங்கள்</string>
+    <string name="category_apks">APKகள்</string>
+
+    <!-- Quick Suggestions & Tools -->
+    <string name="section_suggestions">விரைவு கருவிகள்</string>
+    <string name="cleaner_title">சேமிப்பகத் துப்புரவி</string>
+    <string name="cleaner_desc">தேவையற்ற கோப்புகள் மற்றும் தற்காலிகத் தேக்ககத்தை அழித்து இடத்தை விடுவிக்கவும்</string>
+    <string name="whatsapp_cleaner_title">WhatsApp துப்புரவி</string>
+    <string name="whatsapp_cleaner_desc">அனுப்பிய ஊடகங்கள், குரல் குறிப்புகள், ஸ்டிக்கர்கள் மற்றும் காப்புப்பிரதிகளைச் சுத்தம் செய்யவும்</string>
+    <string name="storage_graph_title">சேமிப்பகப் பகுப்பாய்வி</string>
+    <string name="storage_graph_desc">பெரிய கோப்புகள் மற்றும் கோப்புறை இடப் பகிர்வைக் காட்சிப்படுத்துங்கள்</string>
+
+    <!-- File Actions -->
+    <string name="action_cut">வெட்டு</string>
+    <string name="action_copy">நகலெடு</string>
+    <string name="action_paste">ஒட்டு</string>
+    <string name="action_delete">நீக்கு</string>
+    <string name="action_rename">மறுபெயரிடு</string>
+    <string name="action_details">விவரங்கள்</string>
+    <string name="action_compress">சுருக்கு</string>
+    <string name="action_extract">பிரித்தெடு</string>
+    <string name="action_share">பகிர்</string>
+    <string name="action_select_all">அனைத்தையும் தேர்ந்தெடு</string>
+    <string name="action_deselect_all">தேர்வை நீக்கு</string>
+    <string name="action_search">கோப்புகளைத் தேடு</string>
+    <string name="action_clean">இப்போது சுத்தம் செய்</string>
+    <string name="action_new_folder">புதிய கோப்புறை</string>
+    <string name="action_new_tab">புதிய தாவல்</string>
+    <string name="action_close_tab">தாவலை மூடு</string>
+    <string name="action_open_in_new_tab">புதிய தாவலில் திற</string>
+    <string name="detail_empty_hint">முன்னோட்டத்தையும் விவரங்களையும் இங்கே காண ஒரு கோப்பைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="cd_close_details">விவரங்களை மூடு</string>
+    <string name="rail_graph">வரைபடம்</string>
+    <string name="rail_cleaner">துப்புரவி</string>
+    <string name="rail_whatsapp">WhatsApp</string>
+    <string name="rail_bin">கூடை</string>
+    <string name="action_copy_path">பாதையை நகலெடு</string>
+    <string name="path_copied">பாதை கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது</string>
+    <string name="preview_file">முன்னோட்டம்</string>
+    <string name="preview_play_video">காணொளியை இயக்கு</string>
+    <string name="preview_play_audio">ஒலியை இயக்கு</string>
+    <string name="preview_lines_truncated">%1$d வரிகள் காட்டப்பட்டுள்ளன</string>
+    <string name="preview_empty_file">காலியான கோப்பு</string>
+    <string name="details_item_info">உருப்படி விவரங்கள்</string>
+    <string name="action_open">திற</string>
+    <string name="action_create">உருவாக்கு</string>
+    <string name="action_bookmark">புத்தகக்குறியில் சேர்</string>
+    <string name="action_remove_bookmark">புத்தகக்குறியை நீக்கு</string>
+    <string name="bookmark_added">புத்தகக்குறி சேர்க்கப்பட்டது</string>
+    <string name="bookmark_removed">புத்தகக்குறி நீக்கப்பட்டது</string>
+
+    <!-- Explorer -->
+    <string name="cd_back">பின்செல்</string>
+    <string name="cd_more_options">மேலும் விருப்பங்கள்</string>
+    <string name="cd_more_actions">%1$s க்கான கூடுதல் செயல்கள்</string>
+    <string name="cd_grid_view">கட்டக் காட்சி</string>
+    <string name="cd_list_view">பட்டியல் காட்சி</string>
+    <string name="cd_clear_selection">தேர்வை அழி</string>
+    <string name="cd_clear_clipboard">கிளிப்போர்டை அழி</string>
+    <string name="cd_create_menu">உருவாக்கு</string>
+    <string name="cd_show_password">கடவுச்சொல்லைக் காட்டு</string>
+    <string name="cd_hide_password">கடவுச்சொல்லை மறை</string>
+    <string name="empty_folder_title">இந்தக் கோப்புறை காலியாக உள்ளது</string>
+    <string name="empty_folder_body">கோப்புகளை இங்கே ஒட்டவும் அல்லது புதிய கோப்புறையை உருவாக்கவும்.</string>
+    <string name="label_name">பெயர்</string>
+    <string name="label_archive_name">காப்பகத்தின் பெயர்</string>
+    <string name="error_invalid_name">பெயர்களில் “/” இருக்கக்கூடாது</string>
+    <string name="error_rename">மறுபெயரிட முடியவில்லை — பெயர் ஏற்கனவே இருக்கலாம்</string>
+    <string name="error_new_folder">கோப்புறையை உருவாக்க முடியவில்லை — பெயர் ஏற்கனவே இருக்கலாம்</string>
+    <string name="sort_title">வரிசைப்படுத்து &amp; காட்சி</string>
+    <string name="sort_name">பெயர்</string>
+    <string name="sort_date">மாற்றப்பட்ட தேதி</string>
+    <string name="sort_size">அளவு</string>
+    <string name="sort_type">வகை</string>
+    <string name="sort_ascending">ஏறுவரிசை</string>
+    <string name="sort_descending">இறங்குவரிசை</string>
+    <string name="show_hidden_files">மறைக்கப்பட்ட கோப்புகளைக் காட்டு</string>
+    <string name="details_path">இருப்பிடம்</string>
+    <string name="details_modified">மாற்றப்பட்டது</string>
+    <string name="details_type">வகை</string>
+    <string name="details_size">அளவு</string>
+    <string name="details_contains">கொண்டிருப்பது</string>
+    <string name="delete_body">இதைத் திரும்பப் பெற முடியாது.</string>
+    <plurals name="delete_title">
+        <item quantity="one">%d உருப்படியை நீக்கவா?</item>
+        <item quantity="other">%d உருப்படிகளை நீக்கவா?</item>
+    </plurals>
+    <plurals name="file_count">
+        <item quantity="one">%d கோப்பு</item>
+        <item quantity="other">%d கோப்புகள்</item>
+    </plurals>
+    <plurals name="folder_count">
+        <item quantity="one">%d கோப்புறை</item>
+        <item quantity="other">%d கோப்புறைகள்</item>
+    </plurals>
+    <plurals name="paste_here">
+        <item quantity="one">%d உருப்படியை ஒட்டு</item>
+        <item quantity="other">%d உருப்படிகளை ஒட்டு</item>
+    </plurals>
+    <plurals name="save_here">
+        <item quantity="one">%d கோப்பை இங்கே சேமி</item>
+        <item quantity="other">%d கோப்புகளை இங்கே சேமி</item>
+    </plurals>
+    <plurals name="move_here">
+        <item quantity="one">%d உருப்படியை இங்கே நகர்த்து</item>
+        <item quantity="other">%d உருப்படிகளை இங்கே நகர்த்து</item>
+    </plurals>
+    <string name="action_show_in_folder">கோப்புறையில் காட்டு</string>
+    <string name="category_empty">இங்கே இன்னும் எதுவுமில்லை</string>
+
+    <!-- Tools -->
+    <string name="scanning">சேமிப்பகம் வருடப்படுகிறது…</string>
+    <string name="tool_can_free">விடுவிக்க முடியும்</string>
+    <string name="tool_selected_of">%2$s இல் %1$s தேர்ந்தெடுக்கப்பட்டது</string>
+    <string name="tool_all_clean_title">அனைத்தும் சுத்தமாக உள்ளன</string>
+    <string name="tool_all_clean_body">இப்போது நீக்க எதுவும் இல்லை.</string>
+    <string name="tool_clean_confirm_title">%1$s சுத்தம் செய்யவா?</string>
+    <string name="tool_clean_confirm_body">தேர்ந்தெடுக்கப்பட்ட கோப்புகள் நிரந்தரமாக நீக்கப்படும்.</string>
+    <string name="tool_clean_button">%1$s சுத்தம் செய்</string>
+    <string name="tool_rescan">மீண்டும் வருடு</string>
+    <string name="junk_thumbnails">சிறுபடத் தேக்ககங்கள்</string>
+    <string name="junk_thumbnails_desc">செயலிகள் தானாக மீண்டும் உருவாக்கும் முன்னோட்டப் படங்கள்</string>
+    <string name="junk_temp">தற்காலிக &amp; பதிவுக் கோப்புகள்</string>
+    <string name="junk_temp_desc">.tmp, .log, .bak மற்றும் முற்றுப்பெறாத பதிவிறக்கங்கள்</string>
+    <string name="junk_apks">நிறுவல் கோப்புகள்</string>
+    <string name="junk_apks_desc">நீங்கள் ஏற்கனவே நிறுவியிருக்கக்கூடிய செயலிகளின் APK கோப்புகள்</string>
+    <string name="junk_empty">காலியான கோப்புறைகள்</string>
+    <string name="junk_empty_desc">உள்ளே எதுவும் இல்லாத கோப்புறைகள்</string>
+    <string name="junk_zero">காலியான கோப்புகள்</string>
+    <string name="junk_zero_desc">0 பைட் கோப்புகள்; மறைக்கப்பட்ட குறியீட்டுக் கோப்புகள் பாதுகாக்கப்படும்</string>
+    <string name="telegram_cleaner_title">Telegram துப்புரவி</string>
+    <string name="instagram_cleaner_title">Instagram துப்புரவி</string>
+    <string name="tg_hint">பதிவிறக்கிய மற்றும் அனுப்பிய ஊடகங்கள் மற்றும் கோப்புகள்.</string>
+    <string name="ig_hint">இந்தச் சாதனத்தில் Instagram சேமித்த புகைப்படங்கள் மற்றும் காணொளிகள்.</string>
+    <string name="tg_not_found">இந்தச் சாதனத்தில் Telegram ஊடகங்கள் கிடைக்கவில்லை.</string>
+    <string name="ig_not_found">இந்தச் சாதனத்தில் Instagram ஊடகங்கள் கிடைக்கவில்லை.</string>
+    <string name="app_media_files">ஆவணங்கள் &amp; பிற கோப்புகள்</string>
+    <string name="app_cleaner_title">செயலித் துப்புரவி</string>
+    <string name="app_cleaner_hint">நீக்கப்பட்ட செயலிகளின் எச்சங்கள் மற்றும் Findex அணுகக்கூடிய தேக்ககம்.</string>
+    <string name="app_cleaner_empty">எச்சங்கள் எதுவும் இல்லை. Android 11 மற்றும் அதற்குப் பிந்தைய பதிப்புகள் பிற செயலிகளின் தனிப்பட்ட தேக்ககத்தை அணுக விடாது.</string>
+    <string name="app_leftovers">எஞ்சிய கோப்புறைகள்</string>
+    <string name="app_leftovers_desc">Android/media, data மற்றும் obb இல் நிறுவல் நீக்கப்பட்ட செயலிகளின் கோப்புறைகள்</string>
+    <string name="app_cache">செயலித் தேக்ககம்</string>
+    <string name="app_cache_desc">நிறுவப்பட்ட செயலிகளின் வெளிப்புறத் தேக்ககம்; அவை அதை மீண்டும் உருவாக்கும்</string>
+    <string name="wa_images">படங்கள்</string>
+    <string name="wa_videos">காணொளிகள்</string>
+    <string name="wa_audio">ஒலி</string>
+    <string name="wa_voice">குரல் குறிப்புகள்</string>
+    <string name="wa_documents">ஆவணங்கள்</string>
+    <string name="wa_stickers">ஸ்டிக்கர்கள்</string>
+    <string name="wa_gifs">GIFகள்</string>
+    <string name="wa_backups">காப்புப்பிரதிகள் &amp; தரவுத்தளங்கள்</string>
+    <string name="wa_not_found">இந்தச் சாதனத்தில் WhatsApp ஊடகங்கள் கிடைக்கவில்லை.</string>
+    <string name="wa_hint">தனிப்பட்ட கோப்புறைகள் உட்பட பெறப்பட்ட மற்றும் அனுப்பப்பட்ட ஊடகங்கள்.</string>
+    <string name="analyzer_used">பயன்படுத்தப்பட்டது</string>
+    <string name="analyzer_other">பிற கோப்புகள் &amp; செயலிகள்</string>
+    <string name="analyzer_free">காலி</string>
+    <string name="analyzer_breakdown">பகுப்பாய்வு</string>
+    <string name="analyzer_largest">மிகப் பெரிய கோப்புகள்</string>
+    <string name="analyzer_chart_desc">சேமிப்பக விளக்கப்படம்: %2$s இல் %1$s பயன்படுத்தப்பட்டது</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">தோற்றம்</string>
+    <string name="settings_theme">தீம்</string>
+    <string name="settings_theme_system">கணினி</string>
+    <string name="settings_theme_light">ஒளி</string>
+    <string name="settings_theme_dark">இருள்</string>
+    <string name="settings_dynamic_color">மாறும் நிறம்</string>
+    <string name="settings_dynamic_color_desc">உங்கள் வால்பேப்பருக்கு ஏற்ப நிறங்களைப் பொருத்து</string>
+    <string name="settings_language">மொழி</string>
+    <string name="settings_language_system">கணினி இயல்புநிலை</string>
+    <string name="settings_files">கோப்புகள்</string>
+    <string name="settings_show_hidden_desc">புள்ளியுடன் தொடங்கும் கோப்புகள் மற்றும் கோப்புறைகளைக் காட்டு</string>
+    <string name="settings_grid">இயல்புநிலையாகக் கட்டக் காட்சி</string>
+    <string name="settings_grid_desc">கோப்புறைகளைச் சிறுபடக் கட்டமாகக் காட்டு</string>
+    <string name="settings_about">பற்றி</string>
+    <string name="settings_version">பதிப்பு</string>
+    <string name="settings_updates">புதுப்பிப்புகள்</string>
+    <string name="settings_updates_subtitle">தானியங்கி புதுப்பிப்புகள், வெளியீட்டு அலைவரிசை மற்றும் புதிய பதிப்புச் சரிபார்ப்பு</string>
+    <string name="settings_auto_update">தானியங்கி புதுப்பிப்புகள்</string>
+    <string name="settings_auto_update_desc">தினமும் பின்னணியிலும் Findex திறக்கும்போதும் GitHub ஐச் சரிபார்</string>
+    <string name="updates_title">புதுப்பிப்புகள்</string>
+    <string name="updates_current">நிறுவப்பட்ட பதிப்பு %1$s</string>
+    <string name="settings_channel">வெளியீட்டு அலைவரிசை</string>
+    <string name="channel_stable">நிலையானது</string>
+    <string name="channel_beta">பீட்டா</string>
+    <string name="channel_alpha">ஆல்ஃபா</string>
+    <string name="settings_check_updates">புதுப்பிப்புகளைச் சரிபார்</string>
+    <string name="update_checking">சரிபார்க்கப்படுகிறது…</string>
+    <string name="update_up_to_date">நீங்கள் சமீபத்திய பதிப்பில் உள்ளீர்கள்</string>
+    <string name="update_available_row">பதிப்பு %1$s கிடைக்கிறது</string>
+    <string name="settings_about_subtitle">பதிப்பு %1$s, உருவாக்குநர் மற்றும் நன்றிகள்</string>
+    <string name="update_title">புதுப்பிப்பு கிடைக்கிறது</string>
+    <string name="update_subtitle">%1$s · உங்களிடம் %2$s உள்ளது</string>
+    <string name="update_whats_new">புதியவை என்ன</string>
+    <string name="update_install">நிறுவு</string>
+    <string name="update_allow_install">நிறுவலை அனுமதி</string>
+    <string name="update_downloading">பதிவிறக்கப்படுகிறது… %1$d%%</string>
+    <string name="update_not_now">இப்போது வேண்டாம்</string>
+    <string name="update_failed">புதுப்பிப்பு தோல்வியடைந்தது</string>
+    <string name="update_notification_channel_name">செயலி புதுப்பிப்புகள்</string>
+    <string name="update_notification_title">புதுப்பிப்பு கிடைக்கிறது: %1$s</string>
+    <string name="update_notification_body">வெளியீட்டுக் குறிப்புகளைப் பார்த்து நிறுவத் தட்டவும்</string>
+    <string name="about_title">Findex பற்றி</string>
+    <string name="about_section_app">செயலி</string>
+    <string name="about_version_build">பதிப்பு %1$s · உருவாக்கம் %2$d</string>
+    <string name="about_source_code">மூலக் குறியீடு</string>
+    <string name="about_section_developer">உருவாக்குநர்</string>
+    <string name="about_developer_tagline">ஒரு தனி உருவாக்குநரால் வடிவமைக்கப்பட்டு உருவாக்கப்பட்டது.</string>
+    <string name="about_portfolio">பணித்தொகுப்பு</string>
+    <string name="about_section_open_source">திறந்த மூலம்</string>
+    <string name="about_acknowledgements">நன்றிகள்</string>
+    <string name="about_acknowledgements_subtitle">Findex உருவாக்கப்பட்டுள்ள நூலகங்கள் மற்றும் திட்டங்கள்</string>
+
+    <!-- Compression & Extraction -->
+    <string name="compress_dialog_title">காப்பகத்தை உருவாக்கு</string>
+    <string name="compress_format_label">வடிவம்</string>
+    <string name="compress_password_zip_only">கடவுச்சொல் பாதுகாப்பு ZIP க்கு மட்டுமே கிடைக்கிறது.</string>
+    <string name="compress_password_hint">கடவுச்சொல் (விருப்பத்தேர்வு)</string>
+    <string name="compress_password_help">கடவுச்சொல்லுடன் காப்பகம் AES-256 மூலம் குறியாக்கம் செய்யப்படும்.</string>
+    <string name="extract_password_hint">கடவுச்சொல் (பாதுகாக்கப்பட்டிருந்தால்)</string>
+    <string name="extract_dialog_body">“%1$s” ஐ அதன் அருகிலுள்ள புதிய கோப்புறையில் பிரித்தெடுக்கவும்.</string>
+    <string name="compress_button">சுருக்கு</string>
+    <string name="extract_dialog_title">காப்பகத்தைப் பிரித்தெடு</string>
+    <string name="extract_button">பிரித்தெடு</string>
+
+    <!-- Multitasking & Selection -->
+    <string name="selected_count">%1$d தேர்ந்தெடுக்கப்பட்டது</string>
+    <string name="tabs_header">தாவல்கள்</string>
+
+    <!-- Notifications & Services -->
+    <string name="notification_channel_name">கோப்பு செயல்பாடுகள்</string>
+    <string name="notification_channel_description">நகலெடுத்தல், நகர்த்துதல், நீக்குதல் மற்றும் காப்பகப் பணிகளின் முன்னேற்றமும் முடிவுகளும்</string>
+    <string name="operation_in_progress">செயல்பாடு நடைபெறுகிறது…</string>
+    <string name="operation_completed">செயல்பாடு முடிந்தது</string>
+    <string name="operation_failed">செயல்பாடு தோல்வியடைந்தது</string>
+    <string name="operation_cancelled">செயல்பாடு ரத்துசெய்யப்பட்டது</string>
+    <string name="operation_progress">%1$d%% · %2$s</string>
+    <plurals name="operation_queued">
+        <item quantity="one">%1$s · மேலும் %2$d வரிசையில்</item>
+        <item quantity="other">%1$s · மேலும் %2$d வரிசையில்</item>
+    </plurals>
+    <string name="op_title_copy">%1$s உருப்படி(கள்) நகலெடுக்கப்படுகின்றன</string>
+    <string name="op_title_move">%1$s உருப்படி(கள்) நகர்த்தப்படுகின்றன</string>
+    <string name="op_title_delete">%1$s உருப்படி(கள்) நீக்கப்படுகின்றன</string>
+    <string name="op_title_trash">%1$s உருப்படி(கள்) மறுசுழற்சிக் கூடைக்கு நகர்த்தப்படுகின்றன</string>
+    <string name="op_title_restore">%1$s உருப்படி(கள்) மீட்டெடுக்கப்படுகின்றன</string>
+    <string name="op_title_clean">%1$s உருப்படி(கள்) சுத்தம் செய்யப்படுகின்றன</string>
+    <string name="op_title_compress">%1$s க்குச் சுருக்கப்படுகிறது</string>
+    <string name="op_title_extract">%1$s பிரித்தெடுக்கப்படுகிறது</string>
+    <string name="op_done_copy">%1$s உருப்படி(கள்) நகலெடுக்கப்பட்டன</string>
+    <string name="op_done_move">%1$s உருப்படி(கள்) நகர்த்தப்பட்டன</string>
+    <string name="op_done_delete">%1$s உருப்படி(கள்) நீக்கப்பட்டன</string>
+    <string name="op_done_trash">%1$s உருப்படி(கள்) மறுசுழற்சிக் கூடைக்கு நகர்த்தப்பட்டன</string>
+    <string name="op_done_restore">%1$s உருப்படி(கள்) மீட்டெடுக்கப்பட்டன</string>
+    <string name="op_done_clean">%1$s உருப்படி(கள்) சுத்தம் செய்யப்பட்டன</string>
+    <string name="op_done_compress">%1$s உருவாக்கப்பட்டது</string>
+    <string name="op_done_extract">%1$s பிரித்தெடுக்கப்பட்டது</string>
+    <string name="op_done_batch_rename">%1$s உருப்படி(கள்) மறுபெயரிடப்பட்டன</string>
+    <string name="op_done_image_transform">%1$s படம்(ங்கள்) சுருக்கப்பட்டன</string>
+    <string name="op_done_vault_import">%1$s உருப்படி(கள்) பெட்டகத்திற்கு நகர்த்தப்பட்டன</string>
+    <string name="op_done_vault_export">%1$s உருப்படி(கள்) பெட்டகத்திலிருந்து மீட்டெடுக்கப்பட்டன</string>
+    <string name="op_done_vault_delete">%1$s உருப்படி(கள்) பெட்டகத்திலிருந்து நீக்கப்பட்டன</string>
+    <string name="operation_cancelled_body">முடிவதற்கு முன் நிறுத்தப்பட்டது</string>
+    <string name="error_wrong_password">தவறான அல்லது விடுபட்ட கடவுச்சொல்</string>
+    <string name="error_unsupported_archive">இந்தக் காப்பக வடிவம் அல்லது பதிப்பு ஆதரிக்கப்படவில்லை</string>
+    <string name="error_no_space">போதுமான சேமிப்பக இடம் இல்லை</string>
+    <string name="error_into_itself">ஒரு கோப்புறையை அதற்குள்ளேயே நகலெடுக்க முடியாது</string>
+    <string name="error_access_denied">இந்த இடத்திற்கான அனுமதி மறுக்கப்பட்டது</string>
+    <string name="cancel">ரத்து</string>
+    <string name="confirm">உறுதிசெய்</string>
+
+    <!-- Recycle bin -->
+    <plurals name="trash_title">
+        <item quantity="one">%d உருப்படியை மறுசுழற்சிக் கூடைக்கு நகர்த்தவா?</item>
+        <item quantity="other">%d உருப்படிகளை மறுசுழற்சிக் கூடைக்கு நகர்த்தவா?</item>
+    </plurals>
+    <string name="trash_body">30 நாட்களுக்குள் மறுசுழற்சிக் கூடையிலிருந்து இதை மீட்டெடுக்கலாம்.</string>
+    <string name="delete_permanently">நிரந்தரமாக நீக்கு</string>
+    <string name="action_move_to_bin">கூடைக்கு நகர்த்து</string>
+    <string name="action_restore">மீட்டெடு</string>
+    <string name="action_empty_bin">கூடையைக் காலிசெய்</string>
+    <string name="undo">செயல்தவிர்</string>
+    <plurals name="moved_to_bin">
+        <item quantity="one">%d உருப்படி மறுசுழற்சிக் கூடைக்கு நகர்த்தப்பட்டது</item>
+        <item quantity="other">%d உருப்படிகள் மறுசுழற்சிக் கூடைக்கு நகர்த்தப்பட்டன</item>
+    </plurals>
+    <string name="recycle_bin_hint">30 நாட்களுக்குப் பிறகு உருப்படிகள் நிரந்தரமாக நீக்கப்படும்</string>
+    <string name="recycle_bin_empty">மறுசுழற்சிக் கூடை காலியாக உள்ளது</string>
+
+    <!-- File Inspector & Preview -->
+    <string name="details_dimensions">பரிமாணங்கள்</string>
+    <string name="details_resolution">தெளிவுத்திறன்</string>
+    <string name="details_duration">கால அளவு</string>
+    <string name="details_megapixels">%1$.1f MP</string>
+    <string name="details_artist">கலைஞர்</string>
+    <string name="details_album">ஆல்பம்</string>
+    <string name="details_package">தொகுப்பு</string>
+    <string name="details_version">பதிப்பு</string>
+    <string name="details_checksums">சரிபார்ப்புத் தொகைகள்</string>
+    <string name="details_calculate_hash">சரிபார்ப்புத் தொகைகளைக் கணக்கிடு</string>
+    <string name="details_calculating">கணக்கிடப்படுகிறது…</string>
+    <string name="details_copied_hash">சரிபார்ப்புத் தொகை கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது</string>
+    <string name="preview_fullscreen">முழுத்திரை</string>
+    <string name="preview_zoom_hint">பெரிதாக்க இழுக்கவும் · பெரிதாக்க இருமுறை தட்டவும்</string>
+    <string name="action_open_in_another_app">மற்றொரு செயலியில் திற</string>
+    <string name="action_rotate">சுழற்று</string>
+    <string name="action_reset_zoom">பெரிதாக்கலை மீட்டமை</string>
+    <string name="viewer_item_position">%2$d இல் %1$d</string>
+    <string name="preview_copy_text">உள்ளடக்கத்தை நகலெடு</string>
+    <string name="preview_text_copied">உள்ளடக்கம் கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது</string>
+    <string name="preview_lines_count">%1$d வரிகள்</string>
+    <string name="action_install">நிறுவு</string>
+    <string name="action_play">இயக்கு</string>
+    <string name="action_pause">இடைநிறுத்து</string>
+    <string name="action_open_folder">கோப்புறையைத் திற</string>
+    <string name="details_overview">கண்ணோட்டம்</string>
+    <string name="details_exact_bytes">%1$s பைட்டுகள்</string>
+
+    <!-- Search -->
+    <string name="search_hint">கோப்புகள் மற்றும் கோப்புறைகளைத் தேடு</string>
+    <string name="search_prompt">உங்கள் சேமிப்பகத்தில் எதையும் பெயரால் தேடுங்கள்</string>
+    <string name="search_no_results">“%1$s” உடன் பொருந்தும் கோப்புகள் இல்லை</string>
+    <string name="cd_clear_search">தேடலை அழி</string>
+
+    <!-- Duplicate finder -->
+    <string name="nav_duplicates">நகல் கோப்புகள்</string>
+    <string name="dup_title">நகல் கோப்புகள்</string>
+    <string name="dup_desc">இடத்தை வீணடிக்கும் ஒரே மாதிரியான நகல்கள்</string>
+    <string name="dup_none">நகல் கோப்புகள் எதுவும் இல்லை</string>
+    <string name="dup_keep_hint">ஒவ்வொரு கோப்பின் பழமையான நகல் பாதுகாக்கப்படும். குறைந்தது ஒரு நகலாவது எப்போதும் இருக்கும்.</string>
+    <string name="dup_delete_button">%1$s நீக்கு</string>
+    <string name="dup_hashing">கோப்பு உள்ளடக்கங்கள் ஒப்பிடப்படுகின்றன…</string>
+    <plurals name="dup_copies">
+        <item quantity="one">%d நகல்</item>
+        <item quantity="other">%d நகல்கள்</item>
+    </plurals>
+
+    <!-- Archive preview -->
+    <string name="action_browse">உள்ளடக்கங்களை உலாவு</string>
+    <string name="archive_extract_all">அனைத்தையும் பிரித்தெடு</string>
+    <string name="archive_empty">இந்தக் காப்பகம் காலியாக உள்ளது</string>
+    <string name="archive_unreadable">இந்தக் காப்பகத்தைப் பட்டியலிட முடியவில்லை. இது குறியாக்கம் செய்யப்பட்டிருக்கலாம் அல்லது சேதமடைந்திருக்கலாம்; கடவுச்சொல்லுடன் அனைத்தையும் பிரித்தெடுக்க முயற்சிக்கவும்.</string>
+    <string name="archive_password_title">கடவுச்சொல் தேவை</string>
+    <string name="archive_password_body">“%1$s” குறியாக்கம் செய்யப்பட்டுள்ளது.</string>
+    <string name="archive_unlock">திற</string>
+    <string name="archive_password_label">கடவுச்சொல்</string>
+    <string name="archive_opening">%1$s திறக்கப்படுகிறது…</string>
+
+    <!-- Network storage (SMB / SFTP / FTP / WebDAV) -->
+    <string name="network_title">பிணையச் சேமிப்பகம்</string>
+    <string name="network_subtitle">உங்கள் பிணையத்தில் உள்ள SMB, SFTP, FTP மற்றும் WebDAV சேவையகங்கள்</string>
+    <string name="network_empty_title">இன்னும் சேவையகங்கள் இல்லை</string>
+    <string name="network_empty_body">இங்கே உலாவ PC, NAS அல்லது சேவையகத்திலிருந்து பகிரப்பட்ட கோப்புறையைச் சேர்க்கவும்.</string>
+    <string name="network_add">சேவையகத்தைச் சேர்</string>
+    <string name="network_add_title">பிணையச் சேவையகத்தைச் சேர்</string>
+    <string name="network_protocol_label">நெறிமுறை</string>
+    <string name="network_webdav_https">HTTPS (TLS) ஐப் பயன்படுத்து</string>
+    <string name="network_field_name">காட்சிப் பெயர் (விருப்பத்தேர்வு)</string>
+    <string name="network_field_host">புரவலன் அல்லது IP முகவரி</string>
+    <string name="network_field_host_help">எடுத்துக்காட்டாக 192.168.1.20 அல்லது my-nas.local</string>
+    <string name="network_field_port">போர்ட் (விருப்பத்தேர்வு)</string>
+    <string name="network_field_port_default">இயல்புநிலை %1$d</string>
+    <string name="network_field_share">பகிர்வுப் பெயர்</string>
+    <string name="network_field_share_help">பகிரப்பட்ட கோப்புறை, எடுத்துக்காட்டாக Public</string>
+    <string name="network_field_path">தொலைநிலைப் பாதை (விருப்பத்தேர்வு)</string>
+    <string name="network_field_path_help_sftp">முகப்புக் கோப்புறைக்குக் காலியாக விடவும், அல்லது /mnt/media போன்ற பாதையை உள்ளிடவும்</string>
+    <string name="network_field_path_help_ftp">மூலக் கோப்புறைக்குக் காலியாக விடவும், அல்லது /pub போன்ற பாதையை உள்ளிடவும்</string>
+    <string name="network_field_path_help_webdav">முனைப் பாதை, எடுத்துக்காட்டாக /dav அல்லது /remote.php/dav/files/user</string>
+    <string name="network_field_user">பயனர்பெயர்</string>
+    <string name="network_field_user_help">விருந்தினராக இணையக் காலியாக விடவும்</string>
+    <string name="network_field_user_help_sftp">சேவையகத்தில் உள்ள SSH பயனர்பெயர்</string>
+    <string name="network_field_password">கடவுச்சொல்</string>
+    <string name="network_field_domain">டொமைன் அல்லது பணிக்குழு (விருப்பத்தேர்வு)</string>
+    <string name="network_connect">இணைத்து சேமி</string>
+    <string name="network_connecting">இணைக்கப்படுகிறது…</string>
+    <string name="network_password_note">Android Keystore இல் உள்ள விசையால் குறியாக்கம் செய்யப்பட்டது. இந்தப் பயனர்பெயருக்குச் சேமிக்கப்பட்ட கடவுச்சொல்லை மீண்டும் பயன்படுத்தக் காலியாக விடவும்.</string>
+    <string name="network_guest">விருந்தினர்</string>
+    <string name="network_status_connected">இணைக்கப்பட்டது</string>
+    <string name="network_remember_password">கடவுச்சொல்லை நினைவில் கொள்</string>
+    <string name="network_edit">சேவையகத்தைத் திருத்து</string>
+    <string name="network_edit_title">பிணையச் சேவையகத்தைத் திருத்து</string>
+    <string name="network_save">சோதித்து சேமி</string>
+    <string name="network_password_keep_note">தற்போதைய கடவுச்சொல்லை வைத்திருக்கக் காலியாக விடவும்.</string>
+    <string name="network_password_not_saved_note">சேமிக்கப்படவில்லை. ஒவ்வொரு முறையும் Findex ஐத் திறக்கும்போது ஒருமுறை கேட்கப்படும்.</string>
+    <string name="network_error_password_required">இணையக் கடவுச்சொல் தேவை</string>
+    <string name="network_unlock">திற</string>
+    <string name="network_unlock_title">“%1$s” உடன் இணை</string>
+    <string name="network_unlock_body">%1$s க்கான கடவுச்சொல். நீங்கள் Findex ஐ மூடும் வரை வைத்திருக்கப்படும்.</string>
+    <string name="network_status_offline">துண்டிக்கப்பட்டது. %1$s</string>
+    <string name="network_retry">மீண்டும் முயற்சி</string>
+    <string name="network_remove">சேவையகத்தை நீக்கு</string>
+    <string name="network_remove_title">“%1$s” ஐ நீக்கவா?</string>
+    <string name="network_remove_body">சேமிக்கப்பட்ட உள்நுழைவு மற்றும் பதிவிறக்கிய நகல்கள் நீக்கப்படும். சேவையகத்தில் உள்ள கோப்புகள் தொடப்படாது.</string>
+    <string name="network_error_host">சேவையகத்தை அடைய முடியவில்லை. முகவரி, போர்ட் மற்றும் நீங்கள் அதே பிணையத்தில் உள்ளீர்களா என்பதைச் சரிபார்க்கவும்.</string>
+    <string name="network_error_auth">உள்நுழைவு தோல்வியடைந்தது. பயனர்பெயர் மற்றும் கடவுச்சொல்லைச் சரிபார்க்கவும்.</string>
+    <string name="network_error_share">இந்தச் சேவையகத்தில் அந்தப் பெயரில் பகிர்வோ தொலைநிலைப் பாதையோ இல்லை.</string>
+    <string name="network_error_denied">இந்தக் கணக்கிற்கு அணுகல் மறுக்கப்பட்டது.</string>
+    <string name="network_error_unknown">சேவையகத்துடன் தொடர்புகொள்வதில் ஏதோ தவறு ஏற்பட்டது.</string>
+    <string name="rail_network">பிணையம்</string>
+    <string name="new_tab_title">புதிய தாவலை இதில் திற</string>
+    <string name="error_network">பிணையப் பகிர்வை அடைய முடியவில்லை</string>
+    <string name="error_not_supported_network">பிணையப் பகிர்வுகளில் கிடைக்காது</string>
+    <string name="network_opening_remote">%1$s பதிவிறக்கப்படுகிறது…</string>
+
+    <!-- BEGIN foundation (W1: drawer, entry actions, operation titles, failures) -->
+    <string name="drawer_section_more">மேலும்</string>
+    <string name="nav_favorites">பிடித்தவை</string>
+    <string name="nav_large_files">பெரிய கோப்புகள்</string>
+    <string name="nav_recent_changes">சமீபத்திய மாற்றங்கள்</string>
+    <string name="nav_vault">பெட்டகம்</string>
+    <string name="action_batch_rename">தொகுதி மறுபெயரிடல்</string>
+    <string name="action_move_to_vault">பெட்டகத்திற்கு நகர்த்து</string>
+    <string name="action_compress_image">படங்களைச் சுருக்கு</string>
+    <string name="action_tags">குறிச்சொற்கள்</string>
+    <string name="action_pin_shortcut">முகப்புத் திரையில் சேர்</string>
+    <string name="op_title_batch_rename">%1$s உருப்படி(கள்) மறுபெயரிடப்படுகின்றன</string>
+    <string name="op_title_image_transform">%1$s படம்(ங்கள்) சுருக்கப்படுகின்றன</string>
+    <string name="op_title_vault_import">%1$s உருப்படி(கள்) பெட்டகத்திற்கு நகர்த்தப்படுகின்றன</string>
+    <string name="op_title_vault_export">%1$s உருப்படி(கள்) பெட்டகத்திலிருந்து மீட்டெடுக்கப்படுகின்றன</string>
+    <string name="op_title_vault_delete">%1$s உருப்படி(கள்) பெட்டகத்திலிருந்து நீக்கப்படுகின்றன</string>
+    <string name="error_vault_locked">பெட்டகம் பூட்டப்பட்டுள்ளது</string>
+    <string name="error_nested_selection">ஒரு கோப்புறையையும் அதிலுள்ள உருப்படிகளையும் ஒன்றாக மறுபெயரிட முடியாது. அவற்றைத் தனித்தனியாக மறுபெயரிடவும்.</string>
+    <string name="error_name_conflict">அந்தப் பெயரில் ஒரு கோப்பு ஏற்கனவே உள்ளது</string>
+    <string name="error_op_invalid_name">அந்தப் பெயர் அனுமதிக்கப்படாது</string>
+    <string name="error_unsupported_image">இந்தப் பட வடிவம் ஆதரிக்கப்படவில்லை</string>
+    <string name="placeholder_coming_soon">விரைவில் வருகிறது</string>
+    <string name="selection_expired">தேர்வு காலாவதியானது. கோப்புகளை மீண்டும் தேர்ந்தெடுக்கவும்.</string>
+    <!-- END foundation -->
+
+    <!-- BEGIN batch-rename -->
+    <string name="rename_title">தொகுதி மறுபெயரிடல்</string>
+    <string name="rename_pattern_label">பெயர் வடிவம்</string>
+    <string name="rename_token_name">பெயர்</string>
+    <string name="rename_token_ext">நீட்டிப்பு</string>
+    <string name="rename_token_counter">எண்ணி</string>
+    <string name="rename_token_date">தேதி</string>
+    <string name="rename_token_parent">மூலக் கோப்புறை</string>
+    <string name="rename_find_label">கண்டறி</string>
+    <string name="rename_replace_label">இதனுடன் மாற்று</string>
+    <string name="rename_regex">ரெகுலர் எக்ஸ்பிரஷன் பயன்படுத்து</string>
+    <string name="rename_ignore_case">பெரிய/சிறிய எழுத்தைத் தவிர்க்கவும்</string>
+    <string name="rename_case_none">எழுத்து வகையை மாற்றாதே</string>
+    <string name="rename_case_lower">சிறிய எழுத்து</string>
+    <string name="rename_case_upper">பெரிய எழுத்து</string>
+    <string name="rename_case_title">தலைப்பு எழுத்து</string>
+    <string name="rename_counter_start">தொடங்கும் எண்</string>
+    <string name="rename_counter_step">படி</string>
+    <string name="rename_counter_pad">இலக்கங்கள்</string>
+    <string name="rename_touch_extension">நீட்டிப்பையும் மாற்று</string>
+    <string name="rename_status_unchanged">மாற்றமில்லை</string>
+    <string name="rename_status_duplicate">நகல் பெயர்</string>
+    <string name="rename_status_exists">பெயர் ஏற்கனவே உள்ளது</string>
+    <string name="rename_status_invalid">தவறான பெயர்</string>
+    <string name="rename_status_bad_regex">தவறான வடிவம்</string>
+    <string name="rename_apply">மறுபெயரிடு</string>
+    <plurals name="rename_summary">
+        <item quantity="one">%d உருப்படி மறுபெயரிடப்படும்</item>
+        <item quantity="other">%d உருப்படிகள் மறுபெயரிடப்படும்</item>
+    </plurals>
+    <!-- END batch-rename -->
+
+    <!-- BEGIN large-files -->
+    <string name="bigfiles_title">பெரிய மற்றும் பழைய கோப்புகள்</string>
+    <string name="bigfiles_size_any">எந்த அளவும்</string>
+    <string name="bigfiles_size_100mb">100 MB க்கு மேல்</string>
+    <string name="bigfiles_size_500mb">500 MB க்கு மேல்</string>
+    <string name="bigfiles_size_1gb">1 GB க்கு மேல்</string>
+    <string name="bigfiles_age_any">எந்தப் பழமையும்</string>
+    <string name="bigfiles_age_30d">30 நாட்களுக்கு மேல் பழமையானது</string>
+    <string name="bigfiles_age_90d">90 நாட்களுக்கு மேல் பழமையானது</string>
+    <string name="bigfiles_age_6mo">6 மாதங்களுக்கு மேல் பழமையானது</string>
+    <string name="bigfiles_age_1y">1 வருடத்திற்கு மேல் பழமையானது</string>
+    <string name="bigfiles_category_any">எந்த வகையும்</string>
+    <string name="bigfiles_include_hidden">மறைக்கப்பட்ட கோப்புகளைச் சேர்</string>
+    <string name="bigfiles_hint_modified">பழமையானது என்பது கடைசியாக மாற்றப்பட்ட தேதியை அடிப்படையாகக் கொண்டது</string>
+    <string name="bigfiles_empty">இந்த வடிப்பான்களுடன் பொருந்தும் கோப்புகள் இல்லை</string>
+    <plurals name="bigfiles_selected">
+        <item quantity="one">%d கோப்பு தேர்ந்தெடுக்கப்பட்டது</item>
+        <item quantity="other">%d கோப்புகள் தேர்ந்தெடுக்கப்பட்டன</item>
+    </plurals>
+    <!-- END large-files -->
+
+    <!-- BEGIN image-compress -->
+    <string name="imgc_title">படங்களைச் சுருக்கு</string>
+    <string name="imgc_preset_small">சிறியது</string>
+    <string name="imgc_preset_medium">நடுத்தரம்</string>
+    <string name="imgc_preset_large">பெரியது</string>
+    <string name="imgc_preset_custom">தனிப்பயன்</string>
+    <string name="imgc_max_edge">நீளமான விளிம்பு (px)</string>
+    <string name="imgc_scale_percent">அளவீடு (%)</string>
+    <string name="imgc_quality">தரம்</string>
+    <string name="imgc_format_keep">அசலை வைத்திரு</string>
+    <string name="imgc_output_copy">நகலாகச் சேமி</string>
+    <string name="imgc_output_replace">அசல்களை மாற்று</string>
+    <string name="imgc_output_folder">கோப்புறையில் சேமி</string>
+    <string name="imgc_keep_metadata">இருப்பிடம் மற்றும் கேமரா தகவலை வைத்திரு</string>
+    <string name="imgc_estimate">மதிப்பிடப்பட்ட அளவு: %1$s</string>
+    <string name="imgc_replace_warning">அசல்கள் மேலெழுதப்படும், அவற்றைத் திரும்பப் பெற முடியாது.</string>
+    <plurals name="imgc_skipped">
+        <item quantity="one">%d படம் தவிர்க்கப்பட்டது</item>
+        <item quantity="other">%d படங்கள் தவிர்க்கப்பட்டன</item>
+    </plurals>
+    <!-- END image-compress -->
+
+    <!-- BEGIN vault -->
+    <string name="vault_title">பெட்டகம்</string>
+    <string name="vault_setup_title">உங்கள் பெட்டகத்தை அமைக்கவும்</string>
+    <string name="vault_setup_password">பெட்டகக் கடவுச்சொல்</string>
+    <string name="vault_setup_confirm">கடவுச்சொல்லை உறுதிப்படுத்து</string>
+    <string name="vault_setup_mismatch">கடவுச்சொற்கள் பொருந்தவில்லை</string>
+    <string name="vault_setup_strength_weak">பலவீனமானது</string>
+    <string name="vault_setup_strength_fair">சாதாரணமானது</string>
+    <string name="vault_setup_strength_strong">வலுவானது</string>
+    <string name="vault_setup_biometric">கைரேகை அல்லது முகத்தால் திறக்கவும்</string>
+    <string name="vault_setup_warning_no_recovery">கடவுச்சொல் மீட்பு இல்லை. கடவுச்சொல்லை மறந்துவிட்டால், உங்கள் கோப்புகள் இழக்கப்படும்.</string>
+    <string name="vault_setup_warning_not_secure_erase">அசல் கோப்புகள் சாதாரணமாக நீக்கப்படும், பாதுகாப்பாக அழிக்கப்படாது. நீக்கப்பட்ட தரவு சேமிப்பகத்திலிருந்து மீட்கப்படலாம்.</string>
+    <string name="vault_setup_acknowledge">ஆபத்துகளை நான் புரிந்துகொள்கிறேன்</string>
+    <string name="vault_setup_create">பெட்டகத்தை உருவாக்கு</string>
+    <string name="vault_unlock_title">பெட்டகத்தைத் திற</string>
+    <string name="vault_unlock_password">கடவுச்சொல்</string>
+    <string name="vault_unlock_biometric">கைரேகை அல்லது முகத்தைப் பயன்படுத்து</string>
+    <string name="vault_unlock_wrong_password">தவறான கடவுச்சொல்</string>
+    <string name="vault_unlock_lockout">பல முயற்சிகள். %1$s இல் மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="vault_biometric_prompt_title">பெட்டகத்தைத் திற</string>
+    <string name="vault_biometric_prompt_subtitle">அது நீங்கள்தான் என்பதை உறுதிப்படுத்தவும்</string>
+    <string name="vault_biometric_prompt_negative">கடவுச்சொல்லைப் பயன்படுத்து</string>
+    <string name="vault_biometric_invalidated">கைரேகை அல்லது முகம் மாற்றப்பட்டது. உங்கள் கடவுச்சொல்லால் திறந்து, பயோமெட்ரிக்ஸை மீண்டும் அமைக்கவும்.</string>
+    <string name="vault_add_files">கோப்புகளைச் சேர்</string>
+    <string name="vault_import_confirm">பெட்டகத்திற்கு நகர்த்தவா? அசல்கள் கூடைக்கு அனுப்பப்படாமல் நிரந்தரமாக நீக்கப்படும்.</string>
+    <string name="vault_export_original">அசல் இடத்திற்கு மீட்டெடு</string>
+    <string name="vault_export_choose_folder">கோப்புறையைத் தேர்ந்தெடு</string>
+    <string name="vault_open_external_warning">பெட்டகத்திற்கு வெளியே திறப்பது இந்தச் சாதனத்தில் குறியாக்கம் செய்யப்படாத நகலை விட்டுச்செல்லும்.</string>
+    <string name="vault_menu_change_password">கடவுச்சொல்லை மாற்று</string>
+    <string name="vault_menu_biometric">கைரேகை அல்லது முகத் திறப்பு</string>
+    <string name="vault_menu_auto_lock">தானியங்கிப் பூட்டு</string>
+    <string name="vault_menu_lock_now">இப்போது பூட்டு</string>
+    <string name="vault_auto_lock_immediately">உடனடியாக</string>
+    <string name="vault_auto_lock_1min">1 நிமிடத்திற்குப் பிறகு</string>
+    <string name="vault_auto_lock_5min">5 நிமிடங்களுக்குப் பிறகு</string>
+    <string name="vault_auto_lock_screen_off">திரை அணையும்போது</string>
+    <string name="vault_restore_title">அசல் இடத்திற்கு மீட்டெடுக்கவா?</string>
+    <string name="vault_restore_body">கோப்புகள் மறைகுறியாக்கம் நீக்கப்பட்டு அவற்றின் அசல் கோப்புறைகளுக்குத் திரும்ப நகர்த்தப்படும். விடுபட்ட கோப்புறைகள் மீண்டும் உருவாக்கப்படும்.</string>
+    <string name="vault_restore_action">மீட்டெடு</string>
+    <string name="vault_empty">உங்கள் பெட்டகம் காலியாக உள்ளது</string>
+    <string name="vault_locked_banner">பெட்டகம் பூட்டப்பட்டுள்ளது. உங்கள் கோப்புகளைக் காண அதைத் திறக்கவும்.</string>
+    <string name="cd_vault_lock">பெட்டகத்தைப் பூட்டு</string>
+    <string name="vault_setup_min_length">குறைந்தது 8 எழுத்துக்களைப் பயன்படுத்தவும்</string>
+    <string name="vault_unlock_action">திற</string>
+    <string name="vault_password_current">தற்போதைய கடவுச்சொல்</string>
+    <string name="vault_password_new">புதிய கடவுச்சொல்</string>
+    <string name="vault_password_changed">கடவுச்சொல் மாற்றப்பட்டது</string>
+    <string name="vault_unreadable_title">பெட்டக விசையைப் படிக்க முடியவில்லை</string>
+    <string name="vault_unreadable_body">குறியாக்கம் செய்யப்பட்ட கோப்புகள் .FindexVault கோப்புறையில் உள்ளன, ஆனால் அதன் vault.key கோப்பு இல்லை அல்லது சேதமடைந்துள்ளது. அவற்றைத் திறக்க காப்புப்பிரதியிலிருந்து vault.key ஐ மீட்டெடுக்கவும். புதிய பெட்டகம் உருவாக்கப்படவில்லை, எனவே கோப்புகள் மீட்கக்கூடியதாகவே உள்ளன.</string>
+    <string name="vault_rebuild_title">முந்தைய நிறுவலிலிருந்து கோப்புகள்</string>
+    <string name="vault_rebuild_body">பெட்டகக் கோப்புறையில் குறியாக்கம் செய்யப்பட்ட கோப்புகள் கண்டறியப்பட்டன. அவற்றைப் பட்டியலில் மீட்டெடுக்கவா?</string>
+    <string name="vault_rebuild_action">பட்டியலை மீட்டெடு</string>
+    <string name="vault_add_files_hint">உலாவியில், கோப்புகள் அல்லது கோப்புறைகளை அழுத்திப் பிடித்து பெட்டகத்திற்கு நகர்த்து என்பதைத் தேர்ந்தெடுக்கவும்.</string>
+    <string name="vault_delete_confirm">பெட்டகத்திலிருந்து %1$d உருப்படி(கள்) நீக்கவா? அவற்றை மீட்டெடுக்க முடியாது.</string>
+    <string name="vault_biometric_error">கைரேகை அல்லது முகத் திறப்பு கிடைக்கவில்லை</string>
+    <string name="vault_import_ready">%1$d உருப்படி(கள்) குறியாக்கம் செய்யப்படும். அசல்கள் கூடைக்கு அனுப்பப்படாமல் நிரந்தரமாக நீக்கப்படும்.</string>
+    <!-- END vault -->
+
+    <!-- BEGIN viewers -->
+    <string name="viewer_text_save">சேமி</string>
+    <string name="viewer_text_saved">சேமிக்கப்பட்டது</string>
+    <string name="viewer_text_unsaved_title">மாற்றங்களை நிராகரிக்கவா?</string>
+    <string name="viewer_text_unsaved_body">உங்கள் திருத்தங்கள் இழக்கப்படும்.</string>
+    <string name="viewer_text_discard">நிராகரி</string>
+    <string name="viewer_text_conflict_title">வட்டில் கோப்பு மாற்றப்பட்டது</string>
+    <string name="viewer_text_conflict_body">நீங்கள் திறந்த பிறகு மற்றொரு செயலி இந்தக் கோப்பை மாற்றியது.</string>
+    <string name="viewer_text_overwrite">மேலெழுது</string>
+    <string name="viewer_text_read_only">படிக்க மட்டும்</string>
+    <string name="viewer_text_truncated">கோப்பு மிகவும் பெரியது. முதல் பகுதி காட்டப்படுகிறது.</string>
+    <string name="viewer_text_not_text">இந்தக் கோப்பு எளிய உரை அல்ல.</string>
+    <string name="viewer_text_find">கண்டறி</string>
+    <string name="viewer_text_wrap">வரிகளை மடி</string>
+    <string name="viewer_text_undo">செயல்தவிர்</string>
+    <string name="viewer_text_redo">மீண்டும் செய்</string>
+    <string name="viewer_text_encoding">குறியாக்கம்</string>
+    <string name="viewer_pdf_page_of">பக்கம் %1$d / %2$d</string>
+    <string name="viewer_pdf_go_to_page">பக்கத்திற்குச் செல்</string>
+    <string name="viewer_pdf_protected">இந்த PDF கடவுச்சொல்லால் பாதுகாக்கப்பட்டது</string>
+    <string name="viewer_pdf_password">கடவுச்சொல்</string>
+    <string name="viewer_pdf_downloading">PDF பதிவிறக்கப்படுகிறது…</string>
+    <string name="viewer_pdf_error">இந்த PDF ஐத் திறக்க முடியவில்லை</string>
+    <string name="viewer_audio_play">இயக்கு</string>
+    <string name="viewer_audio_pause">இடைநிறுத்து</string>
+    <string name="viewer_audio_next">அடுத்த பாடல்</string>
+    <string name="viewer_audio_previous">முந்தைய பாடல்</string>
+    <string name="viewer_audio_repeat">மீண்டும்</string>
+    <string name="viewer_audio_shuffle">கலைத்துப் போடு</string>
+    <string name="viewer_audio_queue">வரிசை</string>
+    <string name="viewer_audio_error">இந்தக் கோப்பை இயக்க முடியவில்லை</string>
+    <string name="viewer_text_error">இந்தக் கோப்பைப் படிக்கவோ சேமிக்கவோ முடியவில்லை</string>
+    <!-- END viewers -->
+
+    <!-- BEGIN tags-favorites -->
+    <string name="tags_title">குறிச்சொற்கள்</string>
+    <string name="tags_new">புதிய குறிச்சொல்</string>
+    <string name="tags_name_hint">குறிச்சொல் பெயர்</string>
+    <string name="tags_color_red">சிவப்பு</string>
+    <string name="tags_color_orange">ஆரஞ்சு</string>
+    <string name="tags_color_yellow">மஞ்சள்</string>
+    <string name="tags_color_green">பச்சை</string>
+    <string name="tags_color_teal">நீலப்பச்சை</string>
+    <string name="tags_color_blue">நீலம்</string>
+    <string name="tags_color_purple">ஊதா</string>
+    <string name="tags_color_pink">இளஞ்சிவப்பு</string>
+    <string name="tags_rename">குறிச்சொல்லை மறுபெயரிடு</string>
+    <string name="tags_delete_title">“%1$s” குறிச்சொல்லை நீக்கவா?</string>
+    <string name="tags_delete_body">கோப்புகள் அவற்றின் தரவை வைத்திருக்கும். குறிச்சொல் மட்டுமே நீக்கப்படும்.</string>
+    <string name="tags_empty">குறிச்சொற்கள் இன்னும் இல்லை</string>
+    <string name="favorites_title">பிடித்தவை</string>
+    <string name="favorites_folders">கோப்புறைகள்</string>
+    <string name="favorites_files">கோப்புகள்</string>
+    <string name="favorites_tags">குறிச்சொற்கள்</string>
+    <string name="favorites_empty">இன்னும் எதுவும் சேமிக்கப்படவில்லை</string>
+    <string name="tags_apply">பயன்படுத்து</string>
+    <string name="tags_save">சேமி</string>
+    <string name="tags_files_empty">இந்தக் குறிச்சொல்லுடன் கோப்புகள் இல்லை</string>
+    <!-- END tags-favorites -->
+
+    <!-- BEGIN shortcuts -->
+    <string name="shortcut_pinned">குறுக்குவழி முகப்புத் திரையில் சேர்க்கப்பட்டது</string>
+    <string name="shortcut_unsupported">உங்கள் லாஞ்சர் குறுக்குவழிகளை ஆதரிக்கவில்லை</string>
+    <string name="shortcut_folder_missing">இந்தக் கோப்புறை இனி இல்லை</string>
+    <!-- END shortcuts -->
+
+    <!-- BEGIN recent-changes-growth -->
+    <string name="changes_title">சமீபத்திய மாற்றங்கள்</string>
+    <string name="changes_today">இன்று</string>
+    <string name="changes_yesterday">நேற்று</string>
+    <string name="changes_range_1d">கடந்த 24 மணிநேரம்</string>
+    <string name="changes_range_7d">கடந்த 7 நாட்கள்</string>
+    <string name="changes_range_30d">கடந்த 30 நாட்கள்</string>
+    <string name="changes_empty">சமீபத்திய மாற்றங்கள் இல்லை</string>
+    <string name="changes_limit_hint">மிகச் சமீபத்திய மாற்றங்கள் மட்டுமே காட்டப்படுகின்றன.</string>
+    <string name="growth_title">சேமிப்பக வளர்ச்சி</string>
+    <string name="growth_range_30d">30 நாட்கள்</string>
+    <string name="growth_range_90d">90 நாட்கள்</string>
+    <string name="growth_range_1y">1 வருடம்</string>
+    <string name="growth_delta_up">%1$s அதிகரிப்பு</string>
+    <string name="growth_delta_down">%1$s குறைவு</string>
+    <string name="growth_empty">இன்னும் போதுமான வரலாறு இல்லை. Findex தினமும் சேமிப்பகத்தைப் பதிவு செய்கிறது.</string>
+    <string name="viewer_pdf_dark_pages">இருண்ட பக்கங்கள்</string>
+    <string name="settings_builtin_viewers">உள்ளமைக்கப்பட்ட பார்வையாளர்கள்</string>
+    <string name="settings_builtin_viewers_desc">புகைப்படங்கள், காணொளிகள், PDFகள், உரை மற்றும் ஒலியை Findex இல் திறக்கவும். முடக்கினால் இயல்புநிலை செயலிகள் பயன்படும்</string>
+    <string name="widget_label">Findex சேமிப்பகம்</string>
+    <string name="widget_description">சேமிப்பகப் பயன்பாடு, விரைவு சுத்தம் மற்றும் உங்கள் புத்தகக்குறி கோப்புறைகள்</string>
+    <string name="widget_used">%1$d%% பயன்படுத்தப்பட்டது</string>
+    <string name="widget_free">%2$s இல் %1$s காலி</string>
+    <string name="settings_cleanup_reminder">சுத்தம் செய்யும் நினைவூட்டல்</string>
+    <string name="settings_cleanup_reminder_desc">வாரத்திற்கு ஒருமுறை, சுத்தம் செய்யத் தகுந்த குப்பை இருக்கும்போது தெரிவிக்கவும்</string>
+    <string name="cleanup_reminder_channel">சுத்தம் செய்யும் நினைவூட்டல்கள்</string>
+    <string name="cleanup_reminder_title">%1$s விடுவிக்க முடியும்</string>
+    <string name="cleanup_reminder_text">நீங்கள் சுத்தம் செய்யக்கூடிய சிறுபடங்கள், தற்காலிகக் கோப்புகள் மற்றும் எச்சங்கள்</string>
+    <string name="cleanup_reminder_action">சுத்தம் செய்</string>
+    <string name="settings_storage_history">சேமிப்பக வரலாறு</string>
+    <string name="settings_storage_history_desc">வளர்ச்சி விளக்கப்படத்திற்காக தினசரி சேமிப்பக நிலைகளை வைத்திரு</string>
+    <!-- END recent-changes-growth -->
+
+    <!-- BEGIN share-phone -->
+    <string name="nav_share_phone">இந்தத் தொலைபேசியைப் பகிர்</string>
+    <string name="share_tile_running">%1$s · PIN %2$s</string>
+    <string name="share_tile_starting">தொடங்குகிறது…</string>
+    <string name="share_tile_no_network">Wi-Fi இல்லை</string>
+    <string name="share_tile_off">முடக்கம்</string>
+    <string name="share_channel_name">இந்தத் தொலைபேசியைப் பகிர்</string>
+    <string name="share_notification_title">இந்தத் தொலைபேசி பகிரப்படுகிறது</string>
+    <string name="share_notification_text">%1$s ஐத் திற · PIN %2$s</string>
+    <string name="share_stop">நிறுத்து</string>
+    <string name="share_start">பகிர்வதைத் தொடங்கு</string>
+    <string name="share_starting">தொடங்குகிறது…</string>
+    <string name="share_intro_title">கணினியில் உங்கள் கோப்புகளைத் திறக்கவும்</string>
+    <string name="share_intro_body">Findex இந்தத் தொலைபேசியில் ஒரு சிறிய வலைச் சேவையகத்தைத் தொடங்குகிறது. அதே Wi-Fi அல்லது ஹாட்ஸ்பாட்டில் உள்ள எந்த உலாவியும் ஒருமுறை பயன்படுத்தும் PIN மூலம் அதைத் திறக்கலாம்.</string>
+    <string name="share_no_network">முதலில் Wi-Fi உடன் இணையவும் அல்லது ஹாட்ஸ்பாட்டை இயக்கவும்.</string>
+    <string name="share_open_url">உங்கள் கணினியில் உள்ள உலாவியில் திறக்கவும்</string>
+    <string name="share_pin">PIN</string>
+    <string name="share_copy_url">முகவரியை நகலெடு</string>
+    <string name="share_copied">முகவரி நகலெடுக்கப்பட்டது</string>
+    <plurals name="share_clients">
+        <item quantity="one">%d உலாவி உள்நுழைந்துள்ளது</item>
+        <item quantity="other">%d உலாவிகள் உள்நுழைந்துள்ளன</item>
+    </plurals>
+    <string name="share_clients_none">இன்னும் எந்த உலாவியும் உள்நுழையவில்லை</string>
+    <string name="share_access">அணுகல்</string>
+    <string name="share_access_hint">இணைக்கப்பட்ட உலாவிகளுக்கும் மாற்றங்கள் உடனடியாகப் பொருந்தும்.</string>
+    <string name="share_level_view">பார்வை</string>
+    <string name="share_level_download">பதிவிறக்கம்</string>
+    <string name="share_level_full">முழு</string>
+    <string name="share_perm_media">ஊடகப் பிரிவுகள்</string>
+    <string name="share_perm_media_desc">புகைப்படங்கள், காணொளிகள், ஒலி, ஆவணங்கள் மற்றும் பல</string>
+    <string name="share_perm_files">கோப்பு உலாவி</string>
+    <string name="share_perm_files_desc">உள்ளகச் சேமிப்பகம் மற்றும் SD கார்டில் உள்ள ஒவ்வொரு கோப்புறையையும் உலாவவும்</string>
+    <string name="share_perm_download">திற மற்றும் பதிவிறக்கு</string>
+    <string name="share_perm_download_desc">கணினியில் முன்னோட்டம் பார்க்கவும், ஸ்ட்ரீம் செய்யவும் மற்றும் கோப்புகளைச் சேமிக்கவும்</string>
+    <string name="share_perm_upload">பதிவேற்று</string>
+    <string name="share_perm_upload_desc">கணினியிலிருந்து கோப்புகளைச் சேர்க்கவும் மற்றும் கோப்புறைகளை உருவாக்கவும்</string>
+    <string name="share_perm_modify">மறுபெயரிடு மற்றும் நீக்கு</string>
+    <string name="share_perm_modify_desc">நீக்கப்பட்ட கோப்புகள் மறுசுழற்சிக் கூடைக்குச் செல்லும்</string>
+    <string name="share_auto_stop">தானியங்கி நிறுத்தம்</string>
+    <string name="share_auto_stop_desc">எந்தக் கோரிக்கையும் இல்லாமல் இவ்வளவு நேரத்திற்குப் பிறகு சேவையகத்தை நிறுத்து</string>
+    <string name="share_minutes">%d நிமி</string>
+    <string name="share_never">ஒருபோதும் இல்லை</string>
+    <string name="share_security_note">போக்குவரத்து குறியாக்கம் செய்யப்படவில்லை. நீங்கள் நம்பும் பிணையங்களில் மட்டும் பகிரவும்.</string>
+    <!-- END share-phone -->
+</resources>

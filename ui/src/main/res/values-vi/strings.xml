@@ -1,0 +1,791 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App & Branding -->
+    <string name="app_tagline">Trình quản lý tệp Material 3 Expressive</string>
+
+    <!-- Navigation Drawer -->
+    <string name="drawer_subtitle">Tệp &amp; Lưu trữ đám mây</string>
+    <string name="nav_home">Trang chủ</string>
+    <string name="nav_storage_graph">Biểu đồ lưu trữ</string>
+    <string name="nav_storage_cleaner">Dọn dẹp bộ nhớ</string>
+    <string name="nav_whatsapp_cleaner">Dọn dẹp WhatsApp</string>
+    <string name="nav_telegram_cleaner">Dọn dẹp Telegram</string>
+    <string name="nav_instagram_cleaner">Dọn dẹp Instagram</string>
+    <string name="nav_app_cleaner">Dọn dẹp ứng dụng</string>
+    <string name="nav_dual_pane">Hai khung</string>
+    <string name="dual_compare">So sánh thư mục</string>
+    <string name="dual_swap">Hoán đổi khung</string>
+    <string name="dual_select_missing">Chọn các mục thiếu ở khung kia</string>
+    <string name="dual_copy_to">Sao chép sang khung kia</string>
+    <string name="dual_move_to">Di chuyển sang khung kia</string>
+    <string name="dual_up">Lên một thư mục</string>
+    <string name="cmp_only_here">Chỉ có ở đây</string>
+    <string name="cmp_newer">Mới hơn ở đây</string>
+    <string name="cmp_older">Cũ hơn ở đây</string>
+    <string name="cmp_different">Khác nhau</string>
+    <string name="cmp_same">Giống nhau</string>
+    <string name="nav_archive_manager">Quản lý tệp nén</string>
+    <string name="nav_network_storage">Lưu trữ mạng</string>
+    <string name="nav_settings">Cài đặt</string>
+    <string name="nav_recycle_bin">Thùng rác</string>
+    <string name="nav_tabs">Thẻ</string>
+    <string name="nav_search">Tìm kiếm</string>
+    <plurals name="tabs_open_count">
+        <item quantity="other">%d thẻ đang mở</item>
+    </plurals>
+    <string name="tabs_close_all">Đóng tất cả thẻ</string>
+    <string name="tabs_empty_title">Không có thẻ nào đang mở</string>
+    <string name="tabs_empty_body">Mở thẻ mới để duyệt tệp của bạn</string>
+    <string name="tabs_current">Thẻ hiện tại</string>
+    <string name="cd_close_tab">Đóng thẻ %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Tệp của bạn, được sắp xếp gọn gàng</string>
+    <string name="onboarding_body">Findex cần quyền truy cập tất cả tệp để duyệt, sao chép, nén và dọn dẹp bộ nhớ của bạn.</string>
+    <string name="onboarding_point_access">Duyệt mọi thư mục, thẻ SD và ổ USB</string>
+    <string name="onboarding_point_fast">Sao chép, di chuyển và nén trong nền</string>
+    <string name="onboarding_point_private">Mọi thứ đều nằm trên thiết bị của bạn</string>
+    <string name="onboarding_permissions">Quyền truy cập</string>
+    <string name="onboarding_storage_title">Quyền truy cập tất cả tệp</string>
+    <string name="onboarding_storage_body">Cần thiết để duyệt và quản lý tệp của bạn</string>
+    <string name="onboarding_notify_title">Thông báo</string>
+    <string name="onboarding_notify_body">Hiển thị tiến trình sao chép, di chuyển, nén và dọn dẹp khi bạn dùng ứng dụng khác</string>
+    <string name="onboarding_allow">Cho phép</string>
+    <string name="onboarding_granted">Đã cấp quyền</string>
+    <string name="onboarding_continue">Tiếp tục</string>
+    <string name="onboarding_storage_required">Cho phép truy cập tất cả tệp để tiếp tục</string>
+    <string name="onboarding_notify_hint">Nếu không có thông báo, tiến trình chỉ hiển thị bên trong Findex</string>
+    <string name="error_no_app">Không có ứng dụng nào mở được tệp này</string>
+    <string name="save_to_findex">Lưu vào Findex</string>
+    <string name="save_to_findex_hint">Mở một thư mục, sau đó nhấn Lưu</string>
+    <string name="error_open_unsupported">Findex không thể mở tệp này</string>
+
+    <!-- Tabs -->
+    <string name="tab_device">Thiết bị</string>
+    <string name="tab_network">Mạng</string>
+
+    <!-- Storage Drives -->
+    <string name="storage_internal">Bộ nhớ trong</string>
+    <string name="storage_sdcard">Thẻ SD</string>
+    <string name="storage_network">Lưu trữ mạng</string>
+    <string name="storage_usb">Ổ USB</string>
+    <string name="storage_used_of">Đã dùng %1$s / %2$s</string>
+    <string name="storage_free_space">Còn trống %1$s</string>
+    <string name="storage_scanning">Đang quét bộ nhớ…</string>
+    <string name="storage_no_network_drives">Chưa kết nối ổ mạng nào. Nhấn + để kết nối qua SMB / WebDAV / FTP.</string>
+    <string name="storage_add_network">Thêm ổ mạng</string>
+    <string name="storage_used_label">đã dùng</string>
+
+    <!-- Home -->
+    <string name="home_subtitle">Tệp của bạn, luôn ngăn nắp</string>
+    <string name="section_categories">Danh mục</string>
+    <string name="section_bookmarks">Dấu trang</string>
+    <string name="section_recents">Tệp gần đây</string>
+    <string name="cd_open_drawer">Mở ngăn điều hướng</string>
+    <string name="cd_browse_drive">Duyệt bộ nhớ</string>
+    <plurals name="item_count">
+        <item quantity="other">%d mục</item>
+    </plurals>
+
+    <!-- File Categories -->
+    <string name="category_photos">Ảnh</string>
+    <string name="category_videos">Video</string>
+    <string name="category_audio">Âm thanh</string>
+    <string name="category_documents">Tài liệu</string>
+    <string name="category_downloads">Tải xuống</string>
+    <string name="category_archives">Tệp nén</string>
+    <string name="category_apks">APK</string>
+
+    <!-- Quick Suggestions & Tools -->
+    <string name="section_suggestions">Công cụ nhanh</string>
+    <string name="cleaner_title">Dọn dẹp bộ nhớ</string>
+    <string name="cleaner_desc">Giải phóng dung lượng bằng cách xóa tệp rác và bộ nhớ đệm tạm thời</string>
+    <string name="whatsapp_cleaner_title">Dọn dẹp WhatsApp</string>
+    <string name="whatsapp_cleaner_desc">Xóa phương tiện đã gửi, tin nhắn thoại, nhãn dán và bản sao lưu</string>
+    <string name="storage_graph_title">Phân tích bộ nhớ</string>
+    <string name="storage_graph_desc">Trực quan hóa tệp lớn và phân bổ dung lượng thư mục</string>
+
+    <!-- File Actions -->
+    <string name="action_cut">Cắt</string>
+    <string name="action_copy">Sao chép</string>
+    <string name="action_paste">Dán</string>
+    <string name="action_delete">Xóa</string>
+    <string name="action_rename">Đổi tên</string>
+    <string name="action_details">Chi tiết</string>
+    <string name="action_compress">Nén</string>
+    <string name="action_extract">Giải nén</string>
+    <string name="action_share">Chia sẻ</string>
+    <string name="action_select_all">Chọn tất cả</string>
+    <string name="action_deselect_all">Bỏ chọn</string>
+    <string name="action_search">Tìm kiếm tệp</string>
+    <string name="action_clean">Dọn ngay</string>
+    <string name="action_new_folder">Thư mục mới</string>
+    <string name="action_new_tab">Thẻ mới</string>
+    <string name="action_close_tab">Đóng thẻ</string>
+    <string name="action_open_in_new_tab">Mở trong thẻ mới</string>
+    <string name="detail_empty_hint">Chọn một tệp để xem trước và xem chi tiết tại đây</string>
+    <string name="cd_close_details">Đóng chi tiết</string>
+    <string name="rail_graph">Biểu đồ</string>
+    <string name="rail_cleaner">Dọn dẹp</string>
+    <string name="rail_whatsapp">WhatsApp</string>
+    <string name="rail_bin">Thùng rác</string>
+    <string name="action_copy_path">Sao chép đường dẫn</string>
+    <string name="path_copied">Đã sao chép đường dẫn vào khay nhớ tạm</string>
+    <string name="preview_file">Xem trước</string>
+    <string name="preview_play_video">Phát video</string>
+    <string name="preview_play_audio">Phát âm thanh</string>
+    <string name="preview_lines_truncated">Đang hiển thị %1$d dòng</string>
+    <string name="preview_empty_file">Tệp trống</string>
+    <string name="details_item_info">Chi tiết mục</string>
+
+    <string name="action_open">Mở</string>
+    <string name="action_create">Tạo</string>
+    <string name="action_bookmark">Thêm dấu trang</string>
+    <string name="action_remove_bookmark">Xóa dấu trang</string>
+    <string name="bookmark_added">Đã thêm dấu trang</string>
+    <string name="bookmark_removed">Đã xóa dấu trang</string>
+
+    <!-- Explorer -->
+    <string name="cd_back">Quay lại</string>
+    <string name="cd_more_options">Tùy chọn khác</string>
+    <string name="cd_more_actions">Thao tác khác cho %1$s</string>
+    <string name="cd_grid_view">Chế độ xem lưới</string>
+    <string name="cd_list_view">Chế độ xem danh sách</string>
+    <string name="cd_clear_selection">Bỏ chọn tất cả</string>
+    <string name="cd_clear_clipboard">Xóa khay nhớ tạm</string>
+    <string name="cd_create_menu">Tạo</string>
+    <string name="cd_show_password">Hiện mật khẩu</string>
+    <string name="cd_hide_password">Ẩn mật khẩu</string>
+    <string name="empty_folder_title">Thư mục này trống</string>
+    <string name="empty_folder_body">Dán tệp vào đây hoặc tạo thư mục mới.</string>
+    <string name="label_name">Tên</string>
+    <string name="label_archive_name">Tên tệp nén</string>
+    <string name="error_invalid_name">Tên không được chứa “/”</string>
+    <string name="error_rename">Không thể đổi tên — tên này có thể đã tồn tại</string>
+    <string name="error_new_folder">Không thể tạo thư mục — tên này có thể đã tồn tại</string>
+    <string name="sort_title">Sắp xếp &amp; hiển thị</string>
+    <string name="sort_name">Tên</string>
+    <string name="sort_date">Ngày sửa đổi</string>
+    <string name="sort_size">Kích thước</string>
+    <string name="sort_type">Loại</string>
+    <string name="sort_ascending">Tăng dần</string>
+    <string name="sort_descending">Giảm dần</string>
+    <string name="show_hidden_files">Hiện tệp ẩn</string>
+    <string name="details_path">Vị trí</string>
+    <string name="details_modified">Đã sửa đổi</string>
+    <string name="details_type">Loại</string>
+    <string name="details_size">Kích thước</string>
+    <string name="details_contains">Chứa</string>
+    <string name="delete_body">Không thể hoàn tác thao tác này.</string>
+    <plurals name="delete_title">
+        <item quantity="other">Xóa %d mục?</item>
+    </plurals>
+    <plurals name="file_count">
+        <item quantity="other">%d tệp</item>
+    </plurals>
+    <plurals name="folder_count">
+        <item quantity="other">%d thư mục</item>
+    </plurals>
+    <plurals name="paste_here">
+        <item quantity="other">Dán %d mục</item>
+    </plurals>
+    <plurals name="save_here">
+        <item quantity="other">Lưu %d tệp vào đây</item>
+    </plurals>
+    <plurals name="move_here">
+        <item quantity="other">Di chuyển %d mục vào đây</item>
+    </plurals>
+
+    <string name="action_show_in_folder">Hiển thị trong thư mục</string>
+    <string name="category_empty">Chưa có gì ở đây</string>
+
+    <!-- Tools -->
+    <string name="scanning">Đang quét bộ nhớ…</string>
+    <string name="tool_can_free">có thể giải phóng</string>
+    <string name="tool_selected_of">Đã chọn %1$s / %2$s</string>
+    <string name="tool_all_clean_title">Đã sạch sẽ</string>
+    <string name="tool_all_clean_body">Hiện không có gì cần xóa.</string>
+    <string name="tool_clean_confirm_title">Dọn dẹp %1$s?</string>
+    <string name="tool_clean_confirm_body">Các tệp đã chọn sẽ bị xóa vĩnh viễn.</string>
+    <string name="tool_clean_button">Dọn %1$s</string>
+    <string name="tool_rescan">Quét lại</string>
+    <string name="junk_thumbnails">Bộ nhớ đệm hình thu nhỏ</string>
+    <string name="junk_thumbnails_desc">Ảnh xem trước mà ứng dụng tự động tạo lại</string>
+    <string name="junk_temp">Tệp tạm &amp; nhật ký</string>
+    <string name="junk_temp_desc">Tệp .tmp, .log, .bak và tệp tải xuống chưa hoàn tất</string>
+    <string name="junk_apks">Tệp cài đặt</string>
+    <string name="junk_apks_desc">Tệp APK của các ứng dụng bạn có thể đã cài đặt</string>
+    <string name="junk_empty">Thư mục trống</string>
+    <string name="junk_empty_desc">Các thư mục không có gì bên trong</string>
+    <string name="junk_zero">Tệp trống</string>
+    <string name="junk_zero_desc">Tệp 0 byte; các tệp đánh dấu ẩn sẽ được giữ lại</string>
+    <string name="telegram_cleaner_title">Dọn dẹp Telegram</string>
+    <string name="instagram_cleaner_title">Dọn dẹp Instagram</string>
+    <string name="tg_hint">Phương tiện và tệp đã tải xuống và đã gửi.</string>
+    <string name="ig_hint">Ảnh và video mà Instagram đã lưu trên thiết bị này.</string>
+    <string name="tg_not_found">Không tìm thấy phương tiện Telegram trên thiết bị này.</string>
+    <string name="ig_not_found">Không tìm thấy phương tiện Instagram trên thiết bị này.</string>
+    <string name="app_media_files">Tài liệu &amp; tệp khác</string>
+    <string name="app_cleaner_title">Dọn dẹp ứng dụng</string>
+    <string name="app_cleaner_hint">Dữ liệu thừa của ứng dụng đã gỡ và bộ nhớ đệm mà Findex có thể truy cập.</string>
+    <string name="app_cleaner_empty">Không tìm thấy dữ liệu thừa. Từ Android 11 trở lên, hệ thống chặn quyền truy cập bộ nhớ đệm riêng tư của ứng dụng khác.</string>
+    <string name="app_leftovers">Thư mục còn sót lại</string>
+    <string name="app_leftovers_desc">Thư mục của ứng dụng đã gỡ trong Android/media, data và obb</string>
+    <string name="app_cache">Bộ nhớ đệm ứng dụng</string>
+    <string name="app_cache_desc">Bộ nhớ đệm ngoài của ứng dụng đã cài; chúng sẽ tự tạo lại</string>
+    <string name="wa_images">Ảnh</string>
+    <string name="wa_videos">Video</string>
+    <string name="wa_audio">Âm thanh</string>
+    <string name="wa_voice">Tin nhắn thoại</string>
+    <string name="wa_documents">Tài liệu</string>
+    <string name="wa_stickers">Nhãn dán</string>
+    <string name="wa_gifs">GIF</string>
+    <string name="wa_backups">Bản sao lưu &amp; cơ sở dữ liệu</string>
+    <string name="wa_not_found">Không tìm thấy phương tiện WhatsApp trên thiết bị này.</string>
+    <string name="wa_hint">Phương tiện đã nhận và đã gửi, bao gồm cả thư mục riêng tư.</string>
+    <string name="analyzer_used">Đã dùng</string>
+    <string name="analyzer_other">Tệp khác &amp; ứng dụng</string>
+    <string name="analyzer_free">Còn trống</string>
+    <string name="analyzer_breakdown">Phân tích chi tiết</string>
+    <string name="analyzer_largest">Tệp lớn nhất</string>
+    <string name="analyzer_chart_desc">Biểu đồ bộ nhớ: đã dùng %1$s / %2$s</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">Giao diện</string>
+    <string name="settings_theme">Chủ đề</string>
+    <string name="settings_theme_system">Hệ thống</string>
+    <string name="settings_theme_light">Sáng</string>
+    <string name="settings_theme_dark">Tối</string>
+    <string name="settings_dynamic_color">Màu động</string>
+    <string name="settings_dynamic_color_desc">Khớp màu sắc với hình nền của bạn</string>
+    <string name="settings_language">Ngôn ngữ</string>
+    <string name="settings_language_system">Mặc định hệ thống</string>
+    <string name="settings_files">Tệp</string>
+    <string name="settings_show_hidden_desc">Hiển thị tệp và thư mục bắt đầu bằng dấu chấm</string>
+    <string name="settings_grid">Mặc định xem dạng lưới</string>
+    <string name="settings_grid_desc">Hiển thị thư mục dưới dạng lưới hình thu nhỏ</string>
+    <string name="settings_about">Giới thiệu</string>
+    <string name="settings_version">Phiên bản</string>
+    <string name="settings_updates">Cập nhật</string>
+    <string name="settings_updates_subtitle">Tự động cập nhật, kênh phát hành và kiểm tra phiên bản mới</string>
+    <string name="settings_auto_update">Tự động cập nhật</string>
+    <string name="settings_auto_update_desc">Kiểm tra GitHub hằng ngày trong nền và khi mở Findex</string>
+    <string name="updates_title">Cập nhật</string>
+    <string name="updates_current">Phiên bản đã cài %1$s</string>
+    <string name="settings_channel">Kênh phát hành</string>
+    <string name="channel_stable">Ổn định</string>
+    <string name="channel_beta">Beta</string>
+    <string name="channel_alpha">Alpha</string>
+    <string name="settings_check_updates">Kiểm tra cập nhật</string>
+    <string name="update_checking">Đang kiểm tra…</string>
+    <string name="update_up_to_date">Bạn đang dùng phiên bản mới nhất</string>
+    <string name="update_available_row">Đã có phiên bản %1$s</string>
+    <string name="settings_about_subtitle">Phiên bản %1$s, nhà phát triển và ghi nhận</string>
+    <string name="update_title">Có bản cập nhật mới</string>
+    <string name="update_subtitle">%1$s · bạn đang dùng %2$s</string>
+    <string name="update_whats_new">Có gì mới</string>
+    <string name="update_install">Cài đặt</string>
+    <string name="update_allow_install">Cho phép cài đặt</string>
+    <string name="update_downloading">Đang tải xuống… %1$d%%</string>
+    <string name="update_not_now">Để sau</string>
+    <string name="update_failed">Cập nhật thất bại</string>
+    <string name="update_notification_channel_name">Cập nhật ứng dụng</string>
+    <string name="update_notification_title">Có bản cập nhật mới: %1$s</string>
+    <string name="update_notification_body">Nhấn để xem ghi chú phát hành và cài đặt</string>
+    <string name="about_title">Giới thiệu về Findex</string>
+    <string name="about_section_app">Ứng dụng</string>
+    <string name="about_version_build">Phiên bản %1$s · bản dựng %2$d</string>
+    <string name="about_source_code">Mã nguồn</string>
+    <string name="about_section_developer">Nhà phát triển</string>
+    <string name="about_developer_tagline">Được thiết kế và xây dựng bởi một nhà phát triển.</string>
+    <string name="about_portfolio">Hồ sơ năng lực</string>
+    <string name="about_section_open_source">Mã nguồn mở</string>
+    <string name="about_acknowledgements">Ghi nhận</string>
+    <string name="about_acknowledgements_subtitle">Các thư viện và dự án tạo nên Findex</string>
+
+    <!-- Compression & Extraction -->
+    <string name="compress_dialog_title">Tạo tệp nén</string>
+    <string name="compress_format_label">Định dạng</string>
+    <string name="compress_password_zip_only">Bảo vệ bằng mật khẩu chỉ khả dụng cho ZIP.</string>
+    <string name="compress_password_hint">Mật khẩu (tùy chọn)</string>
+    <string name="compress_password_help">Khi có mật khẩu, tệp nén sẽ được mã hóa bằng AES-256.</string>
+    <string name="extract_password_hint">Mật khẩu (nếu được bảo vệ)</string>
+    <string name="extract_dialog_body">Giải nén “%1$s” vào một thư mục mới ngay bên cạnh.</string>
+    <string name="compress_button">Nén</string>
+    <string name="extract_dialog_title">Giải nén tệp</string>
+    <string name="extract_button">Giải nén</string>
+
+    <!-- Multitasking & Selection -->
+    <string name="selected_count">Đã chọn %1$d</string>
+    <string name="tabs_header">Thẻ</string>
+
+    <!-- Notifications & Services -->
+    <string name="notification_channel_name">Thao tác tệp</string>
+    <string name="notification_channel_description">Tiến trình và kết quả của tác vụ sao chép, di chuyển, xóa và nén</string>
+    <string name="operation_in_progress">Đang thực hiện…</string>
+    <string name="operation_completed">Đã hoàn tất</string>
+    <string name="operation_failed">Thao tác thất bại</string>
+    <string name="operation_cancelled">Đã hủy thao tác</string>
+    <string name="operation_progress">%1$d%% · %2$s</string>
+    <plurals name="operation_queued">
+        <item quantity="other">%1$s · còn %2$d tác vụ trong hàng đợi</item>
+    </plurals>
+    <string name="op_title_copy">Đang sao chép %1$s mục</string>
+    <string name="op_title_move">Đang di chuyển %1$s mục</string>
+    <string name="op_title_delete">Đang xóa %1$s mục</string>
+    <string name="op_title_trash">Đang chuyển %1$s mục vào Thùng rác</string>
+    <string name="op_title_restore">Đang khôi phục %1$s mục</string>
+    <string name="op_title_clean">Đang dọn dẹp %1$s mục</string>
+    <string name="op_title_compress">Đang nén thành %1$s</string>
+    <string name="op_title_extract">Đang giải nén %1$s</string>
+    <string name="op_done_copy">Đã sao chép %1$s mục</string>
+    <string name="op_done_move">Đã di chuyển %1$s mục</string>
+    <string name="op_done_delete">Đã xóa %1$s mục</string>
+    <string name="op_done_trash">Đã chuyển %1$s mục vào Thùng rác</string>
+    <string name="op_done_restore">Đã khôi phục %1$s mục</string>
+    <string name="op_done_clean">Đã dọn dẹp %1$s mục</string>
+    <string name="op_done_compress">Đã tạo %1$s</string>
+    <string name="op_done_extract">Đã giải nén %1$s</string>
+    <string name="op_done_batch_rename">Đã đổi tên %1$s mục</string>
+    <string name="op_done_image_transform">Đã nén %1$s ảnh</string>
+    <string name="op_done_vault_import">Đã chuyển %1$s mục vào két bảo mật</string>
+    <string name="op_done_vault_export">Đã khôi phục %1$s mục từ két bảo mật</string>
+    <string name="op_done_vault_delete">Đã xóa %1$s mục khỏi két bảo mật</string>
+    <string name="operation_cancelled_body">Đã dừng trước khi hoàn tất</string>
+    <string name="error_wrong_password">Mật khẩu sai hoặc bị thiếu</string>
+    <string name="error_unsupported_archive">Định dạng hoặc phiên bản tệp nén này không được hỗ trợ</string>
+    <string name="error_no_space">Không đủ dung lượng lưu trữ</string>
+    <string name="error_into_itself">Không thể sao chép thư mục vào chính nó</string>
+    <string name="error_access_denied">Quyền truy cập vị trí này bị từ chối</string>
+    <string name="cancel">Hủy</string>
+    <string name="confirm">Xác nhận</string>
+
+    <!-- Recycle bin -->
+    <plurals name="trash_title">
+        <item quantity="other">Chuyển %d mục vào Thùng rác?</item>
+    </plurals>
+    <string name="trash_body">Bạn có thể khôi phục từ Thùng rác trong vòng 30 ngày.</string>
+    <string name="delete_permanently">Xóa vĩnh viễn</string>
+    <string name="action_move_to_bin">Chuyển vào thùng rác</string>
+    <string name="action_restore">Khôi phục</string>
+    <string name="action_empty_bin">Dọn sạch thùng rác</string>
+    <string name="undo">Hoàn tác</string>
+    <plurals name="moved_to_bin">
+        <item quantity="other">Đã chuyển %d mục vào Thùng rác</item>
+    </plurals>
+    <string name="recycle_bin_hint">Các mục sẽ bị xóa vĩnh viễn sau 30 ngày</string>
+    <string name="recycle_bin_empty">Thùng rác trống</string>
+
+    <!-- File Inspector & Preview -->
+    <string name="details_dimensions">Kích thước</string>
+    <string name="details_resolution">Độ phân giải</string>
+    <string name="details_duration">Thời lượng</string>
+    <string name="details_megapixels">%1$.1f MP</string>
+    <string name="details_artist">Nghệ sĩ</string>
+    <string name="details_album">Album</string>
+    <string name="details_package">Gói</string>
+    <string name="details_version">Phiên bản</string>
+    <string name="details_checksums">Mã kiểm tra</string>
+    <string name="details_calculate_hash">Tính mã kiểm tra</string>
+    <string name="details_calculating">Đang tính…</string>
+    <string name="details_copied_hash">Đã sao chép mã kiểm tra vào khay nhớ tạm</string>
+    <string name="preview_fullscreen">Toàn màn hình</string>
+    <string name="preview_zoom_hint">Chụm để thu phóng · Nhấn đúp để thu phóng</string>
+    <string name="action_open_in_another_app">Mở bằng ứng dụng khác</string>
+    <string name="action_rotate">Xoay</string>
+    <string name="action_reset_zoom">Đặt lại thu phóng</string>
+    <string name="viewer_item_position">%1$d / %2$d</string>
+    <string name="preview_copy_text">Sao chép nội dung</string>
+    <string name="preview_text_copied">Đã sao chép nội dung vào khay nhớ tạm</string>
+    <string name="preview_lines_count">%1$d dòng</string>
+    <string name="action_install">Cài đặt</string>
+    <string name="action_play">Phát</string>
+    <string name="action_pause">Tạm dừng</string>
+    <string name="action_open_folder">Mở thư mục</string>
+    <string name="details_overview">Tổng quan</string>
+    <string name="details_exact_bytes">%1$s byte</string>
+
+    <!-- Search -->
+    <string name="search_hint">Tìm kiếm tệp và thư mục</string>
+    <string name="search_prompt">Tìm mọi thứ trên bộ nhớ của bạn theo tên</string>
+    <string name="search_no_results">Không có tệp nào khớp với “%1$s”</string>
+    <string name="cd_clear_search">Xóa tìm kiếm</string>
+
+    <!-- Duplicate finder -->
+    <string name="nav_duplicates">Tệp trùng lặp</string>
+    <string name="dup_title">Tệp trùng lặp</string>
+    <string name="dup_desc">Các bản sao giống hệt nhau gây lãng phí dung lượng</string>
+    <string name="dup_none">Không tìm thấy tệp trùng lặp</string>
+    <string name="dup_keep_hint">Bản sao cũ nhất của mỗi tệp sẽ được giữ lại. Luôn giữ lại ít nhất một bản sao.</string>
+    <string name="dup_delete_button">Xóa %1$s</string>
+    <string name="dup_hashing">Đang so sánh nội dung tệp…</string>
+    <plurals name="dup_copies">
+        <item quantity="other">%d bản sao</item>
+    </plurals>
+
+    <!-- Archive preview -->
+    <string name="action_browse">Duyệt nội dung</string>
+    <string name="archive_extract_all">Giải nén tất cả</string>
+    <string name="archive_empty">Tệp nén này trống</string>
+    <string name="archive_unreadable">Không thể liệt kê tệp nén này. Tệp có thể đã bị mã hóa hoặc hỏng; hãy thử Giải nén tất cả bằng mật khẩu của tệp.</string>
+    <string name="archive_password_title">Yêu cầu mật khẩu</string>
+    <string name="archive_password_body">“%1$s” đã được mã hóa.</string>
+    <string name="archive_unlock">Mở khóa</string>
+    <string name="archive_password_label">Mật khẩu</string>
+    <string name="archive_opening">Đang mở %1$s…</string>
+
+    <!-- Network storage (SMB / SFTP / FTP / WebDAV) -->
+    <string name="network_title">Lưu trữ mạng</string>
+    <string name="network_subtitle">Máy chủ SMB, SFTP, FTP và WebDAV trên mạng của bạn</string>
+    <string name="network_empty_title">Chưa có máy chủ nào</string>
+    <string name="network_empty_body">Thêm thư mục chia sẻ từ PC, NAS hoặc máy chủ để duyệt tại đây.</string>
+    <string name="network_add">Thêm máy chủ</string>
+    <string name="network_add_title">Thêm máy chủ mạng</string>
+    <string name="network_protocol_label">Giao thức</string>
+    <string name="network_webdav_https">Sử dụng HTTPS (TLS)</string>
+    <string name="network_field_name">Tên hiển thị (tùy chọn)</string>
+    <string name="network_field_host">Máy chủ hoặc địa chỉ IP</string>
+    <string name="network_field_host_help">Ví dụ: 192.168.1.20 hoặc my-nas.local</string>
+    <string name="network_field_port">Cổng (tùy chọn)</string>
+    <string name="network_field_port_default">Mặc định %1$d</string>
+    <string name="network_field_share">Tên chia sẻ</string>
+    <string name="network_field_share_help">Thư mục được chia sẻ, ví dụ: Public</string>
+    <string name="network_field_path">Đường dẫn từ xa (tùy chọn)</string>
+    <string name="network_field_path_help_sftp">Để trống cho thư mục chính, hoặc nhập đường dẫn như /mnt/media</string>
+    <string name="network_field_path_help_ftp">Để trống cho thư mục gốc, hoặc nhập đường dẫn như /pub</string>
+    <string name="network_field_path_help_webdav">Đường dẫn điểm cuối, ví dụ: /dav hoặc /remote.php/dav/files/user</string>
+    <string name="network_field_user">Tên người dùng</string>
+    <string name="network_field_user_help">Để trống để kết nối với tư cách khách</string>
+    <string name="network_field_user_help_sftp">Tên người dùng SSH trên máy chủ</string>
+    <string name="network_field_password">Mật khẩu</string>
+    <string name="network_field_domain">Miền hoặc nhóm làm việc (tùy chọn)</string>
+    <string name="network_connect">Kết nối và lưu</string>
+    <string name="network_connecting">Đang kết nối…</string>
+    <string name="network_password_note">Được mã hóa bằng khóa lưu trong Android Keystore. Để trống để dùng lại mật khẩu đã lưu cho tên người dùng này.</string>
+    <string name="network_guest">Khách</string>
+    <string name="network_status_connected">Đã kết nối</string>
+    <string name="network_remember_password">Nhớ mật khẩu</string>
+    <string name="network_edit">Chỉnh sửa máy chủ</string>
+    <string name="network_edit_title">Chỉnh sửa máy chủ mạng</string>
+    <string name="network_save">Kiểm tra và lưu</string>
+    <string name="network_password_keep_note">Để trống để giữ mật khẩu hiện tại.</string>
+    <string name="network_password_not_saved_note">Chưa lưu. Bạn sẽ được hỏi một lần mỗi khi mở Findex.</string>
+    <string name="network_error_password_required">Cần mật khẩu để kết nối</string>
+    <string name="network_unlock">Mở khóa</string>
+    <string name="network_unlock_title">Kết nối tới “%1$s”</string>
+    <string name="network_unlock_body">Mật khẩu cho %1$s. Được giữ cho đến khi bạn đóng Findex.</string>
+    <string name="network_status_offline">Đã ngắt kết nối. %1$s</string>
+    <string name="network_retry">Thử kết nối lại</string>
+    <string name="network_remove">Xóa máy chủ</string>
+    <string name="network_remove_title">Xóa “%1$s”?</string>
+    <string name="network_remove_body">Thông tin đăng nhập đã lưu và mọi bản sao đã tải xuống sẽ bị xóa. Tệp trên máy chủ không bị ảnh hưởng.</string>
+    <string name="network_error_host">Không thể kết nối tới máy chủ. Kiểm tra địa chỉ, cổng và đảm bảo bạn đang ở cùng mạng.</string>
+    <string name="network_error_auth">Đăng nhập thất bại. Kiểm tra tên người dùng và mật khẩu.</string>
+    <string name="network_error_share">Không có chia sẻ hoặc đường dẫn từ xa nào có tên đó trên máy chủ này.</string>
+    <string name="network_error_denied">Quyền truy cập bị từ chối cho tài khoản này.</string>
+    <string name="network_error_unknown">Đã xảy ra sự cố khi giao tiếp với máy chủ.</string>
+    <string name="rail_network">Mạng</string>
+    <string name="new_tab_title">Mở thẻ mới trong</string>
+    <string name="error_network">Không thể truy cập chia sẻ mạng</string>
+    <string name="error_not_supported_network">Không khả dụng trên chia sẻ mạng</string>
+    <string name="network_opening_remote">Đang tải xuống %1$s…</string>
+
+    <!-- BEGIN foundation (W1: drawer, entry actions, operation titles, failures) -->
+    <string name="drawer_section_more">Thêm</string>
+    <string name="nav_favorites">Yêu thích</string>
+    <string name="nav_large_files">Tệp lớn</string>
+    <string name="nav_recent_changes">Thay đổi gần đây</string>
+    <string name="nav_vault">Két bảo mật</string>
+    <string name="action_batch_rename">Đổi tên hàng loạt</string>
+    <string name="action_move_to_vault">Chuyển vào két bảo mật</string>
+    <string name="action_compress_image">Nén ảnh</string>
+    <string name="action_tags">Thẻ</string>
+    <string name="action_pin_shortcut">Thêm vào màn hình chính</string>
+    <string name="op_title_batch_rename">Đang đổi tên %1$s mục</string>
+    <string name="op_title_image_transform">Đang nén %1$s ảnh</string>
+    <string name="op_title_vault_import">Đang chuyển %1$s mục vào két bảo mật</string>
+    <string name="op_title_vault_export">Đang khôi phục %1$s mục từ két bảo mật</string>
+    <string name="op_title_vault_delete">Đang xóa %1$s mục khỏi két bảo mật</string>
+    <string name="error_vault_locked">Két bảo mật đang bị khóa</string>
+    <string name="error_nested_selection">Không thể đổi tên đồng thời thư mục và các mục bên trong. Hãy đổi tên riêng lẻ.</string>
+    <string name="error_name_conflict">Đã tồn tại tệp có tên đó</string>
+    <string name="error_op_invalid_name">Tên đó không được phép</string>
+    <string name="error_unsupported_image">Định dạng ảnh này không được hỗ trợ</string>
+    <string name="placeholder_coming_soon">Sắp ra mắt</string>
+    <string name="selection_expired">Lựa chọn đã hết hạn. Vui lòng chọn lại tệp.</string>
+    <!-- END foundation -->
+
+    <!-- BEGIN batch-rename -->
+    <string name="rename_title">Đổi tên hàng loạt</string>
+    <string name="rename_pattern_label">Mẫu tên</string>
+    <string name="rename_token_name">Tên</string>
+    <string name="rename_token_ext">Phần mở rộng</string>
+    <string name="rename_token_counter">Bộ đếm</string>
+    <string name="rename_token_date">Ngày</string>
+    <string name="rename_token_parent">Thư mục cha</string>
+    <string name="rename_find_label">Tìm</string>
+    <string name="rename_replace_label">Thay thế bằng</string>
+    <string name="rename_regex">Dùng biểu thức chính quy</string>
+    <string name="rename_ignore_case">Không phân biệt hoa thường</string>
+    <string name="rename_case_none">Giữ nguyên chữ hoa/thường</string>
+    <string name="rename_case_lower">Chữ thường</string>
+    <string name="rename_case_upper">Chữ hoa</string>
+    <string name="rename_case_title">Viết hoa chữ cái đầu</string>
+    <string name="rename_counter_start">Bắt đầu từ</string>
+    <string name="rename_counter_step">Bước nhảy</string>
+    <string name="rename_counter_pad">Số chữ số</string>
+    <string name="rename_touch_extension">Đổi cả phần mở rộng</string>
+    <string name="rename_status_unchanged">Không thay đổi</string>
+    <string name="rename_status_duplicate">Tên trùng lặp</string>
+    <string name="rename_status_exists">Tên đã tồn tại</string>
+    <string name="rename_status_invalid">Tên không hợp lệ</string>
+    <string name="rename_status_bad_regex">Mẫu không hợp lệ</string>
+    <string name="rename_apply">Đổi tên</string>
+    <plurals name="rename_summary">
+        <item quantity="other">%d mục sẽ được đổi tên</item>
+    </plurals>
+    <!-- END batch-rename -->
+
+    <!-- BEGIN large-files -->
+    <string name="bigfiles_title">Tệp lớn và cũ</string>
+    <string name="bigfiles_size_any">Mọi kích thước</string>
+    <string name="bigfiles_size_100mb">Trên 100 MB</string>
+    <string name="bigfiles_size_500mb">Trên 500 MB</string>
+    <string name="bigfiles_size_1gb">Trên 1 GB</string>
+    <string name="bigfiles_age_any">Mọi thời gian</string>
+    <string name="bigfiles_age_30d">Cũ hơn 30 ngày</string>
+    <string name="bigfiles_age_90d">Cũ hơn 90 ngày</string>
+    <string name="bigfiles_age_6mo">Cũ hơn 6 tháng</string>
+    <string name="bigfiles_age_1y">Cũ hơn 1 năm</string>
+    <string name="bigfiles_category_any">Mọi loại</string>
+    <string name="bigfiles_include_hidden">Bao gồm tệp ẩn</string>
+    <string name="bigfiles_hint_modified">Độ cũ được tính dựa trên ngày sửa đổi cuối cùng</string>
+    <string name="bigfiles_empty">Không có tệp nào khớp với bộ lọc này</string>
+    <plurals name="bigfiles_selected">
+        <item quantity="other">Đã chọn %d tệp</item>
+    </plurals>
+    <!-- END large-files -->
+
+    <!-- BEGIN image-compress -->
+    <string name="imgc_title">Nén ảnh</string>
+    <string name="imgc_preset_small">Nhỏ</string>
+    <string name="imgc_preset_medium">Trung bình</string>
+    <string name="imgc_preset_large">Lớn</string>
+    <string name="imgc_preset_custom">Tùy chỉnh</string>
+    <string name="imgc_max_edge">Cạnh dài nhất (px)</string>
+    <string name="imgc_scale_percent">Tỷ lệ (%)</string>
+    <string name="imgc_quality">Chất lượng</string>
+    <string name="imgc_format_keep">Giữ nguyên định dạng gốc</string>
+    <string name="imgc_output_copy">Lưu thành bản sao</string>
+    <string name="imgc_output_replace">Thay thế bản gốc</string>
+    <string name="imgc_output_folder">Lưu vào thư mục</string>
+    <string name="imgc_keep_metadata">Giữ thông tin vị trí và máy ảnh</string>
+    <string name="imgc_estimate">Kích thước ước tính: %1$s</string>
+    <string name="imgc_replace_warning">Bản gốc sẽ bị ghi đè và không thể hoàn tác.</string>
+    <plurals name="imgc_skipped">
+        <item quantity="other">Đã bỏ qua %d ảnh</item>
+    </plurals>
+    <!-- END image-compress -->
+
+    <!-- BEGIN vault -->
+    <string name="vault_title">Két bảo mật</string>
+    <string name="vault_setup_title">Thiết lập két bảo mật của bạn</string>
+    <string name="vault_setup_password">Mật khẩu két bảo mật</string>
+    <string name="vault_setup_confirm">Xác nhận mật khẩu</string>
+    <string name="vault_setup_mismatch">Mật khẩu không khớp</string>
+    <string name="vault_setup_strength_weak">Yếu</string>
+    <string name="vault_setup_strength_fair">Trung bình</string>
+    <string name="vault_setup_strength_strong">Mạnh</string>
+    <string name="vault_setup_biometric">Mở khóa bằng vân tay hoặc khuôn mặt</string>
+    <string name="vault_setup_warning_no_recovery">Không có tính năng khôi phục mật khẩu. Nếu bạn quên mật khẩu, tệp của bạn sẽ bị mất.</string>
+    <string name="vault_setup_warning_not_secure_erase">Tệp gốc được xóa theo cách thông thường, không xóa an toàn. Dữ liệu đã xóa có thể khôi phục được từ bộ nhớ.</string>
+    <string name="vault_setup_acknowledge">Tôi hiểu các rủi ro</string>
+    <string name="vault_setup_create">Tạo két bảo mật</string>
+    <string name="vault_unlock_title">Mở khóa két bảo mật</string>
+    <string name="vault_unlock_password">Mật khẩu</string>
+    <string name="vault_unlock_biometric">Dùng vân tay hoặc khuôn mặt</string>
+    <string name="vault_unlock_wrong_password">Sai mật khẩu</string>
+    <string name="vault_unlock_lockout">Quá nhiều lần thử. Thử lại sau %1$s.</string>
+    <string name="vault_biometric_prompt_title">Mở khóa két bảo mật</string>
+    <string name="vault_biometric_prompt_subtitle">Xác nhận là bạn</string>
+    <string name="vault_biometric_prompt_negative">Dùng mật khẩu</string>
+    <string name="vault_biometric_invalidated">Vân tay hoặc khuôn mặt đã thay đổi. Mở khóa bằng mật khẩu và thiết lập lại sinh trắc học.</string>
+    <string name="vault_add_files">Thêm tệp</string>
+    <string name="vault_import_confirm">Chuyển vào két bảo mật? Bản gốc sẽ bị xóa vĩnh viễn, không đưa vào thùng rác.</string>
+    <string name="vault_export_original">Khôi phục về vị trí gốc</string>
+    <string name="vault_export_choose_folder">Chọn thư mục</string>
+    <string name="vault_open_external_warning">Mở bên ngoài két bảo mật sẽ để lại một bản sao không mã hóa trên thiết bị này.</string>
+    <string name="vault_menu_change_password">Đổi mật khẩu</string>
+    <string name="vault_menu_biometric">Mở khóa bằng vân tay hoặc khuôn mặt</string>
+    <string name="vault_menu_auto_lock">Tự động khóa</string>
+    <string name="vault_menu_lock_now">Khóa ngay</string>
+    <string name="vault_auto_lock_immediately">Ngay lập tức</string>
+    <string name="vault_auto_lock_1min">Sau 1 phút</string>
+    <string name="vault_auto_lock_5min">Sau 5 phút</string>
+    <string name="vault_auto_lock_screen_off">Khi màn hình tắt</string>
+    <string name="vault_restore_title">Khôi phục về vị trí gốc?</string>
+    <string name="vault_restore_body">Tệp sẽ được giải mã và chuyển lại về thư mục gốc. Các thư mục bị thiếu sẽ được tạo lại.</string>
+    <string name="vault_restore_action">Khôi phục</string>
+    <string name="vault_empty">Két bảo mật của bạn đang trống</string>
+    <string name="vault_locked_banner">Két bảo mật đang khóa. Mở khóa để xem tệp của bạn.</string>
+    <string name="cd_vault_lock">Khóa két bảo mật</string>
+    <string name="vault_setup_min_length">Sử dụng ít nhất 8 ký tự</string>
+    <string name="vault_unlock_action">Mở khóa</string>
+    <string name="vault_password_current">Mật khẩu hiện tại</string>
+    <string name="vault_password_new">Mật khẩu mới</string>
+    <string name="vault_password_changed">Đã đổi mật khẩu</string>
+    <string name="vault_unreadable_title">Không thể đọc khóa két bảo mật</string>
+    <string name="vault_unreadable_body">Các tệp đã mã hóa nằm trong thư mục .FindexVault, nhưng tệp vault.key bị thiếu hoặc hỏng. Hãy khôi phục vault.key từ bản sao lưu để mở chúng. Két mới không được tạo để các tệp vẫn có thể khôi phục.</string>
+    <string name="vault_rebuild_title">Tệp từ lần cài đặt trước</string>
+    <string name="vault_rebuild_body">Đã tìm thấy các tệp được mã hóa trong thư mục két bảo mật. Khôi phục chúng vào danh sách?</string>
+    <string name="vault_rebuild_action">Khôi phục danh sách</string>
+    <string name="vault_add_files_hint">Trong trình duyệt tệp, nhấn giữ tệp hoặc thư mục và chọn Chuyển vào két bảo mật.</string>
+    <string name="vault_delete_confirm">Xóa %1$d mục khỏi két bảo mật? Không thể khôi phục chúng.</string>
+    <string name="vault_biometric_error">Mở khóa bằng vân tay hoặc khuôn mặt không khả dụng</string>
+    <string name="vault_import_ready">%1$d mục sẽ được mã hóa. Bản gốc sẽ bị xóa vĩnh viễn, không đưa vào thùng rác.</string>
+    <!-- END vault -->
+
+    <!-- BEGIN viewers -->
+    <string name="viewer_text_save">Lưu</string>
+    <string name="viewer_text_saved">Đã lưu</string>
+    <string name="viewer_text_unsaved_title">Hủy các thay đổi?</string>
+    <string name="viewer_text_unsaved_body">Các chỉnh sửa của bạn sẽ bị mất.</string>
+    <string name="viewer_text_discard">Hủy bỏ</string>
+    <string name="viewer_text_conflict_title">Tệp đã thay đổi trên đĩa</string>
+    <string name="viewer_text_conflict_body">Một ứng dụng khác đã thay đổi tệp này kể từ khi bạn mở.</string>
+    <string name="viewer_text_overwrite">Ghi đè</string>
+    <string name="viewer_text_read_only">Chỉ đọc</string>
+    <string name="viewer_text_truncated">Tệp quá lớn. Đang hiển thị phần đầu.</string>
+    <string name="viewer_text_not_text">Tệp này không phải văn bản thuần túy.</string>
+    <string name="viewer_text_find">Tìm</string>
+    <string name="viewer_text_wrap">Xuống dòng tự động</string>
+    <string name="viewer_text_undo">Hoàn tác</string>
+    <string name="viewer_text_redo">Làm lại</string>
+    <string name="viewer_text_encoding">Bảng mã</string>
+    <string name="viewer_pdf_page_of">Trang %1$d / %2$d</string>
+    <string name="viewer_pdf_go_to_page">Đi tới trang</string>
+    <string name="viewer_pdf_protected">Tệp PDF này được bảo vệ bằng mật khẩu</string>
+    <string name="viewer_pdf_password">Mật khẩu</string>
+    <string name="viewer_pdf_downloading">Đang tải PDF…</string>
+    <string name="viewer_pdf_error">Không thể mở tệp PDF này</string>
+    <string name="viewer_audio_play">Phát</string>
+    <string name="viewer_audio_pause">Tạm dừng</string>
+    <string name="viewer_audio_next">Bài tiếp theo</string>
+    <string name="viewer_audio_previous">Bài trước</string>
+    <string name="viewer_audio_repeat">Lặp lại</string>
+    <string name="viewer_audio_shuffle">Trộn bài</string>
+    <string name="viewer_audio_queue">Hàng đợi</string>
+    <string name="viewer_audio_error">Không thể phát tệp này</string>
+    <string name="viewer_text_error">Không thể đọc hoặc lưu tệp này</string>
+    <!-- END viewers -->
+
+    <!-- BEGIN tags-favorites -->
+    <string name="tags_title">Thẻ</string>
+    <string name="tags_new">Thẻ mới</string>
+    <string name="tags_name_hint">Tên thẻ</string>
+    <string name="tags_color_red">Đỏ</string>
+    <string name="tags_color_orange">Cam</string>
+    <string name="tags_color_yellow">Vàng</string>
+    <string name="tags_color_green">Xanh lá</string>
+    <string name="tags_color_teal">Xanh mòng két</string>
+    <string name="tags_color_blue">Xanh dương</string>
+    <string name="tags_color_purple">Tím</string>
+    <string name="tags_color_pink">Hồng</string>
+    <string name="tags_rename">Đổi tên thẻ</string>
+    <string name="tags_delete_title">Xóa thẻ “%1$s”?</string>
+    <string name="tags_delete_body">Tệp vẫn giữ nguyên dữ liệu. Chỉ thẻ bị xóa.</string>
+    <string name="tags_empty">Chưa có thẻ nào</string>
+    <string name="favorites_title">Yêu thích</string>
+    <string name="favorites_folders">Thư mục</string>
+    <string name="favorites_files">Tệp</string>
+    <string name="favorites_tags">Thẻ</string>
+    <string name="favorites_empty">Chưa có gì được lưu</string>
+    <string name="tags_apply">Áp dụng</string>
+    <string name="tags_save">Lưu</string>
+    <string name="tags_files_empty">Không có tệp nào gắn thẻ này</string>
+    <!-- END tags-favorites -->
+
+    <!-- BEGIN shortcuts -->
+    <string name="shortcut_pinned">Đã thêm lối tắt vào màn hình chính</string>
+    <string name="shortcut_unsupported">Trình khởi chạy của bạn không hỗ trợ lối tắt</string>
+    <string name="shortcut_folder_missing">Thư mục này không còn tồn tại</string>
+    <!-- END shortcuts -->
+
+    <!-- BEGIN recent-changes-growth -->
+    <string name="changes_title">Thay đổi gần đây</string>
+    <string name="changes_today">Hôm nay</string>
+    <string name="changes_yesterday">Hôm qua</string>
+    <string name="changes_range_1d">24 giờ qua</string>
+    <string name="changes_range_7d">7 ngày qua</string>
+    <string name="changes_range_30d">30 ngày qua</string>
+    <string name="changes_empty">Không có thay đổi gần đây</string>
+    <string name="changes_limit_hint">Chỉ hiển thị những thay đổi mới nhất.</string>
+    <string name="growth_title">Mức tăng bộ nhớ</string>
+    <string name="growth_range_30d">30 ngày</string>
+    <string name="growth_range_90d">90 ngày</string>
+    <string name="growth_range_1y">1 năm</string>
+    <string name="growth_delta_up">Tăng %1$s</string>
+    <string name="growth_delta_down">Giảm %1$s</string>
+    <string name="growth_empty">Chưa đủ dữ liệu lịch sử. Findex ghi lại dung lượng bộ nhớ hằng ngày.</string>
+    <string name="viewer_pdf_dark_pages">Trang tối</string>
+    <string name="settings_builtin_viewers">Trình xem tích hợp</string>
+    <string name="settings_builtin_viewers_desc">Mở ảnh, video, PDF, văn bản và âm thanh trong Findex. Tắt sẽ dùng ứng dụng mặc định của bạn</string>
+    <string name="widget_label">Bộ nhớ Findex</string>
+    <string name="widget_description">Mức sử dụng bộ nhớ, dọn nhanh và các thư mục đã đánh dấu của bạn</string>
+    <string name="widget_used">Đã dùng %1$d%%</string>
+    <string name="widget_free">Còn trống %1$s / %2$s</string>
+    <string name="settings_cleanup_reminder">Nhắc nhở dọn dẹp</string>
+    <string name="settings_cleanup_reminder_desc">Mỗi tuần một lần, báo cho tôi khi có tệp rác đáng dọn</string>
+    <string name="cleanup_reminder_channel">Nhắc nhở dọn dẹp</string>
+    <string name="cleanup_reminder_title">Có thể giải phóng %1$s</string>
+    <string name="cleanup_reminder_text">Hình thu nhỏ, tệp tạm và dữ liệu thừa bạn có thể dọn dẹp</string>
+    <string name="cleanup_reminder_action">Dọn</string>
+    <string name="settings_storage_history">Lịch sử bộ nhớ</string>
+    <string name="settings_storage_history_desc">Lưu ảnh chụp bộ nhớ hằng ngày cho biểu đồ tăng trưởng</string>
+    <!-- END recent-changes-growth -->
+
+    <!-- BEGIN share-phone -->
+    <string name="nav_share_phone">Chia sẻ điện thoại này</string>
+    <string name="share_tile_running">%1$s · PIN %2$s</string>
+    <string name="share_tile_starting">Đang khởi động…</string>
+    <string name="share_tile_no_network">Không có Wi-Fi</string>
+    <string name="share_tile_off">Tắt</string>
+    <string name="share_channel_name">Chia sẻ điện thoại này</string>
+    <string name="share_notification_title">Đang chia sẻ điện thoại này</string>
+    <string name="share_notification_text">Mở %1$s · PIN %2$s</string>
+    <string name="share_stop">Dừng</string>
+    <string name="share_start">Bắt đầu chia sẻ</string>
+    <string name="share_starting">Đang khởi động…</string>
+    <string name="share_intro_title">Mở tệp của bạn trên máy tính</string>
+    <string name="share_intro_body">Findex khởi chạy một máy chủ web nhỏ trên điện thoại này. Mọi trình duyệt trên cùng mạng Wi-Fi hoặc điểm phát sóng đều có thể mở bằng mã PIN dùng một lần.</string>
+    <string name="share_no_network">Hãy kết nối Wi-Fi hoặc bật điểm phát sóng trước.</string>
+    <string name="share_open_url">Mở trong trình duyệt trên máy tính của bạn</string>
+    <string name="share_pin">PIN</string>
+    <string name="share_copy_url">Sao chép địa chỉ</string>
+    <string name="share_copied">Đã sao chép địa chỉ</string>
+    <plurals name="share_clients">
+        <item quantity="other">%d trình duyệt đã đăng nhập</item>
+    </plurals>
+    <string name="share_clients_none">Chưa có trình duyệt nào đăng nhập</string>
+    <string name="share_access">Quyền truy cập</string>
+    <string name="share_access_hint">Thay đổi áp dụng ngay lập tức, kể cả với các trình duyệt đang kết nối.</string>
+    <string name="share_level_view">Xem</string>
+    <string name="share_level_download">Tải xuống</string>
+    <string name="share_level_full">Đầy đủ</string>
+    <string name="share_perm_media">Mục phương tiện</string>
+    <string name="share_perm_media_desc">Ảnh, video, âm thanh, tài liệu và hơn thế nữa</string>
+    <string name="share_perm_files">Trình quản lý tệp</string>
+    <string name="share_perm_files_desc">Duyệt mọi thư mục trên bộ nhớ trong và thẻ SD</string>
+    <string name="share_perm_download">Mở và tải xuống</string>
+    <string name="share_perm_download_desc">Xem trước, phát trực tuyến và lưu tệp trên máy tính</string>
+    <string name="share_perm_upload">Tải lên</string>
+    <string name="share_perm_upload_desc">Thêm tệp và tạo thư mục từ máy tính</string>
+    <string name="share_perm_modify">Đổi tên và xóa</string>
+    <string name="share_perm_modify_desc">Tệp đã xóa sẽ chuyển vào Thùng rác</string>
+    <string name="share_auto_stop">Tự động dừng</string>
+    <string name="share_auto_stop_desc">Dừng máy chủ sau khoảng thời gian này nếu không có yêu cầu nào</string>
+    <string name="share_minutes">%d phút</string>
+    <string name="share_never">Không bao giờ</string>
+    <string name="share_security_note">Lưu lượng không được mã hóa. Chỉ chia sẻ trên các mạng bạn tin cậy.</string>
+    <!-- END share-phone -->
+</resources>

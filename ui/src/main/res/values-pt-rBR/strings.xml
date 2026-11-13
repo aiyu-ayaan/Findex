@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App & Branding -->
+    <string name="app_tagline">Explorador de arquivos Material 3 Expressive</string>
+
+    <!-- Navigation Drawer -->
+    <string name="drawer_subtitle">Arquivos e armazenamento na nuvem</string>
+    <string name="nav_home">Início</string>
+    <string name="nav_storage_graph">Gráfico de armazenamento</string>
+    <string name="nav_storage_cleaner">Limpador de armazenamento</string>
+    <string name="nav_whatsapp_cleaner">Limpador do WhatsApp</string>
+    <string name="nav_telegram_cleaner">Limpador do Telegram</string>
+    <string name="nav_instagram_cleaner">Limpador do Instagram</string>
+    <string name="nav_app_cleaner">Limpador de apps</string>
+    <string name="nav_dual_pane">Painel duplo</string>
+    <string name="dual_compare">Comparar pastas</string>
+    <string name="dual_swap">Trocar painéis</string>
+    <string name="dual_select_missing">Selecionar itens ausentes no outro painel</string>
+    <string name="dual_copy_to">Copiar para o outro painel</string>
+    <string name="dual_move_to">Mover para o outro painel</string>
+    <string name="dual_up">Subir uma pasta</string>
+    <string name="cmp_only_here">Apenas aqui</string>
+    <string name="cmp_newer">Mais recente aqui</string>
+    <string name="cmp_older">Mais antigo aqui</string>
+    <string name="cmp_different">Diferente</string>
+    <string name="cmp_same">Igual</string>
+    <string name="nav_archive_manager">Gerenciador de arquivos compactados</string>
+    <string name="nav_network_storage">Armazenamento em rede</string>
+    <string name="nav_settings">Configurações</string>
+    <string name="nav_recycle_bin">Lixeira</string>
+    <string name="nav_tabs">Abas</string>
+    <string name="nav_search">Pesquisar</string>
+    <plurals name="tabs_open_count">
+        <item quantity="one">%d aba aberta</item>
+        <item quantity="other">%d abas abertas</item>
+    </plurals>
+    <string name="tabs_close_all">Fechar todas as abas</string>
+    <string name="tabs_empty_title">Nenhuma aba aberta</string>
+    <string name="tabs_empty_body">Abra uma nova aba para navegar pelos seus arquivos</string>
+    <string name="tabs_current">Aba atual</string>
+    <string name="cd_close_tab">Fechar aba %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Seus arquivos, lindamente organizados</string>
+    <string name="onboarding_body">O Findex precisa de acesso a todos os arquivos para navegar, copiar, compactar e limpar seu armazenamento.</string>
+    <string name="onboarding_point_access">Navegue por todas as pastas, cartão SD e unidade USB</string>
+    <string name="onboarding_point_fast">Copie, mova e compacte em segundo plano</string>
+    <string name="onboarding_point_private">Tudo permanece no seu dispositivo</string>
+    <string name="onboarding_permissions">Permissões</string>
+    <string name="onboarding_storage_title">Acesso a todos os arquivos</string>
+    <string name="onboarding_storage_body">Necessário para navegar e gerenciar seus arquivos</string>
+    <string name="onboarding_notify_title">Notificações</string>
+    <string name="onboarding_notify_body">Mostra o progresso de cópia, movimentação, compactação e limpeza enquanto você usa outros apps</string>
+    <string name="onboarding_allow">Permitir</string>
+    <string name="onboarding_granted">Concedida</string>
+    <string name="onboarding_continue">Continuar</string>
+    <string name="onboarding_storage_required">Permita o acesso a todos os arquivos para continuar</string>
+    <string name="onboarding_notify_hint">Sem notificações, o progresso aparece apenas dentro do Findex</string>
+    <string name="error_no_app">Nenhum app pode abrir este arquivo</string>
+    <string name="save_to_findex">Salvar no Findex</string>
+    <string name="save_to_findex_hint">Abra uma pasta e toque em Salvar</string>
+    <string name="error_open_unsupported">O Findex não consegue abrir este arquivo</string>
+
+    <!-- Tabs -->
+    <string name="tab_device">Dispositivo</string>
+    <string name="tab_network">Rede</string>
+
+    <!-- Storage Drives -->
+    <string name="storage_internal">Armazenamento interno</string>
+    <string name="storage_sdcard">Cartão SD</string>
+    <string name="storage_network">Armazenamento em rede</string>
+    <string name="storage_usb">Unidade USB</string>
+    <string name="storage_used_of">%1$s usados de %2$s</string>
+    <string name="storage_free_space">%1$s livres</string>
+    <string name="storage_scanning">Analisando armazenamento…</string>
+    <string name="storage_no_network_drives">Nenhuma unidade de rede conectada. Toque em + para conectar via SMB / WebDAV / FTP.</string>
+    <string name="storage_add_network">Adicionar unidade de rede</string>
+    <string name="storage_used_label">usado</string>
+
+    <!-- Home -->
+    <string name="home_subtitle">Seus arquivos, organizados</string>
+    <string name="section_categories">Categorias</string>
+    <string name="section_bookmarks">Favoritos</string>
+    <string name="section_recents">Arquivos recentes</string>
+    <string name="cd_open_drawer">Abrir gaveta de navegação</string>
+    <string name="cd_browse_drive">Explorar armazenamento</string>
+    <plurals name="item_count">
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d itens</item>
+    </plurals>
+
+    <!-- File Categories -->
+    <string name="category_photos">Fotos</string>
+    <string name="category_videos">Vídeos</string>
+    <string name="category_audio">Áudio</string>
+    <string name="category_documents">Documentos</string>
+    <string name="category_downloads">Downloads</string>
+    <string name="category_archives">Arquivos compactados</string>
+    <string name="category_apks">APKs</string>
+
+    <!-- Quick Suggestions & Tools -->
+    <string name="section_suggestions">Ferramentas rápidas</string>
+    <string name="cleaner_title">Limpador de armazenamento</string>
+    <string name="cleaner_desc">Libere espaço removendo lixo eletrônico e cache temporário</string>
+    <string name="whatsapp_cleaner_title">Limpador do WhatsApp</string>
+    <string name="whatsapp_cleaner_desc">Limpe mídias enviadas, notas de voz, figurinhas e backups</string>
+    <string name="storage_graph_title">Analisador de armazenamento</string>
+    <string name="storage_graph_desc">Visualize arquivos grandes e a distribuição de espaço por pasta</string>
+
+    <!-- File Actions -->
+    <string name="action_cut">Recortar</string>
+    <string name="action_copy">Copiar</string>
+    <string name="action_paste">Colar</string>
+    <string name="action_delete">Excluir</string>
+    <string name="action_rename">Renomear</string>
+    <string name="action_details">Detalhes</string>
+    <string name="action_compress">Compactar</string>
+    <string name="action_extract">Extrair</string>
+    <string name="action_share">Compartilhar</string>
+    <string name="action_select_all">Selecionar tudo</string>
+    <string name="action_deselect_all">Desmarcar</string>
+    <string name="action_search">Pesquisar arquivos</string>
+    <string name="action_clean">Limpar agora</string>
+    <string name="action_new_folder">Nova pasta</string>
+    <string name="action_new_tab">Nova aba</string>
+    <string name="action_close_tab">Fechar aba</string>
+    <string name="action_open_in_new_tab">Abrir em nova aba</string>
+    <string name="detail_empty_hint">Selecione um arquivo para ver a pré-visualização e os detalhes aqui</string>
+    <string name="cd_close_details">Fechar detalhes</string>
+    <string name="rail_graph">Gráfico</string>
+    <string name="rail_cleaner">Limpeza</string>
+    <string name="rail_whatsapp">WhatsApp</string>
+    <string name="rail_bin">Lixeira</string>
+    <string name="action_copy_path">Copiar caminho</string>
+    <string name="path_copied">Caminho copiado para a área de transferência</string>
+    <string name="preview_file">Pré-visualizar</string>
+    <string name="preview_play_video">Reproduzir vídeo</string>
+    <string name="preview_play_audio">Reproduzir áudio</string>
+    <string name="preview_lines_truncated">%1$d linhas exibidas</string>
+    <string name="preview_empty_file">Arquivo vazio</string>
+    <string name="details_item_info">Detalhes do item</string>
+    <string name="action_open">Abrir</string>
+    <string name="action_create">Criar</string>
+    <string name="action_bookmark">Adicionar aos favoritos</string>
+    <string name="action_remove_bookmark">Remover dos favoritos</string>
+    <string name="bookmark_added">Adicionado aos favoritos</string>
+    <string name="bookmark_removed">Removido dos favoritos</string>
+
+    <!-- Explorer -->
+    <string name="cd_back">Voltar</string>
+    <string name="cd_more_options">Mais opções</string>
+    <string name="cd_more_actions">Mais ações para %1$s</string>
+    <string name="cd_grid_view">Visualização em grade</string>
+    <string name="cd_list_view">Visualização em lista</string>
+    <string name="cd_clear_selection">Limpar seleção</string>
+    <string name="cd_clear_clipboard">Limpar área de transferência</string>
+    <string name="cd_create_menu">Criar</string>
+    <string name="cd_show_password">Mostrar senha</string>
+    <string name="cd_hide_password">Ocultar senha</string>
+    <string name="empty_folder_title">Esta pasta está vazia</string>
+    <string name="empty_folder_body">Cole arquivos aqui ou crie uma nova pasta.</string>
+    <string name="label_name">Nome</string>
+    <string name="label_archive_name">Nome do arquivo compactado</string>
+    <string name="error_invalid_name">Os nomes não podem conter “/”</string>
+    <string name="error_rename">Não foi possível renomear — o nome já pode existir</string>
+    <string name="error_new_folder">Não foi possível criar a pasta — o nome já pode existir</string>
+    <string name="sort_title">Ordenar e visualizar</string>
+    <string name="sort_name">Nome</string>
+    <string name="sort_date">Data de modificação</string>
+    <string name="sort_size">Tamanho</string>
+    <string name="sort_type">Tipo</string>
+    <string name="sort_ascending">Crescente</string>
+    <string name="sort_descending">Decrescente</string>
+    <string name="show_hidden_files">Mostrar arquivos ocultos</string>
+    <string name="details_path">Local</string>
+    <string name="details_modified">Modificado</string>
+    <string name="details_type">Tipo</string>
+    <string name="details_size">Tamanho</string>
+    <string name="details_contains">Contém</string>
+    <string name="delete_body">Esta ação não pode ser desfeita.</string>
+    <plurals name="delete_title">
+        <item quantity="one">Excluir %d item?</item>
+        <item quantity="other">Excluir %d itens?</item>
+    </plurals>
+    <plurals name="file_count">
+        <item quantity="one">%d arquivo</item>
+        <item quantity="other">%d arquivos</item>
+    </plurals>
+    <plurals name="folder_count">
+        <item quantity="one">%d pasta</item>
+        <item quantity="other">%d pastas</item>
+    </plurals>
+    <plurals name="paste_here">
+        <item quantity="one">Colar %d item</item>
+        <item quantity="other">Colar %d itens</item>
+    </plurals>
+    <plurals name="save_here">
+        <item quantity="one">Salvar %d arquivo aqui</item>
+        <item quantity="other">Salvar %d arquivos aqui</item>
+    </plurals>
+    <plurals name="move_here">
+        <item quantity="one">Mover %d item para cá</item>
+        <item quantity="other">Mover %d itens para cá</item>
+    </plurals>
+    <string name="action_show_in_folder">Mostrar na pasta</string>
+    <string name="category_empty">Nada por aqui ainda</string>
+
+    <!-- Tools -->
+    <string name="scanning">Analisando armazenamento…</string>
+    <string name="tool_can_free">podem ser liberados</string>
+    <string name="tool_selected_of">%1$s selecionados de %2$s</string>
+    <string name="tool_all_clean_title">Tudo limpo</string>
+    <string name="tool_all_clean_body">Nada para remover no momento.</string>
+    <string name="tool_clean_confirm_title">Limpar %1$s?</string>
+    <string name="tool_clean_confirm_body">Os arquivos selecionados serão excluídos permanentemente.</string>
+    <string name="tool_clean_button">Limpar %1$s</string>
+    <string name="tool_rescan">Analisar novamente</string>
+    <string name="junk_thumbnails">Caches de miniaturas</string>
+    <string name="junk_thumbnails_desc">Imagens de pré-visualização recriadas automaticamente pelos apps</string>
+    <string name="junk_temp">Arquivos temporários e de registro</string>
+    <string name="junk_temp_desc">.tmp, .log, .bak e downloads inacabados</string>
+    <string name="junk_apks">Arquivos de instalação</string>
+    <string name="junk_apks_desc">Arquivos APK de apps que você já pode ter instalado</string>
+    <string name="junk_empty">Pastas vazias</string>
+    <string name="junk_empty_desc">Pastas sem nada dentro</string>
+    <string name="junk_zero">Arquivos vazios</string>
+    <string name="junk_zero_desc">Arquivos de 0 bytes; marcadores ocultos são mantidos</string>
+    <string name="telegram_cleaner_title">Limpador do Telegram</string>
+    <string name="instagram_cleaner_title">Limpador do Instagram</string>
+    <string name="tg_hint">Mídias e arquivos baixados e enviados.</string>
+    <string name="ig_hint">Fotos e vídeos salvos pelo Instagram neste dispositivo.</string>
+    <string name="tg_not_found">Mídia do Telegram não encontrada neste dispositivo.</string>
+    <string name="ig_not_found">Mídia do Instagram não encontrada neste dispositivo.</string>
+    <string name="app_media_files">Documentos e outros arquivos</string>
+    <string name="app_cleaner_title">Limpador de apps</string>
+    <string name="app_cleaner_hint">Restos de apps removidos e caches que o Findex consegue acessar.</string>
+    <string name="app_cleaner_empty">Nenhum resto encontrado. O Android 11 e posteriores mantêm o cache privado de outros apps inacessível.</string>
+    <string name="app_leftovers">Pastas residuais</string>
+    <string name="app_leftovers_desc">Pastas de apps desinstalados em Android/media, data e obb</string>
+    <string name="app_cache">Cache de apps</string>
+    <string name="app_cache_desc">Cache externo de apps instalados; eles o recriam</string>
+    <string name="wa_images">Imagens</string>
+    <string name="wa_videos">Vídeos</string>
+    <string name="wa_audio">Áudio</string>
+    <string name="wa_voice">Notas de voz</string>
+    <string name="wa_documents">Documentos</string>
+    <string name="wa_stickers">Figurinhas</string>
+    <string name="wa_gifs">GIFs</string>
+    <string name="wa_backups">Backups e bancos de dados</string>
+    <string name="wa_not_found">Mídia do WhatsApp não encontrada neste dispositivo.</string>
+    <string name="wa_hint">Mídias recebidas e enviadas, incluindo pastas privadas.</string>
+    <string name="analyzer_used">Usado</string>
+    <string name="analyzer_other">Outros arquivos e apps</string>
+    <string name="analyzer_free">Livre</string>
+    <string name="analyzer_breakdown">Detalhamento</string>
+    <string name="analyzer_largest">Maiores arquivos</string>
+    <string name="analyzer_chart_desc">Gráfico de armazenamento: %1$s usados de %2$s</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">Aparência</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_theme_system">Sistema</string>
+    <string name="settings_theme_light">Claro</string>
+    <string name="settings_theme_dark">Escuro</string>
+    <string name="settings_dynamic_color">Cores dinâmicas</string>
+    <string name="settings_dynamic_color_desc">Combinar cores com o papel de parede</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_language_system">Padrão do sistema</string>
+    <string name="settings_files">Arquivos</string>
+    <string name="settings_show_hidden_desc">Mostrar arquivos e pastas que começam com ponto</string>
+    <string name="settings_grid">Visualização em grade por padrão</string>
+    <string name="settings_grid_desc">Mostrar pastas como uma grade de miniaturas</string>
+    <string name="settings_about">Sobre</string>
+    <string name="settings_version">Versão</string>
+    <string name="settings_updates">Atualizações</string>
+    <string name="settings_updates_subtitle">Atualizações automáticas, canal de lançamento e verificação de nova versão</string>
+    <string name="settings_auto_update">Atualizações automáticas</string>
+    <string name="settings_auto_update_desc">Verificar no GitHub diariamente em segundo plano e ao abrir o Findex</string>
+    <string name="updates_title">Atualizações</string>
+    <string name="updates_current">Versão instalada %1$s</string>
+    <string name="settings_channel">Canal de lançamento</string>
+    <string name="channel_stable">Estável</string>
+    <string name="channel_beta">Beta</string>
+    <string name="channel_alpha">Alfa</string>
+    <string name="settings_check_updates">Verificar atualizações</string>
+    <string name="update_checking">Verificando…</string>
+    <string name="update_up_to_date">Você está na versão mais recente</string>
+    <string name="update_available_row">Versão %1$s disponível</string>
+    <string name="settings_about_subtitle">Versão %1$s, desenvolvedor e agradecimentos</string>
+    <string name="update_title">Atualização disponível</string>
+    <string name="update_subtitle">%1$s · você está na %2$s</string>
+    <string name="update_whats_new">Novidades</string>
+    <string name="update_install">Instalar</string>
+    <string name="update_allow_install">Permitir instalação</string>
+    <string name="update_downloading">Baixando… %1$d%%</string>
+    <string name="update_not_now">Agora não</string>
+    <string name="update_failed">Falha na atualização</string>
+    <string name="update_notification_channel_name">Atualizações do app</string>
+    <string name="update_notification_title">Atualização disponível: %1$s</string>
+    <string name="update_notification_body">Toque para ver as notas da versão e instalar</string>
+    <string name="about_title">Sobre o Findex</string>
+    <string name="about_section_app">Aplicativo</string>
+    <string name="about_version_build">Versão %1$s · compilação %2$d</string>
+    <string name="about_source_code">Código-fonte</string>
+    <string name="about_section_developer">Desenvolvedor</string>
+    <string name="about_developer_tagline">Projetado e desenvolvido por um único desenvolvedor.</string>
+    <string name="about_portfolio">Portfólio</string>
+    <string name="about_section_open_source">Código aberto</string>
+    <string name="about_acknowledgements">Agradecimentos</string>
+    <string name="about_acknowledgements_subtitle">Bibliotecas e projetos nos quais o Findex se baseia</string>
+
+    <!-- Compression & Extraction -->
+    <string name="compress_dialog_title">Criar arquivo compactado</string>
+    <string name="compress_format_label">Formato</string>
+    <string name="compress_password_zip_only">A proteção por senha está disponível apenas para ZIP.</string>
+    <string name="compress_password_hint">Senha (opcional)</string>
+    <string name="compress_password_help">Com uma senha, o arquivo é criptografado com AES-256.</string>
+    <string name="extract_password_hint">Senha (se protegido)</string>
+    <string name="extract_dialog_body">Extrair “%1$s” em uma nova pasta ao lado.</string>
+    <string name="compress_button">Compactar</string>
+    <string name="extract_dialog_title">Extrair arquivo</string>
+    <string name="extract_button">Extrair</string>
+
+    <!-- Multitasking & Selection -->
+    <string name="selected_count">%1$d selecionado(s)</string>
+    <string name="tabs_header">Abas</string>
+
+    <!-- Notifications & Services -->
+    <string name="notification_channel_name">Operações de arquivo</string>
+    <string name="notification_channel_description">Progresso e resultados de cópia, movimentação, exclusão e compactação</string>
+    <string name="operation_in_progress">Operação em andamento…</string>
+    <string name="operation_completed">Operação concluída</string>
+    <string name="operation_failed">Falha na operação</string>
+    <string name="operation_cancelled">Operação cancelada</string>
+    <string name="operation_progress">%1$d%% · %2$s</string>
+    <plurals name="operation_queued">
+        <item quantity="one">%1$s · mais %2$d na fila</item>
+        <item quantity="other">%1$s · mais %2$d na fila</item>
+    </plurals>
+    <string name="op_title_copy">Copiando %1$s item(ns)</string>
+    <string name="op_title_move">Movendo %1$s item(ns)</string>
+    <string name="op_title_delete">Excluindo %1$s item(ns)</string>
+    <string name="op_title_trash">Movendo %1$s item(ns) para a Lixeira</string>
+    <string name="op_title_restore">Restaurando %1$s item(ns)</string>
+    <string name="op_title_clean">Limpando %1$s item(ns)</string>
+    <string name="op_title_compress">Compactando para %1$s</string>
+    <string name="op_title_extract">Extraindo %1$s</string>
+    <string name="op_done_copy">%1$s item(ns) copiado(s)</string>
+    <string name="op_done_move">%1$s item(ns) movido(s)</string>
+    <string name="op_done_delete">%1$s item(ns) excluído(s)</string>
+    <string name="op_done_trash">%1$s item(ns) movido(s) para a Lixeira</string>
+    <string name="op_done_restore">%1$s item(ns) restaurado(s)</string>
+    <string name="op_done_clean">%1$s item(ns) limpo(s)</string>
+    <string name="op_done_compress">%1$s criado</string>
+    <string name="op_done_extract">%1$s extraído</string>
+    <string name="op_done_batch_rename">%1$s item(ns) renomeado(s)</string>
+    <string name="op_done_image_transform">%1$s imagem(ns) compactada(s)</string>
+    <string name="op_done_vault_import">%1$s item(ns) movido(s) para o cofre</string>
+    <string name="op_done_vault_export">%1$s item(ns) restaurado(s) do cofre</string>
+    <string name="op_done_vault_delete">%1$s item(ns) excluído(s) do cofre</string>
+    <string name="operation_cancelled_body">Interrompido antes de terminar</string>
+    <string name="error_wrong_password">Senha incorreta ou ausente</string>
+    <string name="error_unsupported_archive">Este formato ou versão de arquivo não é compatível</string>
+    <string name="error_no_space">Espaço de armazenamento insuficiente</string>
+    <string name="error_into_itself">Não é possível copiar uma pasta dentro dela mesma</string>
+    <string name="error_access_denied">Permissão negada para este local</string>
+    <string name="cancel">Cancelar</string>
+    <string name="confirm">Confirmar</string>
+
+    <!-- Recycle bin -->
+    <plurals name="trash_title">
+        <item quantity="one">Mover %d item para a Lixeira?</item>
+        <item quantity="other">Mover %d itens para a Lixeira?</item>
+    </plurals>
+    <string name="trash_body">Você pode restaurá-lo da Lixeira por 30 dias.</string>
+    <string name="delete_permanently">Excluir permanentemente</string>
+    <string name="action_move_to_bin">Mover para a lixeira</string>
+    <string name="action_restore">Restaurar</string>
+    <string name="action_empty_bin">Esvaziar lixeira</string>
+    <string name="undo">Desfazer</string>
+    <plurals name="moved_to_bin">
+        <item quantity="one">%d item movido para a Lixeira</item>
+        <item quantity="other">%d itens movidos para a Lixeira</item>
+    </plurals>
+    <string name="recycle_bin_hint">Os itens são excluídos permanentemente após 30 dias</string>
+    <string name="recycle_bin_empty">A Lixeira está vazia</string>
+
+    <!-- File Inspector & Preview -->
+    <string name="details_dimensions">Dimensões</string>
+    <string name="details_resolution">Resolução</string>
+    <string name="details_duration">Duração</string>
+    <string name="details_megapixels">%1$.1f MP</string>
+    <string name="details_artist">Artista</string>
+    <string name="details_album">Álbum</string>
+    <string name="details_package">Pacote</string>
+    <string name="details_version">Versão</string>
+    <string name="details_checksums">Somas de verificação</string>
+    <string name="details_calculate_hash">Calcular somas de verificação</string>
+    <string name="details_calculating">Calculando…</string>
+    <string name="details_copied_hash">Soma de verificação copiada para a área de transferência</string>
+    <string name="preview_fullscreen">Tela cheia</string>
+    <string name="preview_zoom_hint">Pince para ampliar · Toque duas vezes para ampliar</string>
+    <string name="action_open_in_another_app">Abrir em outro app</string>
+    <string name="action_rotate">Girar</string>
+    <string name="action_reset_zoom">Redefinir zoom</string>
+    <string name="viewer_item_position">%1$d de %2$d</string>
+    <string name="preview_copy_text">Copiar conteúdo</string>
+    <string name="preview_text_copied">Conteúdo copiado para a área de transferência</string>
+    <string name="preview_lines_count">%1$d linhas</string>
+    <string name="action_install">Instalar</string>
+    <string name="action_play">Reproduzir</string>
+    <string name="action_pause">Pausar</string>
+    <string name="action_open_folder">Abrir pasta</string>
+    <string name="details_overview">Visão geral</string>
+    <string name="details_exact_bytes">%1$s bytes</string>
+
+    <!-- Search -->
+    <string name="search_hint">Pesquisar arquivos e pastas</string>
+    <string name="search_prompt">Encontre qualquer coisa no armazenamento pelo nome</string>
+    <string name="search_no_results">Nenhum arquivo corresponde a “%1$s”</string>
+    <string name="cd_clear_search">Limpar pesquisa</string>
+
+    <!-- Duplicate finder -->
+    <string name="nav_duplicates">Arquivos duplicados</string>
+    <string name="dup_title">Arquivos duplicados</string>
+    <string name="dup_desc">Cópias idênticas desperdiçando espaço</string>
+    <string name="dup_none">Nenhum arquivo duplicado encontrado</string>
+    <string name="dup_keep_hint">A cópia mais antiga de cada arquivo é mantida. Pelo menos uma cópia sempre permanece.</string>
+    <string name="dup_delete_button">Excluir %1$s</string>
+    <string name="dup_hashing">Comparando conteúdo dos arquivos…</string>
+    <plurals name="dup_copies">
+        <item quantity="one">%d cópia</item>
+        <item quantity="other">%d cópias</item>
+    </plurals>
+
+    <!-- Archive preview -->
+    <string name="action_browse">Explorar conteúdo</string>
+    <string name="archive_extract_all">Extrair tudo</string>
+    <string name="archive_empty">Este arquivo compactado está vazio</string>
+    <string name="archive_unreadable">Não foi possível listar este arquivo. Ele pode estar criptografado ou danificado; tente Extrair tudo com a senha.</string>
+    <string name="archive_password_title">Senha necessária</string>
+    <string name="archive_password_body">“%1$s” está criptografado.</string>
+    <string name="archive_unlock">Desbloquear</string>
+    <string name="archive_password_label">Senha</string>
+    <string name="archive_opening">Abrindo %1$s…</string>
+
+    <!-- Network storage (SMB / SFTP / FTP / WebDAV) -->
+    <string name="network_title">Armazenamento em rede</string>
+    <string name="network_subtitle">Servidores SMB, SFTP, FTP e WebDAV na sua rede</string>
+    <string name="network_empty_title">Nenhum servidor ainda</string>
+    <string name="network_empty_body">Adicione uma pasta compartilhada de um PC, NAS ou servidor para navegar por ela aqui.</string>
+    <string name="network_add">Adicionar servidor</string>
+    <string name="network_add_title">Adicionar servidor de rede</string>
+    <string name="network_protocol_label">Protocolo</string>
+    <string name="network_webdav_https">Usar HTTPS (TLS)</string>
+    <string name="network_field_name">Nome de exibição (opcional)</string>
+    <string name="network_field_host">Host ou endereço IP</string>
+    <string name="network_field_host_help">Por exemplo, 192.168.1.20 ou meu-nas.local</string>
+    <string name="network_field_port">Porta (opcional)</string>
+    <string name="network_field_port_default">Padrão %1$d</string>
+    <string name="network_field_share">Nome do compartilhamento</string>
+    <string name="network_field_share_help">A pasta compartilhada, por exemplo Public</string>
+    <string name="network_field_path">Caminho remoto (opcional)</string>
+    <string name="network_field_path_help_sftp">Deixe vazio para a pasta inicial ou insira um caminho como /mnt/media</string>
+    <string name="network_field_path_help_ftp">Deixe vazio para a pasta raiz ou insira um caminho como /pub</string>
+    <string name="network_field_path_help_webdav">Caminho do endpoint, por exemplo /dav ou /remote.php/dav/files/usuario</string>
+    <string name="network_field_user">Nome de usuário</string>
+    <string name="network_field_user_help">Deixe vazio para conectar como convidado</string>
+    <string name="network_field_user_help_sftp">Nome de usuário SSH no servidor</string>
+    <string name="network_field_password">Senha</string>
+    <string name="network_field_domain">Domínio ou grupo de trabalho (opcional)</string>
+    <string name="network_connect">Conectar e salvar</string>
+    <string name="network_connecting">Conectando…</string>
+    <string name="network_password_note">Criptografada com uma chave mantida no Android Keystore. Deixe vazio para reutilizar a senha salva para este usuário.</string>
+    <string name="network_guest">Convidado</string>
+    <string name="network_status_connected">Conectado</string>
+    <string name="network_remember_password">Lembrar senha</string>
+    <string name="network_edit">Editar servidor</string>
+    <string name="network_edit_title">Editar servidor de rede</string>
+    <string name="network_save">Testar e salvar</string>
+    <string name="network_password_keep_note">Deixe vazio para manter a senha atual.</string>
+    <string name="network_password_not_saved_note">Não salva. Será solicitada uma vez sempre que você abrir o Findex.</string>
+    <string name="network_error_password_required">Senha necessária para conectar</string>
+    <string name="network_unlock">Desbloquear</string>
+    <string name="network_unlock_title">Conectar a “%1$s”</string>
+    <string name="network_unlock_body">Senha para %1$s. Mantida até você fechar o Findex.</string>
+    <string name="network_status_offline">Desconectado. %1$s</string>
+    <string name="network_retry">Tentar novamente</string>
+    <string name="network_remove">Remover servidor</string>
+    <string name="network_remove_title">Remover “%1$s”?</string>
+    <string name="network_remove_body">O login salvo e quaisquer cópias baixadas serão excluídos. Os arquivos no servidor não são tocados.</string>
+    <string name="network_error_host">Não foi possível alcançar o servidor. Verifique o endereço, a porta e se você está na mesma rede.</string>
+    <string name="network_error_auth">Falha no login. Verifique o nome de usuário e a senha.</string>
+    <string name="network_error_share">Nenhum compartilhamento ou caminho remoto com esse nome neste servidor.</string>
+    <string name="network_error_denied">Acesso negado para esta conta.</string>
+    <string name="network_error_unknown">Algo deu errado ao falar com o servidor.</string>
+    <string name="rail_network">Rede</string>
+    <string name="new_tab_title">Abrir nova aba em</string>
+    <string name="error_network">Não foi possível acessar o compartilhamento de rede</string>
+    <string name="error_not_supported_network">Não disponível em compartilhamentos de rede</string>
+    <string name="network_opening_remote">Baixando %1$s…</string>
+
+    <!-- BEGIN foundation (W1: drawer, entry actions, operation titles, failures) -->
+    <string name="drawer_section_more">Mais</string>
+    <string name="nav_favorites">Favoritos</string>
+    <string name="nav_large_files">Arquivos grandes</string>
+    <string name="nav_recent_changes">Alterações recentes</string>
+    <string name="nav_vault">Cofre</string>
+    <string name="action_batch_rename">Renomear em lote</string>
+    <string name="action_move_to_vault">Mover para o cofre</string>
+    <string name="action_compress_image">Compactar imagens</string>
+    <string name="action_tags">Etiquetas</string>
+    <string name="action_pin_shortcut">Adicionar à tela inicial</string>
+    <string name="op_title_batch_rename">Renomeando %1$s item(ns)</string>
+    <string name="op_title_image_transform">Compactando %1$s imagem(ns)</string>
+    <string name="op_title_vault_import">Movendo %1$s item(ns) para o cofre</string>
+    <string name="op_title_vault_export">Restaurando %1$s item(ns) do cofre</string>
+    <string name="op_title_vault_delete">Excluindo %1$s item(ns) do cofre</string>
+    <string name="error_vault_locked">O cofre está bloqueado</string>
+    <string name="error_nested_selection">Não é possível renomear uma pasta e itens dentro dela juntos. Renomeie-os separadamente.</string>
+    <string name="error_name_conflict">Já existe um arquivo com esse nome</string>
+    <string name="error_op_invalid_name">Esse nome não é permitido</string>
+    <string name="error_unsupported_image">Este formato de imagem não é compatível</string>
+    <string name="placeholder_coming_soon">Em breve</string>
+    <string name="selection_expired">A seleção expirou. Selecione os arquivos novamente.</string>
+    <!-- END foundation -->
+
+    <!-- BEGIN batch-rename -->
+    <string name="rename_title">Renomear em lote</string>
+    <string name="rename_pattern_label">Padrão de nome</string>
+    <string name="rename_token_name">Nome</string>
+    <string name="rename_token_ext">Extensão</string>
+    <string name="rename_token_counter">Contador</string>
+    <string name="rename_token_date">Data</string>
+    <string name="rename_token_parent">Pasta pai</string>
+    <string name="rename_find_label">Localizar</string>
+    <string name="rename_replace_label">Substituir por</string>
+    <string name="rename_regex">Usar expressão regular</string>
+    <string name="rename_ignore_case">Ignorar maiúsculas/minúsculas</string>
+    <string name="rename_case_none">Manter capitalização</string>
+    <string name="rename_case_lower">Minúsculas</string>
+    <string name="rename_case_upper">Maiúsculas</string>
+    <string name="rename_case_title">Primeira letra maiúscula</string>
+    <string name="rename_counter_start">Iniciar em</string>
+    <string name="rename_counter_step">Passo</string>
+    <string name="rename_counter_pad">Dígitos</string>
+    <string name="rename_touch_extension">Alterar extensão também</string>
+    <string name="rename_status_unchanged">Inalterado</string>
+    <string name="rename_status_duplicate">Nome duplicado</string>
+    <string name="rename_status_exists">O nome já existe</string>
+    <string name="rename_status_invalid">Nome inválido</string>
+    <string name="rename_status_bad_regex">Padrão inválido</string>
+    <string name="rename_apply">Renomear</string>
+    <plurals name="rename_summary">
+        <item quantity="one">%d item será renomeado</item>
+        <item quantity="other">%d itens serão renomeados</item>
+    </plurals>
+    <!-- END batch-rename -->
+
+    <!-- BEGIN large-files -->
+    <string name="bigfiles_title">Arquivos grandes e antigos</string>
+    <string name="bigfiles_size_any">Qualquer tamanho</string>
+    <string name="bigfiles_size_100mb">Acima de 100 MB</string>
+    <string name="bigfiles_size_500mb">Acima de 500 MB</string>
+    <string name="bigfiles_size_1gb">Acima de 1 GB</string>
+    <string name="bigfiles_age_any">Qualquer idade</string>
+    <string name="bigfiles_age_30d">Mais de 30 dias</string>
+    <string name="bigfiles_age_90d">Mais de 90 dias</string>
+    <string name="bigfiles_age_6mo">Mais de 6 meses</string>
+    <string name="bigfiles_age_1y">Mais de 1 ano</string>
+    <string name="bigfiles_category_any">Qualquer tipo</string>
+    <string name="bigfiles_include_hidden">Incluir arquivos ocultos</string>
+    <string name="bigfiles_hint_modified">A idade é baseada na data da última modificação</string>
+    <string name="bigfiles_empty">Nenhum arquivo corresponde a esses filtros</string>
+    <plurals name="bigfiles_selected">
+        <item quantity="one">%d arquivo selecionado</item>
+        <item quantity="other">%d arquivos selecionados</item>
+    </plurals>
+    <!-- END large-files -->
+
+    <!-- BEGIN image-compress -->
+    <string name="imgc_title">Compactar imagens</string>
+    <string name="imgc_preset_small">Pequeno</string>
+    <string name="imgc_preset_medium">Médio</string>
+    <string name="imgc_preset_large">Grande</string>
+    <string name="imgc_preset_custom">Personalizado</string>
+    <string name="imgc_max_edge">Maior lado (px)</string>
+    <string name="imgc_scale_percent">Escala (%)</string>
+    <string name="imgc_quality">Qualidade</string>
+    <string name="imgc_format_keep">Manter original</string>
+    <string name="imgc_output_copy">Salvar como cópia</string>
+    <string name="imgc_output_replace">Substituir originais</string>
+    <string name="imgc_output_folder">Salvar na pasta</string>
+    <string name="imgc_keep_metadata">Manter localização e informações da câmera</string>
+    <string name="imgc_estimate">Tamanho estimado: %1$s</string>
+    <string name="imgc_replace_warning">Os originais serão substituídos e não poderão ser recuperados.</string>
+    <plurals name="imgc_skipped">
+        <item quantity="one">%d imagem ignorada</item>
+        <item quantity="other">%d imagens ignoradas</item>
+    </plurals>
+    <!-- END image-compress -->
+
+    <!-- BEGIN vault -->
+    <string name="vault_title">Cofre</string>
+    <string name="vault_setup_title">Configurar seu cofre</string>
+    <string name="vault_setup_password">Senha do cofre</string>
+    <string name="vault_setup_confirm">Confirmar senha</string>
+    <string name="vault_setup_mismatch">As senhas não coincidem</string>
+    <string name="vault_setup_strength_weak">Fraca</string>
+    <string name="vault_setup_strength_fair">Razoável</string>
+    <string name="vault_setup_strength_strong">Forte</string>
+    <string name="vault_setup_biometric">Desbloquear com impressão digital ou rosto</string>
+    <string name="vault_setup_warning_no_recovery">Não há recuperação de senha. Se você esquecer a senha, seus arquivos serão perdidos.</string>
+    <string name="vault_setup_warning_not_secure_erase">Os arquivos originais são removidos normalmente, sem apagamento seguro. Dados excluídos podem ser recuperáveis do armazenamento.</string>
+    <string name="vault_setup_acknowledge">Eu entendo os riscos</string>
+    <string name="vault_setup_create">Criar cofre</string>
+    <string name="vault_unlock_title">Desbloquear cofre</string>
+    <string name="vault_unlock_password">Senha</string>
+    <string name="vault_unlock_biometric">Usar impressão digital ou rosto</string>
+    <string name="vault_unlock_wrong_password">Senha incorreta</string>
+    <string name="vault_unlock_lockout">Muitas tentativas. Tente novamente em %1$s.</string>
+    <string name="vault_biometric_prompt_title">Desbloquear cofre</string>
+    <string name="vault_biometric_prompt_subtitle">Confirme que é você</string>
+    <string name="vault_biometric_prompt_negative">Usar senha</string>
+    <string name="vault_biometric_invalidated">Impressão digital ou rosto alterado. Desbloqueie com sua senha e configure a biometria novamente.</string>
+    <string name="vault_add_files">Adicionar arquivos</string>
+    <string name="vault_import_confirm">Mover para o cofre? Os originais são excluídos permanentemente, sem ir para a lixeira.</string>
+    <string name="vault_export_original">Restaurar para o local original</string>
+    <string name="vault_export_choose_folder">Escolher pasta</string>
+    <string name="vault_open_external_warning">Abrir fora do cofre deixa uma cópia não criptografada neste dispositivo.</string>
+    <string name="vault_menu_change_password">Alterar senha</string>
+    <string name="vault_menu_biometric">Desbloqueio por impressão digital ou rosto</string>
+    <string name="vault_menu_auto_lock">Bloqueio automático</string>
+    <string name="vault_menu_lock_now">Bloquear agora</string>
+    <string name="vault_auto_lock_immediately">Imediatamente</string>
+    <string name="vault_auto_lock_1min">Após 1 minuto</string>
+    <string name="vault_auto_lock_5min">Após 5 minutos</string>
+    <string name="vault_auto_lock_screen_off">Quando a tela desligar</string>
+    <string name="vault_restore_title">Restaurar para o local original?</string>
+    <string name="vault_restore_body">Os arquivos são descriptografados e movidos de volta às pastas originais. Pastas ausentes são recriadas.</string>
+    <string name="vault_restore_action">Restaurar</string>
+    <string name="vault_empty">Seu cofre está vazio</string>
+    <string name="vault_locked_banner">O cofre está bloqueado. Desbloqueie-o para ver seus arquivos.</string>
+    <string name="cd_vault_lock">Bloquear cofre</string>
+    <string name="vault_setup_min_length">Use pelo menos 8 caracteres</string>
+    <string name="vault_unlock_action">Desbloquear</string>
+    <string name="vault_password_current">Senha atual</string>
+    <string name="vault_password_new">Nova senha</string>
+    <string name="vault_password_changed">Senha alterada</string>
+    <string name="vault_unreadable_title">Não foi possível ler a chave do cofre</string>
+    <string name="vault_unreadable_body">Os arquivos criptografados estão na pasta .FindexVault, mas o arquivo vault.key está ausente ou danificado. Restaure o vault.key de um backup para abri-los. Um novo cofre não é criado, mantendo os arquivos recuperáveis.</string>
+    <string name="vault_rebuild_title">Arquivos de uma instalação anterior</string>
+    <string name="vault_rebuild_body">Arquivos criptografados foram encontrados na pasta do cofre. Restaurá-los na lista?</string>
+    <string name="vault_rebuild_action">Restaurar lista</string>
+    <string name="vault_add_files_hint">No explorador, pressione e segure arquivos ou pastas e escolha Mover para o cofre.</string>
+    <string name="vault_delete_confirm">Excluir %1$d item(ns) do cofre? Eles não poderão ser recuperados.</string>
+    <string name="vault_biometric_error">O desbloqueio por impressão digital ou rosto não está disponível</string>
+    <string name="vault_import_ready">%1$d item(ns) serão criptografados. Os originais são excluídos permanentemente, sem ir para a lixeira.</string>
+    <!-- END vault -->
+
+    <!-- BEGIN viewers -->
+    <string name="viewer_text_save">Salvar</string>
+    <string name="viewer_text_saved">Salvo</string>
+    <string name="viewer_text_unsaved_title">Descartar alterações?</string>
+    <string name="viewer_text_unsaved_body">Suas edições serão perdidas.</string>
+    <string name="viewer_text_discard">Descartar</string>
+    <string name="viewer_text_conflict_title">Arquivo alterado no disco</string>
+    <string name="viewer_text_conflict_body">Outro app alterou este arquivo desde que você o abriu.</string>
+    <string name="viewer_text_overwrite">Sobrescrever</string>
+    <string name="viewer_text_read_only">Somente leitura</string>
+    <string name="viewer_text_truncated">Arquivo muito grande. Exibindo a primeira parte.</string>
+    <string name="viewer_text_not_text">Este arquivo não é texto simples.</string>
+    <string name="viewer_text_find">Localizar</string>
+    <string name="viewer_text_wrap">Quebrar linhas</string>
+    <string name="viewer_text_undo">Desfazer</string>
+    <string name="viewer_text_redo">Refazer</string>
+    <string name="viewer_text_encoding">Codificação</string>
+    <string name="viewer_pdf_page_of">Página %1$d de %2$d</string>
+    <string name="viewer_pdf_go_to_page">Ir para a página</string>
+    <string name="viewer_pdf_protected">Este PDF é protegido por senha</string>
+    <string name="viewer_pdf_password">Senha</string>
+    <string name="viewer_pdf_downloading">Baixando PDF…</string>
+    <string name="viewer_pdf_error">Não foi possível abrir este PDF</string>
+    <string name="viewer_audio_play">Reproduzir</string>
+    <string name="viewer_audio_pause">Pausar</string>
+    <string name="viewer_audio_next">Próxima faixa</string>
+    <string name="viewer_audio_previous">Faixa anterior</string>
+    <string name="viewer_audio_repeat">Repetir</string>
+    <string name="viewer_audio_shuffle">Aleatório</string>
+    <string name="viewer_audio_queue">Fila</string>
+    <string name="viewer_audio_error">Não foi possível reproduzir este arquivo</string>
+    <string name="viewer_text_error">Não foi possível ler ou salvar este arquivo</string>
+    <!-- END viewers -->
+
+    <!-- BEGIN tags-favorites -->
+    <string name="tags_title">Etiquetas</string>
+    <string name="tags_new">Nova etiqueta</string>
+    <string name="tags_name_hint">Nome da etiqueta</string>
+    <string name="tags_color_red">Vermelho</string>
+    <string name="tags_color_orange">Laranja</string>
+    <string name="tags_color_yellow">Amarelo</string>
+    <string name="tags_color_green">Verde</string>
+    <string name="tags_color_teal">Verde-azulado</string>
+    <string name="tags_color_blue">Azul</string>
+    <string name="tags_color_purple">Roxo</string>
+    <string name="tags_color_pink">Rosa</string>
+    <string name="tags_rename">Renomear etiqueta</string>
+    <string name="tags_delete_title">Excluir etiqueta “%1$s”?</string>
+    <string name="tags_delete_body">Os arquivos mantêm seus dados. Apenas a etiqueta é removida.</string>
+    <string name="tags_empty">Nenhuma etiqueta ainda</string>
+    <string name="favorites_title">Favoritos</string>
+    <string name="favorites_folders">Pastas</string>
+    <string name="favorites_files">Arquivos</string>
+    <string name="favorites_tags">Etiquetas</string>
+    <string name="favorites_empty">Nada salvo ainda</string>
+    <string name="tags_apply">Aplicar</string>
+    <string name="tags_save">Salvar</string>
+    <string name="tags_files_empty">Nenhum arquivo com esta etiqueta</string>
+    <!-- END tags-favorites -->
+
+    <!-- BEGIN shortcuts -->
+    <string name="shortcut_pinned">Atalho adicionado à tela inicial</string>
+    <string name="shortcut_unsupported">Seu iniciador não oferece suporte a atalhos</string>
+    <string name="shortcut_folder_missing">Esta pasta não existe mais</string>
+    <!-- END shortcuts -->
+
+    <!-- BEGIN recent-changes-growth -->
+    <string name="changes_title">Alterações recentes</string>
+    <string name="changes_today">Hoje</string>
+    <string name="changes_yesterday">Ontem</string>
+    <string name="changes_range_1d">Últimas 24 horas</string>
+    <string name="changes_range_7d">Últimos 7 dias</string>
+    <string name="changes_range_30d">Últimos 30 dias</string>
+    <string name="changes_empty">Nenhuma alteração recente</string>
+    <string name="changes_limit_hint">Exibindo apenas as alterações mais recentes.</string>
+    <string name="growth_title">Crescimento do armazenamento</string>
+    <string name="growth_range_30d">30 dias</string>
+    <string name="growth_range_90d">90 dias</string>
+    <string name="growth_range_1y">1 ano</string>
+    <string name="growth_delta_up">Aumento de %1$s</string>
+    <string name="growth_delta_down">Redução de %1$s</string>
+    <string name="growth_empty">Ainda não há histórico suficiente. O Findex registra o armazenamento diariamente.</string>
+    <string name="viewer_pdf_dark_pages">Páginas escuras</string>
+    <string name="settings_builtin_viewers">Visualizadores integrados</string>
+    <string name="settings_builtin_viewers_desc">Abrir fotos, vídeos, PDFs, textos e áudios no Findex. Desativado usa seus apps padrão</string>
+    <string name="widget_label">Armazenamento do Findex</string>
+    <string name="widget_description">Uso de armazenamento, limpeza rápida e suas pastas favoritas</string>
+    <string name="widget_used">%1$d%% usado</string>
+    <string name="widget_free">%1$s livres de %2$s</string>
+    <string name="settings_cleanup_reminder">Lembrete de limpeza</string>
+    <string name="settings_cleanup_reminder_desc">Uma vez por semana, avisar quando houver lixo que vale a pena limpar</string>
+    <string name="cleanup_reminder_channel">Lembretes de limpeza</string>
+    <string name="cleanup_reminder_title">%1$s podem ser liberados</string>
+    <string name="cleanup_reminder_text">Miniaturas, arquivos temporários e restos que você pode limpar</string>
+    <string name="cleanup_reminder_action">Limpar</string>
+    <string name="settings_storage_history">Histórico de armazenamento</string>
+    <string name="settings_storage_history_desc">Manter registros diários de armazenamento para o gráfico de crescimento</string>
+    <!-- END recent-changes-growth -->
+
+    <!-- BEGIN share-phone -->
+    <string name="nav_share_phone">Compartilhar este telefone</string>
+    <string name="share_tile_running">%1$s · PIN %2$s</string>
+    <string name="share_tile_starting">Iniciando…</string>
+    <string name="share_tile_no_network">Sem Wi-Fi</string>
+    <string name="share_tile_off">Desativado</string>
+    <string name="share_channel_name">Compartilhar este telefone</string>
+    <string name="share_notification_title">Compartilhando este telefone</string>
+    <string name="share_notification_text">Abra %1$s · PIN %2$s</string>
+    <string name="share_stop">Parar</string>
+    <string name="share_start">Iniciar compartilhamento</string>
+    <string name="share_starting">Iniciando…</string>
+    <string name="share_intro_title">Abra seus arquivos em um computador</string>
+    <string name="share_intro_body">O Findex inicia um pequeno servidor web neste telefone. Qualquer navegador no mesmo Wi-Fi ou ponto de acesso pode abri-lo com um PIN único.</string>
+    <string name="share_no_network">Conecte-se ao Wi-Fi ou ative o ponto de acesso primeiro.</string>
+    <string name="share_open_url">Abra em um navegador no seu computador</string>
+    <string name="share_pin">PIN</string>
+    <string name="share_copy_url">Copiar endereço</string>
+    <string name="share_copied">Endereço copiado</string>
+    <plurals name="share_clients">
+        <item quantity="one">%d navegador conectado</item>
+        <item quantity="other">%d navegadores conectados</item>
+    </plurals>
+    <string name="share_clients_none">Nenhum navegador conectado ainda</string>
+    <string name="share_access">Acesso</string>
+    <string name="share_access_hint">As alterações valem imediatamente, inclusive para navegadores conectados.</string>
+    <string name="share_level_view">Visualizar</string>
+    <string name="share_level_download">Baixar</string>
+    <string name="share_level_full">Completo</string>
+    <string name="share_perm_media">Seções de mídia</string>
+    <string name="share_perm_media_desc">Fotos, vídeos, áudio, documentos e muito mais</string>
+    <string name="share_perm_files">Explorador de arquivos</string>
+    <string name="share_perm_files_desc">Navegar por todas as pastas no armazenamento interno e cartão SD</string>
+    <string name="share_perm_download">Abrir e baixar</string>
+    <string name="share_perm_download_desc">Pré-visualizar, transmitir e salvar arquivos no computador</string>
+    <string name="share_perm_upload">Enviar</string>
+    <string name="share_perm_upload_desc">Adicionar arquivos e criar pastas a partir do computador</string>
+    <string name="share_perm_modify">Renomear e excluir</string>
+    <string name="share_perm_modify_desc">Os arquivos excluídos vão para a Lixeira</string>
+    <string name="share_auto_stop">Parada automática</string>
+    <string name="share_auto_stop_desc">Parar o servidor após este tempo sem nenhuma solicitação</string>
+    <string name="share_minutes">%d min</string>
+    <string name="share_never">Nunca</string>
+    <string name="share_security_note">O tráfego não é criptografado. Compartilhe apenas em redes confiáveis.</string>
+    <!-- END share-phone -->
+</resources>

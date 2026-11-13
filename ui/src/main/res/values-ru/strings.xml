@@ -1,0 +1,837 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App & Branding -->
+    <string name="app_tagline">Файловый менеджер Material 3 Expressive</string>
+
+    <!-- Navigation Drawer -->
+    <string name="drawer_subtitle">Файлы и облачное хранилище</string>
+    <string name="nav_home">Главная</string>
+    <string name="nav_storage_graph">График памяти</string>
+    <string name="nav_storage_cleaner">Очистка памяти</string>
+    <string name="nav_whatsapp_cleaner">Очистка WhatsApp</string>
+    <string name="nav_telegram_cleaner">Очистка Telegram</string>
+    <string name="nav_instagram_cleaner">Очистка Instagram</string>
+    <string name="nav_app_cleaner">Очистка приложений</string>
+    <string name="nav_dual_pane">Две панели</string>
+    <string name="dual_compare">Сравнить папки</string>
+    <string name="dual_swap">Поменять панели местами</string>
+    <string name="dual_select_missing">Выбрать отсутствующие в другой панели</string>
+    <string name="dual_copy_to">Копировать в другую панель</string>
+    <string name="dual_move_to">Переместить в другую панель</string>
+    <string name="dual_up">На папку вверх</string>
+    <string name="cmp_only_here">Только здесь</string>
+    <string name="cmp_newer">Новее здесь</string>
+    <string name="cmp_older">Старее здесь</string>
+    <string name="cmp_different">Отличается</string>
+    <string name="cmp_same">Совпадает</string>
+    <string name="nav_archive_manager">Менеджер архивов</string>
+    <string name="nav_network_storage">Сетевое хранилище</string>
+    <string name="nav_settings">Настройки</string>
+    <string name="nav_recycle_bin">Корзина</string>
+    <string name="nav_tabs">Вкладки</string>
+    <string name="nav_search">Поиск</string>
+    <plurals name="tabs_open_count">
+        <item quantity="one">%d открытая вкладка</item>
+        <item quantity="few">%d открытые вкладки</item>
+        <item quantity="many">%d открытых вкладок</item>
+        <item quantity="other">%d открытых вкладок</item>
+    </plurals>
+    <string name="tabs_close_all">Закрыть все вкладки</string>
+    <string name="tabs_empty_title">Нет открытых вкладок</string>
+    <string name="tabs_empty_body">Откройте новую вкладку для просмотра файлов</string>
+    <string name="tabs_current">Текущая вкладка</string>
+    <string name="cd_close_tab">Закрыть вкладку %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Ваши файлы в идеальном порядке</string>
+    <string name="onboarding_body">Findex нужен доступ ко всем файлам для просмотра, копирования, сжатия и очистки памяти.</string>
+    <string name="onboarding_point_access">Просмотр всех папок, SD-карты и USB-накопителя</string>
+    <string name="onboarding_point_fast">Копирование, перемещение и архивация в фоне</string>
+    <string name="onboarding_point_private">Всё остаётся на вашем устройстве</string>
+    <string name="onboarding_permissions">Разрешения</string>
+    <string name="onboarding_storage_title">Доступ ко всем файлам</string>
+    <string name="onboarding_storage_body">Необходим для просмотра и управления файлами</string>
+    <string name="onboarding_notify_title">Уведомления</string>
+    <string name="onboarding_notify_body">Показывает ход копирования, перемещения, сжатия и очистки, пока вы пользуетесь другими приложениями</string>
+    <string name="onboarding_allow">Разрешить</string>
+    <string name="onboarding_granted">Предоставлено</string>
+    <string name="onboarding_continue">Продолжить</string>
+    <string name="onboarding_storage_required">Разрешите доступ ко всем файлам, чтобы продолжить</string>
+    <string name="onboarding_notify_hint">Без уведомлений прогресс отображается только внутри Findex</string>
+    <string name="error_no_app">Нет приложения для открытия этого файла</string>
+    <string name="save_to_findex">Сохранить в Findex</string>
+    <string name="save_to_findex_hint">Откройте папку и нажмите «Сохранить»</string>
+    <string name="error_open_unsupported">Findex не может открыть этот файл</string>
+
+    <!-- Tabs -->
+    <string name="tab_device">Устройство</string>
+    <string name="tab_network">Сеть</string>
+
+    <!-- Storage Drives -->
+    <string name="storage_internal">Внутренняя память</string>
+    <string name="storage_sdcard">SD-карта</string>
+    <string name="storage_network">Сетевое хранилище</string>
+    <string name="storage_usb">USB-накопитель</string>
+    <string name="storage_used_of">Занято %1$s из %2$s</string>
+    <string name="storage_free_space">Свободно %1$s</string>
+    <string name="storage_scanning">Сканирование памяти…</string>
+    <string name="storage_no_network_drives">Нет подключённых сетевых дисков. Нажмите +, чтобы подключиться по SMB / WebDAV / FTP.</string>
+    <string name="storage_add_network">Добавить сетевой диск</string>
+    <string name="storage_used_label">занято</string>
+
+    <!-- Home -->
+    <string name="home_subtitle">Ваши файлы в порядке</string>
+    <string name="section_categories">Категории</string>
+    <string name="section_bookmarks">Закладки</string>
+    <string name="section_recents">Недавние файлы</string>
+    <string name="cd_open_drawer">Открыть меню навигации</string>
+    <string name="cd_browse_drive">Открыть хранилище</string>
+    <plurals name="item_count">
+        <item quantity="one">%d элемент</item>
+        <item quantity="few">%d элемента</item>
+        <item quantity="many">%d элементов</item>
+        <item quantity="other">%d элементов</item>
+    </plurals>
+
+    <!-- File Categories -->
+    <string name="category_photos">Фото</string>
+    <string name="category_videos">Видео</string>
+    <string name="category_audio">Аудио</string>
+    <string name="category_documents">Документы</string>
+    <string name="category_downloads">Загрузки</string>
+    <string name="category_archives">Архивы</string>
+    <string name="category_apks">APK</string>
+
+    <!-- Quick Suggestions & Tools -->
+    <string name="section_suggestions">Быстрые инструменты</string>
+    <string name="cleaner_title">Очистка памяти</string>
+    <string name="cleaner_desc">Освободите место, удалив мусор и временный кэш</string>
+    <string name="whatsapp_cleaner_title">Очистка WhatsApp</string>
+    <string name="whatsapp_cleaner_desc">Удаление отправленных медиафайлов, голосовых, стикеров и резервных копий</string>
+    <string name="storage_graph_title">Анализатор памяти</string>
+    <string name="storage_graph_desc">Просмотр крупных файлов и распределения места по папкам</string>
+
+    <!-- File Actions -->
+    <string name="action_cut">Вырезать</string>
+    <string name="action_copy">Копировать</string>
+    <string name="action_paste">Вставить</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_rename">Переименовать</string>
+    <string name="action_details">Свойства</string>
+    <string name="action_compress">Сжать</string>
+    <string name="action_extract">Извлечь</string>
+    <string name="action_share">Поделиться</string>
+    <string name="action_select_all">Выбрать все</string>
+    <string name="action_deselect_all">Снять выделение</string>
+    <string name="action_search">Поиск файлов</string>
+    <string name="action_clean">Очистить сейчас</string>
+    <string name="action_new_folder">Новая папка</string>
+    <string name="action_new_tab">Новая вкладка</string>
+    <string name="action_close_tab">Закрыть вкладку</string>
+    <string name="action_open_in_new_tab">Открыть в новой вкладке</string>
+    <string name="detail_empty_hint">Выберите файл, чтобы увидеть предпросмотр и сведения</string>
+    <string name="cd_close_details">Закрыть свойства</string>
+    <string name="rail_graph">График</string>
+    <string name="rail_cleaner">Очистка</string>
+    <string name="rail_whatsapp">WhatsApp</string>
+    <string name="rail_bin">Корзина</string>
+    <string name="action_copy_path">Копировать путь</string>
+    <string name="path_copied">Путь скопирован в буфер обмена</string>
+    <string name="preview_file">Предпросмотр</string>
+    <string name="preview_play_video">Воспроизвести видео</string>
+    <string name="preview_play_audio">Воспроизвести аудио</string>
+    <string name="preview_lines_truncated">Показано строк: %1$d</string>
+    <string name="preview_empty_file">Пустой файл</string>
+    <string name="details_item_info">Сведения об элементе</string>
+    <string name="action_open">Открыть</string>
+    <string name="action_create">Создать</string>
+    <string name="action_bookmark">В закладки</string>
+    <string name="action_remove_bookmark">Удалить закладку</string>
+    <string name="bookmark_added">Закладка добавлена</string>
+    <string name="bookmark_removed">Закладка удалена</string>
+
+    <!-- Explorer -->
+    <string name="cd_back">Назад</string>
+    <string name="cd_more_options">Ещё</string>
+    <string name="cd_more_actions">Другие действия для %1$s</string>
+    <string name="cd_grid_view">Сетка</string>
+    <string name="cd_list_view">Список</string>
+    <string name="cd_clear_selection">Снять выделение</string>
+    <string name="cd_clear_clipboard">Очистить буфер обмена</string>
+    <string name="cd_create_menu">Создать</string>
+    <string name="cd_show_password">Показать пароль</string>
+    <string name="cd_hide_password">Скрыть пароль</string>
+    <string name="empty_folder_title">Эта папка пуста</string>
+    <string name="empty_folder_body">Вставьте файлы сюда или создайте новую папку.</string>
+    <string name="label_name">Имя</string>
+    <string name="label_archive_name">Имя архива</string>
+    <string name="error_invalid_name">Имя не может содержать «/»</string>
+    <string name="error_rename">Не удалось переименовать — возможно, такое имя уже существует</string>
+    <string name="error_new_folder">Не удалось создать папку — возможно, такое имя уже существует</string>
+    <string name="sort_title">Сортировка и вид</string>
+    <string name="sort_name">Имя</string>
+    <string name="sort_date">Дата изменения</string>
+    <string name="sort_size">Размер</string>
+    <string name="sort_type">Тип</string>
+    <string name="sort_ascending">По возрастанию</string>
+    <string name="sort_descending">По убыванию</string>
+    <string name="show_hidden_files">Показывать скрытые файлы</string>
+    <string name="details_path">Расположение</string>
+    <string name="details_modified">Изменён</string>
+    <string name="details_type">Тип</string>
+    <string name="details_size">Размер</string>
+    <string name="details_contains">Содержит</string>
+    <string name="delete_body">Это действие нельзя отменить.</string>
+    <plurals name="delete_title">
+        <item quantity="one">Удалить %d элемент?</item>
+        <item quantity="few">Удалить %d элемента?</item>
+        <item quantity="many">Удалить %d элементов?</item>
+        <item quantity="other">Удалить %d элементов?</item>
+    </plurals>
+    <plurals name="file_count">
+        <item quantity="one">%d файл</item>
+        <item quantity="few">%d файла</item>
+        <item quantity="many">%d файлов</item>
+        <item quantity="other">%d файлов</item>
+    </plurals>
+    <plurals name="folder_count">
+        <item quantity="one">%d папка</item>
+        <item quantity="few">%d папки</item>
+        <item quantity="many">%d папок</item>
+        <item quantity="other">%d папок</item>
+    </plurals>
+    <plurals name="paste_here">
+        <item quantity="one">Вставить %d элемент</item>
+        <item quantity="few">Вставить %d элемента</item>
+        <item quantity="many">Вставить %d элементов</item>
+        <item quantity="other">Вставить %d элементов</item>
+    </plurals>
+    <plurals name="save_here">
+        <item quantity="one">Сохранить %d файл здесь</item>
+        <item quantity="few">Сохранить %d файла здесь</item>
+        <item quantity="many">Сохранить %d файлов здесь</item>
+        <item quantity="other">Сохранить %d файлов здесь</item>
+    </plurals>
+    <plurals name="move_here">
+        <item quantity="one">Переместить %d элемент сюда</item>
+        <item quantity="few">Переместить %d элемента сюда</item>
+        <item quantity="many">Переместить %d элементов сюда</item>
+        <item quantity="other">Переместить %d элементов сюда</item>
+    </plurals>
+    <string name="action_show_in_folder">Показать в папке</string>
+    <string name="category_empty">Здесь пока пусто</string>
+
+    <!-- Tools -->
+    <string name="scanning">Сканирование памяти…</string>
+    <string name="tool_can_free">можно освободить</string>
+    <string name="tool_selected_of">Выбрано %1$s из %2$s</string>
+    <string name="tool_all_clean_title">Всё чисто</string>
+    <string name="tool_all_clean_body">Сейчас нечего удалять.</string>
+    <string name="tool_clean_confirm_title">Очистить %1$s?</string>
+    <string name="tool_clean_confirm_body">Выбранные файлы будут удалены безвозвратно.</string>
+    <string name="tool_clean_button">Очистить %1$s</string>
+    <string name="tool_rescan">Сканировать снова</string>
+    <string name="junk_thumbnails">Кэш миниатюр</string>
+    <string name="junk_thumbnails_desc">Превью изображений, которые приложения создают заново</string>
+    <string name="junk_temp">Временные файлы и журналы</string>
+    <string name="junk_temp_desc">.tmp, .log, .bak и незавершённые загрузки</string>
+    <string name="junk_apks">Установочные файлы</string>
+    <string name="junk_apks_desc">APK-файлы приложений, которые уже могли быть установлены</string>
+    <string name="junk_empty">Пустые папки</string>
+    <string name="junk_empty_desc">Папки без содержимого</string>
+    <string name="junk_zero">Пустые файлы</string>
+    <string name="junk_zero_desc">Файлы размером 0 байт; скрытые файлы-маркеры сохраняются</string>
+    <string name="telegram_cleaner_title">Очистка Telegram</string>
+    <string name="instagram_cleaner_title">Очистка Instagram</string>
+    <string name="tg_hint">Загруженные и отправленные медиафайлы и документы.</string>
+    <string name="ig_hint">Фото и видео, сохранённые Instagram на этом устройстве.</string>
+    <string name="tg_not_found">Медиафайлы Telegram не найдены на этом устройстве.</string>
+    <string name="ig_not_found">Медиафайлы Instagram не найдены на этом устройстве.</string>
+    <string name="app_media_files">Документы и прочие файлы</string>
+    <string name="app_cleaner_title">Очистка приложений</string>
+    <string name="app_cleaner_hint">Остатки удалённых приложений и кэш, доступный Findex.</string>
+    <string name="app_cleaner_empty">Остатки не найдены. На Android 11 и выше личный кэш других приложений недоступен.</string>
+    <string name="app_leftovers">Оставшиеся папки</string>
+    <string name="app_leftovers_desc">Папки удалённых приложений в Android/media, data и obb</string>
+    <string name="app_cache">Кэш приложений</string>
+    <string name="app_cache_desc">Внешний кэш установленных приложений; они воссоздадут его</string>
+    <string name="wa_images">Изображения</string>
+    <string name="wa_videos">Видео</string>
+    <string name="wa_audio">Аудио</string>
+    <string name="wa_voice">Голосовые сообщения</string>
+    <string name="wa_documents">Документы</string>
+    <string name="wa_stickers">Стикеры</string>
+    <string name="wa_gifs">GIF</string>
+    <string name="wa_backups">Резервные копии и базы данных</string>
+    <string name="wa_not_found">Медиафайлы WhatsApp не найдены на этом устройстве.</string>
+    <string name="wa_hint">Полученные и отправленные медиафайлы, включая личные папки.</string>
+    <string name="analyzer_used">Занято</string>
+    <string name="analyzer_other">Другие файлы и приложения</string>
+    <string name="analyzer_free">Свободно</string>
+    <string name="analyzer_breakdown">Структура</string>
+    <string name="analyzer_largest">Самые большие файлы</string>
+    <string name="analyzer_chart_desc">Диаграмма памяти: занято %1$s из %2$s</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">Оформление</string>
+    <string name="settings_theme">Тема</string>
+    <string name="settings_theme_system">Системная</string>
+    <string name="settings_theme_light">Светлая</string>
+    <string name="settings_theme_dark">Тёмная</string>
+    <string name="settings_dynamic_color">Динамические цвета</string>
+    <string name="settings_dynamic_color_desc">Подбирать цвета под обои</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_language_system">По умолчанию</string>
+    <string name="settings_files">Файлы</string>
+    <string name="settings_show_hidden_desc">Показывать файлы и папки, начинающиеся с точки</string>
+    <string name="settings_grid">Сетка по умолчанию</string>
+    <string name="settings_grid_desc">Показывать папки в виде сетки миниатюр</string>
+    <string name="settings_about">О приложении</string>
+    <string name="settings_version">Версия</string>
+    <string name="settings_updates">Обновления</string>
+    <string name="settings_updates_subtitle">Автообновления, канал обновлений и проверка новой версии</string>
+    <string name="settings_auto_update">Автообновления</string>
+    <string name="settings_auto_update_desc">Ежедневно проверять GitHub в фоне и при открытии Findex</string>
+    <string name="updates_title">Обновления</string>
+    <string name="updates_current">Установлена версия %1$s</string>
+    <string name="settings_channel">Канал обновлений</string>
+    <string name="channel_stable">Стабильный</string>
+    <string name="channel_beta">Бета</string>
+    <string name="channel_alpha">Альфа</string>
+    <string name="settings_check_updates">Проверить обновления</string>
+    <string name="update_checking">Проверка…</string>
+    <string name="update_up_to_date">У вас установлена последняя версия</string>
+    <string name="update_available_row">Доступна версия %1$s</string>
+    <string name="settings_about_subtitle">Версия %1$s, разработчик и благодарности</string>
+    <string name="update_title">Доступно обновление</string>
+    <string name="update_subtitle">%1$s · у вас %2$s</string>
+    <string name="update_whats_new">Что нового</string>
+    <string name="update_install">Установить</string>
+    <string name="update_allow_install">Разрешить установку</string>
+    <string name="update_downloading">Загрузка… %1$d%%</string>
+    <string name="update_not_now">Не сейчас</string>
+    <string name="update_failed">Ошибка обновления</string>
+    <string name="update_notification_channel_name">Обновления приложения</string>
+    <string name="update_notification_title">Доступно обновление: %1$s</string>
+    <string name="update_notification_body">Нажмите, чтобы посмотреть список изменений и установить</string>
+    <string name="about_title">О Findex</string>
+    <string name="about_section_app">Приложение</string>
+    <string name="about_version_build">Версия %1$s · сборка %2$d</string>
+    <string name="about_source_code">Исходный код</string>
+    <string name="about_section_developer">Разработчик</string>
+    <string name="about_developer_tagline">Спроектировано и разработано одним автором.</string>
+    <string name="about_portfolio">Портфолио</string>
+    <string name="about_section_open_source">Открытый код</string>
+    <string name="about_acknowledgements">Благодарности</string>
+    <string name="about_acknowledgements_subtitle">Библиотеки и проекты, на которых построен Findex</string>
+
+    <!-- Compression & Extraction -->
+    <string name="compress_dialog_title">Создать архив</string>
+    <string name="compress_format_label">Формат</string>
+    <string name="compress_password_zip_only">Защита паролем доступна только для ZIP.</string>
+    <string name="compress_password_hint">Пароль (необязательно)</string>
+    <string name="compress_password_help">При наличии пароля архив шифруется по стандарту AES-256.</string>
+    <string name="extract_password_hint">Пароль (если защищён)</string>
+    <string name="extract_dialog_body">Извлечь «%1$s» в новую папку рядом.</string>
+    <string name="compress_button">Сжать</string>
+    <string name="extract_dialog_title">Извлечь архив</string>
+    <string name="extract_button">Извлечь</string>
+
+    <!-- Multitasking & Selection -->
+    <string name="selected_count">Выбрано: %1$d</string>
+    <string name="tabs_header">Вкладки</string>
+
+    <!-- Notifications & Services -->
+    <string name="notification_channel_name">Файловые операции</string>
+    <string name="notification_channel_description">Ход и результаты копирования, перемещения, удаления и работы с архивами</string>
+    <string name="operation_in_progress">Выполняется операция…</string>
+    <string name="operation_completed">Операция завершена</string>
+    <string name="operation_failed">Ошибка операции</string>
+    <string name="operation_cancelled">Операция отменена</string>
+    <string name="operation_progress">%1$d%% · %2$s</string>
+    <plurals name="operation_queued">
+        <item quantity="one">%1$s · ещё %2$d в очереди</item>
+        <item quantity="few">%1$s · ещё %2$d в очереди</item>
+        <item quantity="many">%1$s · ещё %2$d в очереди</item>
+        <item quantity="other">%1$s · ещё %2$d в очереди</item>
+    </plurals>
+    <string name="op_title_copy">Копирование (%1$s)</string>
+    <string name="op_title_move">Перемещение (%1$s)</string>
+    <string name="op_title_delete">Удаление (%1$s)</string>
+    <string name="op_title_trash">Перемещение в Корзину (%1$s)</string>
+    <string name="op_title_restore">Восстановление (%1$s)</string>
+    <string name="op_title_clean">Очистка (%1$s)</string>
+    <string name="op_title_compress">Сжатие в %1$s</string>
+    <string name="op_title_extract">Извлечение %1$s</string>
+    <string name="op_done_copy">Скопировано: %1$s</string>
+    <string name="op_done_move">Перемещено: %1$s</string>
+    <string name="op_done_delete">Удалено: %1$s</string>
+    <string name="op_done_trash">Перемещено в Корзину: %1$s</string>
+    <string name="op_done_restore">Восстановлено: %1$s</string>
+    <string name="op_done_clean">Очищено: %1$s</string>
+    <string name="op_done_compress">Создан %1$s</string>
+    <string name="op_done_extract">Извлечён %1$s</string>
+    <string name="op_done_batch_rename">Переименовано: %1$s</string>
+    <string name="op_done_image_transform">Сжато изображений: %1$s</string>
+    <string name="op_done_vault_import">Перемещено в сейф: %1$s</string>
+    <string name="op_done_vault_export">Восстановлено из сейфа: %1$s</string>
+    <string name="op_done_vault_delete">Удалено из сейфа: %1$s</string>
+    <string name="operation_cancelled_body">Остановлено до завершения</string>
+    <string name="error_wrong_password">Неверный или отсутствующий пароль</string>
+    <string name="error_unsupported_archive">Этот формат или версия архива не поддерживается</string>
+    <string name="error_no_space">Недостаточно места в памяти</string>
+    <string name="error_into_itself">Нельзя скопировать папку саму в себя</string>
+    <string name="error_access_denied">Доступ к этому расположению запрещён</string>
+    <string name="cancel">Отмена</string>
+    <string name="confirm">Подтвердить</string>
+
+    <!-- Recycle bin -->
+    <plurals name="trash_title">
+        <item quantity="one">Переместить %d элемент в Корзину?</item>
+        <item quantity="few">Переместить %d элемента в Корзину?</item>
+        <item quantity="many">Переместить %d элементов в Корзину?</item>
+        <item quantity="other">Переместить %d элементов в Корзину?</item>
+    </plurals>
+    <string name="trash_body">Его можно восстановить из Корзины в течение 30 дней.</string>
+    <string name="delete_permanently">Удалить навсегда</string>
+    <string name="action_move_to_bin">В корзину</string>
+    <string name="action_restore">Восстановить</string>
+    <string name="action_empty_bin">Очистить корзину</string>
+    <string name="undo">Отменить</string>
+    <plurals name="moved_to_bin">
+        <item quantity="one">%d элемент перемещён в Корзину</item>
+        <item quantity="few">%d элемента перемещены в Корзину</item>
+        <item quantity="many">%d элементов перемещены в Корзину</item>
+        <item quantity="other">%d элементов перемещены в Корзину</item>
+    </plurals>
+    <string name="recycle_bin_hint">Элементы удаляются навсегда через 30 дней</string>
+    <string name="recycle_bin_empty">Корзина пуста</string>
+
+    <!-- File Inspector & Preview -->
+    <string name="details_dimensions">Размеры</string>
+    <string name="details_resolution">Разрешение</string>
+    <string name="details_duration">Длительность</string>
+    <string name="details_megapixels">%1$.1f МП</string>
+    <string name="details_artist">Исполнитель</string>
+    <string name="details_album">Альбом</string>
+    <string name="details_package">Пакет</string>
+    <string name="details_version">Версия</string>
+    <string name="details_checksums">Контрольные суммы</string>
+    <string name="details_calculate_hash">Вычислить контрольные суммы</string>
+    <string name="details_calculating">Вычисление…</string>
+    <string name="details_copied_hash">Контрольная сумма скопирована в буфер обмена</string>
+    <string name="preview_fullscreen">На весь экран</string>
+    <string name="preview_zoom_hint">Сведите/разведите пальцы или нажмите дважды для масштаба</string>
+    <string name="action_open_in_another_app">Открыть в другом приложении</string>
+    <string name="action_rotate">Повернуть</string>
+    <string name="action_reset_zoom">Сбросить масштаб</string>
+    <string name="viewer_item_position">%1$d из %2$d</string>
+    <string name="preview_copy_text">Копировать текст</string>
+    <string name="preview_text_copied">Содержимое скопировано в буфер обмена</string>
+    <string name="preview_lines_count">Строк: %1$d</string>
+    <string name="action_install">Установить</string>
+    <string name="action_play">Воспроизвести</string>
+    <string name="action_pause">Пауза</string>
+    <string name="action_open_folder">Открыть папку</string>
+    <string name="details_overview">Обзор</string>
+    <string name="details_exact_bytes">%1$s байт</string>
+
+    <!-- Search -->
+    <string name="search_hint">Поиск файлов и папок</string>
+    <string name="search_prompt">Найдите любой файл в хранилище по имени</string>
+    <string name="search_no_results">Нет файлов по запросу «%1$s»</string>
+    <string name="cd_clear_search">Очистить поиск</string>
+
+    <!-- Duplicate finder -->
+    <string name="nav_duplicates">Дубликаты файлов</string>
+    <string name="dup_title">Дубликаты файлов</string>
+    <string name="dup_desc">Одинаковые копии, занимающие место</string>
+    <string name="dup_none">Дубликаты не найдены</string>
+    <string name="dup_keep_hint">Самая старая копия каждого файла сохраняется. Всегда остаётся хотя бы одна копия.</string>
+    <string name="dup_delete_button">Удалить %1$s</string>
+    <string name="dup_hashing">Сравнение содержимого файлов…</string>
+    <plurals name="dup_copies">
+        <item quantity="one">%d копия</item>
+        <item quantity="few">%d копии</item>
+        <item quantity="many">%d копий</item>
+        <item quantity="other">%d копий</item>
+    </plurals>
+
+    <!-- Archive preview -->
+    <string name="action_browse">Просмотреть содержимое</string>
+    <string name="archive_extract_all">Извлечь всё</string>
+    <string name="archive_empty">Этот архив пуст</string>
+    <string name="archive_unreadable">Не удалось получить список файлов. Возможно, архив зашифрован или повреждён; попробуйте «Извлечь всё» с паролем.</string>
+    <string name="archive_password_title">Требуется пароль</string>
+    <string name="archive_password_body">«%1$s» зашифрован.</string>
+    <string name="archive_unlock">Разблокировать</string>
+    <string name="archive_password_label">Пароль</string>
+    <string name="archive_opening">Открытие %1$s…</string>
+
+    <!-- Network storage (SMB / SFTP / FTP / WebDAV) -->
+    <string name="network_title">Сетевое хранилище</string>
+    <string name="network_subtitle">Серверы SMB, SFTP, FTP и WebDAV в вашей сети</string>
+    <string name="network_empty_title">Серверов пока нет</string>
+    <string name="network_empty_body">Добавьте общую папку с ПК, NAS или сервера для просмотра здесь.</string>
+    <string name="network_add">Добавить сервер</string>
+    <string name="network_add_title">Добавить сетевой сервер</string>
+    <string name="network_protocol_label">Протокол</string>
+    <string name="network_webdav_https">Использовать HTTPS (TLS)</string>
+    <string name="network_field_name">Отображаемое имя (необязательно)</string>
+    <string name="network_field_host">Хост или IP-адрес</string>
+    <string name="network_field_host_help">Например, 192.168.1.20 или my-nas.local</string>
+    <string name="network_field_port">Порт (необязательно)</string>
+    <string name="network_field_port_default">По умолчанию %1$d</string>
+    <string name="network_field_share">Имя общего ресурса</string>
+    <string name="network_field_share_help">Общая папка, например Public</string>
+    <string name="network_field_path">Удалённый путь (необязательно)</string>
+    <string name="network_field_path_help_sftp">Оставьте пустым для домашней папки или укажите путь, например /mnt/media</string>
+    <string name="network_field_path_help_ftp">Оставьте пустым для корневой папки или укажите путь, например /pub</string>
+    <string name="network_field_path_help_webdav">Путь конечной точки, например /dav или /remote.php/dav/files/user</string>
+    <string name="network_field_user">Имя пользователя</string>
+    <string name="network_field_user_help">Оставьте пустым для гостевого входа</string>
+    <string name="network_field_user_help_sftp">Имя пользователя SSH на сервере</string>
+    <string name="network_field_password">Пароль</string>
+    <string name="network_field_domain">Домен или рабочая группа (необязательно)</string>
+    <string name="network_connect">Подключить и сохранить</string>
+    <string name="network_connecting">Подключение…</string>
+    <string name="network_password_note">Шифруется ключом из Android Keystore. Оставьте пустым, чтобы использовать пароль, сохранённый для этого пользователя.</string>
+    <string name="network_guest">Гость</string>
+    <string name="network_status_connected">Подключено</string>
+    <string name="network_remember_password">Запомнить пароль</string>
+    <string name="network_edit">Изменить сервер</string>
+    <string name="network_edit_title">Редактировать сетевой сервер</string>
+    <string name="network_save">Проверить и сохранить</string>
+    <string name="network_password_keep_note">Оставьте пустым, чтобы сохранить текущий пароль.</string>
+    <string name="network_password_not_saved_note">Не сохраняется. Запрашивается один раз при каждом запуске Findex.</string>
+    <string name="network_error_password_required">Для подключения нужен пароль</string>
+    <string name="network_unlock">Разблокировать</string>
+    <string name="network_unlock_title">Подключение к «%1$s»</string>
+    <string name="network_unlock_body">Пароль для %1$s. Хранится до закрытия Findex.</string>
+    <string name="network_status_offline">Отключено. %1$s</string>
+    <string name="network_retry">Повторить подключение</string>
+    <string name="network_remove">Удалить сервер</string>
+    <string name="network_remove_title">Удалить «%1$s»?</string>
+    <string name="network_remove_body">Сохранённый вход и загруженные копии будут удалены. Файлы на сервере не затрагиваются.</string>
+    <string name="network_error_host">Не удалось связаться с сервером. Проверьте адрес, порт и подключение к той же сети.</string>
+    <string name="network_error_auth">Ошибка входа. Проверьте имя пользователя и пароль.</string>
+    <string name="network_error_share">На этом сервере нет общего ресурса или пути с таким именем.</string>
+    <string name="network_error_denied">Доступ для этой учётной записи запрещён.</string>
+    <string name="network_error_unknown">Произошла ошибка при обмене данными с сервером.</string>
+    <string name="rail_network">Сеть</string>
+    <string name="new_tab_title">Открыть новую вкладку в</string>
+    <string name="error_network">Не удалось подключиться к сетевому ресурсу</string>
+    <string name="error_not_supported_network">Недоступно для сетевых ресурсов</string>
+    <string name="network_opening_remote">Загрузка %1$s…</string>
+
+    <!-- BEGIN foundation (W1: drawer, entry actions, operation titles, failures) -->
+    <string name="drawer_section_more">Ещё</string>
+    <string name="nav_favorites">Избранное</string>
+    <string name="nav_large_files">Крупные файлы</string>
+    <string name="nav_recent_changes">Недавние изменения</string>
+    <string name="nav_vault">Сейф</string>
+    <string name="action_batch_rename">Пакетное переименование</string>
+    <string name="action_move_to_vault">Переместить в сейф</string>
+    <string name="action_compress_image">Сжать изображения</string>
+    <string name="action_tags">Теги</string>
+    <string name="action_pin_shortcut">На главный экран</string>
+    <string name="op_title_batch_rename">Переименование (%1$s)</string>
+    <string name="op_title_image_transform">Сжатие изображений (%1$s)</string>
+    <string name="op_title_vault_import">Перемещение в сейф (%1$s)</string>
+    <string name="op_title_vault_export">Восстановление из сейфа (%1$s)</string>
+    <string name="op_title_vault_delete">Удаление из сейфа (%1$s)</string>
+    <string name="error_vault_locked">Сейф заблокирован</string>
+    <string name="error_nested_selection">Нельзя одновременно переименовать папку и файлы внутри неё. Переименуйте их отдельно.</string>
+    <string name="error_name_conflict">Файл с таким именем уже существует</string>
+    <string name="error_op_invalid_name">Такое имя недопустимо</string>
+    <string name="error_unsupported_image">Этот формат изображения не поддерживается</string>
+    <string name="placeholder_coming_soon">Скоро</string>
+    <string name="selection_expired">Выделение устарело. Выберите файлы снова.</string>
+    <!-- END foundation -->
+
+    <!-- BEGIN batch-rename -->
+    <string name="rename_title">Пакетное переименование</string>
+    <string name="rename_pattern_label">Шаблон имени</string>
+    <string name="rename_token_name">Имя</string>
+    <string name="rename_token_ext">Расширение</string>
+    <string name="rename_token_counter">Счётчик</string>
+    <string name="rename_token_date">Дата</string>
+    <string name="rename_token_parent">Родительская папка</string>
+    <string name="rename_find_label">Найти</string>
+    <string name="rename_replace_label">Заменить на</string>
+    <string name="rename_regex">Регулярное выражение</string>
+    <string name="rename_ignore_case">Без учёта регистра</string>
+    <string name="rename_case_none">Не менять регистр</string>
+    <string name="rename_case_lower">нижний регистр</string>
+    <string name="rename_case_upper">ВЕРХНИЙ РЕГИСТР</string>
+    <string name="rename_case_title">Как В Заголовках</string>
+    <string name="rename_counter_start">Начать с</string>
+    <string name="rename_counter_step">Шаг</string>
+    <string name="rename_counter_pad">Разряды</string>
+    <string name="rename_touch_extension">Также менять расширение</string>
+    <string name="rename_status_unchanged">Без изменений</string>
+    <string name="rename_status_duplicate">Дубликат имени</string>
+    <string name="rename_status_exists">Имя уже существует</string>
+    <string name="rename_status_invalid">Недопустимое имя</string>
+    <string name="rename_status_bad_regex">Неверный шаблон</string>
+    <string name="rename_apply">Переименовать</string>
+    <plurals name="rename_summary">
+        <item quantity="one">Будет переименован %d элемент</item>
+        <item quantity="few">Будут переименованы %d элемента</item>
+        <item quantity="many">Будут переименованы %d элементов</item>
+        <item quantity="other">Будут переименованы %d элементов</item>
+    </plurals>
+    <!-- END batch-rename -->
+
+    <!-- BEGIN large-files -->
+    <string name="bigfiles_title">Крупные и старые файлы</string>
+    <string name="bigfiles_size_any">Любой размер</string>
+    <string name="bigfiles_size_100mb">Больше 100 МБ</string>
+    <string name="bigfiles_size_500mb">Больше 500 МБ</string>
+    <string name="bigfiles_size_1gb">Больше 1 ГБ</string>
+    <string name="bigfiles_age_any">Любой возраст</string>
+    <string name="bigfiles_age_30d">Старше 30 дней</string>
+    <string name="bigfiles_age_90d">Старше 90 дней</string>
+    <string name="bigfiles_age_6mo">Старше 6 месяцев</string>
+    <string name="bigfiles_age_1y">Старше 1 года</string>
+    <string name="bigfiles_category_any">Любой тип</string>
+    <string name="bigfiles_include_hidden">Включая скрытые файлы</string>
+    <string name="bigfiles_hint_modified">Возраст определяется по дате последнего изменения</string>
+    <string name="bigfiles_empty">Нет файлов, подходящих под фильтры</string>
+    <plurals name="bigfiles_selected">
+        <item quantity="one">Выбран %d файл</item>
+        <item quantity="few">Выбрано %d файла</item>
+        <item quantity="many">Выбрано %d файлов</item>
+        <item quantity="other">Выбрано %d файлов</item>
+    </plurals>
+    <!-- END large-files -->
+
+    <!-- BEGIN image-compress -->
+    <string name="imgc_title">Сжать изображения</string>
+    <string name="imgc_preset_small">Малый</string>
+    <string name="imgc_preset_medium">Средний</string>
+    <string name="imgc_preset_large">Большой</string>
+    <string name="imgc_preset_custom">Свой</string>
+    <string name="imgc_max_edge">Длинная сторона (px)</string>
+    <string name="imgc_scale_percent">Масштаб (%)</string>
+    <string name="imgc_quality">Качество</string>
+    <string name="imgc_format_keep">Сохранить оригинал</string>
+    <string name="imgc_output_copy">Сохранить как копию</string>
+    <string name="imgc_output_replace">Заменить оригиналы</string>
+    <string name="imgc_output_folder">Сохранить в папку</string>
+    <string name="imgc_keep_metadata">Сохранять геолокацию и данные камеры</string>
+    <string name="imgc_estimate">Ожидаемый размер: %1$s</string>
+    <string name="imgc_replace_warning">Оригиналы будут перезаписаны без возможности восстановления.</string>
+    <plurals name="imgc_skipped">
+        <item quantity="one">%d изображение пропущено</item>
+        <item quantity="few">%d изображения пропущены</item>
+        <item quantity="many">%d изображений пропущено</item>
+        <item quantity="other">%d изображений пропущено</item>
+    </plurals>
+    <!-- END image-compress -->
+
+    <!-- BEGIN vault -->
+    <string name="vault_title">Сейф</string>
+    <string name="vault_setup_title">Настройка сейфа</string>
+    <string name="vault_setup_password">Пароль сейфа</string>
+    <string name="vault_setup_confirm">Подтвердите пароль</string>
+    <string name="vault_setup_mismatch">Пароли не совпадают</string>
+    <string name="vault_setup_strength_weak">Слабый</string>
+    <string name="vault_setup_strength_fair">Средний</string>
+    <string name="vault_setup_strength_strong">Надёжный</string>
+    <string name="vault_setup_biometric">Разблокировка по отпечатку или лицу</string>
+    <string name="vault_setup_warning_no_recovery">Восстановления пароля нет. Если вы забудете пароль, файлы будут утеряны.</string>
+    <string name="vault_setup_warning_not_secure_erase">Исходные файлы удаляются обычным способом, без гарантированного затирания. Удалённые данные могут быть восстановлены из памяти.</string>
+    <string name="vault_setup_acknowledge">Я понимаю риски</string>
+    <string name="vault_setup_create">Создать сейф</string>
+    <string name="vault_unlock_title">Открыть сейф</string>
+    <string name="vault_unlock_password">Пароль</string>
+    <string name="vault_unlock_biometric">По отпечатку или лицу</string>
+    <string name="vault_unlock_wrong_password">Неверный пароль</string>
+    <string name="vault_unlock_lockout">Слишком много попыток. Повторите через %1$s.</string>
+    <string name="vault_biometric_prompt_title">Открыть сейф</string>
+    <string name="vault_biometric_prompt_subtitle">Подтвердите личность</string>
+    <string name="vault_biometric_prompt_negative">Использовать пароль</string>
+    <string name="vault_biometric_invalidated">Отпечаток или лицо изменились. Разблокируйте паролем и настройте биометрию снова.</string>
+    <string name="vault_add_files">Добавить файлы</string>
+    <string name="vault_import_confirm">Переместить в сейф? Оригиналы удаляются навсегда, минуя корзину.</string>
+    <string name="vault_export_original">Восстановить в исходную папку</string>
+    <string name="vault_export_choose_folder">Выбрать папку</string>
+    <string name="vault_open_external_warning">Открытие вне сейфа оставляет незашифрованную копию на устройстве.</string>
+    <string name="vault_menu_change_password">Изменить пароль</string>
+    <string name="vault_menu_biometric">Вход по отпечатку или лицу</string>
+    <string name="vault_menu_auto_lock">Автоблокировка</string>
+    <string name="vault_menu_lock_now">Заблокировать сейчас</string>
+    <string name="vault_auto_lock_immediately">Сразу</string>
+    <string name="vault_auto_lock_1min">Через 1 минуту</string>
+    <string name="vault_auto_lock_5min">Через 5 минут</string>
+    <string name="vault_auto_lock_screen_off">При выключении экрана</string>
+    <string name="vault_restore_title">Восстановить в исходную папку?</string>
+    <string name="vault_restore_body">Файлы будут расшифрованы и возвращены в исходные папки. Отсутствующие папки будут созданы заново.</string>
+    <string name="vault_restore_action">Восстановить</string>
+    <string name="vault_empty">Ваш сейф пуст</string>
+    <string name="vault_locked_banner">Сейф заблокирован. Разблокируйте его, чтобы увидеть файлы.</string>
+    <string name="cd_vault_lock">Заблокировать сейф</string>
+    <string name="vault_setup_min_length">Минимум 8 символов</string>
+    <string name="vault_unlock_action">Разблокировать</string>
+    <string name="vault_password_current">Текущий пароль</string>
+    <string name="vault_password_new">Новый пароль</string>
+    <string name="vault_password_changed">Пароль изменён</string>
+    <string name="vault_unreadable_title">Не удаётся прочитать ключ сейфа</string>
+    <string name="vault_unreadable_body">Зашифрованные файлы находятся в папке .FindexVault, но файл vault.key отсутствует или повреждён. Восстановите vault.key из резервной копии, чтобы открыть их. Новый сейф не создаётся, поэтому файлы остаются доступными для восстановления.</string>
+    <string name="vault_rebuild_title">Файлы от прежней установки</string>
+    <string name="vault_rebuild_body">В папке сейфа найдены зашифрованные файлы. Восстановить их в списке?</string>
+    <string name="vault_rebuild_action">Восстановить список</string>
+    <string name="vault_add_files_hint">В проводнике зажмите файлы или папки и выберите «Переместить в сейф».</string>
+    <string name="vault_delete_confirm">Удалить %1$d элемент(ов) из сейфа? Их нельзя будет восстановить.</string>
+    <string name="vault_biometric_error">Разблокировка по отпечатку или лицу недоступна</string>
+    <string name="vault_import_ready">Будет зашифровано: %1$d. Оригиналы удаляются навсегда, минуя корзину.</string>
+    <!-- END vault -->
+
+    <!-- BEGIN viewers -->
+    <string name="viewer_text_save">Сохранить</string>
+    <string name="viewer_text_saved">Сохранено</string>
+    <string name="viewer_text_unsaved_title">Отменить изменения?</string>
+    <string name="viewer_text_unsaved_body">Ваши правки будут потеряны.</string>
+    <string name="viewer_text_discard">Отменить</string>
+    <string name="viewer_text_conflict_title">Файл изменён на диске</string>
+    <string name="viewer_text_conflict_body">Другое приложение изменило этот файл после открытия.</string>
+    <string name="viewer_text_overwrite">Перезаписать</string>
+    <string name="viewer_text_read_only">Только чтение</string>
+    <string name="viewer_text_truncated">Файл слишком большой. Показана первая часть.</string>
+    <string name="viewer_text_not_text">Этот файл не является обычным текстом.</string>
+    <string name="viewer_text_find">Найти</string>
+    <string name="viewer_text_wrap">Перенос строк</string>
+    <string name="viewer_text_undo">Отменить</string>
+    <string name="viewer_text_redo">Повторить</string>
+    <string name="viewer_text_encoding">Кодировка</string>
+    <string name="viewer_pdf_page_of">Страница %1$d из %2$d</string>
+    <string name="viewer_pdf_go_to_page">Перейти к странице</string>
+    <string name="viewer_pdf_protected">Этот PDF защищён паролем</string>
+    <string name="viewer_pdf_password">Пароль</string>
+    <string name="viewer_pdf_downloading">Загрузка PDF…</string>
+    <string name="viewer_pdf_error">Не удалось открыть этот PDF</string>
+    <string name="viewer_audio_play">Воспроизвести</string>
+    <string name="viewer_audio_pause">Пауза</string>
+    <string name="viewer_audio_next">Следующий трек</string>
+    <string name="viewer_audio_previous">Предыдущий трек</string>
+    <string name="viewer_audio_repeat">Повтор</string>
+    <string name="viewer_audio_shuffle">Перемешать</string>
+    <string name="viewer_audio_queue">Очередь</string>
+    <string name="viewer_audio_error">Не удалось воспроизвести этот файл</string>
+    <string name="viewer_text_error">Не удалось прочитать или сохранить этот файл</string>
+    <!-- END viewers -->
+
+    <!-- BEGIN tags-favorites -->
+    <string name="tags_title">Теги</string>
+    <string name="tags_new">Новый тег</string>
+    <string name="tags_name_hint">Название тега</string>
+    <string name="tags_color_red">Красный</string>
+    <string name="tags_color_orange">Оранжевый</string>
+    <string name="tags_color_yellow">Жёлтый</string>
+    <string name="tags_color_green">Зелёный</string>
+    <string name="tags_color_teal">Бирюзовый</string>
+    <string name="tags_color_blue">Синий</string>
+    <string name="tags_color_purple">Фиолетовый</string>
+    <string name="tags_color_pink">Розовый</string>
+    <string name="tags_rename">Переименовать тег</string>
+    <string name="tags_delete_title">Удалить тег «%1$s»?</string>
+    <string name="tags_delete_body">Данные файлов сохранятся. Будет удалён только тег.</string>
+    <string name="tags_empty">Тегов пока нет</string>
+    <string name="favorites_title">Избранное</string>
+    <string name="favorites_folders">Папки</string>
+    <string name="favorites_files">Файлы</string>
+    <string name="favorites_tags">Теги</string>
+    <string name="favorites_empty">Пока ничего не сохранено</string>
+    <string name="tags_apply">Применить</string>
+    <string name="tags_save">Сохранить</string>
+    <string name="tags_files_empty">Нет файлов с этим тегом</string>
+    <!-- END tags-favorites -->
+
+    <!-- BEGIN shortcuts -->
+    <string name="shortcut_pinned">Ярлык добавлен на главный экран</string>
+    <string name="shortcut_unsupported">Ваш лаунчер не поддерживает ярлыки</string>
+    <string name="shortcut_folder_missing">Эта папка больше не существует</string>
+    <!-- END shortcuts -->
+
+    <!-- BEGIN recent-changes-growth -->
+    <string name="changes_title">Недавние изменения</string>
+    <string name="changes_today">Сегодня</string>
+    <string name="changes_yesterday">Вчера</string>
+    <string name="changes_range_1d">За последние 24 часа</string>
+    <string name="changes_range_7d">За последние 7 дней</string>
+    <string name="changes_range_30d">За последние 30 дней</string>
+    <string name="changes_empty">Недавних изменений нет</string>
+    <string name="changes_limit_hint">Показаны только самые недавние изменения.</string>
+    <string name="growth_title">Рост памяти</string>
+    <string name="growth_range_30d">30 дней</string>
+    <string name="growth_range_90d">90 дней</string>
+    <string name="growth_range_1y">1 год</string>
+    <string name="growth_delta_up">Плюс %1$s</string>
+    <string name="growth_delta_down">Минус %1$s</string>
+    <string name="growth_empty">Пока недостаточно данных. Findex записывает состояние памяти ежедневно.</string>
+    <string name="viewer_pdf_dark_pages">Тёмные страницы</string>
+    <string name="settings_builtin_viewers">Встроенные просмотрщики</string>
+    <string name="settings_builtin_viewers_desc">Открывать фото, видео, PDF, текст и аудио в Findex. Если выключено, используются приложения по умолчанию</string>
+    <string name="widget_label">Память Findex</string>
+    <string name="widget_description">Использование памяти, быстрая очистка и папки в закладках</string>
+    <string name="widget_used">Занято %1$d%%</string>
+    <string name="widget_free">Свободно %1$s из %2$s</string>
+    <string name="settings_cleanup_reminder">Напоминание об очистке</string>
+    <string name="settings_cleanup_reminder_desc">Раз в неделю сообщать, когда накопился мусор для очистки</string>
+    <string name="cleanup_reminder_channel">Напоминания об очистке</string>
+    <string name="cleanup_reminder_title">Можно освободить %1$s</string>
+    <string name="cleanup_reminder_text">Миниатюры, временные файлы и остатки, которые можно очистить</string>
+    <string name="cleanup_reminder_action">Очистить</string>
+    <string name="settings_storage_history">История памяти</string>
+    <string name="settings_storage_history_desc">Сохранять ежедневные снимки памяти для графика роста</string>
+    <!-- END recent-changes-growth -->
+
+    <!-- BEGIN share-phone -->
+    <string name="nav_share_phone">Поделиться телефоном</string>
+    <string name="share_tile_running">%1$s · PIN %2$s</string>
+    <string name="share_tile_starting">Запуск…</string>
+    <string name="share_tile_no_network">Нет Wi-Fi</string>
+    <string name="share_tile_off">Выкл.</string>
+    <string name="share_channel_name">Поделиться телефоном</string>
+    <string name="share_notification_title">Доступ к телефону открыт</string>
+    <string name="share_notification_text">Откройте %1$s · PIN %2$s</string>
+    <string name="share_stop">Остановить</string>
+    <string name="share_start">Начать обмен</string>
+    <string name="share_starting">Запуск…</string>
+    <string name="share_intro_title">Откройте файлы на компьютере</string>
+    <string name="share_intro_body">Findex запускает небольшой веб-сервер на этом телефоне. Любой браузер в той же сети Wi-Fi или точке доступа сможет открыть его с помощью одноразового PIN-кода.</string>
+    <string name="share_no_network">Сначала подключитесь к Wi-Fi или включите точку доступа.</string>
+    <string name="share_open_url">Откройте в браузере на компьютере</string>
+    <string name="share_pin">PIN</string>
+    <string name="share_copy_url">Копировать адрес</string>
+    <string name="share_copied">Адрес скопирован</string>
+    <plurals name="share_clients">
+        <item quantity="one">Подключён %d браузер</item>
+        <item quantity="few">Подключено %d браузера</item>
+        <item quantity="many">Подключено %d браузеров</item>
+        <item quantity="other">Подключено %d браузеров</item>
+    </plurals>
+    <string name="share_clients_none">Пока ни один браузер не вошёл</string>
+    <string name="share_access">Доступ</string>
+    <string name="share_access_hint">Изменения применяются сразу, даже для уже подключённых браузеров.</string>
+    <string name="share_level_view">Просмотр</string>
+    <string name="share_level_download">Скачивание</string>
+    <string name="share_level_full">Полный</string>
+    <string name="share_perm_media">Разделы медиа</string>
+    <string name="share_perm_media_desc">Фото, видео, аудио, документы и другое</string>
+    <string name="share_perm_files">Проводник файлов</string>
+    <string name="share_perm_files_desc">Просмотр всех папок во внутренней памяти и на SD-карте</string>
+    <string name="share_perm_download">Открытие и скачивание</string>
+    <string name="share_perm_download_desc">Предпросмотр, потоковая передача и сохранение файлов на компьютер</string>
+    <string name="share_perm_upload">Загрузка на телефон</string>
+    <string name="share_perm_upload_desc">Добавление файлов и создание папок с компьютера</string>
+    <string name="share_perm_modify">Переименование и удаление</string>
+    <string name="share_perm_modify_desc">Удалённые файлы попадают в Корзину</string>
+    <string name="share_auto_stop">Автоостановка</string>
+    <string name="share_auto_stop_desc">Останавливать сервер после такого времени без запросов</string>
+    <string name="share_minutes">%d мин</string>
+    <string name="share_never">Никогда</string>
+    <string name="share_security_note">Трафик не шифруется. Делитесь только в доверенных сетях.</string>
+    <!-- END share-phone -->
+</resources>

@@ -1,0 +1,789 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App & Branding -->
+    <string name="app_tagline">Penjelajah File Material 3 Expressive</string>
+
+    <!-- Navigation Drawer -->
+    <string name="drawer_subtitle">File &amp; Penyimpanan Cloud</string>
+    <string name="nav_home">Beranda</string>
+    <string name="nav_storage_graph">Grafik Penyimpanan</string>
+    <string name="nav_storage_cleaner">Pembersih Penyimpanan</string>
+    <string name="nav_whatsapp_cleaner">Pembersih WhatsApp</string>
+    <string name="nav_telegram_cleaner">Pembersih Telegram</string>
+    <string name="nav_instagram_cleaner">Pembersih Instagram</string>
+    <string name="nav_app_cleaner">Pembersih Aplikasi</string>
+    <string name="nav_dual_pane">Panel ganda</string>
+    <string name="dual_compare">Bandingkan folder</string>
+    <string name="dual_swap">Tukar panel</string>
+    <string name="dual_select_missing">Pilih item yang tidak ada di panel lain</string>
+    <string name="dual_copy_to">Salin ke panel lain</string>
+    <string name="dual_move_to">Pindahkan ke panel lain</string>
+    <string name="dual_up">Naik satu folder</string>
+    <string name="cmp_only_here">Hanya di sini</string>
+    <string name="cmp_newer">Lebih baru di sini</string>
+    <string name="cmp_older">Lebih lama di sini</string>
+    <string name="cmp_different">Berbeda</string>
+    <string name="cmp_same">Sama</string>
+    <string name="nav_archive_manager">Pengelola Arsip</string>
+    <string name="nav_network_storage">Penyimpanan Jaringan</string>
+    <string name="nav_settings">Pengaturan</string>
+    <string name="nav_recycle_bin">Keranjang sampah</string>
+    <string name="nav_tabs">Tab</string>
+    <string name="nav_search">Cari</string>
+    <plurals name="tabs_open_count">
+        <item quantity="other">%d tab terbuka</item>
+    </plurals>
+    <string name="tabs_close_all">Tutup semua tab</string>
+    <string name="tabs_empty_title">Tidak ada tab terbuka</string>
+    <string name="tabs_empty_body">Buka tab baru untuk menjelajahi file Anda</string>
+    <string name="tabs_current">Tab saat ini</string>
+    <string name="cd_close_tab">Tutup tab %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">File Anda, tertata dengan rapi</string>
+    <string name="onboarding_body">Findex memerlukan akses ke semua file untuk menjelajah, menyalin, mengompres, dan membersihkan penyimpanan Anda.</string>
+    <string name="onboarding_point_access">Jelajahi setiap folder, kartu SD, dan drive USB</string>
+    <string name="onboarding_point_fast">Salin, pindahkan, dan zip di latar belakang</string>
+    <string name="onboarding_point_private">Semuanya tetap berada di perangkat Anda</string>
+    <string name="onboarding_permissions">Izin</string>
+    <string name="onboarding_storage_title">Akses semua file</string>
+    <string name="onboarding_storage_body">Diperlukan untuk menjelajah dan mengelola file Anda</string>
+    <string name="onboarding_notify_title">Notifikasi</string>
+    <string name="onboarding_notify_body">Menampilkan progres salin, pindah, kompres, dan pembersihan saat Anda menggunakan aplikasi lain</string>
+    <string name="onboarding_allow">Izinkan</string>
+    <string name="onboarding_granted">Diizinkan</string>
+    <string name="onboarding_continue">Lanjutkan</string>
+    <string name="onboarding_storage_required">Izinkan akses semua file untuk melanjutkan</string>
+    <string name="onboarding_notify_hint">Tanpa notifikasi, progres hanya ditampilkan di dalam Findex</string>
+    <string name="error_no_app">Tidak ada aplikasi yang dapat membuka file ini</string>
+    <string name="save_to_findex">Simpan ke Findex</string>
+    <string name="save_to_findex_hint">Buka folder, lalu ketuk Simpan</string>
+    <string name="error_open_unsupported">Findex tidak dapat membuka file ini</string>
+
+    <!-- Tabs -->
+    <string name="tab_device">Perangkat</string>
+    <string name="tab_network">Jaringan</string>
+
+    <!-- Storage Drives -->
+    <string name="storage_internal">Penyimpanan Internal</string>
+    <string name="storage_sdcard">Kartu SD</string>
+    <string name="storage_network">Penyimpanan Jaringan</string>
+    <string name="storage_usb">Drive USB</string>
+    <string name="storage_used_of">%1$s terpakai dari %2$s</string>
+    <string name="storage_free_space">%1$s tersisa</string>
+    <string name="storage_scanning">Memindai penyimpanan…</string>
+    <string name="storage_no_network_drives">Tidak ada drive jaringan terhubung. Ketuk + untuk terhubung melalui SMB / WebDAV / FTP.</string>
+    <string name="storage_add_network">Tambah Drive Jaringan</string>
+    <string name="storage_used_label">terpakai</string>
+
+    <!-- Home -->
+    <string name="home_subtitle">File Anda, tertata rapi</string>
+    <string name="section_categories">Kategori</string>
+    <string name="section_bookmarks">Penanda</string>
+    <string name="section_recents">File terbaru</string>
+    <string name="cd_open_drawer">Buka panel navigasi</string>
+    <string name="cd_browse_drive">Jelajahi penyimpanan</string>
+    <plurals name="item_count">
+        <item quantity="other">%d item</item>
+    </plurals>
+
+    <!-- File Categories -->
+    <string name="category_photos">Foto</string>
+    <string name="category_videos">Video</string>
+    <string name="category_audio">Audio</string>
+    <string name="category_documents">Dokumen</string>
+    <string name="category_downloads">Unduhan</string>
+    <string name="category_archives">Arsip</string>
+    <string name="category_apks">APK</string>
+
+    <!-- Quick Suggestions & Tools -->
+    <string name="section_suggestions">Alat Cepat</string>
+    <string name="cleaner_title">Pembersih Penyimpanan</string>
+    <string name="cleaner_desc">Kosongkan ruang dengan menghapus sampah dan cache sementara</string>
+    <string name="whatsapp_cleaner_title">Pembersih WhatsApp</string>
+    <string name="whatsapp_cleaner_desc">Bersihkan media terkirim, pesan suara, stiker, dan cadangan</string>
+    <string name="storage_graph_title">Penganalisis Penyimpanan</string>
+    <string name="storage_graph_desc">Visualisasikan file besar dan distribusi ruang folder</string>
+
+    <!-- File Actions -->
+    <string name="action_cut">Potong</string>
+    <string name="action_copy">Salin</string>
+    <string name="action_paste">Tempel</string>
+    <string name="action_delete">Hapus</string>
+    <string name="action_rename">Ubah nama</string>
+    <string name="action_details">Detail</string>
+    <string name="action_compress">Kompres</string>
+    <string name="action_extract">Ekstrak</string>
+    <string name="action_share">Bagikan</string>
+    <string name="action_select_all">Pilih Semua</string>
+    <string name="action_deselect_all">Batal pilih</string>
+    <string name="action_search">Cari file</string>
+    <string name="action_clean">Bersihkan Sekarang</string>
+    <string name="action_new_folder">Folder Baru</string>
+    <string name="action_new_tab">Tab Baru</string>
+    <string name="action_close_tab">Tutup Tab</string>
+    <string name="action_open_in_new_tab">Buka di tab baru</string>
+    <string name="detail_empty_hint">Pilih file untuk melihat pratinjau dan detailnya di sini</string>
+    <string name="cd_close_details">Tutup detail</string>
+    <string name="rail_graph">Grafik</string>
+    <string name="rail_cleaner">Pembersih</string>
+    <string name="rail_whatsapp">WhatsApp</string>
+    <string name="rail_bin">Sampah</string>
+    <string name="action_copy_path">Salin jalur</string>
+    <string name="path_copied">Jalur disalin ke papan klip</string>
+    <string name="preview_file">Pratinjau</string>
+    <string name="preview_play_video">Putar video</string>
+    <string name="preview_play_audio">Putar audio</string>
+    <string name="preview_lines_truncated">%1$d baris ditampilkan</string>
+    <string name="preview_empty_file">File kosong</string>
+    <string name="details_item_info">Detail item</string>
+    <string name="action_open">Buka</string>
+    <string name="action_create">Buat</string>
+    <string name="action_bookmark">Tambah penanda</string>
+    <string name="action_remove_bookmark">Hapus penanda</string>
+    <string name="bookmark_added">Penanda ditambahkan</string>
+    <string name="bookmark_removed">Penanda dihapus</string>
+
+    <!-- Explorer -->
+    <string name="cd_back">Kembali</string>
+    <string name="cd_more_options">Opsi lainnya</string>
+    <string name="cd_more_actions">Tindakan lainnya untuk %1$s</string>
+    <string name="cd_grid_view">Tampilan kisi</string>
+    <string name="cd_list_view">Tampilan daftar</string>
+    <string name="cd_clear_selection">Hapus pilihan</string>
+    <string name="cd_clear_clipboard">Kosongkan papan klip</string>
+    <string name="cd_create_menu">Buat</string>
+    <string name="cd_show_password">Tampilkan kata sandi</string>
+    <string name="cd_hide_password">Sembunyikan kata sandi</string>
+    <string name="empty_folder_title">Folder ini kosong</string>
+    <string name="empty_folder_body">Tempel file di sini atau buat folder baru.</string>
+    <string name="label_name">Nama</string>
+    <string name="label_archive_name">Nama arsip</string>
+    <string name="error_invalid_name">Nama tidak boleh berisi “/”</string>
+    <string name="error_rename">Tidak dapat mengubah nama — nama mungkin sudah ada</string>
+    <string name="error_new_folder">Tidak dapat membuat folder — nama mungkin sudah ada</string>
+    <string name="sort_title">Urutkan &amp; tampilkan</string>
+    <string name="sort_name">Nama</string>
+    <string name="sort_date">Tanggal diubah</string>
+    <string name="sort_size">Ukuran</string>
+    <string name="sort_type">Jenis</string>
+    <string name="sort_ascending">Menaik</string>
+    <string name="sort_descending">Menurun</string>
+    <string name="show_hidden_files">Tampilkan file tersembunyi</string>
+    <string name="details_path">Lokasi</string>
+    <string name="details_modified">Diubah</string>
+    <string name="details_type">Jenis</string>
+    <string name="details_size">Ukuran</string>
+    <string name="details_contains">Berisi</string>
+    <string name="delete_body">Tindakan ini tidak dapat dibatalkan.</string>
+    <plurals name="delete_title">
+        <item quantity="other">Hapus %d item?</item>
+    </plurals>
+    <plurals name="file_count">
+        <item quantity="other">%d file</item>
+    </plurals>
+    <plurals name="folder_count">
+        <item quantity="other">%d folder</item>
+    </plurals>
+    <plurals name="paste_here">
+        <item quantity="other">Tempel %d item</item>
+    </plurals>
+    <plurals name="save_here">
+        <item quantity="other">Simpan %d file di sini</item>
+    </plurals>
+    <plurals name="move_here">
+        <item quantity="other">Pindahkan %d item ke sini</item>
+    </plurals>
+    <string name="action_show_in_folder">Tampilkan di folder</string>
+    <string name="category_empty">Belum ada apa pun di sini</string>
+
+    <!-- Tools -->
+    <string name="scanning">Memindai penyimpanan…</string>
+    <string name="tool_can_free">dapat dibebaskan</string>
+    <string name="tool_selected_of">%1$s dipilih dari %2$s</string>
+    <string name="tool_all_clean_title">Semua bersih</string>
+    <string name="tool_all_clean_body">Tidak ada yang perlu dihapus saat ini.</string>
+    <string name="tool_clean_confirm_title">Bersihkan %1$s?</string>
+    <string name="tool_clean_confirm_body">File yang dipilih akan dihapus secara permanen.</string>
+    <string name="tool_clean_button">Bersihkan %1$s</string>
+    <string name="tool_rescan">Pindai lagi</string>
+    <string name="junk_thumbnails">Cache gambar mini</string>
+    <string name="junk_thumbnails_desc">Gambar pratinjau yang dibuat ulang otomatis oleh aplikasi</string>
+    <string name="junk_temp">File sementara &amp; log</string>
+    <string name="junk_temp_desc">File .tmp, .log, .bak, dan unduhan yang belum selesai</string>
+    <string name="junk_apks">File instalasi</string>
+    <string name="junk_apks_desc">File APK dari aplikasi yang mungkin sudah Anda pasang</string>
+    <string name="junk_empty">Folder kosong</string>
+    <string name="junk_empty_desc">Folder tanpa isi apa pun</string>
+    <string name="junk_zero">File kosong</string>
+    <string name="junk_zero_desc">File berukuran 0 byte; file penanda tersembunyi tetap disimpan</string>
+    <string name="telegram_cleaner_title">Pembersih Telegram</string>
+    <string name="instagram_cleaner_title">Pembersih Instagram</string>
+    <string name="tg_hint">Media dan file yang diunduh serta dikirim.</string>
+    <string name="ig_hint">Foto dan video yang disimpan Instagram di perangkat ini.</string>
+    <string name="tg_not_found">Media Telegram tidak ditemukan di perangkat ini.</string>
+    <string name="ig_not_found">Media Instagram tidak ditemukan di perangkat ini.</string>
+    <string name="app_media_files">Dokumen &amp; file lainnya</string>
+    <string name="app_cleaner_title">Pembersih Aplikasi</string>
+    <string name="app_cleaner_hint">Sisa aplikasi yang sudah dihapus dan cache yang dapat dijangkau Findex.</string>
+    <string name="app_cleaner_empty">Tidak ada sisa yang ditemukan. Android 11 ke atas membatasi akses ke cache pribadi aplikasi lain.</string>
+    <string name="app_leftovers">Folder sisa</string>
+    <string name="app_leftovers_desc">Folder aplikasi yang sudah dihapus di Android/media, data, dan obb</string>
+    <string name="app_cache">Cache aplikasi</string>
+    <string name="app_cache_desc">Cache eksternal aplikasi terpasang; aplikasi akan membuatnya ulang</string>
+    <string name="wa_images">Gambar</string>
+    <string name="wa_videos">Video</string>
+    <string name="wa_audio">Audio</string>
+    <string name="wa_voice">Pesan suara</string>
+    <string name="wa_documents">Dokumen</string>
+    <string name="wa_stickers">Stiker</string>
+    <string name="wa_gifs">GIF</string>
+    <string name="wa_backups">Cadangan &amp; basis data</string>
+    <string name="wa_not_found">Media WhatsApp tidak ditemukan di perangkat ini.</string>
+    <string name="wa_hint">Media yang diterima dan dikirim, termasuk folder pribadi.</string>
+    <string name="analyzer_used">Terpakai</string>
+    <string name="analyzer_other">File lain &amp; aplikasi</string>
+    <string name="analyzer_free">Kosong</string>
+    <string name="analyzer_breakdown">Rincian</string>
+    <string name="analyzer_largest">File terbesar</string>
+    <string name="analyzer_chart_desc">Grafik penyimpanan: %1$s terpakai dari %2$s</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">Tampilan</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_theme_system">Sistem</string>
+    <string name="settings_theme_light">Terang</string>
+    <string name="settings_theme_dark">Gelap</string>
+    <string name="settings_dynamic_color">Warna dinamis</string>
+    <string name="settings_dynamic_color_desc">Sesuaikan warna dengan wallpaper Anda</string>
+    <string name="settings_language">Bahasa</string>
+    <string name="settings_language_system">Default sistem</string>
+    <string name="settings_files">File</string>
+    <string name="settings_show_hidden_desc">Tampilkan file dan folder yang diawali tanda titik</string>
+    <string name="settings_grid">Tampilan kisi secara default</string>
+    <string name="settings_grid_desc">Tampilkan folder sebagai kisi gambar mini</string>
+    <string name="settings_about">Tentang</string>
+    <string name="settings_version">Versi</string>
+    <string name="settings_updates">Pembaruan</string>
+    <string name="settings_updates_subtitle">Pembaruan otomatis, saluran rilis, dan pemeriksaan versi baru</string>
+    <string name="settings_auto_update">Pembaruan otomatis</string>
+    <string name="settings_auto_update_desc">Periksa GitHub setiap hari di latar belakang dan saat Findex dibuka</string>
+    <string name="updates_title">Pembaruan</string>
+    <string name="updates_current">Versi terpasang %1$s</string>
+    <string name="settings_channel">Saluran rilis</string>
+    <string name="channel_stable">Stabil</string>
+    <string name="channel_beta">Beta</string>
+    <string name="channel_alpha">Alpha</string>
+    <string name="settings_check_updates">Periksa pembaruan</string>
+    <string name="update_checking">Memeriksa…</string>
+    <string name="update_up_to_date">Anda sudah menggunakan versi terbaru</string>
+    <string name="update_available_row">Versi %1$s tersedia</string>
+    <string name="settings_about_subtitle">Versi %1$s, pengembang, dan ucapan terima kasih</string>
+    <string name="update_title">Pembaruan tersedia</string>
+    <string name="update_subtitle">%1$s · Anda menggunakan %2$s</string>
+    <string name="update_whats_new">Yang baru</string>
+    <string name="update_install">Pasang</string>
+    <string name="update_allow_install">Izinkan pemasangan</string>
+    <string name="update_downloading">Mengunduh… %1$d%%</string>
+    <string name="update_not_now">Nanti saja</string>
+    <string name="update_failed">Pembaruan gagal</string>
+    <string name="update_notification_channel_name">Pembaruan Aplikasi</string>
+    <string name="update_notification_title">Pembaruan tersedia: %1$s</string>
+    <string name="update_notification_body">Ketuk untuk melihat catatan rilis dan memasang</string>
+    <string name="about_title">Tentang Findex</string>
+    <string name="about_section_app">Aplikasi</string>
+    <string name="about_version_build">Versi %1$s · build %2$d</string>
+    <string name="about_source_code">Kode sumber</string>
+    <string name="about_section_developer">Pengembang</string>
+    <string name="about_developer_tagline">Dirancang dan dibangun oleh satu pengembang.</string>
+    <string name="about_portfolio">Portofolio</string>
+    <string name="about_section_open_source">Sumber terbuka</string>
+    <string name="about_acknowledgements">Ucapan terima kasih</string>
+    <string name="about_acknowledgements_subtitle">Pustaka dan proyek yang digunakan untuk membangun Findex</string>
+
+    <!-- Compression & Extraction -->
+    <string name="compress_dialog_title">Buat Arsip</string>
+    <string name="compress_format_label">Format</string>
+    <string name="compress_password_zip_only">Perlindungan kata sandi hanya tersedia untuk ZIP.</string>
+    <string name="compress_password_hint">Kata sandi (opsional)</string>
+    <string name="compress_password_help">Dengan kata sandi, arsip dienkripsi menggunakan AES-256.</string>
+    <string name="extract_password_hint">Kata sandi (jika dilindungi)</string>
+    <string name="extract_dialog_body">Ekstrak “%1$s” ke folder baru di sebelahnya.</string>
+    <string name="compress_button">Kompres</string>
+    <string name="extract_dialog_title">Ekstrak Arsip</string>
+    <string name="extract_button">Ekstrak</string>
+
+    <!-- Multitasking & Selection -->
+    <string name="selected_count">%1$d dipilih</string>
+    <string name="tabs_header">Tab</string>
+
+    <!-- Notifications & Services -->
+    <string name="notification_channel_name">Operasi File</string>
+    <string name="notification_channel_description">Progres dan hasil tugas salin, pindah, hapus, dan arsip</string>
+    <string name="operation_in_progress">Operasi sedang berlangsung…</string>
+    <string name="operation_completed">Operasi selesai</string>
+    <string name="operation_failed">Operasi gagal</string>
+    <string name="operation_cancelled">Operasi dibatalkan</string>
+    <string name="operation_progress">%1$d%% · %2$s</string>
+    <plurals name="operation_queued">
+        <item quantity="other">%1$s · %2$d lainnya dalam antrean</item>
+    </plurals>
+    <string name="op_title_copy">Menyalin %1$s item</string>
+    <string name="op_title_move">Memindahkan %1$s item</string>
+    <string name="op_title_delete">Menghapus %1$s item</string>
+    <string name="op_title_trash">Memindahkan %1$s item ke Keranjang sampah</string>
+    <string name="op_title_restore">Memulihkan %1$s item</string>
+    <string name="op_title_clean">Membersihkan %1$s item</string>
+    <string name="op_title_compress">Mengompres ke %1$s</string>
+    <string name="op_title_extract">Mengekstrak %1$s</string>
+    <string name="op_done_copy">%1$s item disalin</string>
+    <string name="op_done_move">%1$s item dipindahkan</string>
+    <string name="op_done_delete">%1$s item dihapus</string>
+    <string name="op_done_trash">%1$s item dipindahkan ke Keranjang sampah</string>
+    <string name="op_done_restore">%1$s item dipulihkan</string>
+    <string name="op_done_clean">%1$s item dibersihkan</string>
+    <string name="op_done_compress">%1$s dibuat</string>
+    <string name="op_done_extract">%1$s diekstrak</string>
+    <string name="op_done_batch_rename">%1$s item diubah namanya</string>
+    <string name="op_done_image_transform">%1$s gambar dikompres</string>
+    <string name="op_done_vault_import">%1$s item dipindahkan ke brankas</string>
+    <string name="op_done_vault_export">%1$s item dipulihkan dari brankas</string>
+    <string name="op_done_vault_delete">%1$s item dihapus dari brankas</string>
+    <string name="operation_cancelled_body">Dihentikan sebelum selesai</string>
+    <string name="error_wrong_password">Kata sandi salah atau tidak diisi</string>
+    <string name="error_unsupported_archive">Format atau versi arsip ini tidak didukung</string>
+    <string name="error_no_space">Ruang penyimpanan tidak cukup</string>
+    <string name="error_into_itself">Folder tidak dapat disalin ke dalam dirinya sendiri</string>
+    <string name="error_access_denied">Izin ditolak untuk lokasi ini</string>
+    <string name="cancel">Batal</string>
+    <string name="confirm">Konfirmasi</string>
+
+    <!-- Recycle bin -->
+    <plurals name="trash_title">
+        <item quantity="other">Pindahkan %d item ke Keranjang sampah?</item>
+    </plurals>
+    <string name="trash_body">Anda dapat memulihkannya dari Keranjang sampah selama 30 hari.</string>
+    <string name="delete_permanently">Hapus permanen</string>
+    <string name="action_move_to_bin">Pindah ke sampah</string>
+    <string name="action_restore">Pulihkan</string>
+    <string name="action_empty_bin">Kosongkan sampah</string>
+    <string name="undo">Urungkan</string>
+    <plurals name="moved_to_bin">
+        <item quantity="other">%d item dipindahkan ke Keranjang sampah</item>
+    </plurals>
+    <string name="recycle_bin_hint">Item akan dihapus permanen setelah 30 hari</string>
+    <string name="recycle_bin_empty">Keranjang sampah kosong</string>
+
+    <!-- File Inspector & Preview -->
+    <string name="details_dimensions">Dimensi</string>
+    <string name="details_resolution">Resolusi</string>
+    <string name="details_duration">Durasi</string>
+    <string name="details_megapixels">%1$.1f MP</string>
+    <string name="details_artist">Artis</string>
+    <string name="details_album">Album</string>
+    <string name="details_package">Paket</string>
+    <string name="details_version">Versi</string>
+    <string name="details_checksums">Checksum</string>
+    <string name="details_calculate_hash">Hitung checksum</string>
+    <string name="details_calculating">Menghitung…</string>
+    <string name="details_copied_hash">Checksum disalin ke papan klip</string>
+    <string name="preview_fullscreen">Layar penuh</string>
+    <string name="preview_zoom_hint">Cubit untuk memperbesar · Ketuk dua kali untuk memperbesar</string>
+    <string name="action_open_in_another_app">Buka di aplikasi lain</string>
+    <string name="action_rotate">Putar</string>
+    <string name="action_reset_zoom">Atur ulang zoom</string>
+    <string name="viewer_item_position">%1$d dari %2$d</string>
+    <string name="preview_copy_text">Salin konten</string>
+    <string name="preview_text_copied">Konten disalin ke papan klip</string>
+    <string name="preview_lines_count">%1$d baris</string>
+    <string name="action_install">Pasang</string>
+    <string name="action_play">Putar</string>
+    <string name="action_pause">Jeda</string>
+    <string name="action_open_folder">Buka folder</string>
+    <string name="details_overview">Ringkasan</string>
+    <string name="details_exact_bytes">%1$s byte</string>
+
+    <!-- Search -->
+    <string name="search_hint">Cari file dan folder</string>
+    <string name="search_prompt">Temukan apa saja di penyimpanan Anda berdasarkan nama</string>
+    <string name="search_no_results">Tidak ada file yang cocok dengan “%1$s”</string>
+    <string name="cd_clear_search">Hapus pencarian</string>
+
+    <!-- Duplicate finder -->
+    <string name="nav_duplicates">File duplikat</string>
+    <string name="dup_title">File duplikat</string>
+    <string name="dup_desc">Salinan identik yang memboroskan ruang</string>
+    <string name="dup_none">Tidak ada file duplikat ditemukan</string>
+    <string name="dup_keep_hint">Salinan terlama dari setiap file dipertahankan. Setidaknya satu salinan selalu disimpan.</string>
+    <string name="dup_delete_button">Hapus %1$s</string>
+    <string name="dup_hashing">Membandingkan isi file…</string>
+    <plurals name="dup_copies">
+        <item quantity="other">%d salinan</item>
+    </plurals>
+
+    <!-- Archive preview -->
+    <string name="action_browse">Jelajahi isi</string>
+    <string name="archive_extract_all">Ekstrak semua</string>
+    <string name="archive_empty">Arsip ini kosong</string>
+    <string name="archive_unreadable">Arsip ini tidak dapat ditampilkan. Mungkin terenkripsi atau rusak; coba Ekstrak semua dengan kata sandinya.</string>
+    <string name="archive_password_title">Kata sandi diperlukan</string>
+    <string name="archive_password_body">“%1$s” terenkripsi.</string>
+    <string name="archive_unlock">Buka kunci</string>
+    <string name="archive_password_label">Kata sandi</string>
+    <string name="archive_opening">Membuka %1$s…</string>
+
+    <!-- Network storage (SMB / SFTP / FTP / WebDAV) -->
+    <string name="network_title">Penyimpanan Jaringan</string>
+    <string name="network_subtitle">Server SMB, SFTP, FTP, dan WebDAV di jaringan Anda</string>
+    <string name="network_empty_title">Belum ada server</string>
+    <string name="network_empty_body">Tambahkan folder bersama dari PC, NAS, atau server untuk menjelajahinya di sini.</string>
+    <string name="network_add">Tambah server</string>
+    <string name="network_add_title">Tambah server jaringan</string>
+    <string name="network_protocol_label">Protokol</string>
+    <string name="network_webdav_https">Gunakan HTTPS (TLS)</string>
+    <string name="network_field_name">Nama tampilan (opsional)</string>
+    <string name="network_field_host">Host atau alamat IP</string>
+    <string name="network_field_host_help">Misalnya 192.168.1.20 atau my-nas.local</string>
+    <string name="network_field_port">Port (opsional)</string>
+    <string name="network_field_port_default">Default %1$d</string>
+    <string name="network_field_share">Nama berbagi</string>
+    <string name="network_field_share_help">Folder bersama, misalnya Public</string>
+    <string name="network_field_path">Jalur jarak jauh (opsional)</string>
+    <string name="network_field_path_help_sftp">Kosongkan untuk folder beranda, atau masukkan jalur seperti /mnt/media</string>
+    <string name="network_field_path_help_ftp">Kosongkan untuk folder root, atau masukkan jalur seperti /pub</string>
+    <string name="network_field_path_help_webdav">Jalur endpoint, misalnya /dav atau /remote.php/dav/files/user</string>
+    <string name="network_field_user">Nama pengguna</string>
+    <string name="network_field_user_help">Kosongkan untuk terhubung sebagai tamu</string>
+    <string name="network_field_user_help_sftp">Nama pengguna SSH di server</string>
+    <string name="network_field_password">Kata sandi</string>
+    <string name="network_field_domain">Domain atau workgroup (opsional)</string>
+    <string name="network_connect">Hubungkan dan simpan</string>
+    <string name="network_connecting">Menghubungkan…</string>
+    <string name="network_password_note">Dienkripsi dengan kunci yang disimpan di Android Keystore. Kosongkan untuk menggunakan kembali kata sandi yang tersimpan untuk nama pengguna ini.</string>
+    <string name="network_guest">Tamu</string>
+    <string name="network_status_connected">Terhubung</string>
+    <string name="network_remember_password">Ingat kata sandi</string>
+    <string name="network_edit">Edit server</string>
+    <string name="network_edit_title">Edit server jaringan</string>
+    <string name="network_save">Uji dan simpan</string>
+    <string name="network_password_keep_note">Kosongkan untuk mempertahankan kata sandi saat ini.</string>
+    <string name="network_password_not_saved_note">Tidak disimpan. Anda akan diminta sekali setiap kali membuka Findex.</string>
+    <string name="network_error_password_required">Kata sandi diperlukan untuk terhubung</string>
+    <string name="network_unlock">Buka kunci</string>
+    <string name="network_unlock_title">Hubungkan ke “%1$s”</string>
+    <string name="network_unlock_body">Kata sandi untuk %1$s. Disimpan hingga Anda menutup Findex.</string>
+    <string name="network_status_offline">Terputus. %1$s</string>
+    <string name="network_retry">Coba hubungkan lagi</string>
+    <string name="network_remove">Hapus server</string>
+    <string name="network_remove_title">Hapus “%1$s”?</string>
+    <string name="network_remove_body">Info masuk tersimpan dan salinan yang diunduh akan dihapus. File di server tidak disentuh.</string>
+    <string name="network_error_host">Tidak dapat menjangkau server. Periksa alamat, port, dan pastikan Anda berada di jaringan yang sama.</string>
+    <string name="network_error_auth">Gagal masuk. Periksa nama pengguna dan kata sandi.</string>
+    <string name="network_error_share">Tidak ada folder berbagi atau jalur jarak jauh dengan nama tersebut di server ini.</string>
+    <string name="network_error_denied">Akses ditolak untuk akun ini.</string>
+    <string name="network_error_unknown">Terjadi kesalahan saat berkomunikasi dengan server.</string>
+    <string name="rail_network">Jaringan</string>
+    <string name="new_tab_title">Buka tab baru di</string>
+    <string name="error_network">Tidak dapat menjangkau folder berbagi jaringan</string>
+    <string name="error_not_supported_network">Tidak tersedia pada folder berbagi jaringan</string>
+    <string name="network_opening_remote">Mengunduh %1$s…</string>
+
+    <!-- BEGIN foundation (W1: drawer, entry actions, operation titles, failures) -->
+    <string name="drawer_section_more">Lainnya</string>
+    <string name="nav_favorites">Favorit</string>
+    <string name="nav_large_files">File besar</string>
+    <string name="nav_recent_changes">Perubahan terbaru</string>
+    <string name="nav_vault">Brankas</string>
+    <string name="action_batch_rename">Ubah nama massal</string>
+    <string name="action_move_to_vault">Pindah ke brankas</string>
+    <string name="action_compress_image">Kompres gambar</string>
+    <string name="action_tags">Tag</string>
+    <string name="action_pin_shortcut">Tambahkan ke layar utama</string>
+    <string name="op_title_batch_rename">Mengubah nama %1$s item</string>
+    <string name="op_title_image_transform">Mengompres %1$s gambar</string>
+    <string name="op_title_vault_import">Memindahkan %1$s item ke brankas</string>
+    <string name="op_title_vault_export">Memulihkan %1$s item dari brankas</string>
+    <string name="op_title_vault_delete">Menghapus %1$s item dari brankas</string>
+    <string name="error_vault_locked">Brankas terkunci</string>
+    <string name="error_nested_selection">Tidak dapat mengubah nama folder dan item di dalamnya secara bersamaan. Ubah namanya secara terpisah.</string>
+    <string name="error_name_conflict">File dengan nama tersebut sudah ada</string>
+    <string name="error_op_invalid_name">Nama tersebut tidak diizinkan</string>
+    <string name="error_unsupported_image">Format gambar ini tidak didukung</string>
+    <string name="placeholder_coming_soon">Segera hadir</string>
+    <string name="selection_expired">Pilihan kedaluwarsa. Pilih file lagi.</string>
+    <!-- END foundation -->
+
+    <!-- BEGIN batch-rename -->
+    <string name="rename_title">Ubah nama massal</string>
+    <string name="rename_pattern_label">Pola nama</string>
+    <string name="rename_token_name">Nama</string>
+    <string name="rename_token_ext">Ekstensi</string>
+    <string name="rename_token_counter">Penghitung</string>
+    <string name="rename_token_date">Tanggal</string>
+    <string name="rename_token_parent">Folder induk</string>
+    <string name="rename_find_label">Cari</string>
+    <string name="rename_replace_label">Ganti dengan</string>
+    <string name="rename_regex">Gunakan ekspresi reguler</string>
+    <string name="rename_ignore_case">Abaikan huruf besar/kecil</string>
+    <string name="rename_case_none">Pertahankan huruf</string>
+    <string name="rename_case_lower">Huruf kecil</string>
+    <string name="rename_case_upper">Huruf besar</string>
+    <string name="rename_case_title">Huruf kapital awal kata</string>
+    <string name="rename_counter_start">Mulai dari</string>
+    <string name="rename_counter_step">Langkah</string>
+    <string name="rename_counter_pad">Digit</string>
+    <string name="rename_touch_extension">Ubah ekstensi juga</string>
+    <string name="rename_status_unchanged">Tidak berubah</string>
+    <string name="rename_status_duplicate">Nama duplikat</string>
+    <string name="rename_status_exists">Nama sudah ada</string>
+    <string name="rename_status_invalid">Nama tidak valid</string>
+    <string name="rename_status_bad_regex">Pola tidak valid</string>
+    <string name="rename_apply">Ubah nama</string>
+    <plurals name="rename_summary">
+        <item quantity="other">%d item akan diubah namanya</item>
+    </plurals>
+    <!-- END batch-rename -->
+
+    <!-- BEGIN large-files -->
+    <string name="bigfiles_title">File besar dan lama</string>
+    <string name="bigfiles_size_any">Ukuran apa saja</string>
+    <string name="bigfiles_size_100mb">Lebih dari 100 MB</string>
+    <string name="bigfiles_size_500mb">Lebih dari 500 MB</string>
+    <string name="bigfiles_size_1gb">Lebih dari 1 GB</string>
+    <string name="bigfiles_age_any">Usia berapa saja</string>
+    <string name="bigfiles_age_30d">Lebih dari 30 hari</string>
+    <string name="bigfiles_age_90d">Lebih dari 90 hari</string>
+    <string name="bigfiles_age_6mo">Lebih dari 6 bulan</string>
+    <string name="bigfiles_age_1y">Lebih dari 1 tahun</string>
+    <string name="bigfiles_category_any">Jenis apa saja</string>
+    <string name="bigfiles_include_hidden">Sertakan file tersembunyi</string>
+    <string name="bigfiles_hint_modified">Usia didasarkan pada tanggal terakhir diubah</string>
+    <string name="bigfiles_empty">Tidak ada file yang cocok dengan filter ini</string>
+    <plurals name="bigfiles_selected">
+        <item quantity="other">%d file dipilih</item>
+    </plurals>
+    <!-- END large-files -->
+
+    <!-- BEGIN image-compress -->
+    <string name="imgc_title">Kompres gambar</string>
+    <string name="imgc_preset_small">Kecil</string>
+    <string name="imgc_preset_medium">Sedang</string>
+    <string name="imgc_preset_large">Besar</string>
+    <string name="imgc_preset_custom">Kustom</string>
+    <string name="imgc_max_edge">Sisi terpanjang (px)</string>
+    <string name="imgc_scale_percent">Skala (%)</string>
+    <string name="imgc_quality">Kualitas</string>
+    <string name="imgc_format_keep">Pertahankan asli</string>
+    <string name="imgc_output_copy">Simpan sebagai salinan</string>
+    <string name="imgc_output_replace">Ganti file asli</string>
+    <string name="imgc_output_folder">Simpan ke folder</string>
+    <string name="imgc_keep_metadata">Simpan lokasi dan info kamera</string>
+    <string name="imgc_estimate">Perkiraan ukuran: %1$s</string>
+    <string name="imgc_replace_warning">File asli akan ditimpa dan tidak dapat dibatalkan.</string>
+    <plurals name="imgc_skipped">
+        <item quantity="other">%d gambar dilewati</item>
+    </plurals>
+    <!-- END image-compress -->
+
+    <!-- BEGIN vault -->
+    <string name="vault_title">Brankas</string>
+    <string name="vault_setup_title">Siapkan brankas Anda</string>
+    <string name="vault_setup_password">Kata sandi brankas</string>
+    <string name="vault_setup_confirm">Konfirmasi kata sandi</string>
+    <string name="vault_setup_mismatch">Kata sandi tidak cocok</string>
+    <string name="vault_setup_strength_weak">Lemah</string>
+    <string name="vault_setup_strength_fair">Cukup</string>
+    <string name="vault_setup_strength_strong">Kuat</string>
+    <string name="vault_setup_biometric">Buka kunci dengan sidik jari atau wajah</string>
+    <string name="vault_setup_warning_no_recovery">Tidak ada pemulihan kata sandi. Jika Anda lupa kata sandinya, file Anda akan hilang.</string>
+    <string name="vault_setup_warning_not_secure_erase">File asli dihapus secara normal, bukan dihapus aman. Data yang terhapus mungkin masih dapat dipulihkan dari penyimpanan.</string>
+    <string name="vault_setup_acknowledge">Saya memahami risikonya</string>
+    <string name="vault_setup_create">Buat brankas</string>
+    <string name="vault_unlock_title">Buka kunci brankas</string>
+    <string name="vault_unlock_password">Kata sandi</string>
+    <string name="vault_unlock_biometric">Gunakan sidik jari atau wajah</string>
+    <string name="vault_unlock_wrong_password">Kata sandi salah</string>
+    <string name="vault_unlock_lockout">Terlalu banyak percobaan. Coba lagi dalam %1$s.</string>
+    <string name="vault_biometric_prompt_title">Buka kunci brankas</string>
+    <string name="vault_biometric_prompt_subtitle">Konfirmasi bahwa ini Anda</string>
+    <string name="vault_biometric_prompt_negative">Gunakan kata sandi</string>
+    <string name="vault_biometric_invalidated">Sidik jari atau wajah berubah. Buka kunci dengan kata sandi Anda dan atur ulang biometrik.</string>
+    <string name="vault_add_files">Tambah file</string>
+    <string name="vault_import_confirm">Pindahkan ke brankas? File asli akan dihapus permanen, bukan dikirim ke keranjang sampah.</string>
+    <string name="vault_export_original">Pulihkan ke lokasi asli</string>
+    <string name="vault_export_choose_folder">Pilih folder</string>
+    <string name="vault_open_external_warning">Membuka di luar brankas akan meninggalkan salinan tidak terenkripsi di perangkat ini.</string>
+    <string name="vault_menu_change_password">Ubah kata sandi</string>
+    <string name="vault_menu_biometric">Buka kunci sidik jari atau wajah</string>
+    <string name="vault_menu_auto_lock">Kunci otomatis</string>
+    <string name="vault_menu_lock_now">Kunci sekarang</string>
+    <string name="vault_auto_lock_immediately">Segera</string>
+    <string name="vault_auto_lock_1min">Setelah 1 menit</string>
+    <string name="vault_auto_lock_5min">Setelah 5 menit</string>
+    <string name="vault_auto_lock_screen_off">Saat layar mati</string>
+    <string name="vault_restore_title">Pulihkan ke lokasi asli?</string>
+    <string name="vault_restore_body">File didekripsi dan dipindahkan kembali ke folder asalnya. Folder yang hilang akan dibuat ulang.</string>
+    <string name="vault_restore_action">Pulihkan</string>
+    <string name="vault_empty">Brankas Anda kosong</string>
+    <string name="vault_locked_banner">Brankas terkunci. Buka kunci untuk melihat file Anda.</string>
+    <string name="cd_vault_lock">Kunci brankas</string>
+    <string name="vault_setup_min_length">Gunakan minimal 8 karakter</string>
+    <string name="vault_unlock_action">Buka kunci</string>
+    <string name="vault_password_current">Kata sandi saat ini</string>
+    <string name="vault_password_new">Kata sandi baru</string>
+    <string name="vault_password_changed">Kata sandi diubah</string>
+    <string name="vault_unreadable_title">Kunci brankas tidak dapat dibaca</string>
+    <string name="vault_unreadable_body">File terenkripsi ada di folder .FindexVault, tetapi file vault.key hilang atau rusak. Pulihkan vault.key dari cadangan untuk membukanya. Brankas baru tidak dibuat agar file tetap dapat dipulihkan.</string>
+    <string name="vault_rebuild_title">File dari instalasi sebelumnya</string>
+    <string name="vault_rebuild_body">File terenkripsi ditemukan di folder brankas. Pulihkan ke daftar?</string>
+    <string name="vault_rebuild_action">Pulihkan daftar</string>
+    <string name="vault_add_files_hint">Di penjelajah, tekan lama file atau folder lalu pilih Pindah ke brankas.</string>
+    <string name="vault_delete_confirm">Hapus %1$d item dari brankas? Item tidak dapat dipulihkan.</string>
+    <string name="vault_biometric_error">Buka kunci sidik jari atau wajah tidak tersedia</string>
+    <string name="vault_import_ready">%1$d item akan dienkripsi. File asli dihapus permanen, bukan dikirim ke keranjang sampah.</string>
+    <!-- END vault -->
+
+    <!-- BEGIN viewers -->
+    <string name="viewer_text_save">Simpan</string>
+    <string name="viewer_text_saved">Tersimpan</string>
+    <string name="viewer_text_unsaved_title">Buang perubahan?</string>
+    <string name="viewer_text_unsaved_body">Suntingan Anda akan hilang.</string>
+    <string name="viewer_text_discard">Buang</string>
+    <string name="viewer_text_conflict_title">File berubah di disk</string>
+    <string name="viewer_text_conflict_body">Aplikasi lain mengubah file ini sejak Anda membukanya.</string>
+    <string name="viewer_text_overwrite">Timpa</string>
+    <string name="viewer_text_read_only">Hanya baca</string>
+    <string name="viewer_text_truncated">File terlalu besar. Menampilkan bagian pertama.</string>
+    <string name="viewer_text_not_text">File ini bukan teks biasa.</string>
+    <string name="viewer_text_find">Cari</string>
+    <string name="viewer_text_wrap">Bungkus baris</string>
+    <string name="viewer_text_undo">Urungkan</string>
+    <string name="viewer_text_redo">Ulangi</string>
+    <string name="viewer_text_encoding">Pengodean</string>
+    <string name="viewer_pdf_page_of">Halaman %1$d dari %2$d</string>
+    <string name="viewer_pdf_go_to_page">Buka halaman</string>
+    <string name="viewer_pdf_protected">PDF ini dilindungi kata sandi</string>
+    <string name="viewer_pdf_password">Kata sandi</string>
+    <string name="viewer_pdf_downloading">Mengunduh PDF…</string>
+    <string name="viewer_pdf_error">Tidak dapat membuka PDF ini</string>
+    <string name="viewer_audio_play">Putar</string>
+    <string name="viewer_audio_pause">Jeda</string>
+    <string name="viewer_audio_next">Trek berikutnya</string>
+    <string name="viewer_audio_previous">Trek sebelumnya</string>
+    <string name="viewer_audio_repeat">Ulangi</string>
+    <string name="viewer_audio_shuffle">Acak</string>
+    <string name="viewer_audio_queue">Antrean</string>
+    <string name="viewer_audio_error">Tidak dapat memutar file ini</string>
+    <string name="viewer_text_error">Tidak dapat membaca atau menyimpan file ini</string>
+    <!-- END viewers -->
+
+    <!-- BEGIN tags-favorites -->
+    <string name="tags_title">Tag</string>
+    <string name="tags_new">Tag baru</string>
+    <string name="tags_name_hint">Nama tag</string>
+    <string name="tags_color_red">Merah</string>
+    <string name="tags_color_orange">Oranye</string>
+    <string name="tags_color_yellow">Kuning</string>
+    <string name="tags_color_green">Hijau</string>
+    <string name="tags_color_teal">Teal</string>
+    <string name="tags_color_blue">Biru</string>
+    <string name="tags_color_purple">Ungu</string>
+    <string name="tags_color_pink">Merah muda</string>
+    <string name="tags_rename">Ubah nama tag</string>
+    <string name="tags_delete_title">Hapus tag “%1$s”?</string>
+    <string name="tags_delete_body">File tetap menyimpan datanya. Hanya tag yang dihapus.</string>
+    <string name="tags_empty">Belum ada tag</string>
+    <string name="favorites_title">Favorit</string>
+    <string name="favorites_folders">Folder</string>
+    <string name="favorites_files">File</string>
+    <string name="favorites_tags">Tag</string>
+    <string name="favorites_empty">Belum ada yang disimpan</string>
+    <string name="tags_apply">Terapkan</string>
+    <string name="tags_save">Simpan</string>
+    <string name="tags_files_empty">Tidak ada file dengan tag ini</string>
+    <!-- END tags-favorites -->
+
+    <!-- BEGIN shortcuts -->
+    <string name="shortcut_pinned">Pintasan ditambahkan ke layar utama</string>
+    <string name="shortcut_unsupported">Peluncur Anda tidak mendukung pintasan</string>
+    <string name="shortcut_folder_missing">Folder ini sudah tidak ada</string>
+    <!-- END shortcuts -->
+
+    <!-- BEGIN recent-changes-growth -->
+    <string name="changes_title">Perubahan terbaru</string>
+    <string name="changes_today">Hari ini</string>
+    <string name="changes_yesterday">Kemarin</string>
+    <string name="changes_range_1d">24 jam terakhir</string>
+    <string name="changes_range_7d">7 hari terakhir</string>
+    <string name="changes_range_30d">30 hari terakhir</string>
+    <string name="changes_empty">Tidak ada perubahan terbaru</string>
+    <string name="changes_limit_hint">Hanya menampilkan perubahan terbaru.</string>
+    <string name="growth_title">Pertumbuhan penyimpanan</string>
+    <string name="growth_range_30d">30 hari</string>
+    <string name="growth_range_90d">90 hari</string>
+    <string name="growth_range_1y">1 tahun</string>
+    <string name="growth_delta_up">Naik %1$s</string>
+    <string name="growth_delta_down">Turun %1$s</string>
+    <string name="growth_empty">Belum cukup riwayat. Findex mencatat penyimpanan setiap hari.</string>
+    <string name="viewer_pdf_dark_pages">Halaman gelap</string>
+    <string name="settings_builtin_viewers">Penampil bawaan</string>
+    <string name="settings_builtin_viewers_desc">Buka foto, video, PDF, teks, dan audio di Findex. Nonaktif menggunakan aplikasi default Anda</string>
+    <string name="widget_label">Penyimpanan Findex</string>
+    <string name="widget_description">Penggunaan penyimpanan, pembersihan cepat, dan folder penanda Anda</string>
+    <string name="widget_used">%1$d%% terpakai</string>
+    <string name="widget_free">%1$s tersisa dari %2$s</string>
+    <string name="settings_cleanup_reminder">Pengingat pembersihan</string>
+    <string name="settings_cleanup_reminder_desc">Seminggu sekali, beri tahu saya jika ada sampah yang layak dibersihkan</string>
+    <string name="cleanup_reminder_channel">Pengingat pembersihan</string>
+    <string name="cleanup_reminder_title">%1$s dapat dibebaskan</string>
+    <string name="cleanup_reminder_text">Gambar mini, file sementara, dan sisa yang dapat Anda bersihkan</string>
+    <string name="cleanup_reminder_action">Bersihkan</string>
+    <string name="settings_storage_history">Riwayat penyimpanan</string>
+    <string name="settings_storage_history_desc">Simpan cuplikan penyimpanan harian untuk grafik pertumbuhan</string>
+    <!-- END recent-changes-growth -->
+
+    <!-- BEGIN share-phone -->
+    <string name="nav_share_phone">Bagikan ponsel ini</string>
+    <string name="share_tile_running">%1$s · PIN %2$s</string>
+    <string name="share_tile_starting">Memulai…</string>
+    <string name="share_tile_no_network">Tidak ada Wi-Fi</string>
+    <string name="share_tile_off">Nonaktif</string>
+    <string name="share_channel_name">Bagikan ponsel ini</string>
+    <string name="share_notification_title">Membagikan ponsel ini</string>
+    <string name="share_notification_text">Buka %1$s · PIN %2$s</string>
+    <string name="share_stop">Hentikan</string>
+    <string name="share_start">Mulai berbagi</string>
+    <string name="share_starting">Memulai…</string>
+    <string name="share_intro_title">Buka file Anda di komputer</string>
+    <string name="share_intro_body">Findex memulai server web kecil di ponsel ini. Browser apa pun di Wi-Fi atau hotspot yang sama dapat membukanya dengan PIN sekali pakai.</string>
+    <string name="share_no_network">Hubungkan ke Wi-Fi atau nyalakan hotspot terlebih dahulu.</string>
+    <string name="share_open_url">Buka di browser pada komputer Anda</string>
+    <string name="share_pin">PIN</string>
+    <string name="share_copy_url">Salin alamat</string>
+    <string name="share_copied">Alamat disalin</string>
+    <plurals name="share_clients">
+        <item quantity="other">%d browser masuk</item>
+    </plurals>
+    <string name="share_clients_none">Belum ada browser yang masuk</string>
+    <string name="share_access">Akses</string>
+    <string name="share_access_hint">Perubahan langsung berlaku, termasuk untuk browser yang sudah terhubung.</string>
+    <string name="share_level_view">Lihat</string>
+    <string name="share_level_download">Unduh</string>
+    <string name="share_level_full">Penuh</string>
+    <string name="share_perm_media">Bagian media</string>
+    <string name="share_perm_media_desc">Foto, video, audio, dokumen, dan lainnya</string>
+    <string name="share_perm_files">Penjelajah file</string>
+    <string name="share_perm_files_desc">Jelajahi setiap folder di penyimpanan internal dan kartu SD</string>
+    <string name="share_perm_download">Buka dan unduh</string>
+    <string name="share_perm_download_desc">Pratinjau, streaming, dan simpan file di komputer</string>
+    <string name="share_perm_upload">Unggah</string>
+    <string name="share_perm_upload_desc">Tambahkan file dan buat folder dari komputer</string>
+    <string name="share_perm_modify">Ubah nama dan hapus</string>
+    <string name="share_perm_modify_desc">File yang dihapus masuk ke Keranjang Sampah</string>
+    <string name="share_auto_stop">Berhenti otomatis</string>
+    <string name="share_auto_stop_desc">Hentikan server setelah sekian lama tanpa permintaan</string>
+    <string name="share_minutes">%d mnt</string>
+    <string name="share_never">Tidak pernah</string>
+    <string name="share_security_note">Lalu lintas tidak dienkripsi. Bagikan hanya di jaringan yang Anda percaya.</string>
+    <!-- END share-phone -->
+</resources>

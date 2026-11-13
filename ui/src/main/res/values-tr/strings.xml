@@ -1,0 +1,807 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App & Branding -->
+    <string name="app_tagline">Material 3 Expressive Dosya Gezgini</string>
+
+    <!-- Navigation Drawer -->
+    <string name="drawer_subtitle">Dosyalar ve Bulut Depolama</string>
+    <string name="nav_home">Ana Sayfa</string>
+    <string name="nav_storage_graph">Depolama Grafiği</string>
+    <string name="nav_storage_cleaner">Depolama Temizleyici</string>
+    <string name="nav_whatsapp_cleaner">WhatsApp Temizleyici</string>
+    <string name="nav_telegram_cleaner">Telegram Temizleyici</string>
+    <string name="nav_instagram_cleaner">Instagram Temizleyici</string>
+    <string name="nav_app_cleaner">Uygulama Temizleyici</string>
+    <string name="nav_dual_pane">Çift bölme</string>
+    <string name="dual_compare">Klasörleri karşılaştır</string>
+    <string name="dual_swap">Bölmeleri değiştir</string>
+    <string name="dual_select_missing">Diğer bölmede eksik olan öğeleri seç</string>
+    <string name="dual_copy_to">Diğer bölmeye kopyala</string>
+    <string name="dual_move_to">Diğer bölmeye taşı</string>
+    <string name="dual_up">Bir üst klasör</string>
+    <string name="cmp_only_here">Yalnızca burada</string>
+    <string name="cmp_newer">Burada daha yeni</string>
+    <string name="cmp_older">Burada daha eski</string>
+    <string name="cmp_different">Farklı</string>
+    <string name="cmp_same">Aynı</string>
+    <string name="nav_archive_manager">Arşiv Yöneticisi</string>
+    <string name="nav_network_storage">Ağ Depolama</string>
+    <string name="nav_settings">Ayarlar</string>
+    <string name="nav_recycle_bin">Geri dönüşüm kutusu</string>
+    <string name="nav_tabs">Sekmeler</string>
+    <string name="nav_search">Ara</string>
+    <plurals name="tabs_open_count">
+        <item quantity="one">%d açık sekme</item>
+        <item quantity="other">%d açık sekme</item>
+    </plurals>
+    <string name="tabs_close_all">Tüm sekmeleri kapat</string>
+    <string name="tabs_empty_title">Açık sekme yok</string>
+    <string name="tabs_empty_body">Dosyalarınıza göz atmak için yeni bir sekme açın</string>
+    <string name="tabs_current">Geçerli sekme</string>
+    <string name="cd_close_tab">%1$s sekmesini kapat</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Dosyalarınız, harika bir düzende</string>
+    <string name="onboarding_body">Findex; dosyalarınıza göz atmak, kopyalamak, sıkıştırmak ve depolamanızı temizlemek için tüm dosyalara erişim iznine ihtiyaç duyar.</string>
+    <string name="onboarding_point_access">Her klasöre, SD karta ve USB sürücüye göz atın</string>
+    <string name="onboarding_point_fast">Arka planda kopyalayın, taşıyın ve sıkıştırın</string>
+    <string name="onboarding_point_private">Her şey cihazınızda kalır</string>
+    <string name="onboarding_permissions">İzinler</string>
+    <string name="onboarding_storage_title">Tüm dosyalara erişim</string>
+    <string name="onboarding_storage_body">Dosyalarınıza göz atmak ve onları yönetmek için gereklidir</string>
+    <string name="onboarding_notify_title">Bildirimler</string>
+    <string name="onboarding_notify_body">Başka uygulamaları kullanırken kopyalama, taşıma, sıkıştırma ve temizleme ilerlemesini gösterir</string>
+    <string name="onboarding_allow">İzin ver</string>
+    <string name="onboarding_granted">İzin verildi</string>
+    <string name="onboarding_continue">Devam et</string>
+    <string name="onboarding_storage_required">Devam etmek için tüm dosyalara erişime izin verin</string>
+    <string name="onboarding_notify_hint">Bildirimler olmadan ilerleme yalnızca Findex içinde gösterilir</string>
+    <string name="error_no_app">Bu dosyayı açabilecek uygulama yok</string>
+    <string name="save_to_findex">Findex\'e kaydet</string>
+    <string name="save_to_findex_hint">Bir klasör açın, ardından Kaydet\'e dokunun</string>
+    <string name="error_open_unsupported">Findex bu dosyayı açamıyor</string>
+
+    <!-- Tabs -->
+    <string name="tab_device">Cihaz</string>
+    <string name="tab_network">Ağ</string>
+
+    <!-- Storage Drives -->
+    <string name="storage_internal">Dahili Depolama</string>
+    <string name="storage_sdcard">SD Kart</string>
+    <string name="storage_network">Ağ Depolama</string>
+    <string name="storage_usb">USB Sürücü</string>
+    <string name="storage_used_of">%2$s içinde %1$s kullanıldı</string>
+    <string name="storage_free_space">%1$s boş</string>
+    <string name="storage_scanning">Depolama taranıyor…</string>
+    <string name="storage_no_network_drives">Bağlı ağ sürücüsü yok. SMB / WebDAV / FTP üzerinden bağlanmak için + simgesine dokunun.</string>
+    <string name="storage_add_network">Ağ Sürücüsü Ekle</string>
+    <string name="storage_used_label">kullanılan</string>
+
+    <!-- Home -->
+    <string name="home_subtitle">Dosyalarınız düzenli</string>
+    <string name="section_categories">Kategoriler</string>
+    <string name="section_bookmarks">Yer imleri</string>
+    <string name="section_recents">Son dosyalar</string>
+    <string name="cd_open_drawer">Gezinme çekmecesini aç</string>
+    <string name="cd_browse_drive">Depolamaya göz at</string>
+    <plurals name="item_count">
+        <item quantity="one">%d öğe</item>
+        <item quantity="other">%d öğe</item>
+    </plurals>
+
+    <!-- File Categories -->
+    <string name="category_photos">Fotoğraflar</string>
+    <string name="category_videos">Videolar</string>
+    <string name="category_audio">Ses</string>
+    <string name="category_documents">Belgeler</string>
+    <string name="category_downloads">İndirilenler</string>
+    <string name="category_archives">Arşivler</string>
+    <string name="category_apks">APK\'lar</string>
+
+    <!-- Quick Suggestions & Tools -->
+    <string name="section_suggestions">Hızlı Araçlar</string>
+    <string name="cleaner_title">Depolama Temizleyici</string>
+    <string name="cleaner_desc">Gereksiz dosyaları ve geçici önbelleği temizleyerek yer açın</string>
+    <string name="whatsapp_cleaner_title">WhatsApp Temizleyici</string>
+    <string name="whatsapp_cleaner_desc">Gönderilen medyaları, sesli notları, çıkartmaları ve yedekleri temizleyin</string>
+    <string name="storage_graph_title">Depolama Analizcisi</string>
+    <string name="storage_graph_desc">Büyük dosyaları ve klasör alanı dağılımını görselleştirin</string>
+
+    <!-- File Actions -->
+    <string name="action_cut">Kes</string>
+    <string name="action_copy">Kopyala</string>
+    <string name="action_paste">Yapıştır</string>
+    <string name="action_delete">Sil</string>
+    <string name="action_rename">Yeniden adlandır</string>
+    <string name="action_details">Ayrıntılar</string>
+    <string name="action_compress">Sıkıştır</string>
+    <string name="action_extract">Çıkar</string>
+    <string name="action_share">Paylaş</string>
+    <string name="action_select_all">Tümünü Seç</string>
+    <string name="action_deselect_all">Seçimi kaldır</string>
+    <string name="action_search">Dosya ara</string>
+    <string name="action_clean">Şimdi Temizle</string>
+    <string name="action_new_folder">Yeni Klasör</string>
+    <string name="action_new_tab">Yeni Sekme</string>
+    <string name="action_close_tab">Sekmeyi Kapat</string>
+    <string name="action_open_in_new_tab">Yeni sekmede aç</string>
+    <string name="detail_empty_hint">Önizlemesini ve ayrıntılarını burada görmek için bir dosya seçin</string>
+    <string name="cd_close_details">Ayrıntıları kapat</string>
+    <string name="rail_graph">Grafik</string>
+    <string name="rail_cleaner">Temizleyici</string>
+    <string name="rail_whatsapp">WhatsApp</string>
+    <string name="rail_bin">Çöp Kutusu</string>
+    <string name="action_copy_path">Yolu kopyala</string>
+    <string name="path_copied">Yol panoya kopyalandı</string>
+    <string name="preview_file">Önizleme</string>
+    <string name="preview_play_video">Videoyu oynat</string>
+    <string name="preview_play_audio">Sesi oynat</string>
+    <string name="preview_lines_truncated">%1$d satır gösteriliyor</string>
+    <string name="preview_empty_file">Boş dosya</string>
+    <string name="details_item_info">Öğe ayrıntıları</string>
+
+    <string name="action_open">Aç</string>
+    <string name="action_create">Oluştur</string>
+    <string name="action_bookmark">Yer imi ekle</string>
+    <string name="action_remove_bookmark">Yer imini kaldır</string>
+    <string name="bookmark_added">Yer imi eklendi</string>
+    <string name="bookmark_removed">Yer imi kaldırıldı</string>
+
+    <!-- Explorer -->
+    <string name="cd_back">Geri</string>
+    <string name="cd_more_options">Diğer seçenekler</string>
+    <string name="cd_more_actions">%1$s için diğer işlemler</string>
+    <string name="cd_grid_view">Izgara görünümü</string>
+    <string name="cd_list_view">Liste görünümü</string>
+    <string name="cd_clear_selection">Seçimi temizle</string>
+    <string name="cd_clear_clipboard">Panoyu temizle</string>
+    <string name="cd_create_menu">Oluştur</string>
+    <string name="cd_show_password">Parolayı göster</string>
+    <string name="cd_hide_password">Parolayı gizle</string>
+    <string name="empty_folder_title">Bu klasör boş</string>
+    <string name="empty_folder_body">Dosyaları buraya yapıştırın veya yeni bir klasör oluşturun.</string>
+    <string name="label_name">Ad</string>
+    <string name="label_archive_name">Arşiv adı</string>
+    <string name="error_invalid_name">Adlar “/” içeremez</string>
+    <string name="error_rename">Yeniden adlandırılamadı — bu ad zaten var olabilir</string>
+    <string name="error_new_folder">Klasör oluşturulamadı — bu ad zaten var olabilir</string>
+    <string name="sort_title">Sırala ve görüntüle</string>
+    <string name="sort_name">Ad</string>
+    <string name="sort_date">Değiştirilme tarihi</string>
+    <string name="sort_size">Boyut</string>
+    <string name="sort_type">Tür</string>
+    <string name="sort_ascending">Artan</string>
+    <string name="sort_descending">Azalan</string>
+    <string name="show_hidden_files">Gizli dosyaları göster</string>
+    <string name="details_path">Konum</string>
+    <string name="details_modified">Değiştirildi</string>
+    <string name="details_type">Tür</string>
+    <string name="details_size">Boyut</string>
+    <string name="details_contains">İçeriği</string>
+    <string name="delete_body">Bu işlem geri alınamaz.</string>
+    <plurals name="delete_title">
+        <item quantity="one">%d öğe silinsin mi?</item>
+        <item quantity="other">%d öğe silinsin mi?</item>
+    </plurals>
+    <plurals name="file_count">
+        <item quantity="one">%d dosya</item>
+        <item quantity="other">%d dosya</item>
+    </plurals>
+    <plurals name="folder_count">
+        <item quantity="one">%d klasör</item>
+        <item quantity="other">%d klasör</item>
+    </plurals>
+    <plurals name="paste_here">
+        <item quantity="one">%d öğeyi yapıştır</item>
+        <item quantity="other">%d öğeyi yapıştır</item>
+    </plurals>
+    <plurals name="save_here">
+        <item quantity="one">%d dosyayı buraya kaydet</item>
+        <item quantity="other">%d dosyayı buraya kaydet</item>
+    </plurals>
+    <plurals name="move_here">
+        <item quantity="one">%d öğeyi buraya taşı</item>
+        <item quantity="other">%d öğeyi buraya taşı</item>
+    </plurals>
+
+    <string name="action_show_in_folder">Klasörde göster</string>
+    <string name="category_empty">Henüz burada hiçbir şey yok</string>
+
+    <!-- Tools -->
+    <string name="scanning">Depolama taranıyor…</string>
+    <string name="tool_can_free">boşaltılabilir</string>
+    <string name="tool_selected_of">%2$s içinden %1$s seçildi</string>
+    <string name="tool_all_clean_title">Her şey temiz</string>
+    <string name="tool_all_clean_body">Şu anda kaldırılacak bir şey yok.</string>
+    <string name="tool_clean_confirm_title">%1$s temizlensin mi?</string>
+    <string name="tool_clean_confirm_body">Seçilen dosyalar kalıcı olarak silinecektir.</string>
+    <string name="tool_clean_button">%1$s temizle</string>
+    <string name="tool_rescan">Tekrar tara</string>
+    <string name="junk_thumbnails">Küçük resim önbellekleri</string>
+    <string name="junk_thumbnails_desc">Uygulamaların otomatik olarak yeniden oluşturduğu önizleme görselleri</string>
+    <string name="junk_temp">Geçici ve günlük dosyaları</string>
+    <string name="junk_temp_desc">.tmp, .log, .bak ve tamamlanmamış indirmeler</string>
+    <string name="junk_apks">Kurulum dosyaları</string>
+    <string name="junk_apks_desc">Kurmuş olabileceğiniz uygulamaların APK dosyaları</string>
+    <string name="junk_empty">Boş klasörler</string>
+    <string name="junk_empty_desc">İçinde hiçbir şey olmayan klasörler</string>
+    <string name="junk_zero">Boş dosyalar</string>
+    <string name="junk_zero_desc">0 baytlık dosyalar; gizli işaretçi dosyaları korunur</string>
+    <string name="telegram_cleaner_title">Telegram Temizleyici</string>
+    <string name="instagram_cleaner_title">Instagram Temizleyici</string>
+    <string name="tg_hint">İndirilen ve gönderilen medya ve dosyalar.</string>
+    <string name="ig_hint">Instagram\'ın bu cihaza kaydettiği fotoğraf ve videolar.</string>
+    <string name="tg_not_found">Bu cihazda Telegram medyası bulunamadı.</string>
+    <string name="ig_not_found">Bu cihazda Instagram medyası bulunamadı.</string>
+    <string name="app_media_files">Belgeler ve diğer dosyalar</string>
+    <string name="app_cleaner_title">Uygulama Temizleyici</string>
+    <string name="app_cleaner_hint">Kaldırılan uygulamaların artıkları ve Findex\'in erişebildiği önbellek.</string>
+    <string name="app_cleaner_empty">Artık dosya bulunamadı. Android 11 ve üzeri sürümler diğer uygulamaların özel önbelleğine erişimi kısıtlar.</string>
+    <string name="app_leftovers">Artık klasörler</string>
+    <string name="app_leftovers_desc">Kaldırılan uygulamaların Android/media, data ve obb içindeki klasörleri</string>
+    <string name="app_cache">Uygulama önbelleği</string>
+    <string name="app_cache_desc">Yüklü uygulamaların harici önbelleği; uygulamalar bunları yeniden oluşturur</string>
+    <string name="wa_images">Görseller</string>
+    <string name="wa_videos">Videolar</string>
+    <string name="wa_audio">Ses</string>
+    <string name="wa_voice">Sesli notlar</string>
+    <string name="wa_documents">Belgeler</string>
+    <string name="wa_stickers">Çıkartmalar</string>
+    <string name="wa_gifs">GIF\'ler</string>
+    <string name="wa_backups">Yedekler ve veritabanları</string>
+    <string name="wa_not_found">Bu cihazda WhatsApp medyası bulunamadı.</string>
+    <string name="wa_hint">Özel klasörler dahil alınan ve gönderilen medyalar.</string>
+    <string name="analyzer_used">Kullanılan</string>
+    <string name="analyzer_other">Diğer dosyalar ve uygulamalar</string>
+    <string name="analyzer_free">Boş</string>
+    <string name="analyzer_breakdown">Dağılım</string>
+    <string name="analyzer_largest">En büyük dosyalar</string>
+    <string name="analyzer_chart_desc">Depolama grafiği: %2$s içinde %1$s kullanıldı</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">Görünüm</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_theme_system">Sistem</string>
+    <string name="settings_theme_light">Açık</string>
+    <string name="settings_theme_dark">Koyu</string>
+    <string name="settings_dynamic_color">Dinamik renk</string>
+    <string name="settings_dynamic_color_desc">Renkleri duvar kağıdınızla eşleştirin</string>
+    <string name="settings_language">Dil</string>
+    <string name="settings_language_system">Sistem varsayılanı</string>
+    <string name="settings_files">Dosyalar</string>
+    <string name="settings_show_hidden_desc">Nokta ile başlayan dosya ve klasörleri göster</string>
+    <string name="settings_grid">Varsayılan olarak ızgara görünümü</string>
+    <string name="settings_grid_desc">Klasörleri küçük resim ızgarası olarak göster</string>
+    <string name="settings_about">Hakkında</string>
+    <string name="settings_version">Sürüm</string>
+    <string name="settings_updates">Güncellemeler</string>
+    <string name="settings_updates_subtitle">Otomatik güncellemeler, yayın kanalı ve yeni sürüm denetimi</string>
+    <string name="settings_auto_update">Otomatik güncellemeler</string>
+    <string name="settings_auto_update_desc">Arka planda günlük olarak ve Findex açıldığında GitHub\'ı denetle</string>
+    <string name="updates_title">Güncellemeler</string>
+    <string name="updates_current">Yüklü sürüm %1$s</string>
+    <string name="settings_channel">Yayın kanalı</string>
+    <string name="channel_stable">Kararlı</string>
+    <string name="channel_beta">Beta</string>
+    <string name="channel_alpha">Alfa</string>
+    <string name="settings_check_updates">Güncellemeleri denetle</string>
+    <string name="update_checking">Denetleniyor…</string>
+    <string name="update_up_to_date">En son sürümü kullanıyorsunuz</string>
+    <string name="update_available_row">%1$s sürümü mevcut</string>
+    <string name="settings_about_subtitle">Sürüm %1$s, geliştirici ve teşekkürler</string>
+    <string name="update_title">Güncelleme mevcut</string>
+    <string name="update_subtitle">%1$s · sizdeki sürüm %2$s</string>
+    <string name="update_whats_new">Yenilikler</string>
+    <string name="update_install">Yükle</string>
+    <string name="update_allow_install">Yüklemeye izin ver</string>
+    <string name="update_downloading">İndiriliyor… %%%1$d</string>
+    <string name="update_not_now">Şimdi değil</string>
+    <string name="update_failed">Güncelleme başarısız</string>
+    <string name="update_notification_channel_name">Uygulama Güncellemeleri</string>
+    <string name="update_notification_title">Güncelleme mevcut: %1$s</string>
+    <string name="update_notification_body">Sürüm notlarını görmek ve yüklemek için dokunun</string>
+    <string name="about_title">Findex Hakkında</string>
+    <string name="about_section_app">Uygulama</string>
+    <string name="about_version_build">Sürüm %1$s · derleme %2$d</string>
+    <string name="about_source_code">Kaynak kodu</string>
+    <string name="about_section_developer">Geliştirici</string>
+    <string name="about_developer_tagline">Tek bir geliştirici tarafından tasarlandı ve geliştirildi.</string>
+    <string name="about_portfolio">Portföy</string>
+    <string name="about_section_open_source">Açık kaynak</string>
+    <string name="about_acknowledgements">Teşekkürler</string>
+    <string name="about_acknowledgements_subtitle">Findex\'in üzerine inşa edildiği kütüphaneler ve projeler</string>
+
+    <!-- Compression & Extraction -->
+    <string name="compress_dialog_title">Arşiv Oluştur</string>
+    <string name="compress_format_label">Biçim</string>
+    <string name="compress_password_zip_only">Parola koruması yalnızca ZIP için kullanılabilir.</string>
+    <string name="compress_password_hint">Parola (isteğe bağlı)</string>
+    <string name="compress_password_help">Parola ile arşiv AES-256 ile şifrelenir.</string>
+    <string name="extract_password_hint">Parola (korumalıysa)</string>
+    <string name="extract_dialog_body">“%1$s” arşivini yanındaki yeni bir klasöre çıkarın.</string>
+    <string name="compress_button">Sıkıştır</string>
+    <string name="extract_dialog_title">Arşivi Çıkar</string>
+    <string name="extract_button">Çıkar</string>
+
+    <!-- Multitasking & Selection -->
+    <string name="selected_count">%1$d seçildi</string>
+    <string name="tabs_header">Sekmeler</string>
+
+    <!-- Notifications & Services -->
+    <string name="notification_channel_name">Dosya İşlemleri</string>
+    <string name="notification_channel_description">Kopyalama, taşıma, silme ve arşiv görevlerinin ilerlemesi ve sonuçları</string>
+    <string name="operation_in_progress">İşlem sürüyor…</string>
+    <string name="operation_completed">İşlem tamamlandı</string>
+    <string name="operation_failed">İşlem başarısız</string>
+    <string name="operation_cancelled">İşlem iptal edildi</string>
+    <string name="operation_progress">%%%1$d · %2$s</string>
+    <plurals name="operation_queued">
+        <item quantity="one">%1$s · %2$d işlem daha sırada</item>
+        <item quantity="other">%1$s · %2$d işlem daha sırada</item>
+    </plurals>
+    <string name="op_title_copy">%1$s öğe kopyalanıyor</string>
+    <string name="op_title_move">%1$s öğe taşınıyor</string>
+    <string name="op_title_delete">%1$s öğe siliniyor</string>
+    <string name="op_title_trash">%1$s öğe Geri dönüşüm kutusuna taşınıyor</string>
+    <string name="op_title_restore">%1$s öğe geri yükleniyor</string>
+    <string name="op_title_clean">%1$s öğe temizleniyor</string>
+    <string name="op_title_compress">%1$s olarak sıkıştırılıyor</string>
+    <string name="op_title_extract">%1$s çıkarılıyor</string>
+    <string name="op_done_copy">%1$s öğe kopyalandı</string>
+    <string name="op_done_move">%1$s öğe taşındı</string>
+    <string name="op_done_delete">%1$s öğe silindi</string>
+    <string name="op_done_trash">%1$s öğe Geri dönüşüm kutusuna taşındı</string>
+    <string name="op_done_restore">%1$s öğe geri yüklendi</string>
+    <string name="op_done_clean">%1$s öğe temizlendi</string>
+    <string name="op_done_compress">%1$s oluşturuldu</string>
+    <string name="op_done_extract">%1$s çıkarıldı</string>
+    <string name="op_done_batch_rename">%1$s öğe yeniden adlandırıldı</string>
+    <string name="op_done_image_transform">%1$s görsel sıkıştırıldı</string>
+    <string name="op_done_vault_import">%1$s öğe kasaya taşındı</string>
+    <string name="op_done_vault_export">%1$s öğe kasadan geri yüklendi</string>
+    <string name="op_done_vault_delete">%1$s öğe kasadan silindi</string>
+    <string name="operation_cancelled_body">Tamamlanmadan durduruldu</string>
+    <string name="error_wrong_password">Yanlış veya eksik parola</string>
+    <string name="error_unsupported_archive">Bu arşiv biçimi veya sürümü desteklenmiyor</string>
+    <string name="error_no_space">Yeterli depolama alanı yok</string>
+    <string name="error_into_itself">Bir klasör kendi içine kopyalanamaz</string>
+    <string name="error_access_denied">Bu konum için izin reddedildi</string>
+    <string name="cancel">İptal</string>
+    <string name="confirm">Onayla</string>
+
+    <!-- Recycle bin -->
+    <plurals name="trash_title">
+        <item quantity="one">%d öğe Geri dönüşüm kutusuna taşınsın mı?</item>
+        <item quantity="other">%d öğe Geri dönüşüm kutusuna taşınsın mı?</item>
+    </plurals>
+    <string name="trash_body">30 gün boyunca Geri dönüşüm kutusundan geri yükleyebilirsiniz.</string>
+    <string name="delete_permanently">Kalıcı olarak sil</string>
+    <string name="action_move_to_bin">Çöp kutusuna taşı</string>
+    <string name="action_restore">Geri yükle</string>
+    <string name="action_empty_bin">Çöp kutusunu boşalt</string>
+    <string name="undo">Geri al</string>
+    <plurals name="moved_to_bin">
+        <item quantity="one">%d öğe Geri dönüşüm kutusuna taşındı</item>
+        <item quantity="other">%d öğe Geri dönüşüm kutusuna taşındı</item>
+    </plurals>
+    <string name="recycle_bin_hint">Öğeler 30 gün sonra kalıcı olarak silinir</string>
+    <string name="recycle_bin_empty">Geri dönüşüm kutusu boş</string>
+
+    <!-- File Inspector & Preview -->
+    <string name="details_dimensions">Boyutlar</string>
+    <string name="details_resolution">Çözünürlük</string>
+    <string name="details_duration">Süre</string>
+    <string name="details_megapixels">%1$.1f MP</string>
+    <string name="details_artist">Sanatçı</string>
+    <string name="details_album">Albüm</string>
+    <string name="details_package">Paket</string>
+    <string name="details_version">Sürüm</string>
+    <string name="details_checksums">Sağlama toplamları</string>
+    <string name="details_calculate_hash">Sağlama toplamlarını hesapla</string>
+    <string name="details_calculating">Hesaplanıyor…</string>
+    <string name="details_copied_hash">Sağlama toplamı panoya kopyalandı</string>
+    <string name="preview_fullscreen">Tam ekran</string>
+    <string name="preview_zoom_hint">Yakınlaştırmak için sıkıştırın · Yakınlaştırmak için çift dokunun</string>
+    <string name="action_open_in_another_app">Başka bir uygulamada aç</string>
+    <string name="action_rotate">Döndür</string>
+    <string name="action_reset_zoom">Yakınlaştırmayı sıfırla</string>
+    <string name="viewer_item_position">%1$d / %2$d</string>
+    <string name="preview_copy_text">İçeriği kopyala</string>
+    <string name="preview_text_copied">İçerik panoya kopyalandı</string>
+    <string name="preview_lines_count">%1$d satır</string>
+    <string name="action_install">Yükle</string>
+    <string name="action_play">Oynat</string>
+    <string name="action_pause">Duraklat</string>
+    <string name="action_open_folder">Klasörü aç</string>
+    <string name="details_overview">Genel bakış</string>
+    <string name="details_exact_bytes">%1$s bayt</string>
+
+    <!-- Search -->
+    <string name="search_hint">Dosya ve klasör ara</string>
+    <string name="search_prompt">Depolamanızdaki her şeyi ada göre bulun</string>
+    <string name="search_no_results">“%1$s” ile eşleşen dosya yok</string>
+    <string name="cd_clear_search">Aramayı temizle</string>
+
+    <!-- Duplicate finder -->
+    <string name="nav_duplicates">Yinelenen dosyalar</string>
+    <string name="dup_title">Yinelenen dosyalar</string>
+    <string name="dup_desc">Yer kaplayan özdeş kopyalar</string>
+    <string name="dup_none">Yinelenen dosya bulunamadı</string>
+    <string name="dup_keep_hint">Her dosyanın en eski kopyası korunur. En az bir kopya her zaman kalır.</string>
+    <string name="dup_delete_button">%1$s sil</string>
+    <string name="dup_hashing">Dosya içerikleri karşılaştırılıyor…</string>
+    <plurals name="dup_copies">
+        <item quantity="one">%d kopya</item>
+        <item quantity="other">%d kopya</item>
+    </plurals>
+
+    <!-- Archive preview -->
+    <string name="action_browse">İçeriğe göz at</string>
+    <string name="archive_extract_all">Tümünü çıkar</string>
+    <string name="archive_empty">Bu arşiv boş</string>
+    <string name="archive_unreadable">Bu arşiv listelenemiyor. Şifreli veya bozuk olabilir; parolasıyla Tümünü çıkar seçeneğini deneyin.</string>
+    <string name="archive_password_title">Parola gerekli</string>
+    <string name="archive_password_body">“%1$s” şifreli.</string>
+    <string name="archive_unlock">Kilidi aç</string>
+    <string name="archive_password_label">Parola</string>
+    <string name="archive_opening">%1$s açılıyor…</string>
+
+    <!-- Network storage (SMB / SFTP / FTP / WebDAV) -->
+    <string name="network_title">Ağ Depolama</string>
+    <string name="network_subtitle">Ağınızdaki SMB, SFTP, FTP ve WebDAV sunucuları</string>
+    <string name="network_empty_title">Henüz sunucu yok</string>
+    <string name="network_empty_body">Burada göz atmak için bir PC, NAS veya sunucudan paylaşılan klasör ekleyin.</string>
+    <string name="network_add">Sunucu ekle</string>
+    <string name="network_add_title">Ağ sunucusu ekle</string>
+    <string name="network_protocol_label">Protokol</string>
+    <string name="network_webdav_https">HTTPS (TLS) kullan</string>
+    <string name="network_field_name">Görünen ad (isteğe bağlı)</string>
+    <string name="network_field_host">Ana bilgisayar veya IP adresi</string>
+    <string name="network_field_host_help">Örneğin 192.168.1.20 veya my-nas.local</string>
+    <string name="network_field_port">Bağlantı noktası (isteğe bağlı)</string>
+    <string name="network_field_port_default">Varsayılan %1$d</string>
+    <string name="network_field_share">Paylaşım adı</string>
+    <string name="network_field_share_help">Paylaşılan klasör, örneğin Public</string>
+    <string name="network_field_path">Uzak yol (isteğe bağlı)</string>
+    <string name="network_field_path_help_sftp">Ana klasör için boş bırakın veya /mnt/media gibi bir yol girin</string>
+    <string name="network_field_path_help_ftp">Kök klasör için boş bırakın veya /pub gibi bir yol girin</string>
+    <string name="network_field_path_help_webdav">Uç nokta yolu, örneğin /dav veya /remote.php/dav/files/user</string>
+    <string name="network_field_user">Kullanıcı adı</string>
+    <string name="network_field_user_help">Konuk olarak bağlanmak için boş bırakın</string>
+    <string name="network_field_user_help_sftp">Sunucudaki SSH kullanıcı adı</string>
+    <string name="network_field_password">Parola</string>
+    <string name="network_field_domain">Etki alanı veya çalışma grubu (isteğe bağlı)</string>
+    <string name="network_connect">Bağlan ve kaydet</string>
+    <string name="network_connecting">Bağlanıyor…</string>
+    <string name="network_password_note">Android Keystore\'da tutulan bir anahtarla şifrelenir. Bu kullanıcı adı için kayıtlı parolayı yeniden kullanmak üzere boş bırakın.</string>
+    <string name="network_guest">Konuk</string>
+    <string name="network_status_connected">Bağlandı</string>
+    <string name="network_remember_password">Parolayı hatırla</string>
+    <string name="network_edit">Sunucuyu düzenle</string>
+    <string name="network_edit_title">Ağ sunucusunu düzenle</string>
+    <string name="network_save">Sına ve kaydet</string>
+    <string name="network_password_keep_note">Mevcut parolayı korumak için boş bırakın.</string>
+    <string name="network_password_not_saved_note">Kaydedilmedi. Findex\'i her açtığınızda bir kez sorulacaktır.</string>
+    <string name="network_error_password_required">Bağlanmak için parola gerekli</string>
+    <string name="network_unlock">Kilidi aç</string>
+    <string name="network_unlock_title">“%1$s” sunucusuna bağlan</string>
+    <string name="network_unlock_body">%1$s için parola. Findex\'i kapatana kadar saklanır.</string>
+    <string name="network_status_offline">Bağlantı kesildi. %1$s</string>
+    <string name="network_retry">Bağlantıyı yeniden dene</string>
+    <string name="network_remove">Sunucuyu kaldır</string>
+    <string name="network_remove_title">“%1$s” kaldırılsın mı?</string>
+    <string name="network_remove_body">Kayıtlı oturum açma bilgileri ve indirilen tüm kopyalar silinir. Sunucudaki dosyalara dokunulmaz.</string>
+    <string name="network_error_host">Sunucuya ulaşılamıyor. Adresi, bağlantı noktasını ve aynı ağda olduğunuzu kontrol edin.</string>
+    <string name="network_error_auth">Oturum açılamadı. Kullanıcı adını ve parolayı kontrol edin.</string>
+    <string name="network_error_share">Bu sunucuda bu adla bir paylaşım veya uzak yol yok.</string>
+    <string name="network_error_denied">Bu hesap için erişim reddedildi.</string>
+    <string name="network_error_unknown">Sunucuyla iletişim kurulurken bir sorun oluştu.</string>
+    <string name="rail_network">Ağ</string>
+    <string name="new_tab_title">Yeni sekme aç</string>
+    <string name="error_network">Ağ paylaşımına ulaşılamadı</string>
+    <string name="error_not_supported_network">Ağ paylaşımlarında kullanılamaz</string>
+    <string name="network_opening_remote">%1$s indiriliyor…</string>
+
+    <!-- BEGIN foundation (W1: drawer, entry actions, operation titles, failures) -->
+    <string name="drawer_section_more">Diğer</string>
+    <string name="nav_favorites">Favoriler</string>
+    <string name="nav_large_files">Büyük dosyalar</string>
+    <string name="nav_recent_changes">Son değişiklikler</string>
+    <string name="nav_vault">Kasa</string>
+    <string name="action_batch_rename">Toplu yeniden adlandır</string>
+    <string name="action_move_to_vault">Kasaya taşı</string>
+    <string name="action_compress_image">Görselleri sıkıştır</string>
+    <string name="action_tags">Etiketler</string>
+    <string name="action_pin_shortcut">Ana ekrana ekle</string>
+    <string name="op_title_batch_rename">%1$s öğe yeniden adlandırılıyor</string>
+    <string name="op_title_image_transform">%1$s görsel sıkıştırılıyor</string>
+    <string name="op_title_vault_import">%1$s öğe kasaya taşınıyor</string>
+    <string name="op_title_vault_export">%1$s öğe kasadan geri yükleniyor</string>
+    <string name="op_title_vault_delete">%1$s öğe kasadan siliniyor</string>
+    <string name="error_vault_locked">Kasa kilitli</string>
+    <string name="error_nested_selection">Bir klasör ve içindeki öğeler birlikte yeniden adlandırılamaz. Ayrı ayrı adlandırın.</string>
+    <string name="error_name_conflict">Bu ada sahip bir dosya zaten var</string>
+    <string name="error_op_invalid_name">Bu ada izin verilmiyor</string>
+    <string name="error_unsupported_image">Bu görsel biçimi desteklenmiyor</string>
+    <string name="placeholder_coming_soon">Yakında</string>
+    <string name="selection_expired">Seçim süresi doldu. Dosyaları tekrar seçin.</string>
+    <!-- END foundation -->
+
+    <!-- BEGIN batch-rename -->
+    <string name="rename_title">Toplu yeniden adlandır</string>
+    <string name="rename_pattern_label">Ad deseni</string>
+    <string name="rename_token_name">Ad</string>
+    <string name="rename_token_ext">Uzantı</string>
+    <string name="rename_token_counter">Sayaç</string>
+    <string name="rename_token_date">Tarih</string>
+    <string name="rename_token_parent">Üst klasör</string>
+    <string name="rename_find_label">Bul</string>
+    <string name="rename_replace_label">Değiştir</string>
+    <string name="rename_regex">Düzenli ifade (Regex) kullan</string>
+    <string name="rename_ignore_case">Büyük/küçük harf duyarsız</string>
+    <string name="rename_case_none">Harf durumunu koru</string>
+    <string name="rename_case_lower">Küçük harf</string>
+    <string name="rename_case_upper">Büyük harf</string>
+    <string name="rename_case_title">Başlık düzeni</string>
+    <string name="rename_counter_start">Başlangıç</string>
+    <string name="rename_counter_step">Adım</string>
+    <string name="rename_counter_pad">Basamak</string>
+    <string name="rename_touch_extension">Uzantıyı da değiştir</string>
+    <string name="rename_status_unchanged">Değişmedi</string>
+    <string name="rename_status_duplicate">Yinelenen ad</string>
+    <string name="rename_status_exists">Ad zaten var</string>
+    <string name="rename_status_invalid">Geçersiz ad</string>
+    <string name="rename_status_bad_regex">Geçersiz desen</string>
+    <string name="rename_apply">Yeniden adlandır</string>
+    <plurals name="rename_summary">
+        <item quantity="one">%d öğe yeniden adlandırılacak</item>
+        <item quantity="other">%d öğe yeniden adlandırılacak</item>
+    </plurals>
+    <!-- END batch-rename -->
+
+    <!-- BEGIN large-files -->
+    <string name="bigfiles_title">Büyük ve eski dosyalar</string>
+    <string name="bigfiles_size_any">Herhangi bir boyut</string>
+    <string name="bigfiles_size_100mb">100 MB üzeri</string>
+    <string name="bigfiles_size_500mb">500 MB üzeri</string>
+    <string name="bigfiles_size_1gb">1 GB üzeri</string>
+    <string name="bigfiles_age_any">Herhangi bir yaş</string>
+    <string name="bigfiles_age_30d">30 günden eski</string>
+    <string name="bigfiles_age_90d">90 günden eski</string>
+    <string name="bigfiles_age_6mo">6 aydan eski</string>
+    <string name="bigfiles_age_1y">1 yıldan eski</string>
+    <string name="bigfiles_category_any">Herhangi bir tür</string>
+    <string name="bigfiles_include_hidden">Gizli dosyaları dahil et</string>
+    <string name="bigfiles_hint_modified">Yaş, son değiştirilme tarihine göre hesaplanır</string>
+    <string name="bigfiles_empty">Bu filtrelere uyan dosya yok</string>
+    <plurals name="bigfiles_selected">
+        <item quantity="one">%d dosya seçildi</item>
+        <item quantity="other">%d dosya seçildi</item>
+    </plurals>
+    <!-- END large-files -->
+
+    <!-- BEGIN image-compress -->
+    <string name="imgc_title">Görselleri sıkıştır</string>
+    <string name="imgc_preset_small">Küçük</string>
+    <string name="imgc_preset_medium">Orta</string>
+    <string name="imgc_preset_large">Büyük</string>
+    <string name="imgc_preset_custom">Özel</string>
+    <string name="imgc_max_edge">En uzun kenar (px)</string>
+    <string name="imgc_scale_percent">Ölçek (%)</string>
+    <string name="imgc_quality">Kalite</string>
+    <string name="imgc_format_keep">Orijinali koru</string>
+    <string name="imgc_output_copy">Kopya olarak kaydet</string>
+    <string name="imgc_output_replace">Orijinalleri değiştir</string>
+    <string name="imgc_output_folder">Klasöre kaydet</string>
+    <string name="imgc_keep_metadata">Konum ve kamera bilgilerini koru</string>
+    <string name="imgc_estimate">Tahmini boyut: %1$s</string>
+    <string name="imgc_replace_warning">Orijinallerin üzerine yazılacak ve bu işlem geri alınamaz.</string>
+    <plurals name="imgc_skipped">
+        <item quantity="one">%d görsel atlandı</item>
+        <item quantity="other">%d görsel atlandı</item>
+    </plurals>
+    <!-- END image-compress -->
+
+    <!-- BEGIN vault -->
+    <string name="vault_title">Kasa</string>
+    <string name="vault_setup_title">Kasanızı kurun</string>
+    <string name="vault_setup_password">Kasa parolası</string>
+    <string name="vault_setup_confirm">Parolayı onayla</string>
+    <string name="vault_setup_mismatch">Parolalar eşleşmiyor</string>
+    <string name="vault_setup_strength_weak">Zayıf</string>
+    <string name="vault_setup_strength_fair">Orta</string>
+    <string name="vault_setup_strength_strong">Güçlü</string>
+    <string name="vault_setup_biometric">Parmak izi veya yüzle kilidi aç</string>
+    <string name="vault_setup_warning_no_recovery">Parola kurtarma yoktur. Parolayı unutursanız dosyalarınız kaybolur.</string>
+    <string name="vault_setup_warning_not_secure_erase">Orijinal dosyalar normal şekilde kaldırılır, güvenli silme yapılmaz. Silinen veriler depolamadan kurtarılabilir.</string>
+    <string name="vault_setup_acknowledge">Riskleri anlıyorum</string>
+    <string name="vault_setup_create">Kasa oluştur</string>
+    <string name="vault_unlock_title">Kasanın kilidini aç</string>
+    <string name="vault_unlock_password">Parola</string>
+    <string name="vault_unlock_biometric">Parmak izi veya yüz kullan</string>
+    <string name="vault_unlock_wrong_password">Yanlış parola</string>
+    <string name="vault_unlock_lockout">Çok fazla deneme. %1$s sonra tekrar deneyin.</string>
+    <string name="vault_biometric_prompt_title">Kasanın kilidini aç</string>
+    <string name="vault_biometric_prompt_subtitle">Kimliğinizi doğrulayın</string>
+    <string name="vault_biometric_prompt_negative">Parola kullan</string>
+    <string name="vault_biometric_invalidated">Parmak izi veya yüz değişti. Parolanızla kilidi açın ve biyometriyi yeniden kurun.</string>
+    <string name="vault_add_files">Dosya ekle</string>
+    <string name="vault_import_confirm">Kasaya taşınsın mı? Orijinaller çöp kutusuna gönderilmeden kalıcı olarak silinir.</string>
+    <string name="vault_export_original">Orijinal konuma geri yükle</string>
+    <string name="vault_export_choose_folder">Klasör seç</string>
+    <string name="vault_open_external_warning">Kasa dışında açmak bu cihazda şifrelenmemiş bir kopya bırakır.</string>
+    <string name="vault_menu_change_password">Parolayı değiştir</string>
+    <string name="vault_menu_biometric">Parmak izi veya yüzle kilit açma</string>
+    <string name="vault_menu_auto_lock">Otomatik kilitle</string>
+    <string name="vault_menu_lock_now">Şimdi kilitle</string>
+    <string name="vault_auto_lock_immediately">Hemen</string>
+    <string name="vault_auto_lock_1min">1 dakika sonra</string>
+    <string name="vault_auto_lock_5min">5 dakika sonra</string>
+    <string name="vault_auto_lock_screen_off">Ekran kapandığında</string>
+    <string name="vault_restore_title">Orijinal konuma geri yüklensin mi?</string>
+    <string name="vault_restore_body">Dosyaların şifresi çözülür ve orijinal klasörlerine geri taşınır. Eksik klasörler yeniden oluşturulur.</string>
+    <string name="vault_restore_action">Geri yükle</string>
+    <string name="vault_empty">Kasanız boş</string>
+    <string name="vault_locked_banner">Kasa kilitli. Dosyalarınızı görmek için kilidi açın.</string>
+    <string name="cd_vault_lock">Kasayı kilitle</string>
+    <string name="vault_setup_min_length">En az 8 karakter kullanın</string>
+    <string name="vault_unlock_action">Kilidi aç</string>
+    <string name="vault_password_current">Mevcut parola</string>
+    <string name="vault_password_new">Yeni parola</string>
+    <string name="vault_password_changed">Parola değiştirildi</string>
+    <string name="vault_unreadable_title">Kasa anahtarı okunamıyor</string>
+    <string name="vault_unreadable_body">Şifrelenmiş dosyalar .FindexVault klasöründe, ancak vault.key dosyası eksik veya bozuk. Bunları açmak için vault.key dosyasını bir yedekten geri yükleyin. Dosyaların kurtarılabilir kalması için yeni bir kasa oluşturulmadı.</string>
+    <string name="vault_rebuild_title">Önceki bir kurulumdan kalan dosyalar</string>
+    <string name="vault_rebuild_body">Kasa klasöründe şifrelenmiş dosyalar bulundu. Listeye geri yüklensin mi?</string>
+    <string name="vault_rebuild_action">Listeyi geri yükle</string>
+    <string name="vault_add_files_hint">Gezginde dosya veya klasörlere uzun basın ve Kasaya taşı\'yı seçin.</string>
+    <string name="vault_delete_confirm">%1$d öğe kasadan silinsin mi? Kurtarılamazlar.</string>
+    <string name="vault_biometric_error">Parmak izi veya yüzle kilit açma kullanılamıyor</string>
+    <string name="vault_import_ready">%1$d öğe şifrelenecek. Orijinaller çöp kutusuna gönderilmeden kalıcı olarak silinir.</string>
+    <!-- END vault -->
+
+    <!-- BEGIN viewers -->
+    <string name="viewer_text_save">Kaydet</string>
+    <string name="viewer_text_saved">Kaydedildi</string>
+    <string name="viewer_text_unsaved_title">Değişiklikler silinsin mi?</string>
+    <string name="viewer_text_unsaved_body">Düzenlemeleriniz kaybolacak.</string>
+    <string name="viewer_text_discard">Sil</string>
+    <string name="viewer_text_conflict_title">Dosya diskte değişti</string>
+    <string name="viewer_text_conflict_body">Siz açtıktan sonra başka bir uygulama bu dosyayı değiştirdi.</string>
+    <string name="viewer_text_overwrite">Üzerine yaz</string>
+    <string name="viewer_text_read_only">Salt okunur</string>
+    <string name="viewer_text_truncated">Dosya çok büyük. İlk bölümü gösteriliyor.</string>
+    <string name="viewer_text_not_text">Bu dosya düz metin değil.</string>
+    <string name="viewer_text_find">Bul</string>
+    <string name="viewer_text_wrap">Satırları kaydır</string>
+    <string name="viewer_text_undo">Geri al</string>
+    <string name="viewer_text_redo">Yinele</string>
+    <string name="viewer_text_encoding">Kodlama</string>
+    <string name="viewer_pdf_page_of">Sayfa %1$d / %2$d</string>
+    <string name="viewer_pdf_go_to_page">Sayfaya git</string>
+    <string name="viewer_pdf_protected">Bu PDF parola korumalı</string>
+    <string name="viewer_pdf_password">Parola</string>
+    <string name="viewer_pdf_downloading">PDF indiriliyor…</string>
+    <string name="viewer_pdf_error">Bu PDF açılamadı</string>
+    <string name="viewer_audio_play">Oynat</string>
+    <string name="viewer_audio_pause">Duraklat</string>
+    <string name="viewer_audio_next">Sonraki parça</string>
+    <string name="viewer_audio_previous">Önceki parça</string>
+    <string name="viewer_audio_repeat">Yinele</string>
+    <string name="viewer_audio_shuffle">Karıştır</string>
+    <string name="viewer_audio_queue">Sıra</string>
+    <string name="viewer_audio_error">Bu dosya oynatılamadı</string>
+    <string name="viewer_text_error">Bu dosya okunamadı veya kaydedilemedi</string>
+    <!-- END viewers -->
+
+    <!-- BEGIN tags-favorites -->
+    <string name="tags_title">Etiketler</string>
+    <string name="tags_new">Yeni etiket</string>
+    <string name="tags_name_hint">Etiket adı</string>
+    <string name="tags_color_red">Kırmızı</string>
+    <string name="tags_color_orange">Turuncu</string>
+    <string name="tags_color_yellow">Sarı</string>
+    <string name="tags_color_green">Yeşil</string>
+    <string name="tags_color_teal">Deniz mavisi</string>
+    <string name="tags_color_blue">Mavi</string>
+    <string name="tags_color_purple">Mor</string>
+    <string name="tags_color_pink">Pembe</string>
+    <string name="tags_rename">Etiketi yeniden adlandır</string>
+    <string name="tags_delete_title">“%1$s” etiketi silinsin mi?</string>
+    <string name="tags_delete_body">Dosyalar verilerini korur. Yalnızca etiket kaldırılır.</string>
+    <string name="tags_empty">Henüz etiket yok</string>
+    <string name="favorites_title">Favoriler</string>
+    <string name="favorites_folders">Klasörler</string>
+    <string name="favorites_files">Dosyalar</string>
+    <string name="favorites_tags">Etiketler</string>
+    <string name="favorites_empty">Henüz kayıtlı bir şey yok</string>
+    <string name="tags_apply">Uygula</string>
+    <string name="tags_save">Kaydet</string>
+    <string name="tags_files_empty">Bu etikete sahip dosya yok</string>
+    <!-- END tags-favorites -->
+
+    <!-- BEGIN shortcuts -->
+    <string name="shortcut_pinned">Kısayol ana ekrana eklendi</string>
+    <string name="shortcut_unsupported">Başlatıcınız kısayolları desteklemiyor</string>
+    <string name="shortcut_folder_missing">Bu klasör artık mevcut değil</string>
+    <!-- END shortcuts -->
+
+    <!-- BEGIN recent-changes-growth -->
+    <string name="changes_title">Son değişiklikler</string>
+    <string name="changes_today">Bugün</string>
+    <string name="changes_yesterday">Dün</string>
+    <string name="changes_range_1d">Son 24 saat</string>
+    <string name="changes_range_7d">Son 7 gün</string>
+    <string name="changes_range_30d">Son 30 gün</string>
+    <string name="changes_empty">Son değişiklik yok</string>
+    <string name="changes_limit_hint">Yalnızca en son değişiklikler gösteriliyor.</string>
+    <string name="growth_title">Depolama artışı</string>
+    <string name="growth_range_30d">30 gün</string>
+    <string name="growth_range_90d">90 gün</string>
+    <string name="growth_range_1y">1 yıl</string>
+    <string name="growth_delta_up">%1$s arttı</string>
+    <string name="growth_delta_down">%1$s azaldı</string>
+    <string name="growth_empty">Henüz yeterli geçmiş yok. Findex depolamayı günlük olarak kaydeder.</string>
+    <string name="viewer_pdf_dark_pages">Koyu sayfalar</string>
+    <string name="settings_builtin_viewers">Yerleşik görüntüleyiciler</string>
+    <string name="settings_builtin_viewers_desc">Fotoğrafları, videoları, PDF\'leri, metinleri ve sesleri Findex\'te açın. Kapalıysa varsayılan uygulamalarınız kullanılır</string>
+    <string name="widget_label">Findex depolama</string>
+    <string name="widget_description">Depolama kullanımı, hızlı temizlik ve yer imine eklediğiniz klasörler</string>
+    <string name="widget_used">%%%1$d kullanıldı</string>
+    <string name="widget_free">%2$s içinde %1$s boş</string>
+    <string name="settings_cleanup_reminder">Temizlik hatırlatıcısı</string>
+    <string name="settings_cleanup_reminder_desc">Temizlenmeye değer gereksiz dosyalar olduğunda haftada bir bildir</string>
+    <string name="cleanup_reminder_channel">Temizlik hatırlatıcıları</string>
+    <string name="cleanup_reminder_title">%1$s boşaltılabilir</string>
+    <string name="cleanup_reminder_text">Temizleyebileceğiniz küçük resimler, geçici dosyalar ve artıklar</string>
+    <string name="cleanup_reminder_action">Temizle</string>
+    <string name="settings_storage_history">Depolama geçmişi</string>
+    <string name="settings_storage_history_desc">Artış grafiği için günlük depolama anlık görüntülerini sakla</string>
+    <!-- END recent-changes-growth -->
+
+    <!-- BEGIN share-phone -->
+    <string name="nav_share_phone">Bu telefonu paylaş</string>
+    <string name="share_tile_running">%1$s · PIN %2$s</string>
+    <string name="share_tile_starting">Başlatılıyor…</string>
+    <string name="share_tile_no_network">Wi-Fi yok</string>
+    <string name="share_tile_off">Kapalı</string>
+    <string name="share_channel_name">Bu telefonu paylaş</string>
+    <string name="share_notification_title">Bu telefon paylaşılıyor</string>
+    <string name="share_notification_text">Aç: %1$s · PIN %2$s</string>
+    <string name="share_stop">Durdur</string>
+    <string name="share_start">Paylaşımı başlat</string>
+    <string name="share_starting">Başlatılıyor…</string>
+    <string name="share_intro_title">Dosyalarınızı bir bilgisayarda açın</string>
+    <string name="share_intro_body">Findex bu telefonda küçük bir web sunucusu başlatır. Aynı Wi-Fi veya erişim noktasındaki herhangi bir tarayıcı tek kullanımlık bir PIN ile açabilir.</string>
+    <string name="share_no_network">Önce Wi-Fi\'ye bağlanın veya erişim noktasını açın.</string>
+    <string name="share_open_url">Bilgisayarınızdaki bir tarayıcıda açın</string>
+    <string name="share_pin">PIN</string>
+    <string name="share_copy_url">Adresi kopyala</string>
+    <string name="share_copied">Adres kopyalandı</string>
+    <plurals name="share_clients">
+        <item quantity="one">%d tarayıcı oturum açtı</item>
+        <item quantity="other">%d tarayıcı oturum açtı</item>
+    </plurals>
+    <string name="share_clients_none">Henüz oturum açan tarayıcı yok</string>
+    <string name="share_access">Erişim</string>
+    <string name="share_access_hint">Değişiklikler bağlı tarayıcılar için bile hemen uygulanır.</string>
+    <string name="share_level_view">Görüntüle</string>
+    <string name="share_level_download">İndir</string>
+    <string name="share_level_full">Tam</string>
+    <string name="share_perm_media">Medya bölümleri</string>
+    <string name="share_perm_media_desc">Fotoğraflar, videolar, sesler, belgeler ve daha fazlası</string>
+    <string name="share_perm_files">Dosya gezgini</string>
+    <string name="share_perm_files_desc">Dahili depolama ve SD karttaki her klasöre göz atın</string>
+    <string name="share_perm_download">Aç ve indir</string>
+    <string name="share_perm_download_desc">Bilgisayarda dosyaları önizleyin, yayınlayın ve kaydedin</string>
+    <string name="share_perm_upload">Yükle</string>
+    <string name="share_perm_upload_desc">Bilgisayardan dosya ekleyin ve klasör oluşturun</string>
+    <string name="share_perm_modify">Yeniden adlandır ve sil</string>
+    <string name="share_perm_modify_desc">Silinen dosyalar Geri Dönüşüm Kutusuna gider</string>
+    <string name="share_auto_stop">Otomatik durdur</string>
+    <string name="share_auto_stop_desc">Herhangi bir istek gelmeden bu kadar süre geçtikten sonra sunucuyu durdur</string>
+    <string name="share_minutes">%d dk</string>
+    <string name="share_never">Asla</string>
+    <string name="share_security_note">Trafik şifrelenmez. Yalnızca güvendiğiniz ağlarda paylaşın.</string>
+    <!-- END share-phone -->
+</resources>

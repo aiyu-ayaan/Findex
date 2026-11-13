@@ -1,0 +1,869 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App & Branding -->
+    <string name="app_tagline">مستكشف ملفات بتصميم Material 3 Expressive</string>
+
+    <!-- Navigation Drawer -->
+    <string name="drawer_subtitle">الملفات والتخزين السحابي</string>
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_storage_graph">مخطط التخزين</string>
+    <string name="nav_storage_cleaner">منظّف التخزين</string>
+    <string name="nav_whatsapp_cleaner">منظّف واتساب</string>
+    <string name="nav_telegram_cleaner">منظّف تيليجرام</string>
+    <string name="nav_instagram_cleaner">منظّف إنستغرام</string>
+    <string name="nav_app_cleaner">منظّف التطبيقات</string>
+    <string name="nav_dual_pane">عرض مزدوج</string>
+    <string name="dual_compare">مقارنة المجلدات</string>
+    <string name="dual_swap">تبديل اللوحتين</string>
+    <string name="dual_select_missing">تحديد العناصر المفقودة في اللوحة الأخرى</string>
+    <string name="dual_copy_to">نسخ إلى اللوحة الأخرى</string>
+    <string name="dual_move_to">نقل إلى اللوحة الأخرى</string>
+    <string name="dual_up">مجلد للأعلى</string>
+    <string name="cmp_only_here">هنا فقط</string>
+    <string name="cmp_newer">أحدث هنا</string>
+    <string name="cmp_older">أقدم هنا</string>
+    <string name="cmp_different">مختلف</string>
+    <string name="cmp_same">متطابق</string>
+    <string name="nav_archive_manager">مدير الأرشيف</string>
+    <string name="nav_network_storage">التخزين الشبكي</string>
+    <string name="nav_settings">الإعدادات</string>
+    <string name="nav_recycle_bin">سلة المحذوفات</string>
+    <string name="nav_tabs">علامات التبويب</string>
+    <string name="nav_search">بحث</string>
+    <plurals name="tabs_open_count">
+        <item quantity="zero">%d علامة تبويب مفتوحة</item>
+        <item quantity="one">علامة تبويب واحدة مفتوحة (%d)</item>
+        <item quantity="two">علامتا تبويب مفتوحتان (%d)</item>
+        <item quantity="few">%d علامات تبويب مفتوحة</item>
+        <item quantity="many">%d علامة تبويب مفتوحة</item>
+        <item quantity="other">%d علامة تبويب مفتوحة</item>
+    </plurals>
+    <string name="tabs_close_all">إغلاق جميع علامات التبويب</string>
+    <string name="tabs_empty_title">لا توجد علامات تبويب مفتوحة</string>
+    <string name="tabs_empty_body">افتح علامة تبويب جديدة لتصفح ملفاتك</string>
+    <string name="tabs_current">علامة التبويب الحالية</string>
+    <string name="cd_close_tab">إغلاق علامة التبويب %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">ملفاتك، منظّمة بأناقة</string>
+    <string name="onboarding_body">يحتاج Findex إلى إذن الوصول إلى جميع الملفات لتصفح مساحتك التخزينية ونسخها وضغطها وتنظيفها.</string>
+    <string name="onboarding_point_access">تصفح كل مجلد وبطاقة SD ومحرك USB</string>
+    <string name="onboarding_point_fast">نسخ ونقل وضغط الملفات في الخلفية</string>
+    <string name="onboarding_point_private">كل شيء يبقى على جهازك</string>
+    <string name="onboarding_permissions">الأذونات</string>
+    <string name="onboarding_storage_title">الوصول إلى جميع الملفات</string>
+    <string name="onboarding_storage_body">مطلوب لتصفح ملفاتك وإدارتها</string>
+    <string name="onboarding_notify_title">الإشعارات</string>
+    <string name="onboarding_notify_body">تعرض تقدم النسخ والنقل والضغط والتنظيف أثناء استخدامك تطبيقات أخرى</string>
+    <string name="onboarding_allow">سماح</string>
+    <string name="onboarding_granted">تم المنح</string>
+    <string name="onboarding_continue">متابعة</string>
+    <string name="onboarding_storage_required">اسمح بالوصول إلى جميع الملفات للمتابعة</string>
+    <string name="onboarding_notify_hint">بدون الإشعارات، يظهر التقدم داخل Findex فقط</string>
+    <string name="error_no_app">لا يوجد تطبيق يمكنه فتح هذا الملف</string>
+    <string name="save_to_findex">حفظ في Findex</string>
+    <string name="save_to_findex_hint">افتح مجلدًا، ثم انقر على حفظ</string>
+    <string name="error_open_unsupported">لا يمكن لـ Findex فتح هذا الملف</string>
+
+    <!-- Tabs -->
+    <string name="tab_device">الجهاز</string>
+    <string name="tab_network">الشبكة</string>
+
+    <!-- Storage Drives -->
+    <string name="storage_internal">التخزين الداخلي</string>
+    <string name="storage_sdcard">بطاقة SD</string>
+    <string name="storage_network">التخزين الشبكي</string>
+    <string name="storage_usb">محرك USB</string>
+    <string name="storage_used_of">%1$s مستخدمة من %2$s</string>
+    <string name="storage_free_space">%1$s متاحة</string>
+    <string name="storage_scanning">جارٍ فحص التخزين…</string>
+    <string name="storage_no_network_drives">لا توجد محركات شبكة متصلة. انقر على + للاتصال عبر SMB / WebDAV / FTP.</string>
+    <string name="storage_add_network">إضافة محرك شبكة</string>
+    <string name="storage_used_label">مستخدم</string>
+
+    <!-- Home -->
+    <string name="home_subtitle">ملفاتك، منظّمة</string>
+    <string name="section_categories">الفئات</string>
+    <string name="section_bookmarks">الإشارات المرجعية</string>
+    <string name="section_recents">الملفات الأخيرة</string>
+    <string name="cd_open_drawer">فتح قائمة التنقل</string>
+    <string name="cd_browse_drive">تصفح التخزين</string>
+    <plurals name="item_count">
+        <item quantity="zero">%d عنصر</item>
+        <item quantity="one">عنصر واحد (%d)</item>
+        <item quantity="two">عنصران (%d)</item>
+        <item quantity="few">%d عناصر</item>
+        <item quantity="many">%d عنصرًا</item>
+        <item quantity="other">%d عنصر</item>
+    </plurals>
+
+    <!-- File Categories -->
+    <string name="category_photos">الصور</string>
+    <string name="category_videos">الفيديوهات</string>
+    <string name="category_audio">الصوتيات</string>
+    <string name="category_documents">المستندات</string>
+    <string name="category_downloads">التنزيلات</string>
+    <string name="category_archives">الأرشيفات</string>
+    <string name="category_apks">ملفات APK</string>
+
+    <!-- Quick Suggestions & Tools -->
+    <string name="section_suggestions">أدوات سريعة</string>
+    <string name="cleaner_title">منظّف التخزين</string>
+    <string name="cleaner_desc">وفر المساحة بحذف الملفات غير المرغوبة وذاكرة التخزين المؤقتة</string>
+    <string name="whatsapp_cleaner_title">منظّف واتساب</string>
+    <string name="whatsapp_cleaner_desc">تنظيف الوسائط المرسلة والرسائل الصوتية والملصقات والنسخ الاحتياطية</string>
+    <string name="storage_graph_title">محلّل التخزين</string>
+    <string name="storage_graph_desc">عرض الملفات الكبيرة وتوزيع مساحة المجلدات بصريًا</string>
+
+    <!-- File Actions -->
+    <string name="action_cut">قص</string>
+    <string name="action_copy">نسخ</string>
+    <string name="action_paste">لصق</string>
+    <string name="action_delete">حذف</string>
+    <string name="action_rename">إعادة تسمية</string>
+    <string name="action_details">التفاصيل</string>
+    <string name="action_compress">ضغط</string>
+    <string name="action_extract">استخراج</string>
+    <string name="action_share">مشاركة</string>
+    <string name="action_select_all">تحديد الكل</string>
+    <string name="action_deselect_all">إلغاء التحديد</string>
+    <string name="action_search">البحث عن ملفات</string>
+    <string name="action_clean">تنظيف الآن</string>
+    <string name="action_new_folder">مجلد جديد</string>
+    <string name="action_new_tab">علامة تبويب جديدة</string>
+    <string name="action_close_tab">إغلاق علامة التبويب</string>
+    <string name="action_open_in_new_tab">فتح في علامة تبويب جديدة</string>
+    <string name="detail_empty_hint">حدد ملفًا لعرض معاينته وتفاصيله هنا</string>
+    <string name="cd_close_details">إغلاق التفاصيل</string>
+    <string name="rail_graph">المخطط</string>
+    <string name="rail_cleaner">المنظّف</string>
+    <string name="rail_whatsapp">واتساب</string>
+    <string name="rail_bin">السلة</string>
+    <string name="action_copy_path">نسخ المسار</string>
+    <string name="path_copied">تم نسخ المسار إلى الحافظة</string>
+    <string name="preview_file">معاينة</string>
+    <string name="preview_play_video">تشغيل الفيديو</string>
+    <string name="preview_play_audio">تشغيل الصوت</string>
+    <string name="preview_lines_truncated">تم عرض %1$d أسطر</string>
+    <string name="preview_empty_file">ملف فارغ</string>
+    <string name="details_item_info">تفاصيل العنصر</string>
+    <string name="action_open">فتح</string>
+    <string name="action_create">إنشاء</string>
+    <string name="action_bookmark">إضافة إشارة مرجعية</string>
+    <string name="action_remove_bookmark">إزالة الإشارة المرجعية</string>
+    <string name="bookmark_added">تمت إضافة الإشارة المرجعية</string>
+    <string name="bookmark_removed">تمت إزالة الإشارة المرجعية</string>
+
+    <!-- Explorer -->
+    <string name="cd_back">رجوع</string>
+    <string name="cd_more_options">المزيد من الخيارات</string>
+    <string name="cd_more_actions">المزيد من الإجراءات لـ %1$s</string>
+    <string name="cd_grid_view">عرض الشبكة</string>
+    <string name="cd_list_view">عرض القائمة</string>
+    <string name="cd_clear_selection">مسح التحديد</string>
+    <string name="cd_clear_clipboard">مسح الحافظة</string>
+    <string name="cd_create_menu">إنشاء</string>
+    <string name="cd_show_password">إظهار كلمة المرور</string>
+    <string name="cd_hide_password">إخفاء كلمة المرور</string>
+    <string name="empty_folder_title">هذا المجلد فارغ</string>
+    <string name="empty_folder_body">الصق الملفات هنا أو أنشئ مجلدًا جديدًا.</string>
+    <string name="label_name">الاسم</string>
+    <string name="label_archive_name">اسم الأرشيف</string>
+    <string name="error_invalid_name">لا يمكن أن تحتوي الأسماء على “/”</string>
+    <string name="error_rename">تعذرت إعادة التسمية — قد يكون الاسم موجودًا بالفعل</string>
+    <string name="error_new_folder">تعذر إنشاء المجلد — قد يكون الاسم موجودًا بالفعل</string>
+    <string name="sort_title">الفرز والعرض</string>
+    <string name="sort_name">الاسم</string>
+    <string name="sort_date">تاريخ التعديل</string>
+    <string name="sort_size">الحجم</string>
+    <string name="sort_type">النوع</string>
+    <string name="sort_ascending">تصاعدي</string>
+    <string name="sort_descending">تنازلي</string>
+    <string name="show_hidden_files">إظهار الملفات المخفية</string>
+    <string name="details_path">الموقع</string>
+    <string name="details_modified">تاريخ التعديل</string>
+    <string name="details_type">النوع</string>
+    <string name="details_size">الحجم</string>
+    <string name="details_contains">يحتوي على</string>
+    <string name="delete_body">لا يمكن التراجع عن هذا الإجراء.</string>
+    <plurals name="delete_title">
+        <item quantity="zero">حذف %d عنصر؟</item>
+        <item quantity="one">حذف عنصر واحد (%d)؟</item>
+        <item quantity="two">حذف عنصرين (%d)؟</item>
+        <item quantity="few">حذف %d عناصر؟</item>
+        <item quantity="many">حذف %d عنصرًا؟</item>
+        <item quantity="other">حذف %d عنصر؟</item>
+    </plurals>
+    <plurals name="file_count">
+        <item quantity="zero">%d ملف</item>
+        <item quantity="one">ملف واحد (%d)</item>
+        <item quantity="two">ملفان (%d)</item>
+        <item quantity="few">%d ملفات</item>
+        <item quantity="many">%d ملفًا</item>
+        <item quantity="other">%d ملف</item>
+    </plurals>
+    <plurals name="folder_count">
+        <item quantity="zero">%d مجلد</item>
+        <item quantity="one">مجلد واحد (%d)</item>
+        <item quantity="two">مجلدان (%d)</item>
+        <item quantity="few">%d مجلدات</item>
+        <item quantity="many">%d مجلدًا</item>
+        <item quantity="other">%d مجلد</item>
+    </plurals>
+    <plurals name="paste_here">
+        <item quantity="zero">لصق %d عنصر</item>
+        <item quantity="one">لصق عنصر واحد (%d)</item>
+        <item quantity="two">لصق عنصرين (%d)</item>
+        <item quantity="few">لصق %d عناصر</item>
+        <item quantity="many">لصق %d عنصرًا</item>
+        <item quantity="other">لصق %d عنصر</item>
+    </plurals>
+    <plurals name="save_here">
+        <item quantity="zero">حفظ %d ملف هنا</item>
+        <item quantity="one">حفظ ملف واحد (%d) هنا</item>
+        <item quantity="two">حفظ ملفين (%d) هنا</item>
+        <item quantity="few">حفظ %d ملفات هنا</item>
+        <item quantity="many">حفظ %d ملفًا هنا</item>
+        <item quantity="other">حفظ %d ملف هنا</item>
+    </plurals>
+    <plurals name="move_here">
+        <item quantity="zero">نقل %d عنصر إلى هنا</item>
+        <item quantity="one">نقل عنصر واحد (%d) إلى هنا</item>
+        <item quantity="two">نقل عنصرين (%d) إلى هنا</item>
+        <item quantity="few">نقل %d عناصر إلى هنا</item>
+        <item quantity="many">نقل %d عنصرًا إلى هنا</item>
+        <item quantity="other">نقل %d عنصر إلى هنا</item>
+    </plurals>
+    <string name="action_show_in_folder">إظهار في المجلد</string>
+    <string name="category_empty">لا يوجد شيء هنا بعد</string>
+
+    <!-- Tools -->
+    <string name="scanning">جارٍ فحص التخزين…</string>
+    <string name="tool_can_free">يمكن تحريرها</string>
+    <string name="tool_selected_of">تم تحديد %1$s من %2$s</string>
+    <string name="tool_all_clean_title">الكل نظيف</string>
+    <string name="tool_all_clean_body">لا يوجد ما يمكن إزالته الآن.</string>
+    <string name="tool_clean_confirm_title">تنظيف %1$s؟</string>
+    <string name="tool_clean_confirm_body">سيتم حذف الملفات المحددة نهائيًا.</string>
+    <string name="tool_clean_button">تنظيف %1$s</string>
+    <string name="tool_rescan">إعادة الفحص</string>
+    <string name="junk_thumbnails">ذاكرة الصور المصغّرة</string>
+    <string name="junk_thumbnails_desc">صور معاينة تعيد التطبيقات إنشاءها تلقائيًا</string>
+    <string name="junk_temp">ملفات مؤقتة وسجلات</string>
+    <string name="junk_temp_desc">ملفات .tmp و.log و.bak والتنزيلات غير المكتملة</string>
+    <string name="junk_apks">ملفات التثبيت</string>
+    <string name="junk_apks_desc">ملفات APK لتطبيقات ربما قمت بتثبيتها</string>
+    <string name="junk_empty">مجلدات فارغة</string>
+    <string name="junk_empty_desc">مجلدات لا تحتوي على أي شيء</string>
+    <string name="junk_zero">ملفات فارغة</string>
+    <string name="junk_zero_desc">ملفات بحجم 0 بايت؛ يتم الاحتفاظ بملفات العلامات المخفية</string>
+    <string name="telegram_cleaner_title">منظّف تيليجرام</string>
+    <string name="instagram_cleaner_title">منظّف إنستغرام</string>
+    <string name="tg_hint">الوسائط والملفات المنزّلة والمرسلة.</string>
+    <string name="ig_hint">الصور ومقاطع الفيديو التي حفظها إنستغرام على هذا الجهاز.</string>
+    <string name="tg_not_found">لم يتم العثور على وسائط تيليجرام على هذا الجهاز.</string>
+    <string name="ig_not_found">لم يتم العثور على وسائط إنستغرام على هذا الجهاز.</string>
+    <string name="app_media_files">المستندات وملفات أخرى</string>
+    <string name="app_cleaner_title">منظّف التطبيقات</string>
+    <string name="app_cleaner_hint">بقايا التطبيقات المحذوفة والذاكرة المؤقتة التي يمكن لـ Findex الوصول إليها.</string>
+    <string name="app_cleaner_empty">لم يتم العثور على بقايا. يمنع Android 11 والإصدارات الأحدث الوصول إلى الذاكرة المؤقتة الخاصة بالتطبيقات الأخرى.</string>
+    <string name="app_leftovers">مجلدات متبقية</string>
+    <string name="app_leftovers_desc">مجلدات التطبيقات المثبتة مسبقًا والمحذوفة في Android/media وdata وobb</string>
+    <string name="app_cache">ذاكرة التطبيقات المؤقتة</string>
+    <string name="app_cache_desc">الذاكرة المؤقتة الخارجية للتطبيقات المثبتة؛ تعيد إنشاءها تلقائيًا</string>
+    <string name="wa_images">الصور</string>
+    <string name="wa_videos">الفيديوهات</string>
+    <string name="wa_audio">الصوتيات</string>
+    <string name="wa_voice">الرسائل الصوتية</string>
+    <string name="wa_documents">المستندات</string>
+    <string name="wa_stickers">الملصقات</string>
+    <string name="wa_gifs">صور GIF</string>
+    <string name="wa_backups">النسخ الاحتياطية وقواعد البيانات</string>
+    <string name="wa_not_found">لم يتم العثور على وسائط واتساب على هذا الجهاز.</string>
+    <string name="wa_hint">الوسائط المستلمة والمرسلة، بما في ذلك المجلدات الخاصة.</string>
+    <string name="analyzer_used">مستخدم</string>
+    <string name="analyzer_other">ملفات وتطبيقات أخرى</string>
+    <string name="analyzer_free">متاح</string>
+    <string name="analyzer_breakdown">التفصيل</string>
+    <string name="analyzer_largest">أكبر الملفات</string>
+    <string name="analyzer_chart_desc">مخطط التخزين: %1$s مستخدمة من %2$s</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">المظهر</string>
+    <string name="settings_theme">السمة</string>
+    <string name="settings_theme_system">النظام</string>
+    <string name="settings_theme_light">فاتح</string>
+    <string name="settings_theme_dark">داكن</string>
+    <string name="settings_dynamic_color">الألوان الديناميكية</string>
+    <string name="settings_dynamic_color_desc">مطابقة الألوان مع خلفية الشاشة</string>
+    <string name="settings_language">اللغة</string>
+    <string name="settings_language_system">لغة النظام الافتراضية</string>
+    <string name="settings_files">الملفات</string>
+    <string name="settings_show_hidden_desc">إظهار الملفات والمجلدات التي تبدأ بنقطة</string>
+    <string name="settings_grid">عرض الشبكة افتراضيًا</string>
+    <string name="settings_grid_desc">عرض المجلدات كشبكة من الصور المصغّرة</string>
+    <string name="settings_about">حول</string>
+    <string name="settings_version">الإصدار</string>
+    <string name="settings_updates">التحديثات</string>
+    <string name="settings_updates_subtitle">التحديثات التلقائية وقناة الإصدار والتحقق من وجود إصدار جديد</string>
+    <string name="settings_auto_update">التحديثات التلقائية</string>
+    <string name="settings_auto_update_desc">التحقق من GitHub يوميًا في الخلفية وعند فتح Findex</string>
+    <string name="updates_title">التحديثات</string>
+    <string name="updates_current">الإصدار المثبت %1$s</string>
+    <string name="settings_channel">قناة الإصدار</string>
+    <string name="channel_stable">مستقرة</string>
+    <string name="channel_beta">تجريبية (Beta)</string>
+    <string name="channel_alpha">أولية (Alpha)</string>
+    <string name="settings_check_updates">التحقق من وجود تحديثات</string>
+    <string name="update_checking">جارٍ التحقق…</string>
+    <string name="update_up_to_date">لديك أحدث إصدار</string>
+    <string name="update_available_row">الإصدار %1$s متاح</string>
+    <string name="settings_about_subtitle">الإصدار %1$s، المطوّر والإشعارات</string>
+    <string name="update_title">تحديث متاح</string>
+    <string name="update_subtitle">%1$s · لديك الإصدار %2$s</string>
+    <string name="update_whats_new">ما الجديد</string>
+    <string name="update_install">تثبيت</string>
+    <string name="update_allow_install">السماح بالتثبيت</string>
+    <string name="update_downloading">جارٍ التنزيل… %1$d%%</string>
+    <string name="update_not_now">ليس الآن</string>
+    <string name="update_failed">فشل التحديث</string>
+    <string name="update_notification_channel_name">تحديثات التطبيق</string>
+    <string name="update_notification_title">تحديث متاح: %1$s</string>
+    <string name="update_notification_body">انقر لعرض ملاحظات الإصدار والتثبيت</string>
+    <string name="about_title">حول Findex</string>
+    <string name="about_section_app">التطبيق</string>
+    <string name="about_version_build">الإصدار %1$s · البنية %2$d</string>
+    <string name="about_source_code">الشيفرة المصدرية</string>
+    <string name="about_section_developer">المطوّر</string>
+    <string name="about_developer_tagline">صُمم وطُوّر بواسطة مطوّر واحد.</string>
+    <string name="about_portfolio">معرض الأعمال</string>
+    <string name="about_section_open_source">مصدر مفتوح</string>
+    <string name="about_acknowledgements">شكر وتقدير</string>
+    <string name="about_acknowledgements_subtitle">المكتبات والمشاريع التي يعتمد عليها Findex</string>
+
+    <!-- Compression & Extraction -->
+    <string name="compress_dialog_title">إنشاء أرشيف</string>
+    <string name="compress_format_label">الصيغة</string>
+    <string name="compress_password_zip_only">الحماية بكلمة مرور متاحة لصيغة ZIP فقط.</string>
+    <string name="compress_password_hint">كلمة المرور (اختياري)</string>
+    <string name="compress_password_help">عند تعيين كلمة مرور، يتم تشفير الأرشيف باستخدام AES-256.</string>
+    <string name="extract_password_hint">كلمة المرور (إن كان محميًا)</string>
+    <string name="extract_dialog_body">استخراج “%1$s” إلى مجلد جديد بجانبه.</string>
+    <string name="compress_button">ضغط</string>
+    <string name="extract_dialog_title">استخراج الأرشيف</string>
+    <string name="extract_button">استخراج</string>
+
+    <!-- Multitasking & Selection -->
+    <string name="selected_count">تم تحديد %1$d</string>
+    <string name="tabs_header">علامات التبويب</string>
+
+    <!-- Notifications & Services -->
+    <string name="notification_channel_name">عمليات الملفات</string>
+    <string name="notification_channel_description">تقدم ونتائج مهام النسخ والنقل والحذف والأرشفة</string>
+    <string name="operation_in_progress">العملية قيد التنفيذ…</string>
+    <string name="operation_completed">اكتملت العملية</string>
+    <string name="operation_failed">فشلت العملية</string>
+    <string name="operation_cancelled">تم إلغاء العملية</string>
+    <string name="operation_progress">%1$d%% · %2$s</string>
+    <plurals name="operation_queued">
+        <item quantity="zero">%1$s · %2$d في الانتظار</item>
+        <item quantity="one">%1$s · %2$d في الانتظار</item>
+        <item quantity="two">%1$s · %2$d في الانتظار</item>
+        <item quantity="few">%1$s · %2$d في الانتظار</item>
+        <item quantity="many">%1$s · %2$d في الانتظار</item>
+        <item quantity="other">%1$s · %2$d في الانتظار</item>
+    </plurals>
+    <string name="op_title_copy">جارٍ نسخ %1$s عنصر</string>
+    <string name="op_title_move">جارٍ نقل %1$s عنصر</string>
+    <string name="op_title_delete">جارٍ حذف %1$s عنصر</string>
+    <string name="op_title_trash">جارٍ نقل %1$s عنصر إلى سلة المحذوفات</string>
+    <string name="op_title_restore">جارٍ استعادة %1$s عنصر</string>
+    <string name="op_title_clean">جارٍ تنظيف %1$s عنصر</string>
+    <string name="op_title_compress">جارٍ الضغط إلى %1$s</string>
+    <string name="op_title_extract">جارٍ استخراج %1$s</string>
+    <string name="op_done_copy">تم نسخ %1$s عنصر</string>
+    <string name="op_done_move">تم نقل %1$s عنصر</string>
+    <string name="op_done_delete">تم حذف %1$s عنصر</string>
+    <string name="op_done_trash">تم نقل %1$s عنصر إلى سلة المحذوفات</string>
+    <string name="op_done_restore">تمت استعادة %1$s عنصر</string>
+    <string name="op_done_clean">تم تنظيف %1$s عنصر</string>
+    <string name="op_done_compress">تم إنشاء %1$s</string>
+    <string name="op_done_extract">تم استخراج %1$s</string>
+    <string name="op_done_batch_rename">تمت إعادة تسمية %1$s عنصر</string>
+    <string name="op_done_image_transform">تم ضغط %1$s صورة</string>
+    <string name="op_done_vault_import">تم نقل %1$s عنصر إلى الخزنة</string>
+    <string name="op_done_vault_export">تمت استعادة %1$s عنصر من الخزنة</string>
+    <string name="op_done_vault_delete">تم حذف %1$s عنصر من الخزنة</string>
+    <string name="operation_cancelled_body">توقفت قبل الاكتمال</string>
+    <string name="error_wrong_password">كلمة مرور خاطئة أو مفقودة</string>
+    <string name="error_unsupported_archive">صيغة الأرشيف هذه أو إصدارها غير مدعوم</string>
+    <string name="error_no_space">لا توجد مساحة تخزين كافية</string>
+    <string name="error_into_itself">لا يمكن نسخ مجلد إلى داخل نفسه</string>
+    <string name="error_access_denied">تم رفض الإذن لهذا الموقع</string>
+    <string name="cancel">إلغاء</string>
+    <string name="confirm">تأكيد</string>
+
+    <!-- Recycle bin -->
+    <plurals name="trash_title">
+        <item quantity="zero">نقل %d عنصر إلى سلة المحذوفات؟</item>
+        <item quantity="one">نقل عنصر واحد (%d) إلى سلة المحذوفات؟</item>
+        <item quantity="two">نقل عنصرين (%d) إلى سلة المحذوفات؟</item>
+        <item quantity="few">نقل %d عناصر إلى سلة المحذوفات؟</item>
+        <item quantity="many">نقل %d عنصرًا إلى سلة المحذوفات؟</item>
+        <item quantity="other">نقل %d عنصر إلى سلة المحذوفات؟</item>
+    </plurals>
+    <string name="trash_body">يمكنك استعادتها من سلة المحذوفات لمدة 30 يومًا.</string>
+    <string name="delete_permanently">حذف نهائي</string>
+    <string name="action_move_to_bin">نقل إلى السلة</string>
+    <string name="action_restore">استعادة</string>
+    <string name="action_empty_bin">إفراغ السلة</string>
+    <string name="undo">تراجع</string>
+    <plurals name="moved_to_bin">
+        <item quantity="zero">تم نقل %d عنصر إلى سلة المحذوفات</item>
+        <item quantity="one">تم نقل عنصر واحد (%d) إلى سلة المحذوفات</item>
+        <item quantity="two">تم نقل عنصرين (%d) إلى سلة المحذوفات</item>
+        <item quantity="few">تم نقل %d عناصر إلى سلة المحذوفات</item>
+        <item quantity="many">تم نقل %d عنصرًا إلى سلة المحذوفات</item>
+        <item quantity="other">تم نقل %d عنصر إلى سلة المحذوفات</item>
+    </plurals>
+    <string name="recycle_bin_hint">تُحذف العناصر نهائيًا بعد 30 يومًا</string>
+    <string name="recycle_bin_empty">سلة المحذوفات فارغة</string>
+
+    <!-- File Inspector & Preview -->
+    <string name="details_dimensions">الأبعاد</string>
+    <string name="details_resolution">الدقة</string>
+    <string name="details_duration">المدة</string>
+    <string name="details_megapixels">%1$.1f ميجابكسل</string>
+    <string name="details_artist">الفنان</string>
+    <string name="details_album">الألبوم</string>
+    <string name="details_package">الحزمة</string>
+    <string name="details_version">الإصدار</string>
+    <string name="details_checksums">المجاميع الاختبارية</string>
+    <string name="details_calculate_hash">حساب المجاميع الاختبارية</string>
+    <string name="details_calculating">جارٍ الحساب…</string>
+    <string name="details_copied_hash">تم نسخ المجموع الاختباري إلى الحافظة</string>
+    <string name="preview_fullscreen">ملء الشاشة</string>
+    <string name="preview_zoom_hint">قرّب للتكبير · انقر مرتين للتكبير</string>
+    <string name="action_open_in_another_app">فتح في تطبيق آخر</string>
+    <string name="action_rotate">تدوير</string>
+    <string name="action_reset_zoom">إعادة ضبط التكبير</string>
+    <string name="viewer_item_position">%1$d من %2$d</string>
+    <string name="preview_copy_text">نسخ المحتوى</string>
+    <string name="preview_text_copied">تم نسخ المحتوى إلى الحافظة</string>
+    <string name="preview_lines_count">%1$d أسطر</string>
+    <string name="action_install">تثبيت</string>
+    <string name="action_play">تشغيل</string>
+    <string name="action_pause">إيقاف مؤقت</string>
+    <string name="action_open_folder">فتح المجلد</string>
+    <string name="details_overview">نظرة عامة</string>
+    <string name="details_exact_bytes">%1$s بايت</string>
+
+    <!-- Search -->
+    <string name="search_hint">البحث في الملفات والمجلدات</string>
+    <string name="search_prompt">اعثر على أي شيء في وحدة التخزين بالاسم</string>
+    <string name="search_no_results">لا توجد ملفات تطابق “%1$s”</string>
+    <string name="cd_clear_search">مسح البحث</string>
+
+    <!-- Duplicate finder -->
+    <string name="nav_duplicates">الملفات المكررة</string>
+    <string name="dup_title">الملفات المكررة</string>
+    <string name="dup_desc">نسخ متطابقة تهدر المساحة</string>
+    <string name="dup_none">لم يتم العثور على ملفات مكررة</string>
+    <string name="dup_keep_hint">يتم الاحتفاظ بأقدم نسخة من كل ملف. تبقى نسخة واحدة على الأقل دائمًا.</string>
+    <string name="dup_delete_button">حذف %1$s</string>
+    <string name="dup_hashing">جارٍ مقارنة محتويات الملفات…</string>
+    <plurals name="dup_copies">
+        <item quantity="zero">%d نسخة</item>
+        <item quantity="one">نسخة واحدة (%d)</item>
+        <item quantity="two">نسختان (%d)</item>
+        <item quantity="few">%d نسخ</item>
+        <item quantity="many">%d نسخة</item>
+        <item quantity="other">%d نسخة</item>
+    </plurals>
+
+    <!-- Archive preview -->
+    <string name="action_browse">تصفح المحتويات</string>
+    <string name="archive_extract_all">استخراج الكل</string>
+    <string name="archive_empty">هذا الأرشيف فارغ</string>
+    <string name="archive_unreadable">لا يمكن عرض محتويات هذا الأرشيف. قد يكون مشفرًا أو تالفًا؛ جرّب استخراج الكل بكلمة مروره.</string>
+    <string name="archive_password_title">كلمة المرور مطلوبة</string>
+    <string name="archive_password_body">“%1$s” مشفّر.</string>
+    <string name="archive_unlock">فتح القفل</string>
+    <string name="archive_password_label">كلمة المرور</string>
+    <string name="archive_opening">جارٍ فتح %1$s…</string>
+
+    <!-- Network storage (SMB / SFTP / FTP / WebDAV) -->
+    <string name="network_title">التخزين الشبكي</string>
+    <string name="network_subtitle">خوادم SMB وSFTP وFTP وWebDAV على شبكتك</string>
+    <string name="network_empty_title">لا توجد خوادم بعد</string>
+    <string name="network_empty_body">أضف مجلدًا مشتركًا من كمبيوتر أو NAS أو خادم لتصفحه هنا.</string>
+    <string name="network_add">إضافة خادم</string>
+    <string name="network_add_title">إضافة خادم شبكة</string>
+    <string name="network_protocol_label">البروتوكول</string>
+    <string name="network_webdav_https">استخدام HTTPS (TLS)</string>
+    <string name="network_field_name">اسم العرض (اختياري)</string>
+    <string name="network_field_host">المضيف أو عنوان IP</string>
+    <string name="network_field_host_help">مثال: 192.168.1.20 أو my-nas.local</string>
+    <string name="network_field_port">المنفذ (اختياري)</string>
+    <string name="network_field_port_default">الافتراضي %1$d</string>
+    <string name="network_field_share">اسم المشاركة</string>
+    <string name="network_field_share_help">المجلد المشترك، مثل Public</string>
+    <string name="network_field_path">المسار البعيد (اختياري)</string>
+    <string name="network_field_path_help_sftp">اتركه فارغًا للمجلد الرئيسي، أو أدخل مسارًا مثل /mnt/media</string>
+    <string name="network_field_path_help_ftp">اتركه فارغًا للمجلد الجذري، أو أدخل مسارًا مثل /pub</string>
+    <string name="network_field_path_help_webdav">مسار نقطة النهاية، مثل /dav أو /remote.php/dav/files/user</string>
+    <string name="network_field_user">اسم المستخدم</string>
+    <string name="network_field_user_help">اتركه فارغًا للاتصال كضيف</string>
+    <string name="network_field_user_help_sftp">اسم مستخدم SSH على الخادم</string>
+    <string name="network_field_password">كلمة المرور</string>
+    <string name="network_field_domain">النطاق أو مجموعة العمل (اختياري)</string>
+    <string name="network_connect">اتصال وحفظ</string>
+    <string name="network_connecting">جارٍ الاتصال…</string>
+    <string name="network_password_note">مشفّرة بمفتاح محفوظ في Android Keystore. اتركها فارغة لإعادة استخدام كلمة المرور المحفوظة لاسم المستخدم هذا.</string>
+    <string name="network_guest">ضيف</string>
+    <string name="network_status_connected">متصل</string>
+    <string name="network_remember_password">تذكر كلمة المرور</string>
+    <string name="network_edit">تعديل الخادم</string>
+    <string name="network_edit_title">تعديل خادم الشبكة</string>
+    <string name="network_save">اختبار وحفظ</string>
+    <string name="network_password_keep_note">اتركه فارغًا للاحتفاظ بكلمة المرور الحالية.</string>
+    <string name="network_password_not_saved_note">غير محفوظة. سيُطلب منك إدخالها مرة واحدة في كل مرة تفتح فيها Findex.</string>
+    <string name="network_error_password_required">كلمة المرور مطلوبة للاتصال</string>
+    <string name="network_unlock">فتح القفل</string>
+    <string name="network_unlock_title">الاتصال بـ “%1$s”</string>
+    <string name="network_unlock_body">كلمة مرور %1$s. تُحفظ حتى تغلق Findex.</string>
+    <string name="network_status_offline">غير متصل. %1$s</string>
+    <string name="network_retry">إعادة محاولة الاتصال</string>
+    <string name="network_remove">إزالة الخادم</string>
+    <string name="network_remove_title">إزالة “%1$s”؟</string>
+    <string name="network_remove_body">يتم حذف بيانات الدخول المحفوظة وأي نسخ منزّلة. لا تُمس الملفات الموجودة على الخادم.</string>
+    <string name="network_error_host">تعذر الوصول إلى الخادم. تحقق من العنوان والمنفذ وتأكد من أنك على نفس الشبكة.</string>
+    <string name="network_error_auth">فشل تسجيل الدخول. تحقق من اسم المستخدم وكلمة المرور.</string>
+    <string name="network_error_share">لا توجد مشاركة أو مسار بعيد بهذا الاسم على هذا الخادم.</string>
+    <string name="network_error_denied">تم رفض الوصول لهذا الحساب.</string>
+    <string name="network_error_unknown">حدث خطأ أثناء الاتصال بالخادم.</string>
+    <string name="rail_network">الشبكة</string>
+    <string name="new_tab_title">فتح علامة تبويب جديدة في</string>
+    <string name="error_network">تعذر الوصول إلى مشاركة الشبكة</string>
+    <string name="error_not_supported_network">غير متاح على مشاركات الشبكة</string>
+    <string name="network_opening_remote">جارٍ تنزيل %1$s…</string>
+
+    <!-- BEGIN foundation -->
+    <string name="drawer_section_more">المزيد</string>
+    <string name="nav_favorites">المفضلة</string>
+    <string name="nav_large_files">الملفات الكبيرة</string>
+    <string name="nav_recent_changes">التغييرات الأخيرة</string>
+    <string name="nav_vault">الخزنة</string>
+    <string name="action_batch_rename">إعادة تسمية مجمّعة</string>
+    <string name="action_move_to_vault">نقل إلى الخزنة</string>
+    <string name="action_compress_image">ضغط الصور</string>
+    <string name="action_tags">الوسوم</string>
+    <string name="action_pin_shortcut">إضافة إلى الشاشة الرئيسية</string>
+    <string name="op_title_batch_rename">جارٍ إعادة تسمية %1$s عنصر</string>
+    <string name="op_title_image_transform">جارٍ ضغط %1$s صورة</string>
+    <string name="op_title_vault_import">جارٍ نقل %1$s عنصر إلى الخزنة</string>
+    <string name="op_title_vault_export">جارٍ استعادة %1$s عنصر من الخزنة</string>
+    <string name="op_title_vault_delete">جارٍ حذف %1$s عنصر من الخزنة</string>
+    <string name="error_vault_locked">الخزنة مقفلة</string>
+    <string name="error_nested_selection">لا يمكن إعادة تسمية مجلد وعناصر بداخله معًا. أعد تسميتها بشكل منفصل.</string>
+    <string name="error_name_conflict">يوجد ملف بهذا الاسم بالفعل</string>
+    <string name="error_op_invalid_name">هذا الاسم غير مسموح به</string>
+    <string name="error_unsupported_image">صيغة الصورة هذه غير مدعومة</string>
+    <string name="placeholder_coming_soon">قريبًا</string>
+    <string name="selection_expired">انتهت صلاحية التحديد. حدد الملفات مرة أخرى.</string>
+    <!-- END foundation -->
+
+    <!-- BEGIN batch-rename -->
+    <string name="rename_title">إعادة تسمية مجمّعة</string>
+    <string name="rename_pattern_label">نمط الاسم</string>
+    <string name="rename_token_name">الاسم</string>
+    <string name="rename_token_ext">الامتداد</string>
+    <string name="rename_token_counter">العداد</string>
+    <string name="rename_token_date">التاريخ</string>
+    <string name="rename_token_parent">المجلد الأب</string>
+    <string name="rename_find_label">بحث عن</string>
+    <string name="rename_replace_label">استبدال بـ</string>
+    <string name="rename_regex">استخدام التعبير النمطي</string>
+    <string name="rename_ignore_case">تجاهل حالة الأحرف</string>
+    <string name="rename_case_none">الاحتفاظ بحالة الأحرف</string>
+    <string name="rename_case_lower">أحرف صغيرة</string>
+    <string name="rename_case_upper">أحرف كبيرة</string>
+    <string name="rename_case_title">حرف كبير في بداية كل كلمة</string>
+    <string name="rename_counter_start">البدء عند</string>
+    <string name="rename_counter_step">الخطوة</string>
+    <string name="rename_counter_pad">الأرقام</string>
+    <string name="rename_touch_extension">تغيير الامتداد أيضًا</string>
+    <string name="rename_status_unchanged">دون تغيير</string>
+    <string name="rename_status_duplicate">اسم مكرر</string>
+    <string name="rename_status_exists">الاسم موجود بالفعل</string>
+    <string name="rename_status_invalid">اسم غير صالح</string>
+    <string name="rename_status_bad_regex">نمط غير صالح</string>
+    <string name="rename_apply">إعادة تسمية</string>
+    <plurals name="rename_summary">
+        <item quantity="zero">سيتم إعادة تسمية %d عنصر</item>
+        <item quantity="one">سيتم إعادة تسمية عنصر واحد (%d)</item>
+        <item quantity="two">سيتم إعادة تسمية عنصرين (%d)</item>
+        <item quantity="few">سيتم إعادة تسمية %d عناصر</item>
+        <item quantity="many">سيتم إعادة تسمية %d عنصرًا</item>
+        <item quantity="other">سيتم إعادة تسمية %d عنصر</item>
+    </plurals>
+    <!-- END batch-rename -->
+
+    <!-- BEGIN large-files -->
+    <string name="bigfiles_title">الملفات الكبيرة والقديمة</string>
+    <string name="bigfiles_size_any">أي حجم</string>
+    <string name="bigfiles_size_100mb">أكبر من 100 MB</string>
+    <string name="bigfiles_size_500mb">أكبر من 500 MB</string>
+    <string name="bigfiles_size_1gb">أكبر من 1 GB</string>
+    <string name="bigfiles_age_any">أي عمر</string>
+    <string name="bigfiles_age_30d">أقدم من 30 يومًا</string>
+    <string name="bigfiles_age_90d">أقدم من 90 يومًا</string>
+    <string name="bigfiles_age_6mo">أقدم من 6 أشهر</string>
+    <string name="bigfiles_age_1y">أقدم من سنة واحدة</string>
+    <string name="bigfiles_category_any">أي نوع</string>
+    <string name="bigfiles_include_hidden">تضمين الملفات المخفية</string>
+    <string name="bigfiles_hint_modified">يعتمد العمر على تاريخ آخر تعديل</string>
+    <string name="bigfiles_empty">لا توجد ملفات تطابق عوامل التصفية هذه</string>
+    <plurals name="bigfiles_selected">
+        <item quantity="zero">تم تحديد %d ملف</item>
+        <item quantity="one">تم تحديد ملف واحد (%d)</item>
+        <item quantity="two">تم تحديد ملفين (%d)</item>
+        <item quantity="few">تم تحديد %d ملفات</item>
+        <item quantity="many">تم تحديد %d ملفًا</item>
+        <item quantity="other">تم تحديد %d ملف</item>
+    </plurals>
+    <!-- END large-files -->
+
+    <!-- BEGIN image-compress -->
+    <string name="imgc_title">ضغط الصور</string>
+    <string name="imgc_preset_small">صغير</string>
+    <string name="imgc_preset_medium">متوسط</string>
+    <string name="imgc_preset_large">كبير</string>
+    <string name="imgc_preset_custom">مخصّص</string>
+    <string name="imgc_max_edge">أطول ضلع (بكسل)</string>
+    <string name="imgc_scale_percent">المقياس (%)</string>
+    <string name="imgc_quality">الجودة</string>
+    <string name="imgc_format_keep">الاحتفاظ بالأصلي</string>
+    <string name="imgc_output_copy">حفظ كنسخة</string>
+    <string name="imgc_output_replace">استبدال الملفات الأصلية</string>
+    <string name="imgc_output_folder">حفظ في مجلد</string>
+    <string name="imgc_keep_metadata">الاحتفاظ بمعلومات الموقع والكاميرا</string>
+    <string name="imgc_estimate">الحجم المقدّر: %1$s</string>
+    <string name="imgc_replace_warning">سيتم استبدال الملفات الأصلية ولا يمكن التراجع عن ذلك.</string>
+    <plurals name="imgc_skipped">
+        <item quantity="zero">تم تخطي %d صورة</item>
+        <item quantity="one">تم تخطي صورة واحدة (%d)</item>
+        <item quantity="two">تم تخطي صورتين (%d)</item>
+        <item quantity="few">تم تخطي %d صور</item>
+        <item quantity="many">تم تخطي %d صورة</item>
+        <item quantity="other">تم تخطي %d صورة</item>
+    </plurals>
+    <!-- END image-compress -->
+
+    <!-- BEGIN vault -->
+    <string name="vault_title">الخزنة</string>
+    <string name="vault_setup_title">إعداد خزنتك</string>
+    <string name="vault_setup_password">كلمة مرور الخزنة</string>
+    <string name="vault_setup_confirm">تأكيد كلمة المرور</string>
+    <string name="vault_setup_mismatch">كلمتا المرور غير متطابقتين</string>
+    <string name="vault_setup_strength_weak">ضعيفة</string>
+    <string name="vault_setup_strength_fair">متوسطة</string>
+    <string name="vault_setup_strength_strong">قوية</string>
+    <string name="vault_setup_biometric">الفتح بالبصمة أو الوجه</string>
+    <string name="vault_setup_warning_no_recovery">لا يوجد استرداد لكلمة المرور. إذا نسيت كلمة المرور، فستفقد ملفاتك.</string>
+    <string name="vault_setup_warning_not_secure_erase">تُحذف الملفات الأصلية بالطريقة العادية، ولا تُمسح بشكل آمن. قد تظل البيانات المحذوفة قابلة للاسترداد من وحدة التخزين.</string>
+    <string name="vault_setup_acknowledge">أفهم المخاطر</string>
+    <string name="vault_setup_create">إنشاء خزنة</string>
+    <string name="vault_unlock_title">فتح الخزنة</string>
+    <string name="vault_unlock_password">كلمة المرور</string>
+    <string name="vault_unlock_biometric">استخدام البصمة أو الوجه</string>
+    <string name="vault_unlock_wrong_password">كلمة مرور خاطئة</string>
+    <string name="vault_unlock_lockout">محاولات كثيرة جدًا. حاول مرة أخرى خلال %1$s.</string>
+    <string name="vault_biometric_prompt_title">فتح الخزنة</string>
+    <string name="vault_biometric_prompt_subtitle">تأكيد هويتك</string>
+    <string name="vault_biometric_prompt_negative">استخدام كلمة المرور</string>
+    <string name="vault_biometric_invalidated">تغيّرت البصمة أو الوجه. افتح باستخدام كلمة المرور وأعد إعداد القياسات الحيوية.</string>
+    <string name="vault_add_files">إضافة ملفات</string>
+    <string name="vault_import_confirm">نقل إلى الخزنة؟ تُحذف الملفات الأصلية نهائيًا ولا تُرسل إلى السلة.</string>
+    <string name="vault_export_original">استعادة إلى الموقع الأصلي</string>
+    <string name="vault_export_choose_folder">اختيار مجلد</string>
+    <string name="vault_open_external_warning">الفتح خارج الخزنة يترك نسخة غير مشفّرة على هذا الجهاز.</string>
+    <string name="vault_menu_change_password">تغيير كلمة المرور</string>
+    <string name="vault_menu_biometric">الفتح بالبصمة أو الوجه</string>
+    <string name="vault_menu_auto_lock">القفل التلقائي</string>
+    <string name="vault_menu_lock_now">قفل الآن</string>
+    <string name="vault_auto_lock_immediately">فورًا</string>
+    <string name="vault_auto_lock_1min">بعد دقيقة واحدة</string>
+    <string name="vault_auto_lock_5min">بعد 5 دقائق</string>
+    <string name="vault_auto_lock_screen_off">عند إيقاف تشغيل الشاشة</string>
+    <string name="vault_restore_title">استعادة إلى الموقع الأصلي؟</string>
+    <string name="vault_restore_body">يتم فك تشفير الملفات وإعادتها إلى مجلداتها الأصلية. تُنشأ المجلدات المفقودة من جديد.</string>
+    <string name="vault_restore_action">استعادة</string>
+    <string name="vault_empty">خزنتك فارغة</string>
+    <string name="vault_locked_banner">الخزنة مقفلة. افتحها لعرض ملفاتك.</string>
+    <string name="cd_vault_lock">قفل الخزنة</string>
+    <string name="vault_setup_min_length">استخدم 8 أحرف على الأقل</string>
+    <string name="vault_unlock_action">فتح القفل</string>
+    <string name="vault_password_current">كلمة المرور الحالية</string>
+    <string name="vault_password_new">كلمة المرور الجديدة</string>
+    <string name="vault_password_changed">تم تغيير كلمة المرور</string>
+    <string name="vault_unreadable_title">تعذر قراءة مفتاح الخزنة</string>
+    <string name="vault_unreadable_body">توجد ملفات مشفّرة في مجلد .FindexVault، لكن ملف vault.key مفقود أو تالف. استعد vault.key من نسخة احتياطية لفتحها. لن يتم إنشاء خزنة جديدة حتى تبقى الملفات قابلة للاسترداد.</string>
+    <string name="vault_rebuild_title">ملفات من تثبيت سابق</string>
+    <string name="vault_rebuild_body">تم العثور على ملفات مشفّرة في مجلد الخزنة. هل تريد استعادتها إلى القائمة؟</string>
+    <string name="vault_rebuild_action">استعادة القائمة</string>
+    <string name="vault_add_files_hint">في المستكشف، اضغط مطولًا على الملفات أو المجلدات واختر نقل إلى الخزنة.</string>
+    <string name="vault_delete_confirm">حذف %1$d عنصر من الخزنة؟ لا يمكن استعادتها.</string>
+    <string name="vault_biometric_error">الفتح بالبصمة أو الوجه غير متاح</string>
+    <string name="vault_import_ready">سيتم تشفير %1$d عنصر. تُحذف الملفات الأصلية نهائيًا ولا تُرسل إلى السلة.</string>
+    <!-- END vault -->
+
+    <!-- BEGIN viewers -->
+    <string name="viewer_text_save">حفظ</string>
+    <string name="viewer_text_saved">تم الحفظ</string>
+    <string name="viewer_text_unsaved_title">تجاهل التغييرات؟</string>
+    <string name="viewer_text_unsaved_body">ستفقد تعديلاتك.</string>
+    <string name="viewer_text_discard">تجاهل</string>
+    <string name="viewer_text_conflict_title">تغيّر الملف على القرص</string>
+    <string name="viewer_text_conflict_body">قام تطبيق آخر بتعديل هذا الملف منذ فتحه.</string>
+    <string name="viewer_text_overwrite">استبدال</string>
+    <string name="viewer_text_read_only">للقراءة فقط</string>
+    <string name="viewer_text_truncated">الملف كبير جدًا. يتم عرض الجزء الأول فقط.</string>
+    <string name="viewer_text_not_text">هذا الملف ليس نصًا عاديًا.</string>
+    <string name="viewer_text_find">بحث</string>
+    <string name="viewer_text_wrap">التفاف الأسطر</string>
+    <string name="viewer_text_undo">تراجع</string>
+    <string name="viewer_text_redo">إعادة</string>
+    <string name="viewer_text_encoding">الترميز</string>
+    <string name="viewer_pdf_page_of">صفحة %1$d من %2$d</string>
+    <string name="viewer_pdf_go_to_page">الانتقال إلى صفحة</string>
+    <string name="viewer_pdf_protected">ملف PDF هذا محمي بكلمة مرور</string>
+    <string name="viewer_pdf_password">كلمة المرور</string>
+    <string name="viewer_pdf_downloading">جارٍ تنزيل PDF…</string>
+    <string name="viewer_pdf_error">تعذر فتح ملف PDF هذا</string>
+    <string name="viewer_audio_play">تشغيل</string>
+    <string name="viewer_audio_pause">إيقاف مؤقت</string>
+    <string name="viewer_audio_next">المقطع التالي</string>
+    <string name="viewer_audio_previous">المقطع السابق</string>
+    <string name="viewer_audio_repeat">تكرار</string>
+    <string name="viewer_audio_shuffle">خلط</string>
+    <string name="viewer_audio_queue">قائمة الانتظار</string>
+    <string name="viewer_audio_error">تعذر تشغيل هذا الملف</string>
+    <string name="viewer_text_error">تعذر قراءة هذا الملف أو حفظه</string>
+    <!-- END viewers -->
+
+    <!-- BEGIN tags-favorites -->
+    <string name="tags_title">الوسوم</string>
+    <string name="tags_new">وسم جديد</string>
+    <string name="tags_name_hint">اسم الوسم</string>
+    <string name="tags_color_red">أحمر</string>
+    <string name="tags_color_orange">برتقالي</string>
+    <string name="tags_color_yellow">أصفر</string>
+    <string name="tags_color_green">أخضر</string>
+    <string name="tags_color_teal">أزرق مخضر</string>
+    <string name="tags_color_blue">أزرق</string>
+    <string name="tags_color_purple">بنفسجي</string>
+    <string name="tags_color_pink">وردي</string>
+    <string name="tags_rename">إعادة تسمية الوسم</string>
+    <string name="tags_delete_title">حذف الوسم “%1$s”؟</string>
+    <string name="tags_delete_body">تحتفظ الملفات ببياناتها. تتم إزالة الوسم فقط.</string>
+    <string name="tags_empty">لا توجد وسوم بعد</string>
+    <string name="favorites_title">المفضلة</string>
+    <string name="favorites_folders">المجلدات</string>
+    <string name="favorites_files">الملفات</string>
+    <string name="favorites_tags">الوسوم</string>
+    <string name="favorites_empty">لا يوجد شيء محفوظ بعد</string>
+    <string name="tags_apply">تطبيق</string>
+    <string name="tags_save">حفظ</string>
+    <string name="tags_files_empty">لا توجد ملفات بهذا الوسم</string>
+    <!-- END tags-favorites -->
+
+    <!-- BEGIN shortcuts -->
+    <string name="shortcut_pinned">تمت إضافة الاختصار إلى الشاشة الرئيسية</string>
+    <string name="shortcut_unsupported">مشغّل التطبيقات لديك لا يدعم الاختصارات</string>
+    <string name="shortcut_folder_missing">لم يعد هذا المجلد موجودًا</string>
+    <!-- END shortcuts -->
+
+    <!-- BEGIN recent-changes-growth -->
+    <string name="changes_title">التغييرات الأخيرة</string>
+    <string name="changes_today">اليوم</string>
+    <string name="changes_yesterday">أمس</string>
+    <string name="changes_range_1d">آخر 24 ساعة</string>
+    <string name="changes_range_7d">آخر 7 أيام</string>
+    <string name="changes_range_30d">آخر 30 يومًا</string>
+    <string name="changes_empty">لا توجد تغييرات حديثة</string>
+    <string name="changes_limit_hint">يتم عرض أحدث التغييرات فقط.</string>
+    <string name="growth_title">نمو التخزين</string>
+    <string name="growth_range_30d">30 يومًا</string>
+    <string name="growth_range_90d">90 يومًا</string>
+    <string name="growth_range_1y">سنة واحدة</string>
+    <string name="growth_delta_up">زيادة %1$s</string>
+    <string name="growth_delta_down">انخفاض %1$s</string>
+    <string name="growth_empty">لا يوجد سجل كافٍ بعد. يسجل Findex مساحة التخزين يوميًا.</string>
+    <string name="viewer_pdf_dark_pages">صفحات داكنة</string>
+    <string name="settings_builtin_viewers">العارضات المدمجة</string>
+    <string name="settings_builtin_viewers_desc">افتح الصور والفيديوهات وملفات PDF والنصوص والصوتيات داخل Findex. عند الإيقاف تُستخدم تطبيقاتك الافتراضية</string>
+    <string name="widget_label">تخزين Findex</string>
+    <string name="widget_description">استخدام التخزين والتنظيف السريع ومجلداتك المفضلة</string>
+    <string name="widget_used">%1$d%% مستخدم</string>
+    <string name="widget_free">%1$s متاحة من %2$s</string>
+    <string name="settings_cleanup_reminder">تذكير التنظيف</string>
+    <string name="settings_cleanup_reminder_desc">مرة واحدة أسبوعيًا، أخبرني عند وجود ملفات غير مرغوبة تستحق التنظيف</string>
+    <string name="cleanup_reminder_channel">تذكيرات التنظيف</string>
+    <string name="cleanup_reminder_title">يمكن تحرير %1$s</string>
+    <string name="cleanup_reminder_text">صور مصغّرة وملفات مؤقتة وبقايا يمكنك تنظيفها</string>
+    <string name="cleanup_reminder_action">تنظيف</string>
+    <string name="settings_storage_history">سجل التخزين</string>
+    <string name="settings_storage_history_desc">الاحتفاظ بلقطات يومية للتخزين لمخطط النمو</string>
+    <!-- END recent-changes-growth -->
+
+    <!-- BEGIN share-phone -->
+    <string name="nav_share_phone">مشاركة هذا الهاتف</string>
+    <string name="share_tile_running">%1$s · PIN %2$s</string>
+    <string name="share_tile_starting">جارٍ البدء…</string>
+    <string name="share_tile_no_network">لا يوجد Wi-Fi</string>
+    <string name="share_tile_off">متوقف</string>
+    <string name="share_channel_name">مشاركة هذا الهاتف</string>
+    <string name="share_notification_title">تتم مشاركة هذا الهاتف</string>
+    <string name="share_notification_text">افتح %1$s · PIN %2$s</string>
+    <string name="share_stop">إيقاف</string>
+    <string name="share_start">بدء المشاركة</string>
+    <string name="share_starting">جارٍ البدء…</string>
+    <string name="share_intro_title">افتح ملفاتك على الكمبيوتر</string>
+    <string name="share_intro_body">يشغّل Findex خادم ويب صغير على هذا الهاتف. يمكن لأي متصفح على نفس شبكة Wi-Fi أو نقطة الاتصال فتحه برمز PIN لمرة واحدة.</string>
+    <string name="share_no_network">اتصل بشبكة Wi-Fi أو فعّل نقطة الاتصال أولًا.</string>
+    <string name="share_open_url">افتح في متصفح على جهاز الكمبيوتر</string>
+    <string name="share_pin">PIN</string>
+    <string name="share_copy_url">نسخ العنوان</string>
+    <string name="share_copied">تم نسخ العنوان</string>
+    <plurals name="share_clients">
+        <item quantity="zero">%d متصفح مسجّل الدخول</item>
+        <item quantity="one">متصفح واحد (%d) مسجّل الدخول</item>
+        <item quantity="two">متصفحان (%d) مسجّلا الدخول</item>
+        <item quantity="few">%d متصفحات مسجّلة الدخول</item>
+        <item quantity="many">%d متصفحًا مسجّل الدخول</item>
+        <item quantity="other">%d متصفح مسجّل الدخول</item>
+    </plurals>
+    <string name="share_clients_none">لم يسجل أي متصفح الدخول بعد</string>
+    <string name="share_access">الوصول</string>
+    <string name="share_access_hint">تُطبّق التغييرات فورًا، حتى على المتصفحات المتصلة.</string>
+    <string name="share_level_view">عرض</string>
+    <string name="share_level_download">تنزيل</string>
+    <string name="share_level_full">كامل</string>
+    <string name="share_perm_media">أقسام الوسائط</string>
+    <string name="share_perm_media_desc">الصور والفيديوهات والصوتيات والمستندات والمزيد</string>
+    <string name="share_perm_files">مستكشف الملفات</string>
+    <string name="share_perm_files_desc">تصفح كل مجلد على التخزين الداخلي وبطاقة SD</string>
+    <string name="share_perm_download">فتح وتنزيل</string>
+    <string name="share_perm_download_desc">معاينة وبث وحفظ الملفات على الكمبيوتر</string>
+    <string name="share_perm_upload">رفع</string>
+    <string name="share_perm_upload_desc">إضافة ملفات وإنشاء مجلدات من الكمبيوتر</string>
+    <string name="share_perm_modify">إعادة التسمية والحذف</string>
+    <string name="share_perm_modify_desc">تنتقل الملفات المحذوفة إلى سلة المحذوفات</string>
+    <string name="share_auto_stop">إيقاف تلقائي</string>
+    <string name="share_auto_stop_desc">إيقاف الخادم بعد هذه المدة دون أي طلب</string>
+    <string name="share_minutes">%d د</string>
+    <string name="share_never">أبدًا</string>
+    <string name="share_security_note">حركة البيانات غير مشفّرة. شارك فقط على الشبكات التي تثق بها.</string>
+    <!-- END share-phone -->
+</resources>

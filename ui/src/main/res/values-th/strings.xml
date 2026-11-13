@@ -1,0 +1,791 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App & Branding -->
+    <string name="app_tagline">ตัวจัดการไฟล์ Material 3 Expressive</string>
+
+    <!-- Navigation Drawer -->
+    <string name="drawer_subtitle">ไฟล์และพื้นที่เก็บข้อมูลบนคลาวด์</string>
+    <string name="nav_home">หน้าแรก</string>
+    <string name="nav_storage_graph">กราฟพื้นที่เก็บข้อมูล</string>
+    <string name="nav_storage_cleaner">ตัวล้างพื้นที่เก็บข้อมูล</string>
+    <string name="nav_whatsapp_cleaner">ตัวล้าง WhatsApp</string>
+    <string name="nav_telegram_cleaner">ตัวล้าง Telegram</string>
+    <string name="nav_instagram_cleaner">ตัวล้าง Instagram</string>
+    <string name="nav_app_cleaner">ตัวล้างแอป</string>
+    <string name="nav_dual_pane">หน้าต่างคู่</string>
+    <string name="dual_compare">เปรียบเทียบโฟลเดอร์</string>
+    <string name="dual_swap">สลับหน้าต่าง</string>
+    <string name="dual_select_missing">เลือกรายการที่ไม่มีในอีกหน้าต่าง</string>
+    <string name="dual_copy_to">คัดลอกไปยังอีกหน้าต่าง</string>
+    <string name="dual_move_to">ย้ายไปยังอีกหน้าต่าง</string>
+    <string name="dual_up">ขึ้นหนึ่งโฟลเดอร์</string>
+    <string name="cmp_only_here">มีเฉพาะที่นี่</string>
+    <string name="cmp_newer">ใหม่กว่าที่นี่</string>
+    <string name="cmp_older">เก่ากว่าที่นี่</string>
+    <string name="cmp_different">แตกต่างกัน</string>
+    <string name="cmp_same">เหมือนกัน</string>
+    <string name="nav_archive_manager">ตัวจัดการไฟล์บีบอัด</string>
+    <string name="nav_network_storage">พื้นที่เก็บข้อมูลเครือข่าย</string>
+    <string name="nav_settings">การตั้งค่า</string>
+    <string name="nav_recycle_bin">ถังรีไซเคิล</string>
+    <string name="nav_tabs">แท็บ</string>
+    <string name="nav_search">ค้นหา</string>
+    <plurals name="tabs_open_count">
+        <item quantity="other">เปิดอยู่ %d แท็บ</item>
+    </plurals>
+    <string name="tabs_close_all">ปิดแท็บทั้งหมด</string>
+    <string name="tabs_empty_title">ไม่มีแท็บที่เปิดอยู่</string>
+    <string name="tabs_empty_body">เปิดแท็บใหม่เพื่อเรียกดูไฟล์ของคุณ</string>
+    <string name="tabs_current">แท็บปัจจุบัน</string>
+    <string name="cd_close_tab">ปิดแท็บ %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">ไฟล์ของคุณ จัดระเบียบอย่างสวยงาม</string>
+    <string name="onboarding_body">Findex ต้องการสิทธิ์เข้าถึงไฟล์ทั้งหมดเพื่อเรียกดู คัดลอก บีบอัด และล้างพื้นที่เก็บข้อมูลของคุณ</string>
+    <string name="onboarding_point_access">เรียกดูทุกโฟลเดอร์ การ์ด SD และไดรฟ์ USB</string>
+    <string name="onboarding_point_fast">คัดลอก ย้าย และบีบอัดในพื้นหลัง</string>
+    <string name="onboarding_point_private">ทุกอย่างอยู่บนอุปกรณ์ของคุณ</string>
+    <string name="onboarding_permissions">สิทธิ์การเข้าถึง</string>
+    <string name="onboarding_storage_title">สิทธิ์เข้าถึงไฟล์ทั้งหมด</string>
+    <string name="onboarding_storage_body">จำเป็นสำหรับการเรียกดูและจัดการไฟล์ของคุณ</string>
+    <string name="onboarding_notify_title">การแจ้งเตือน</string>
+    <string name="onboarding_notify_body">แสดงความคืบหน้าของการคัดลอก ย้าย บีบอัด และล้างข้อมูลขณะคุณใช้แอปอื่น</string>
+    <string name="onboarding_allow">อนุญาต</string>
+    <string name="onboarding_granted">อนุญาตแล้ว</string>
+    <string name="onboarding_continue">ดำเนินการต่อ</string>
+    <string name="onboarding_storage_required">อนุญาตการเข้าถึงไฟล์ทั้งหมดเพื่อดำเนินการต่อ</string>
+    <string name="onboarding_notify_hint">หากไม่มีการแจ้งเตือน ความคืบหน้าจะแสดงเฉพาะภายใน Findex เท่านั้น</string>
+    <string name="error_no_app">ไม่มีแอปที่สามารถเปิดไฟล์นี้ได้</string>
+    <string name="save_to_findex">บันทึกไปยัง Findex</string>
+    <string name="save_to_findex_hint">เปิดโฟลเดอร์ แล้วแตะบันทึก</string>
+    <string name="error_open_unsupported">Findex ไม่สามารถเปิดไฟล์นี้ได้</string>
+
+    <!-- Tabs -->
+    <string name="tab_device">อุปกรณ์</string>
+    <string name="tab_network">เครือข่าย</string>
+
+    <!-- Storage Drives -->
+    <string name="storage_internal">ที่เก็บข้อมูลภายใน</string>
+    <string name="storage_sdcard">การ์ด SD</string>
+    <string name="storage_network">พื้นที่เก็บข้อมูลเครือข่าย</string>
+    <string name="storage_usb">ไดรฟ์ USB</string>
+    <string name="storage_used_of">ใช้ไป %1$s จาก %2$s</string>
+    <string name="storage_free_space">ว่าง %1$s</string>
+    <string name="storage_scanning">กำลังสแกนพื้นที่เก็บข้อมูล…</string>
+    <string name="storage_no_network_drives">ยังไม่มีไดรฟ์เครือข่ายที่เชื่อมต่อ แตะ + เพื่อเชื่อมต่อผ่าน SMB / WebDAV / FTP</string>
+    <string name="storage_add_network">เพิ่มไดรฟ์เครือข่าย</string>
+    <string name="storage_used_label">ใช้ไป</string>
+
+    <!-- Home -->
+    <string name="home_subtitle">ไฟล์ของคุณ จัดระเบียบอย่างลงตัว</string>
+    <string name="section_categories">หมวดหมู่</string>
+    <string name="section_bookmarks">บุ๊กมาร์ก</string>
+    <string name="section_recents">ไฟล์ล่าสุด</string>
+    <string name="cd_open_drawer">เปิดลิ้นชักการนำทาง</string>
+    <string name="cd_browse_drive">เรียกดูพื้นที่เก็บข้อมูล</string>
+    <plurals name="item_count">
+        <item quantity="other">%d รายการ</item>
+    </plurals>
+
+    <!-- File Categories -->
+    <string name="category_photos">รูปภาพ</string>
+    <string name="category_videos">วิดีโอ</string>
+    <string name="category_audio">เสียง</string>
+    <string name="category_documents">เอกสาร</string>
+    <string name="category_downloads">ดาวน์โหลด</string>
+    <string name="category_archives">ไฟล์บีบอัด</string>
+    <string name="category_apks">ไฟล์ APK</string>
+
+    <!-- Quick Suggestions & Tools -->
+    <string name="section_suggestions">เครื่องมือด่วน</string>
+    <string name="cleaner_title">ตัวล้างพื้นที่เก็บข้อมูล</string>
+    <string name="cleaner_desc">เพิ่มพื้นที่ว่างโดยล้างไฟล์ขยะและแคชชั่วคราว</string>
+    <string name="whatsapp_cleaner_title">ตัวล้าง WhatsApp</string>
+    <string name="whatsapp_cleaner_desc">ล้างสื่อที่ส่ง ข้อความเสียง สติกเกอร์ และข้อมูลสำรอง</string>
+    <string name="storage_graph_title">ตัววิเคราะห์พื้นที่เก็บข้อมูล</string>
+    <string name="storage_graph_desc">แสดงภาพไฟล์ขนาดใหญ่และการกระจายพื้นที่ของโฟลเดอร์</string>
+
+    <!-- File Actions -->
+    <string name="action_cut">ตัด</string>
+    <string name="action_copy">คัดลอก</string>
+    <string name="action_paste">วาง</string>
+    <string name="action_delete">ลบ</string>
+    <string name="action_rename">เปลี่ยนชื่อ</string>
+    <string name="action_details">รายละเอียด</string>
+    <string name="action_compress">บีบอัด</string>
+    <string name="action_extract">แตกไฟล์</string>
+    <string name="action_share">แชร์</string>
+    <string name="action_select_all">เลือกทั้งหมด</string>
+    <string name="action_deselect_all">ยกเลิกการเลือก</string>
+    <string name="action_search">ค้นหาไฟล์</string>
+    <string name="action_clean">ล้างทันที</string>
+    <string name="action_new_folder">โฟลเดอร์ใหม่</string>
+    <string name="action_new_tab">แท็บใหม่</string>
+    <string name="action_close_tab">ปิดแท็บ</string>
+    <string name="action_open_in_new_tab">เปิดในแท็บใหม่</string>
+    <string name="detail_empty_hint">เลือกไฟล์เพื่อดูตัวอย่างและรายละเอียดที่นี่</string>
+    <string name="cd_close_details">ปิดรายละเอียด</string>
+    <string name="rail_graph">กราฟ</string>
+    <string name="rail_cleaner">ตัวล้าง</string>
+    <string name="rail_whatsapp">WhatsApp</string>
+    <string name="rail_bin">ถังขยะ</string>
+    <string name="action_copy_path">คัดลอกเส้นทาง</string>
+    <string name="path_copied">คัดลอกเส้นทางไปยังคลิปบอร์ดแล้ว</string>
+    <string name="preview_file">ตัวอย่าง</string>
+    <string name="preview_play_video">เล่นวิดีโอ</string>
+    <string name="preview_play_audio">เล่นเสียง</string>
+    <string name="preview_lines_truncated">แสดง %1$d บรรทัด</string>
+    <string name="preview_empty_file">ไฟล์ว่างเปล่า</string>
+    <string name="details_item_info">รายละเอียดรายการ</string>
+
+    <string name="action_open">เปิด</string>
+    <string name="action_create">สร้าง</string>
+    <string name="action_bookmark">เพิ่มบุ๊กมาร์ก</string>
+    <string name="action_remove_bookmark">ลบบุ๊กมาร์ก</string>
+    <string name="bookmark_added">เพิ่มบุ๊กมาร์กแล้ว</string>
+    <string name="bookmark_removed">ลบบุ๊กมาร์กแล้ว</string>
+
+    <!-- Explorer -->
+    <string name="cd_back">ย้อนกลับ</string>
+    <string name="cd_more_options">ตัวเลือกเพิ่มเติม</string>
+    <string name="cd_more_actions">การดำเนินการเพิ่มเติมสำหรับ %1$s</string>
+    <string name="cd_grid_view">มุมมองตาราง</string>
+    <string name="cd_list_view">มุมมองรายการ</string>
+    <string name="cd_clear_selection">ล้างการเลือก</string>
+    <string name="cd_clear_clipboard">ล้างคลิปบอร์ด</string>
+    <string name="cd_create_menu">สร้าง</string>
+    <string name="cd_show_password">แสดงรหัสผ่าน</string>
+    <string name="cd_hide_password">ซ่อนรหัสผ่าน</string>
+    <string name="empty_folder_title">โฟลเดอร์นี้ว่างเปล่า</string>
+    <string name="empty_folder_body">วางไฟล์ที่นี่หรือสร้างโฟลเดอร์ใหม่</string>
+    <string name="label_name">ชื่อ</string>
+    <string name="label_archive_name">ชื่อไฟล์บีบอัด</string>
+    <string name="error_invalid_name">ชื่อต้องไม่มี “/”</string>
+    <string name="error_rename">เปลี่ยนชื่อไม่สำเร็จ — อาจมีชื่อนี้อยู่แล้ว</string>
+    <string name="error_new_folder">สร้างโฟลเดอร์ไม่สำเร็จ — อาจมีชื่อนี้อยู่แล้ว</string>
+    <string name="sort_title">เรียงลำดับและมุมมอง</string>
+    <string name="sort_name">ชื่อ</string>
+    <string name="sort_date">วันที่แก้ไข</string>
+    <string name="sort_size">ขนาด</string>
+    <string name="sort_type">ประเภท</string>
+    <string name="sort_ascending">จากน้อยไปมาก</string>
+    <string name="sort_descending">จากมากไปน้อย</string>
+    <string name="show_hidden_files">แสดงไฟล์ที่ซ่อนอยู่</string>
+    <string name="details_path">ตำแหน่ง</string>
+    <string name="details_modified">แก้ไขล่าสุด</string>
+    <string name="details_type">ประเภท</string>
+    <string name="details_size">ขนาด</string>
+    <string name="details_contains">ประกอบด้วย</string>
+    <string name="delete_body">การดำเนินการนี้ไม่สามารถยกเลิกได้</string>
+    <plurals name="delete_title">
+        <item quantity="other">ลบ %d รายการหรือไม่?</item>
+    </plurals>
+    <plurals name="file_count">
+        <item quantity="other">%d ไฟล์</item>
+    </plurals>
+    <plurals name="folder_count">
+        <item quantity="other">%d โฟลเดอร์</item>
+    </plurals>
+    <plurals name="paste_here">
+        <item quantity="other">วาง %d รายการ</item>
+    </plurals>
+    <plurals name="save_here">
+        <item quantity="other">บันทึก %d ไฟล์ที่นี่</item>
+    </plurals>
+    <plurals name="move_here">
+        <item quantity="other">ย้าย %d รายการมาที่นี่</item>
+    </plurals>
+
+    <string name="action_show_in_folder">แสดงในโฟลเดอร์</string>
+    <string name="category_empty">ยังไม่มีรายการที่นี่</string>
+
+    <!-- Tools -->
+    <string name="scanning">กำลังสแกนพื้นที่เก็บข้อมูล…</string>
+    <string name="tool_can_free">สามารถเพิ่มพื้นที่ว่างได้</string>
+    <string name="tool_selected_of">เลือกแล้ว %1$s จาก %2$s</string>
+    <string name="tool_all_clean_title">สะอาดหมดจด</string>
+    <string name="tool_all_clean_body">ไม่มีรายการที่ต้องลบในตอนนี้</string>
+    <string name="tool_clean_confirm_title">ล้าง %1$s หรือไม่?</string>
+    <string name="tool_clean_confirm_body">ไฟล์ที่เลือกจะถูกลบอย่างถาวร</string>
+    <string name="tool_clean_button">ล้าง %1$s</string>
+    <string name="tool_rescan">สแกนอีกครั้ง</string>
+    <string name="junk_thumbnails">แคชภาพขนาดย่อ</string>
+    <string name="junk_thumbnails_desc">ภาพตัวอย่างที่แอปจะสร้างขึ้นใหม่โดยอัตโนมัติ</string>
+    <string name="junk_temp">ไฟล์ชั่วคราวและไฟล์บันทึก</string>
+    <string name="junk_temp_desc">ไฟล์ .tmp, .log, .bak และไฟล์ที่ดาวน์โหลดไม่เสร็จ</string>
+    <string name="junk_apks">ไฟล์ติดตั้งแอป</string>
+    <string name="junk_apks_desc">ไฟล์ APK ของแอปที่คุณอาจติดตั้งไปแล้ว</string>
+    <string name="junk_empty">โฟลเดอร์ว่าง</string>
+    <string name="junk_empty_desc">โฟลเดอร์ที่ไม่มีอะไรอยู่ข้างใน</string>
+    <string name="junk_zero">ไฟล์ว่าง</string>
+    <string name="junk_zero_desc">ไฟล์ขนาด 0 ไบต์ โดยจะเก็บไฟล์เครื่องหมายที่ซ่อนไว้</string>
+    <string name="telegram_cleaner_title">ตัวล้าง Telegram</string>
+    <string name="instagram_cleaner_title">ตัวล้าง Instagram</string>
+    <string name="tg_hint">สื่อและไฟล์ที่ดาวน์โหลดและส่ง</string>
+    <string name="ig_hint">รูปภาพและวิดีโอที่ Instagram บันทึกไว้ในอุปกรณ์นี้</string>
+    <string name="tg_not_found">ไม่พบสื่อของ Telegram ในอุปกรณ์นี้</string>
+    <string name="ig_not_found">ไม่พบสื่อของ Instagram ในอุปกรณ์นี้</string>
+    <string name="app_media_files">เอกสารและไฟล์อื่นๆ</string>
+    <string name="app_cleaner_title">ตัวล้างแอป</string>
+    <string name="app_cleaner_hint">ไฟล์ตกค้างของแอปที่ถูกลบและแคชที่ Findex เข้าถึงได้</string>
+    <string name="app_cleaner_empty">ไม่พบไฟล์ตกค้าง Android 11 ขึ้นไปไม่อนุญาตให้เข้าถึงแคชส่วนตัวของแอปอื่น</string>
+    <string name="app_leftovers">โฟลเดอร์ที่ตกค้าง</string>
+    <string name="app_leftovers_desc">โฟลเดอร์ของแอปที่ถอนการติดตั้งแล้วใน Android/media, data และ obb</string>
+    <string name="app_cache">แคชของแอป</string>
+    <string name="app_cache_desc">แคชภายนอกของแอปที่ติดตั้งอยู่ แอปจะสร้างขึ้นใหม่เอง</string>
+    <string name="wa_images">รูปภาพ</string>
+    <string name="wa_videos">วิดีโอ</string>
+    <string name="wa_audio">เสียง</string>
+    <string name="wa_voice">ข้อความเสียง</string>
+    <string name="wa_documents">เอกสาร</string>
+    <string name="wa_stickers">สติกเกอร์</string>
+    <string name="wa_gifs">GIF</string>
+    <string name="wa_backups">ข้อมูลสำรองและฐานข้อมูล</string>
+    <string name="wa_not_found">ไม่พบสื่อของ WhatsApp ในอุปกรณ์นี้</string>
+    <string name="wa_hint">สื่อที่ได้รับและส่ง รวมถึงโฟลเดอร์ส่วนตัว</string>
+    <string name="analyzer_used">ใช้ไป</string>
+    <string name="analyzer_other">ไฟล์อื่นๆ และแอป</string>
+    <string name="analyzer_free">ว่าง</string>
+    <string name="analyzer_breakdown">รายละเอียด</string>
+    <string name="analyzer_largest">ไฟล์ขนาดใหญ่ที่สุด</string>
+    <string name="analyzer_chart_desc">แผนภูมิพื้นที่เก็บข้อมูล: ใช้ไป %1$s จาก %2$s</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">รูปลักษณ์</string>
+    <string name="settings_theme">ธีม</string>
+    <string name="settings_theme_system">ตามระบบ</string>
+    <string name="settings_theme_light">สว่าง</string>
+    <string name="settings_theme_dark">มืด</string>
+    <string name="settings_dynamic_color">สีแบบไดนามิก</string>
+    <string name="settings_dynamic_color_desc">ปรับสีให้เข้ากับวอลเปเปอร์ของคุณ</string>
+    <string name="settings_language">ภาษา</string>
+    <string name="settings_language_system">ค่าเริ่มต้นของระบบ</string>
+    <string name="settings_files">ไฟล์</string>
+    <string name="settings_show_hidden_desc">แสดงไฟล์และโฟลเดอร์ที่ขึ้นต้นด้วยจุด</string>
+    <string name="settings_grid">มุมมองตารางเป็นค่าเริ่มต้น</string>
+    <string name="settings_grid_desc">แสดงโฟลเดอร์เป็นตารางภาพขนาดย่อ</string>
+    <string name="settings_about">เกี่ยวกับ</string>
+    <string name="settings_version">เวอร์ชัน</string>
+    <string name="settings_updates">การอัปเดต</string>
+    <string name="settings_updates_subtitle">การอัปเดตอัตโนมัติ ช่องทางการเผยแพร่ และการตรวจสอบเวอร์ชันใหม่</string>
+    <string name="settings_auto_update">อัปเดตอัตโนมัติ</string>
+    <string name="settings_auto_update_desc">ตรวจสอบ GitHub ทุกวันในพื้นหลังและเมื่อเปิด Findex</string>
+    <string name="updates_title">การอัปเดต</string>
+    <string name="updates_current">เวอร์ชันที่ติดตั้ง %1$s</string>
+    <string name="settings_channel">ช่องทางการเผยแพร่</string>
+    <string name="channel_stable">เสถียร (Stable)</string>
+    <string name="channel_beta">เบต้า (Beta)</string>
+    <string name="channel_alpha">อัลฟ่า (Alpha)</string>
+    <string name="settings_check_updates">ตรวจสอบการอัปเดต</string>
+    <string name="update_checking">กำลังตรวจสอบ…</string>
+    <string name="update_up_to_date">คุณใช้เวอร์ชันล่าสุดอยู่แล้ว</string>
+    <string name="update_available_row">มีเวอร์ชัน %1$s พร้อมให้อัปเดต</string>
+    <string name="settings_about_subtitle">เวอร์ชัน %1$s ผู้พัฒนา และคำขอบคุณ</string>
+    <string name="update_title">มีอัปเดตใหม่</string>
+    <string name="update_subtitle">%1$s · คุณกำลังใช้ %2$s</string>
+    <string name="update_whats_new">มีอะไรใหม่</string>
+    <string name="update_install">ติดตั้ง</string>
+    <string name="update_allow_install">อนุญาตการติดตั้ง</string>
+    <string name="update_downloading">กำลังดาวน์โหลด… %1$d%%</string>
+    <string name="update_not_now">ไม่ใช่ตอนนี้</string>
+    <string name="update_failed">อัปเดตไม่สำเร็จ</string>
+    <string name="update_notification_channel_name">การอัปเดตแอป</string>
+    <string name="update_notification_title">มีอัปเดตใหม่: %1$s</string>
+    <string name="update_notification_body">แตะเพื่อดูบันทึกประจำรุ่นและติดตั้ง</string>
+    <string name="about_title">เกี่ยวกับ Findex</string>
+    <string name="about_section_app">แอป</string>
+    <string name="about_version_build">เวอร์ชัน %1$s · บิลด์ %2$d</string>
+    <string name="about_source_code">ซอร์สโค้ด</string>
+    <string name="about_section_developer">ผู้พัฒนา</string>
+    <string name="about_developer_tagline">ออกแบบและพัฒนาโดยนักพัฒนาเพียงคนเดียว</string>
+    <string name="about_portfolio">ผลงาน</string>
+    <string name="about_section_open_source">โอเพนซอร์ส</string>
+    <string name="about_acknowledgements">คำขอบคุณ</string>
+    <string name="about_acknowledgements_subtitle">ไลบรารีและโปรเจกต์ที่ Findex ใช้สร้าง</string>
+
+    <!-- Compression & Extraction -->
+    <string name="compress_dialog_title">สร้างไฟล์บีบอัด</string>
+    <string name="compress_format_label">รูปแบบ</string>
+    <string name="compress_password_zip_only">การป้องกันด้วยรหัสผ่านใช้ได้กับ ZIP เท่านั้น</string>
+    <string name="compress_password_hint">รหัสผ่าน (ไม่บังคับ)</string>
+    <string name="compress_password_help">เมื่อตั้งรหัสผ่าน ไฟล์บีบอัดจะถูกเข้ารหัสด้วย AES-256</string>
+    <string name="extract_password_hint">รหัสผ่าน (หากมีการป้องกัน)</string>
+    <string name="extract_dialog_body">แตกไฟล์ “%1$s” ลงในโฟลเดอร์ใหม่ที่อยู่ข้างๆ</string>
+    <string name="compress_button">บีบอัด</string>
+    <string name="extract_dialog_title">แตกไฟล์บีบอัด</string>
+    <string name="extract_button">แตกไฟล์</string>
+
+    <!-- Multitasking & Selection -->
+    <string name="selected_count">เลือกแล้ว %1$d รายการ</string>
+    <string name="tabs_header">แท็บ</string>
+
+    <!-- Notifications & Services -->
+    <string name="notification_channel_name">การทำงานกับไฟล์</string>
+    <string name="notification_channel_description">ความคืบหน้าและผลลัพธ์ของการคัดลอก ย้าย ลบ และจัดการไฟล์บีบอัด</string>
+    <string name="operation_in_progress">กำลังดำเนินการ…</string>
+    <string name="operation_completed">ดำเนินการเสร็จสิ้น</string>
+    <string name="operation_failed">การดำเนินการล้มเหลว</string>
+    <string name="operation_cancelled">ยกเลิกการดำเนินการแล้ว</string>
+    <string name="operation_progress">%1$d%% · %2$s</string>
+    <plurals name="operation_queued">
+        <item quantity="other">%1$s · รอคิวอีก %2$d รายการ</item>
+    </plurals>
+    <string name="op_title_copy">กำลังคัดลอก %1$s รายการ</string>
+    <string name="op_title_move">กำลังย้าย %1$s รายการ</string>
+    <string name="op_title_delete">กำลังลบ %1$s รายการ</string>
+    <string name="op_title_trash">กำลังย้าย %1$s รายการไปถังรีไซเคิล</string>
+    <string name="op_title_restore">กำลังกู้คืน %1$s รายการ</string>
+    <string name="op_title_clean">กำลังล้าง %1$s รายการ</string>
+    <string name="op_title_compress">กำลังบีบอัดเป็น %1$s</string>
+    <string name="op_title_extract">กำลังแตกไฟล์ %1$s</string>
+    <string name="op_done_copy">คัดลอกแล้ว %1$s รายการ</string>
+    <string name="op_done_move">ย้ายแล้ว %1$s รายการ</string>
+    <string name="op_done_delete">ลบแล้ว %1$s รายการ</string>
+    <string name="op_done_trash">ย้าย %1$s รายการไปถังรีไซเคิลแล้ว</string>
+    <string name="op_done_restore">กู้คืนแล้ว %1$s รายการ</string>
+    <string name="op_done_clean">ล้างแล้ว %1$s รายการ</string>
+    <string name="op_done_compress">สร้าง %1$s แล้ว</string>
+    <string name="op_done_extract">แตกไฟล์ %1$s แล้ว</string>
+    <string name="op_done_batch_rename">เปลี่ยนชื่อแล้ว %1$s รายการ</string>
+    <string name="op_done_image_transform">บีบอัดรูปภาพแล้ว %1$s รูป</string>
+    <string name="op_done_vault_import">ย้าย %1$s รายการไปยังห้องนิรภัยแล้ว</string>
+    <string name="op_done_vault_export">กู้คืน %1$s รายการจากห้องนิรภัยแล้ว</string>
+    <string name="op_done_vault_delete">ลบ %1$s รายการออกจากห้องนิรภัยแล้ว</string>
+    <string name="operation_cancelled_body">หยุดก่อนดำเนินการเสร็จ</string>
+    <string name="error_wrong_password">รหัสผ่านไม่ถูกต้องหรือไม่ได้ระบุ</string>
+    <string name="error_unsupported_archive">ไม่รองรับรูปแบบหรือเวอร์ชันของไฟล์บีบอัดนี้</string>
+    <string name="error_no_space">พื้นที่เก็บข้อมูลไม่เพียงพอ</string>
+    <string name="error_into_itself">ไม่สามารถคัดลอกโฟลเดอร์เข้าไปในตัวเองได้</string>
+    <string name="error_access_denied">ไม่มีสิทธิ์เข้าถึงตำแหน่งนี้</string>
+    <string name="cancel">ยกเลิก</string>
+    <string name="confirm">ยืนยัน</string>
+
+    <!-- Recycle bin -->
+    <plurals name="trash_title">
+        <item quantity="other">ย้าย %d รายการไปถังรีไซเคิลหรือไม่?</item>
+    </plurals>
+    <string name="trash_body">คุณสามารถกู้คืนได้จากถังรีไซเคิลภายใน 30 วัน</string>
+    <string name="delete_permanently">ลบอย่างถาวร</string>
+    <string name="action_move_to_bin">ย้ายไปถังขยะ</string>
+    <string name="action_restore">กู้คืน</string>
+    <string name="action_empty_bin">ล้างถังขยะ</string>
+    <string name="undo">เลิกทำ</string>
+    <plurals name="moved_to_bin">
+        <item quantity="other">ย้าย %d รายการไปถังรีไซเคิลแล้ว</item>
+    </plurals>
+    <string name="recycle_bin_hint">รายการจะถูกลบอย่างถาวรหลังจาก 30 วัน</string>
+    <string name="recycle_bin_empty">ถังรีไซเคิลว่างเปล่า</string>
+
+    <!-- File Inspector & Preview -->
+    <string name="details_dimensions">ขนาดภาพ</string>
+    <string name="details_resolution">ความละเอียด</string>
+    <string name="details_duration">ความยาว</string>
+    <string name="details_megapixels">%1$.1f MP</string>
+    <string name="details_artist">ศิลปิน</string>
+    <string name="details_album">อัลบั้ม</string>
+    <string name="details_package">แพ็กเกจ</string>
+    <string name="details_version">เวอร์ชัน</string>
+    <string name="details_checksums">แฮชตรวจสอบ (Checksum)</string>
+    <string name="details_calculate_hash">คำนวณแฮชตรวจสอบ</string>
+    <string name="details_calculating">กำลังคำนวณ…</string>
+    <string name="details_copied_hash">คัดลอกแฮชตรวจสอบไปยังคลิปบอร์ดแล้ว</string>
+    <string name="preview_fullscreen">เต็มหน้าจอ</string>
+    <string name="preview_zoom_hint">จีบนิ้วเพื่อซูม · แตะสองครั้งเพื่อซูม</string>
+    <string name="action_open_in_another_app">เปิดในแอปอื่น</string>
+    <string name="action_rotate">หมุน</string>
+    <string name="action_reset_zoom">รีเซ็ตการซูม</string>
+    <string name="viewer_item_position">%1$d จาก %2$d</string>
+    <string name="preview_copy_text">คัดลอกเนื้อหา</string>
+    <string name="preview_text_copied">คัดลอกเนื้อหาไปยังคลิปบอร์ดแล้ว</string>
+    <string name="preview_lines_count">%1$d บรรทัด</string>
+    <string name="action_install">ติดตั้ง</string>
+    <string name="action_play">เล่น</string>
+    <string name="action_pause">หยุดชั่วคราว</string>
+    <string name="action_open_folder">เปิดโฟลเดอร์</string>
+    <string name="details_overview">ภาพรวม</string>
+    <string name="details_exact_bytes">%1$s ไบต์</string>
+
+    <!-- Search -->
+    <string name="search_hint">ค้นหาไฟล์และโฟลเดอร์</string>
+    <string name="search_prompt">ค้นหาทุกอย่างในพื้นที่เก็บข้อมูลตามชื่อ</string>
+    <string name="search_no_results">ไม่พบไฟล์ที่ตรงกับ “%1$s”</string>
+    <string name="cd_clear_search">ล้างการค้นหา</string>
+
+    <!-- Duplicate finder -->
+    <string name="nav_duplicates">ไฟล์ซ้ำ</string>
+    <string name="dup_title">ไฟล์ซ้ำ</string>
+    <string name="dup_desc">สำเนาที่เหมือนกันซึ่งเปลืองพื้นที่</string>
+    <string name="dup_none">ไม่พบไฟล์ซ้ำ</string>
+    <string name="dup_keep_hint">ระบบจะเก็บไฟล์สำเนาที่เก่าที่สุดของแต่ละไฟล์ไว้ โดยจะเหลืออย่างน้อยหนึ่งสำเนาเสมอ</string>
+    <string name="dup_delete_button">ลบ %1$s</string>
+    <string name="dup_hashing">กำลังเปรียบเทียบเนื้อหาไฟล์…</string>
+    <plurals name="dup_copies">
+        <item quantity="other">%d สำเนา</item>
+    </plurals>
+
+    <!-- Archive preview -->
+    <string name="action_browse">เรียกดูเนื้อหา</string>
+    <string name="archive_extract_all">แตกไฟล์ทั้งหมด</string>
+    <string name="archive_empty">ไฟล์บีบอัดนี้ว่างเปล่า</string>
+    <string name="archive_unreadable">ไม่สามารถแสดงรายการในไฟล์บีบอัดนี้ได้ อาจถูกเข้ารหัสหรือเสียหาย ลองใช้ "แตกไฟล์ทั้งหมด" พร้อมรหัสผ่าน</string>
+    <string name="archive_password_title">ต้องใช้รหัสผ่าน</string>
+    <string name="archive_password_body">“%1$s” ถูกเข้ารหัสไว้</string>
+    <string name="archive_unlock">ปลดล็อก</string>
+    <string name="archive_password_label">รหัสผ่าน</string>
+    <string name="archive_opening">กำลังเปิด %1$s…</string>
+
+    <!-- Network storage (SMB / SFTP / FTP / WebDAV) -->
+    <string name="network_title">พื้นที่เก็บข้อมูลเครือข่าย</string>
+    <string name="network_subtitle">เซิร์ฟเวอร์ SMB, SFTP, FTP และ WebDAV บนเครือข่ายของคุณ</string>
+    <string name="network_empty_title">ยังไม่มีเซิร์ฟเวอร์</string>
+    <string name="network_empty_body">เพิ่มโฟลเดอร์ที่แชร์จากพีซี, NAS หรือเซิร์ฟเวอร์เพื่อเรียกดูที่นี่</string>
+    <string name="network_add">เพิ่มเซิร์ฟเวอร์</string>
+    <string name="network_add_title">เพิ่มเซิร์ฟเวอร์เครือข่าย</string>
+    <string name="network_protocol_label">โปรโตคอล</string>
+    <string name="network_webdav_https">ใช้ HTTPS (TLS)</string>
+    <string name="network_field_name">ชื่อที่แสดง (ไม่บังคับ)</string>
+    <string name="network_field_host">โฮสต์หรือที่อยู่ IP</string>
+    <string name="network_field_host_help">เช่น 192.168.1.20 หรือ my-nas.local</string>
+    <string name="network_field_port">พอร์ต (ไม่บังคับ)</string>
+    <string name="network_field_port_default">ค่าเริ่มต้น %1$d</string>
+    <string name="network_field_share">ชื่อแชร์</string>
+    <string name="network_field_share_help">โฟลเดอร์ที่แชร์ เช่น Public</string>
+    <string name="network_field_path">เส้นทางระยะไกล (ไม่บังคับ)</string>
+    <string name="network_field_path_help_sftp">เว้นว่างไว้สำหรับโฟลเดอร์หลัก หรือป้อนเส้นทางเช่น /mnt/media</string>
+    <string name="network_field_path_help_ftp">เว้นว่างไว้สำหรับโฟลเดอร์ราก หรือป้อนเส้นทางเช่น /pub</string>
+    <string name="network_field_path_help_webdav">เส้นทางปลายทาง เช่น /dav หรือ /remote.php/dav/files/user</string>
+    <string name="network_field_user">ชื่อผู้ใช้</string>
+    <string name="network_field_user_help">เว้นว่างไว้เพื่อเชื่อมต่อแบบผู้เยี่ยมชม</string>
+    <string name="network_field_user_help_sftp">ชื่อผู้ใช้ SSH บนเซิร์ฟเวอร์</string>
+    <string name="network_field_password">รหัสผ่าน</string>
+    <string name="network_field_domain">โดเมนหรือเวิร์กกรุ๊ป (ไม่บังคับ)</string>
+    <string name="network_connect">เชื่อมต่อและบันทึก</string>
+    <string name="network_connecting">กำลังเชื่อมต่อ…</string>
+    <string name="network_password_note">เข้ารหัสด้วยคีย์ที่เก็บไว้ใน Android Keystore เว้นว่างไว้เพื่อใช้รหัสผ่านที่บันทึกไว้สำหรับชื่อผู้ใช้นี้ซ้ำ</string>
+    <string name="network_guest">ผู้เยี่ยมชม</string>
+    <string name="network_status_connected">เชื่อมต่อแล้ว</string>
+    <string name="network_remember_password">จำรหัสผ่าน</string>
+    <string name="network_edit">แก้ไขเซิร์ฟเวอร์</string>
+    <string name="network_edit_title">แก้ไขเซิร์ฟเวอร์เครือข่าย</string>
+    <string name="network_save">ทดสอบและบันทึก</string>
+    <string name="network_password_keep_note">เว้นว่างไว้เพื่อคงรหัสผ่านเดิม</string>
+    <string name="network_password_not_saved_note">ไม่ได้บันทึก ระบบจะถามหนึ่งครั้งทุกครั้งที่คุณเปิด Findex</string>
+    <string name="network_error_password_required">ต้องใช้รหัสผ่านเพื่อเชื่อมต่อ</string>
+    <string name="network_unlock">ปลดล็อก</string>
+    <string name="network_unlock_title">เชื่อมต่อกับ “%1$s”</string>
+    <string name="network_unlock_body">รหัสผ่านสำหรับ %1$s จะเก็บไว้จนกว่าคุณจะปิด Findex</string>
+    <string name="network_status_offline">ขาดการเชื่อมต่อ %1$s</string>
+    <string name="network_retry">ลองเชื่อมต่ออีกครั้ง</string>
+    <string name="network_remove">ลบเซิร์ฟเวอร์</string>
+    <string name="network_remove_title">ลบ “%1$s” หรือไม่?</string>
+    <string name="network_remove_body">ข้อมูลเข้าสู่ระบบที่บันทึกไว้และสำเนาที่ดาวน์โหลดมาจะถูกลบ ไฟล์บนเซิร์ฟเวอร์จะไม่ถูกแตะต้อง</string>
+    <string name="network_error_host">ไม่สามารถเข้าถึงเซิร์ฟเวอร์ได้ โปรดตรวจสอบที่อยู่ พอร์ต และตรวจดูว่าคุณอยู่ในเครือข่ายเดียวกัน</string>
+    <string name="network_error_auth">ลงชื่อเข้าใช้ไม่สำเร็จ โปรดตรวจสอบชื่อผู้ใช้และรหัสผ่าน</string>
+    <string name="network_error_share">ไม่มีแชร์หรือเส้นทางระยะไกลชื่อนั้นบนเซิร์ฟเวอร์นี้</string>
+    <string name="network_error_denied">การเข้าถึงถูกปฏิเสธสำหรับบัญชีนี้</string>
+    <string name="network_error_unknown">เกิดข้อผิดพลาดในการสื่อสารกับเซิร์ฟเวอร์</string>
+    <string name="rail_network">เครือข่าย</string>
+    <string name="new_tab_title">เปิดแท็บใหม่ใน</string>
+    <string name="error_network">ไม่สามารถเข้าถึงโฟลเดอร์แชร์เครือข่ายได้</string>
+    <string name="error_not_supported_network">ไม่พร้อมใช้งานบนโฟลเดอร์แชร์เครือข่าย</string>
+    <string name="network_opening_remote">กำลังดาวน์โหลด %1$s…</string>
+
+    <!-- BEGIN foundation (W1: drawer, entry actions, operation titles, failures) -->
+    <string name="drawer_section_more">เพิ่มเติม</string>
+    <string name="nav_favorites">รายการโปรด</string>
+    <string name="nav_large_files">ไฟล์ขนาดใหญ่</string>
+    <string name="nav_recent_changes">การเปลี่ยนแปลงล่าสุด</string>
+    <string name="nav_vault">ห้องนิรภัย</string>
+    <string name="action_batch_rename">เปลี่ยนชื่อเป็นชุด</string>
+    <string name="action_move_to_vault">ย้ายไปยังห้องนิรภัย</string>
+    <string name="action_compress_image">บีบอัดรูปภาพ</string>
+    <string name="action_tags">แท็ก</string>
+    <string name="action_pin_shortcut">เพิ่มไปยังหน้าจอหลัก</string>
+    <string name="op_title_batch_rename">กำลังเปลี่ยนชื่อ %1$s รายการ</string>
+    <string name="op_title_image_transform">กำลังบีบอัดรูปภาพ %1$s รูป</string>
+    <string name="op_title_vault_import">กำลังย้าย %1$s รายการไปยังห้องนิรภัย</string>
+    <string name="op_title_vault_export">กำลังกู้คืน %1$s รายการจากห้องนิรภัย</string>
+    <string name="op_title_vault_delete">กำลังลบ %1$s รายการออกจากห้องนิรภัย</string>
+    <string name="error_vault_locked">ห้องนิรภัยถูกล็อกอยู่</string>
+    <string name="error_nested_selection">ไม่สามารถเปลี่ยนชื่อโฟลเดอร์และรายการที่อยู่ข้างในพร้อมกันได้ โปรดเปลี่ยนชื่อแยกกัน</string>
+    <string name="error_name_conflict">มีไฟล์ชื่อนี้อยู่แล้ว</string>
+    <string name="error_op_invalid_name">ไม่อนุญาตให้ใช้ชื่อนั้น</string>
+    <string name="error_unsupported_image">ไม่รองรับรูปแบบรูปภาพนี้</string>
+    <string name="placeholder_coming_soon">เร็วๆ นี้</string>
+    <string name="selection_expired">การเลือกหมดอายุแล้ว โปรดเลือกไฟล์อีกครั้ง</string>
+    <!-- END foundation -->
+
+    <!-- BEGIN batch-rename -->
+    <string name="rename_title">เปลี่ยนชื่อเป็นชุด</string>
+    <string name="rename_pattern_label">รูปแบบชื่อ</string>
+    <string name="rename_token_name">ชื่อ</string>
+    <string name="rename_token_ext">นามสกุล</string>
+    <string name="rename_token_counter">ตัวนับ</string>
+    <string name="rename_token_date">วันที่</string>
+    <string name="rename_token_parent">โฟลเดอร์หลัก</string>
+    <string name="rename_find_label">ค้นหา</string>
+    <string name="rename_replace_label">แทนที่ด้วย</string>
+    <string name="rename_regex">ใช้นิพจน์ทั่วไป (Regex)</string>
+    <string name="rename_ignore_case">ไม่สนใจตัวพิมพ์เล็ก-ใหญ่</string>
+    <string name="rename_case_none">คงตัวพิมพ์เดิม</string>
+    <string name="rename_case_lower">ตัวพิมพ์เล็กทั้งหมด</string>
+    <string name="rename_case_upper">ตัวพิมพ์ใหญ่ทั้งหมด</string>
+    <string name="rename_case_title">ตัวพิมพ์ใหญ่ต้นคำ</string>
+    <string name="rename_counter_start">เริ่มที่</string>
+    <string name="rename_counter_step">เพิ่มทีละ</string>
+    <string name="rename_counter_pad">จำนวนหลัก</string>
+    <string name="rename_touch_extension">เปลี่ยนนามสกุลด้วย</string>
+    <string name="rename_status_unchanged">ไม่เปลี่ยนแปลง</string>
+    <string name="rename_status_duplicate">ชื่อซ้ำกัน</string>
+    <string name="rename_status_exists">มีชื่อนี้อยู่แล้ว</string>
+    <string name="rename_status_invalid">ชื่อไม่ถูกต้อง</string>
+    <string name="rename_status_bad_regex">รูปแบบไม่ถูกต้อง</string>
+    <string name="rename_apply">เปลี่ยนชื่อ</string>
+    <plurals name="rename_summary">
+        <item quantity="other">จะเปลี่ยนชื่อ %d รายการ</item>
+    </plurals>
+    <!-- END batch-rename -->
+
+    <!-- BEGIN large-files -->
+    <string name="bigfiles_title">ไฟล์ขนาดใหญ่และไฟล์เก่า</string>
+    <string name="bigfiles_size_any">ทุกขนาด</string>
+    <string name="bigfiles_size_100mb">มากกว่า 100 MB</string>
+    <string name="bigfiles_size_500mb">มากกว่า 500 MB</string>
+    <string name="bigfiles_size_1gb">มากกว่า 1 GB</string>
+    <string name="bigfiles_age_any">ทุกช่วงอายุ</string>
+    <string name="bigfiles_age_30d">เก่ากว่า 30 วัน</string>
+    <string name="bigfiles_age_90d">เก่ากว่า 90 วัน</string>
+    <string name="bigfiles_age_6mo">เก่ากว่า 6 เดือน</string>
+    <string name="bigfiles_age_1y">เก่ากว่า 1 ปี</string>
+    <string name="bigfiles_category_any">ทุกประเภท</string>
+    <string name="bigfiles_include_hidden">รวมไฟล์ที่ซ่อนอยู่</string>
+    <string name="bigfiles_hint_modified">อายุนับจากวันที่แก้ไขล่าสุด</string>
+    <string name="bigfiles_empty">ไม่มีไฟล์ที่ตรงกับตัวกรองเหล่านี้</string>
+    <plurals name="bigfiles_selected">
+        <item quantity="other">เลือกแล้ว %d ไฟล์</item>
+    </plurals>
+    <!-- END large-files -->
+
+    <!-- BEGIN image-compress -->
+    <string name="imgc_title">บีบอัดรูปภาพ</string>
+    <string name="imgc_preset_small">เล็ก</string>
+    <string name="imgc_preset_medium">กลาง</string>
+    <string name="imgc_preset_large">ใหญ่</string>
+    <string name="imgc_preset_custom">กำหนดเอง</string>
+    <string name="imgc_max_edge">ด้านที่ยาวที่สุด (px)</string>
+    <string name="imgc_scale_percent">สัดส่วน (%)</string>
+    <string name="imgc_quality">คุณภาพ</string>
+    <string name="imgc_format_keep">คงรูปแบบเดิม</string>
+    <string name="imgc_output_copy">บันทึกเป็นสำเนา</string>
+    <string name="imgc_output_replace">แทนที่ไฟล์ต้นฉบับ</string>
+    <string name="imgc_output_folder">บันทึกไปยังโฟลเดอร์</string>
+    <string name="imgc_keep_metadata">เก็บข้อมูลตำแหน่งและกล้อง</string>
+    <string name="imgc_estimate">ขนาดโดยประมาณ: %1$s</string>
+    <string name="imgc_replace_warning">ไฟล์ต้นฉบับจะถูกเขียนทับและไม่สามารถยกเลิกได้</string>
+    <plurals name="imgc_skipped">
+        <item quantity="other">ข้าม %d รูปภาพ</item>
+    </plurals>
+    <!-- END image-compress -->
+
+    <!-- BEGIN vault -->
+    <string name="vault_title">ห้องนิรภัย</string>
+    <string name="vault_setup_title">ตั้งค่าห้องนิรภัยของคุณ</string>
+    <string name="vault_setup_password">รหัสผ่านห้องนิรภัย</string>
+    <string name="vault_setup_confirm">ยืนยันรหัสผ่าน</string>
+    <string name="vault_setup_mismatch">รหัสผ่านไม่ตรงกัน</string>
+    <string name="vault_setup_strength_weak">อ่อน</string>
+    <string name="vault_setup_strength_fair">ปานกลาง</string>
+    <string name="vault_setup_strength_strong">แข็งแกร่ง</string>
+    <string name="vault_setup_biometric">ปลดล็อกด้วยลายนิ้วมือหรือใบหน้า</string>
+    <string name="vault_setup_warning_no_recovery">ไม่มีการกู้คืนรหัสผ่าน หากคุณลืมรหัสผ่าน ไฟล์ของคุณจะสูญหาย</string>
+    <string name="vault_setup_warning_not_secure_erase">ไฟล์ต้นฉบับจะถูกลบตามปกติ ไม่ใช่การลบแบบปลอดภัย ข้อมูลที่ถูกลบอาจกู้คืนได้จากพื้นที่เก็บข้อมูล</string>
+    <string name="vault_setup_acknowledge">ฉันเข้าใจความเสี่ยง</string>
+    <string name="vault_setup_create">สร้างห้องนิรภัย</string>
+    <string name="vault_unlock_title">ปลดล็อกห้องนิรภัย</string>
+    <string name="vault_unlock_password">รหัสผ่าน</string>
+    <string name="vault_unlock_biometric">ใช้ลายนิ้วมือหรือใบหน้า</string>
+    <string name="vault_unlock_wrong_password">รหัสผ่านไม่ถูกต้อง</string>
+    <string name="vault_unlock_lockout">พยายามมากเกินไป ลองใหม่อีกครั้งใน %1$s</string>
+    <string name="vault_biometric_prompt_title">ปลดล็อกห้องนิรภัย</string>
+    <string name="vault_biometric_prompt_subtitle">ยืนยันว่าเป็นคุณ</string>
+    <string name="vault_biometric_prompt_negative">ใช้รหัสผ่าน</string>
+    <string name="vault_biometric_invalidated">ลายนิ้วมือหรือใบหน้ามีการเปลี่ยนแปลง โปรดปลดล็อกด้วยรหัสผ่านและตั้งค่าไบโอเมตริกซ์อีกครั้ง</string>
+    <string name="vault_add_files">เพิ่มไฟล์</string>
+    <string name="vault_import_confirm">ย้ายไปยังห้องนิรภัยหรือไม่? ไฟล์ต้นฉบับจะถูกลบอย่างถาวร โดยไม่ส่งไปยังถังขยะ</string>
+    <string name="vault_export_original">กู้คืนไปยังตำแหน่งเดิม</string>
+    <string name="vault_export_choose_folder">เลือกโฟลเดอร์</string>
+    <string name="vault_open_external_warning">การเปิดภายนอกห้องนิรภัยจะทิ้งสำเนาที่ไม่ได้เข้ารหัสไว้บนอุปกรณ์นี้</string>
+    <string name="vault_menu_change_password">เปลี่ยนรหัสผ่าน</string>
+    <string name="vault_menu_biometric">ปลดล็อกด้วยลายนิ้วมือหรือใบหน้า</string>
+    <string name="vault_menu_auto_lock">ล็อกอัตโนมัติ</string>
+    <string name="vault_menu_lock_now">ล็อกทันที</string>
+    <string name="vault_auto_lock_immediately">ทันที</string>
+    <string name="vault_auto_lock_1min">หลังจาก 1 นาที</string>
+    <string name="vault_auto_lock_5min">หลังจาก 5 นาที</string>
+    <string name="vault_auto_lock_screen_off">เมื่อหน้าจอดับ</string>
+    <string name="vault_restore_title">กู้คืนไปยังตำแหน่งเดิมหรือไม่?</string>
+    <string name="vault_restore_body">ไฟล์จะถูกถอดรหัสและย้ายกลับไปยังโฟลเดอร์เดิม โฟลเดอร์ที่หายไปจะถูกสร้างขึ้นใหม่</string>
+    <string name="vault_restore_action">กู้คืน</string>
+    <string name="vault_empty">ห้องนิรภัยของคุณว่างเปล่า</string>
+    <string name="vault_locked_banner">ห้องนิรภัยถูกล็อกอยู่ ปลดล็อกเพื่อดูไฟล์ของคุณ</string>
+    <string name="cd_vault_lock">ล็อกห้องนิรภัย</string>
+    <string name="vault_setup_min_length">ใช้อย่างน้อย 8 ตัวอักษร</string>
+    <string name="vault_unlock_action">ปลดล็อก</string>
+    <string name="vault_password_current">รหัสผ่านปัจจุบัน</string>
+    <string name="vault_password_new">รหัสผ่านใหม่</string>
+    <string name="vault_password_changed">เปลี่ยนรหัสผ่านแล้ว</string>
+    <string name="vault_unreadable_title">ไม่สามารถอ่านคีย์ห้องนิรภัยได้</string>
+    <string name="vault_unreadable_body">ไฟล์ที่เข้ารหัสอยู่ในโฟลเดอร์ .FindexVault แต่ไฟล์ vault.key หายไปหรือเสียหาย โปรดกู้คืน vault.key จากข้อมูลสำรองเพื่อเปิดไฟล์ ระบบจะไม่สร้างห้องนิรภัยใหม่เพื่อให้ไฟล์ยังคงกู้คืนได้</string>
+    <string name="vault_rebuild_title">ไฟล์จากการติดตั้งก่อนหน้า</string>
+    <string name="vault_rebuild_body">พบไฟล์ที่เข้ารหัสในโฟลเดอร์ห้องนิรภัย กู้คืนไปยังรายการหรือไม่?</string>
+    <string name="vault_rebuild_action">กู้คืนรายการ</string>
+    <string name="vault_add_files_hint">ในตัวจัดการไฟล์ ให้กดค้างที่ไฟล์หรือโฟลเดอร์แล้วเลือก ย้ายไปยังห้องนิรภัย</string>
+    <string name="vault_delete_confirm">ลบ %1$d รายการออกจากห้องนิรภัยหรือไม่? จะไม่สามารถกู้คืนได้</string>
+    <string name="vault_biometric_error">การปลดล็อกด้วยลายนิ้วมือหรือใบหน้าไม่พร้อมใช้งาน</string>
+    <string name="vault_import_ready">%1$d รายการจะถูกเข้ารหัส ไฟล์ต้นฉบับจะถูกลบอย่างถาวร โดยไม่ส่งไปยังถังขยะ</string>
+    <!-- END vault -->
+
+    <!-- BEGIN viewers -->
+    <string name="viewer_text_save">บันทึก</string>
+    <string name="viewer_text_saved">บันทึกแล้ว</string>
+    <string name="viewer_text_unsaved_title">ละทิ้งการเปลี่ยนแปลงหรือไม่?</string>
+    <string name="viewer_text_unsaved_body">การแก้ไขของคุณจะสูญหาย</string>
+    <string name="viewer_text_discard">ละทิ้ง</string>
+    <string name="viewer_text_conflict_title">ไฟล์ถูกเปลี่ยนแปลงบนดิสก์</string>
+    <string name="viewer_text_conflict_body">แอปอื่นได้เปลี่ยนแปลงไฟล์นี้ตั้งแต่คุณเปิดมัน</string>
+    <string name="viewer_text_overwrite">เขียนทับ</string>
+    <string name="viewer_text_read_only">อ่านอย่างเดียว</string>
+    <string name="viewer_text_truncated">ไฟล์มีขนาดใหญ่เกินไป กำลังแสดงส่วนแรก</string>
+    <string name="viewer_text_not_text">ไฟล์นี้ไม่ใช่ข้อความธรรมดา</string>
+    <string name="viewer_text_find">ค้นหา</string>
+    <string name="viewer_text_wrap">ตัดบรรทัด</string>
+    <string name="viewer_text_undo">เลิกทำ</string>
+    <string name="viewer_text_redo">ทำซ้ำ</string>
+    <string name="viewer_text_encoding">การเข้ารหัส</string>
+    <string name="viewer_pdf_page_of">หน้า %1$d จาก %2$d</string>
+    <string name="viewer_pdf_go_to_page">ไปที่หน้า</string>
+    <string name="viewer_pdf_protected">PDF นี้มีการป้องกันด้วยรหัสผ่าน</string>
+    <string name="viewer_pdf_password">รหัสผ่าน</string>
+    <string name="viewer_pdf_downloading">กำลังดาวน์โหลด PDF…</string>
+    <string name="viewer_pdf_error">ไม่สามารถเปิด PDF นี้ได้</string>
+    <string name="viewer_audio_play">เล่น</string>
+    <string name="viewer_audio_pause">หยุดชั่วคราว</string>
+    <string name="viewer_audio_next">แทร็กถัดไป</string>
+    <string name="viewer_audio_previous">แทร็กก่อนหน้า</string>
+    <string name="viewer_audio_repeat">เล่นซ้ำ</string>
+    <string name="viewer_audio_shuffle">สุ่ม</string>
+    <string name="viewer_audio_queue">คิว</string>
+    <string name="viewer_audio_error">ไม่สามารถเล่นไฟล์นี้ได้</string>
+    <string name="viewer_text_error">ไม่สามารถอ่านหรือบันทึกไฟล์นี้ได้</string>
+    <!-- END viewers -->
+
+    <!-- BEGIN tags-favorites -->
+    <string name="tags_title">แท็ก</string>
+    <string name="tags_new">แท็กใหม่</string>
+    <string name="tags_name_hint">ชื่อแท็ก</string>
+    <string name="tags_color_red">แดง</string>
+    <string name="tags_color_orange">ส้ม</string>
+    <string name="tags_color_yellow">เหลือง</string>
+    <string name="tags_color_green">เขียว</string>
+    <string name="tags_color_teal">เขียวน้ำทะเล</string>
+    <string name="tags_color_blue">น้ำเงิน</string>
+    <string name="tags_color_purple">ม่วง</string>
+    <string name="tags_color_pink">ชมพู</string>
+    <string name="tags_rename">เปลี่ยนชื่อแท็ก</string>
+    <string name="tags_delete_title">ลบแท็ก “%1$s” หรือไม่?</string>
+    <string name="tags_delete_body">ไฟล์จะยังคงข้อมูลไว้ มีเพียงแท็กเท่านั้นที่จะถูกลบ</string>
+    <string name="tags_empty">ยังไม่มีแท็ก</string>
+    <string name="favorites_title">รายการโปรด</string>
+    <string name="favorites_folders">โฟลเดอร์</string>
+    <string name="favorites_files">ไฟล์</string>
+    <string name="favorites_tags">แท็ก</string>
+    <string name="favorites_empty">ยังไม่มีรายการที่บันทึกไว้</string>
+    <string name="tags_apply">นำไปใช้</string>
+    <string name="tags_save">บันทึก</string>
+    <string name="tags_files_empty">ไม่มีไฟล์ที่ใช้แท็กนี้</string>
+    <!-- END tags-favorites -->
+
+    <!-- BEGIN shortcuts -->
+    <string name="shortcut_pinned">เพิ่มทางลัดไปยังหน้าจอหลักแล้ว</string>
+    <string name="shortcut_unsupported">ตัวเรียกใช้งานของคุณไม่รองรับทางลัด</string>
+    <string name="shortcut_folder_missing">ไม่มีโฟลเดอร์นี้อยู่อีกต่อไป</string>
+    <!-- END shortcuts -->
+
+    <!-- BEGIN recent-changes-growth -->
+    <string name="changes_title">การเปลี่ยนแปลงล่าสุด</string>
+    <string name="changes_today">วันนี้</string>
+    <string name="changes_yesterday">เมื่อวาน</string>
+    <string name="changes_range_1d">24 ชั่วโมงที่ผ่านมา</string>
+    <string name="changes_range_7d">7 วันที่ผ่านมา</string>
+    <string name="changes_range_30d">30 วันที่ผ่านมา</string>
+    <string name="changes_empty">ไม่มีการเปลี่ยนแปลงล่าสุด</string>
+    <string name="changes_limit_hint">แสดงเฉพาะการเปลี่ยนแปลงล่าสุดเท่านั้น</string>
+    <string name="growth_title">การเติบโตของพื้นที่เก็บข้อมูล</string>
+    <string name="growth_range_30d">30 วัน</string>
+    <string name="growth_range_90d">90 วัน</string>
+    <string name="growth_range_1y">1 ปี</string>
+    <string name="growth_delta_up">เพิ่มขึ้น %1$s</string>
+    <string name="growth_delta_down">ลดลง %1$s</string>
+    <string name="growth_empty">ยังไม่มีประวัติเพียงพอ Findex บันทึกพื้นที่เก็บข้อมูลทุกวัน</string>
+    <string name="viewer_pdf_dark_pages">หน้ากระดาษโทนมืด</string>
+    <string name="settings_builtin_viewers">ตัวแสดงผลในตัว</string>
+    <string name="settings_builtin_viewers_desc">เปิดรูปภาพ วิดีโอ PDF ข้อความ และเสียงใน Findex หากปิดจะใช้แอปเริ่มต้นของคุณ</string>
+    <string name="widget_label">พื้นที่เก็บข้อมูล Findex</string>
+    <string name="widget_description">การใช้พื้นที่ การล้างด่วน และโฟลเดอร์บุ๊กมาร์กของคุณ</string>
+    <string name="widget_used">ใช้ไป %1$d%%</string>
+    <string name="widget_free">ว่าง %1$s จาก %2$s</string>
+    <string name="settings_cleanup_reminder">เตือนการล้างข้อมูล</string>
+    <string name="settings_cleanup_reminder_desc">แจ้งเตือนสัปดาห์ละครั้งเมื่อมีไฟล์ขยะที่ควรล้าง</string>
+    <string name="cleanup_reminder_channel">การแจ้งเตือนการล้างข้อมูล</string>
+    <string name="cleanup_reminder_title">เพิ่มพื้นที่ว่างได้ %1$s</string>
+    <string name="cleanup_reminder_text">ภาพขนาดย่อ ไฟล์ชั่วคราว และไฟล์ตกค้างที่คุณสามารถล้างได้</string>
+    <string name="cleanup_reminder_action">ล้าง</string>
+    <string name="settings_storage_history">ประวัติพื้นที่เก็บข้อมูล</string>
+    <string name="settings_storage_history_desc">เก็บภาพรวมพื้นที่เก็บข้อมูลรายวันสำหรับกราฟการเติบโต</string>
+    <!-- END recent-changes-growth -->
+
+    <!-- BEGIN share-phone -->
+    <string name="nav_share_phone">แชร์โทรศัพท์เครื่องนี้</string>
+    <string name="share_tile_running">%1$s · PIN %2$s</string>
+    <string name="share_tile_starting">กำลังเริ่ม…</string>
+    <string name="share_tile_no_network">ไม่มี Wi-Fi</string>
+    <string name="share_tile_off">ปิด</string>
+    <string name="share_channel_name">แชร์โทรศัพท์เครื่องนี้</string>
+    <string name="share_notification_title">กำลังแชร์โทรศัพท์เครื่องนี้</string>
+    <string name="share_notification_text">เปิด %1$s · PIN %2$s</string>
+    <string name="share_stop">หยุด</string>
+    <string name="share_start">เริ่มแชร์</string>
+    <string name="share_starting">กำลังเริ่ม…</string>
+    <string name="share_intro_title">เปิดไฟล์ของคุณบนคอมพิวเตอร์</string>
+    <string name="share_intro_body">Findex จะเริ่มเว็บเซิร์ฟเวอร์ขนาดเล็กบนโทรศัพท์เครื่องนี้ เบราว์เซอร์ใดๆ ใน Wi-Fi หรือฮอตสปอตเดียวกันสามารถเปิดได้ด้วย PIN แบบใช้ครั้งเดียว</string>
+    <string name="share_no_network">เชื่อมต่อ Wi-Fi หรือเปิดฮอตสปอตก่อน</string>
+    <string name="share_open_url">เปิดในเบราว์เซอร์บนคอมพิวเตอร์ของคุณ</string>
+    <string name="share_pin">PIN</string>
+    <string name="share_copy_url">คัดลอกที่อยู่</string>
+    <string name="share_copied">คัดลอกที่อยู่แล้ว</string>
+    <plurals name="share_clients">
+        <item quantity="other">เบราว์เซอร์ที่ลงชื่อเข้าใช้ %d เครื่อง</item>
+    </plurals>
+    <string name="share_clients_none">ยังไม่มีเบราว์เซอร์ลงชื่อเข้าใช้</string>
+    <string name="share_access">การเข้าถึง</string>
+    <string name="share_access_hint">การเปลี่ยนแปลงมีผลทันที รวมถึงกับเบราว์เซอร์ที่เชื่อมต่ออยู่</string>
+    <string name="share_level_view">ดูอย่างเดียว</string>
+    <string name="share_level_download">ดาวน์โหลด</string>
+    <string name="share_level_full">เต็มรูปแบบ</string>
+    <string name="share_perm_media">หมวดหมู่สื่อ</string>
+    <string name="share_perm_media_desc">รูปภาพ วิดีโอ เสียง เอกสาร และอื่นๆ</string>
+    <string name="share_perm_files">ตัวจัดการไฟล์</string>
+    <string name="share_perm_files_desc">เรียกดูทุกโฟลเดอร์บนที่เก็บข้อมูลภายในและการ์ด SD</string>
+    <string name="share_perm_download">เปิดและดาวน์โหลด</string>
+    <string name="share_perm_download_desc">ดูตัวอย่าง สตรีม และบันทึกไฟล์บนคอมพิวเตอร์</string>
+    <string name="share_perm_upload">อัปโหลด</string>
+    <string name="share_perm_upload_desc">เพิ่มไฟล์และสร้างโฟลเดอร์จากคอมพิวเตอร์</string>
+    <string name="share_perm_modify">เปลี่ยนชื่อและลบ</string>
+    <string name="share_perm_modify_desc">ไฟล์ที่ถูกลบจะถูกส่งไปยังถังรีไซเคิล</string>
+    <string name="share_auto_stop">หยุดอัตโนมัติ</string>
+    <string name="share_auto_stop_desc">หยุดเซิร์ฟเวอร์หลังจากไม่มีคำขอเป็นเวลานานเท่านี้</string>
+    <string name="share_minutes">%d นาที</string>
+    <string name="share_never">ไม่เลย</string>
+    <string name="share_security_note">การรับส่งข้อมูลไม่ได้เข้ารหัส โปรดแชร์เฉพาะบนเครือข่ายที่คุณไว้วางใจ</string>
+    <!-- END share-phone -->
+</resources>

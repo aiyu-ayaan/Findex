@@ -1,0 +1,788 @@
+<resources>
+    <!-- App & Branding -->
+    <string name="app_tagline">Material 3 Expressive 檔案總管</string>
+
+    <!-- Navigation Drawer -->
+    <string name="drawer_subtitle">檔案與雲端儲存空間</string>
+    <string name="nav_home">首頁</string>
+    <string name="nav_storage_graph">儲存空間圖表</string>
+    <string name="nav_storage_cleaner">儲存空間清理</string>
+    <string name="nav_whatsapp_cleaner">WhatsApp 清理</string>
+    <string name="nav_telegram_cleaner">Telegram 清理</string>
+    <string name="nav_instagram_cleaner">Instagram 清理</string>
+    <string name="nav_app_cleaner">應用程式清理</string>
+    <string name="nav_dual_pane">雙窗格</string>
+    <string name="dual_compare">比較資料夾</string>
+    <string name="dual_swap">交換窗格</string>
+    <string name="dual_select_missing">選取另一窗格缺少的項目</string>
+    <string name="dual_copy_to">複製到另一窗格</string>
+    <string name="dual_move_to">移動到另一窗格</string>
+    <string name="dual_up">返回上一層</string>
+    <string name="cmp_only_here">僅此處有</string>
+    <string name="cmp_newer">此處較新</string>
+    <string name="cmp_older">此處較舊</string>
+    <string name="cmp_different">不同</string>
+    <string name="cmp_same">相同</string>
+    <string name="nav_archive_manager">壓縮檔管理員</string>
+    <string name="nav_network_storage">網路儲存空間</string>
+    <string name="nav_settings">設定</string>
+    <string name="nav_recycle_bin">資源回收筒</string>
+    <string name="nav_tabs">分頁</string>
+    <string name="nav_search">搜尋</string>
+    <plurals name="tabs_open_count">
+        <item quantity="other">%d 個已開啟的分頁</item>
+    </plurals>
+    <string name="tabs_close_all">關閉所有分頁</string>
+    <string name="tabs_empty_title">沒有已開啟的分頁</string>
+    <string name="tabs_empty_body">開啟新分頁以瀏覽您的檔案</string>
+    <string name="tabs_current">目前分頁</string>
+    <string name="cd_close_tab">關閉分頁 %1$s</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">您的檔案，井然有序</string>
+    <string name="onboarding_body">Findex 需要存取所有檔案的權限，才能瀏覽、複製、壓縮及清理您的儲存空間。</string>
+    <string name="onboarding_point_access">瀏覽每個資料夾、SD 卡和 USB 隨身碟</string>
+    <string name="onboarding_point_fast">在背景複製、移動與壓縮</string>
+    <string name="onboarding_point_private">所有資料皆保留在您的裝置上</string>
+    <string name="onboarding_permissions">權限</string>
+    <string name="onboarding_storage_title">所有檔案存取權</string>
+    <string name="onboarding_storage_body">瀏覽及管理您的檔案所必需</string>
+    <string name="onboarding_notify_title">通知</string>
+    <string name="onboarding_notify_body">在您使用其他應用程式時顯示複製、移動、壓縮及清理的進度</string>
+    <string name="onboarding_allow">允許</string>
+    <string name="onboarding_granted">已允許</string>
+    <string name="onboarding_continue">繼續</string>
+    <string name="onboarding_storage_required">請允許存取所有檔案以繼續</string>
+    <string name="onboarding_notify_hint">若未開啟通知，進度將僅在 Findex 內顯示</string>
+    <string name="error_no_app">沒有應用程式可以開啟此檔案</string>
+    <string name="save_to_findex">儲存至 Findex</string>
+    <string name="save_to_findex_hint">開啟一個資料夾，然後輕觸「儲存」</string>
+    <string name="error_open_unsupported">Findex 無法開啟此檔案</string>
+
+    <!-- Tabs -->
+    <string name="tab_device">裝置</string>
+    <string name="tab_network">網路</string>
+
+    <!-- Storage Drives -->
+    <string name="storage_internal">內部儲存空間</string>
+    <string name="storage_sdcard">SD 卡</string>
+    <string name="storage_network">網路儲存空間</string>
+    <string name="storage_usb">USB 隨身碟</string>
+    <string name="storage_used_of">已使用 %1$s，共 %2$s</string>
+    <string name="storage_free_space">可用 %1$s</string>
+    <string name="storage_scanning">正在掃描儲存空間…</string>
+    <string name="storage_no_network_drives">尚未連線網路磁碟機。輕觸 + 透過 SMB / WebDAV / FTP 連線。</string>
+    <string name="storage_add_network">新增網路磁碟機</string>
+    <string name="storage_used_label">已使用</string>
+
+    <!-- Home -->
+    <string name="home_subtitle">您的檔案，井然有序</string>
+    <string name="section_categories">分類</string>
+    <string name="section_bookmarks">書籤</string>
+    <string name="section_recents">最近檔案</string>
+    <string name="cd_open_drawer">開啟導覽列</string>
+    <string name="cd_browse_drive">瀏覽儲存空間</string>
+    <plurals name="item_count">
+        <item quantity="other">%d 個項目</item>
+    </plurals>
+
+    <!-- File Categories -->
+    <string name="category_photos">相片</string>
+    <string name="category_videos">影片</string>
+    <string name="category_audio">音訊</string>
+    <string name="category_documents">文件</string>
+    <string name="category_downloads">下載</string>
+    <string name="category_archives">壓縮檔</string>
+    <string name="category_apks">APK 檔案</string>
+
+    <!-- Quick Suggestions & Tools -->
+    <string name="section_suggestions">快速工具</string>
+    <string name="cleaner_title">儲存空間清理</string>
+    <string name="cleaner_desc">清除垃圾檔案與暫存快取以釋放空間</string>
+    <string name="whatsapp_cleaner_title">WhatsApp 清理</string>
+    <string name="whatsapp_cleaner_desc">清理已傳送的媒體、語音訊息、貼圖與備份</string>
+    <string name="storage_graph_title">儲存空間分析工具</string>
+    <string name="storage_graph_desc">以視覺化方式檢視大型檔案與資料夾空間佔用分佈</string>
+
+    <!-- File Actions -->
+    <string name="action_cut">剪下</string>
+    <string name="action_copy">複製</string>
+    <string name="action_paste">貼上</string>
+    <string name="action_delete">刪除</string>
+    <string name="action_rename">重新命名</string>
+    <string name="action_details">詳細資料</string>
+    <string name="action_compress">壓縮</string>
+    <string name="action_extract">解壓縮</string>
+    <string name="action_share">分享</string>
+    <string name="action_select_all">全選</string>
+    <string name="action_deselect_all">取消選取</string>
+    <string name="action_search">搜尋檔案</string>
+    <string name="action_clean">立即清理</string>
+    <string name="action_new_folder">新增資料夾</string>
+    <string name="action_new_tab">新增分頁</string>
+    <string name="action_close_tab">關閉分頁</string>
+    <string name="action_open_in_new_tab">在新分頁中開啟</string>
+    <string name="detail_empty_hint">選取檔案即可在此處檢視預覽與詳細資料</string>
+    <string name="cd_close_details">關閉詳細資料</string>
+    <string name="rail_graph">圖表</string>
+    <string name="rail_cleaner">清理</string>
+    <string name="rail_whatsapp">WhatsApp</string>
+    <string name="rail_bin">回收筒</string>
+    <string name="action_copy_path">複製路徑</string>
+    <string name="path_copied">路徑已複製到剪貼簿</string>
+    <string name="preview_file">預覽</string>
+    <string name="preview_play_video">播放影片</string>
+    <string name="preview_play_audio">播放音訊</string>
+    <string name="preview_lines_truncated">已顯示 %1$d 行</string>
+    <string name="preview_empty_file">空白檔案</string>
+    <string name="details_item_info">項目詳細資料</string>
+    <string name="action_open">開啟</string>
+    <string name="action_create">建立</string>
+    <string name="action_bookmark">新增書籤</string>
+    <string name="action_remove_bookmark">移除書籤</string>
+    <string name="bookmark_added">已新增書籤</string>
+    <string name="bookmark_removed">已移除書籤</string>
+
+    <!-- Explorer -->
+    <string name="cd_back">返回</string>
+    <string name="cd_more_options">更多選項</string>
+    <string name="cd_more_actions">更多 %1$s 的操作</string>
+    <string name="cd_grid_view">格狀檢視</string>
+    <string name="cd_list_view">清單檢視</string>
+    <string name="cd_clear_selection">清除選取</string>
+    <string name="cd_clear_clipboard">清除剪貼簿</string>
+    <string name="cd_create_menu">建立</string>
+    <string name="cd_show_password">顯示密碼</string>
+    <string name="cd_hide_password">隱藏密碼</string>
+    <string name="empty_folder_title">此資料夾是空的</string>
+    <string name="empty_folder_body">在此處貼上檔案或建立新資料夾。</string>
+    <string name="label_name">名稱</string>
+    <string name="label_archive_name">壓縮檔名稱</string>
+    <string name="error_invalid_name">名稱不能包含「/」</string>
+    <string name="error_rename">無法重新命名 — 該名稱可能已存在</string>
+    <string name="error_new_folder">無法建立資料夾 — 該名稱可能已存在</string>
+    <string name="sort_title">排序與檢視</string>
+    <string name="sort_name">名稱</string>
+    <string name="sort_date">修改日期</string>
+    <string name="sort_size">大小</string>
+    <string name="sort_type">類型</string>
+    <string name="sort_ascending">遞增</string>
+    <string name="sort_descending">遞減</string>
+    <string name="show_hidden_files">顯示隱藏檔案</string>
+    <string name="details_path">位置</string>
+    <string name="details_modified">修改時間</string>
+    <string name="details_type">類型</string>
+    <string name="details_size">大小</string>
+    <string name="details_contains">包含</string>
+    <string name="delete_body">此操作無法復原。</string>
+    <plurals name="delete_title">
+        <item quantity="other">確定刪除 %d 個項目嗎？</item>
+    </plurals>
+    <plurals name="file_count">
+        <item quantity="other">%d 個檔案</item>
+    </plurals>
+    <plurals name="folder_count">
+        <item quantity="other">%d 個資料夾</item>
+    </plurals>
+    <plurals name="paste_here">
+        <item quantity="other">貼上 %d 個項目</item>
+    </plurals>
+    <plurals name="save_here">
+        <item quantity="other">將 %d 個檔案儲存至此處</item>
+    </plurals>
+    <plurals name="move_here">
+        <item quantity="other">將 %d 個項目移動至此處</item>
+    </plurals>
+    <string name="action_show_in_folder">在資料夾中顯示</string>
+    <string name="category_empty">尚無內容</string>
+
+    <!-- Tools -->
+    <string name="scanning">正在掃描儲存空間…</string>
+    <string name="tool_can_free">可釋放</string>
+    <string name="tool_selected_of">已選取 %1$s，共 %2$s</string>
+    <string name="tool_all_clean_title">非常乾淨</string>
+    <string name="tool_all_clean_body">目前沒有可移除的項目。</string>
+    <string name="tool_clean_confirm_title">確定清理 %1$s 嗎？</string>
+    <string name="tool_clean_confirm_body">選取的檔案將被永久刪除。</string>
+    <string name="tool_clean_button">清理 %1$s</string>
+    <string name="tool_rescan">重新掃描</string>
+    <string name="junk_thumbnails">縮圖快取</string>
+    <string name="junk_thumbnails_desc">應用程式會自動重建的預覽圖片</string>
+    <string name="junk_temp">暫存與記錄檔</string>
+    <string name="junk_temp_desc">.tmp、.log、.bak 及未完成的下載項目</string>
+    <string name="junk_apks">安裝檔案</string>
+    <string name="junk_apks_desc">您可能已安裝應用程式的 APK 檔案</string>
+    <string name="junk_empty">空資料夾</string>
+    <string name="junk_empty_desc">內部沒有任何內容的資料夾</string>
+    <string name="junk_zero">空白檔案</string>
+    <string name="junk_zero_desc">0 位元組的檔案；隱藏的標記檔案將會保留</string>
+    <string name="telegram_cleaner_title">Telegram 清理</string>
+    <string name="instagram_cleaner_title">Instagram 清理</string>
+    <string name="tg_hint">已下載與傳送的媒體及檔案。</string>
+    <string name="ig_hint">Instagram 儲存在此裝置上的相片與影片。</string>
+    <string name="tg_not_found">在此裝置上找不到 Telegram 媒體。</string>
+    <string name="ig_not_found">在此裝置上找不到 Instagram 媒體。</string>
+    <string name="app_media_files">文件與其他檔案</string>
+    <string name="app_cleaner_title">應用程式清理</string>
+    <string name="app_cleaner_hint">已移除應用程式的殘留檔案及 Findex 可存取的快取。</string>
+    <string name="app_cleaner_empty">找不到殘留檔案。Android 11 及以上版本會限制存取其他應用程式的私人快取。</string>
+    <string name="app_leftovers">殘留資料夾</string>
+    <string name="app_leftovers_desc">位於 Android/media、data 與 obb 中已解除安裝應用程式的資料夾</string>
+    <string name="app_cache">應用程式快取</string>
+    <string name="app_cache_desc">已安裝應用程式的外部快取；應用程式會自行重建</string>
+    <string name="wa_images">圖片</string>
+    <string name="wa_videos">影片</string>
+    <string name="wa_audio">音訊</string>
+    <string name="wa_voice">語音訊息</string>
+    <string name="wa_documents">文件</string>
+    <string name="wa_stickers">貼圖</string>
+    <string name="wa_gifs">GIF 動圖</string>
+    <string name="wa_backups">備份與資料庫</string>
+    <string name="wa_not_found">在此裝置上找不到 WhatsApp 媒體。</string>
+    <string name="wa_hint">已接收與已傳送的媒體，包含私人資料夾。</string>
+    <string name="analyzer_used">已使用</string>
+    <string name="analyzer_other">其他檔案與應用程式</string>
+    <string name="analyzer_free">可用</string>
+    <string name="analyzer_breakdown">空間分佈</string>
+    <string name="analyzer_largest">最大檔案</string>
+    <string name="analyzer_chart_desc">儲存空間圖表：已使用 %1$s，共 %2$s</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">外觀</string>
+    <string name="settings_theme">主題</string>
+    <string name="settings_theme_system">跟隨系統</string>
+    <string name="settings_theme_light">淺色</string>
+    <string name="settings_theme_dark">深色</string>
+    <string name="settings_dynamic_color">動態色彩</string>
+    <string name="settings_dynamic_color_desc">依據您的桌布搭配色彩</string>
+    <string name="settings_language">語言</string>
+    <string name="settings_language_system">系統預設</string>
+    <string name="settings_files">檔案</string>
+    <string name="settings_show_hidden_desc">顯示以點號開頭的檔案與資料夾</string>
+    <string name="settings_grid">預設使用格狀檢視</string>
+    <string name="settings_grid_desc">以縮圖格狀方式顯示資料夾</string>
+    <string name="settings_about">關於</string>
+    <string name="settings_version">版本</string>
+    <string name="settings_updates">更新</string>
+    <string name="settings_updates_subtitle">自動更新、發佈通道與檢查新版本</string>
+    <string name="settings_auto_update">自動更新</string>
+    <string name="settings_auto_update_desc">每天在背景及開啟 Findex 時檢查 GitHub 更新</string>
+    <string name="updates_title">更新</string>
+    <string name="updates_current">目前已安裝版本 %1$s</string>
+    <string name="settings_channel">發佈通道</string>
+    <string name="channel_stable">穩定版</string>
+    <string name="channel_beta">測試版</string>
+    <string name="channel_alpha">搶先測試版</string>
+    <string name="settings_check_updates">檢查更新</string>
+    <string name="update_checking">正在檢查…</string>
+    <string name="update_up_to_date">您目前使用的是最新版本</string>
+    <string name="update_available_row">有新版本 %1$s 可供更新</string>
+    <string name="settings_about_subtitle">版本 %1$s、開發者與致謝</string>
+    <string name="update_title">有可用更新</string>
+    <string name="update_subtitle">%1$s · 目前版本 %2$s</string>
+    <string name="update_whats_new">更新內容</string>
+    <string name="update_install">安裝</string>
+    <string name="update_allow_install">允許安裝</string>
+    <string name="update_downloading">正在下載… %1$d%%</string>
+    <string name="update_not_now">稍後再說</string>
+    <string name="update_failed">更新失敗</string>
+    <string name="update_notification_channel_name">應用程式更新</string>
+    <string name="update_notification_title">有可用更新：%1$s</string>
+    <string name="update_notification_body">輕觸以檢視發行說明並安裝</string>
+    <string name="about_title">關於 Findex</string>
+    <string name="about_section_app">應用程式</string>
+    <string name="about_version_build">版本 %1$s · 組建 %2$d</string>
+    <string name="about_source_code">原始碼</string>
+    <string name="about_section_developer">開發者</string>
+    <string name="about_developer_tagline">由獨立開發者設計與打造。</string>
+    <string name="about_portfolio">作品集</string>
+    <string name="about_section_open_source">開放原始碼</string>
+    <string name="about_acknowledgements">致謝</string>
+    <string name="about_acknowledgements_subtitle">Findex 所使用的程式庫與專案</string>
+
+    <!-- Compression & Extraction -->
+    <string name="compress_dialog_title">建立壓縮檔</string>
+    <string name="compress_format_label">格式</string>
+    <string name="compress_password_zip_only">密碼保護僅適用於 ZIP 格式。</string>
+    <string name="compress_password_hint">密碼（選填）</string>
+    <string name="compress_password_help">設定密碼後，壓縮檔將以 AES-256 加密。</string>
+    <string name="extract_password_hint">密碼（若有保護）</string>
+    <string name="extract_dialog_body">將「%1$s」解壓縮至同層目錄的新資料夾。</string>
+    <string name="compress_button">壓縮</string>
+    <string name="extract_dialog_title">解壓縮檔案</string>
+    <string name="extract_button">解壓縮</string>
+
+    <!-- Multitasking & Selection -->
+    <string name="selected_count">已選取 %1$d 項</string>
+    <string name="tabs_header">分頁</string>
+
+    <!-- Notifications & Services -->
+    <string name="notification_channel_name">檔案操作</string>
+    <string name="notification_channel_description">複製、移動、刪除與封存任務的進度及結果</string>
+    <string name="operation_in_progress">操作進行中…</string>
+    <string name="operation_completed">操作已完成</string>
+    <string name="operation_failed">操作失敗</string>
+    <string name="operation_cancelled">操作已取消</string>
+    <string name="operation_progress">%1$d%% · %2$s</string>
+    <plurals name="operation_queued">
+        <item quantity="other">%1$s · 佇列中還有 %2$d 項</item>
+    </plurals>
+    <string name="op_title_copy">正在複製 %1$s 個項目</string>
+    <string name="op_title_move">正在移動 %1$s 個項目</string>
+    <string name="op_title_delete">正在刪除 %1$s 個項目</string>
+    <string name="op_title_trash">正在將 %1$s 個項目移至資源回收筒</string>
+    <string name="op_title_restore">正在還原 %1$s 個項目</string>
+    <string name="op_title_clean">正在清理 %1$s 個項目</string>
+    <string name="op_title_compress">正在壓縮至 %1$s</string>
+    <string name="op_title_extract">正在解壓縮 %1$s</string>
+    <string name="op_done_copy">已複製 %1$s 個項目</string>
+    <string name="op_done_move">已移動 %1$s 個項目</string>
+    <string name="op_done_delete">已刪除 %1$s 個項目</string>
+    <string name="op_done_trash">已將 %1$s 個項目移至資源回收筒</string>
+    <string name="op_done_restore">已還原 %1$s 個項目</string>
+    <string name="op_done_clean">已清理 %1$s 個項目</string>
+    <string name="op_done_compress">已建立 %1$s</string>
+    <string name="op_done_extract">已解壓縮 %1$s</string>
+    <string name="op_done_batch_rename">已重新命名 %1$s 個項目</string>
+    <string name="op_done_image_transform">已壓縮 %1$s 張圖片</string>
+    <string name="op_done_vault_import">已將 %1$s 個項目移入保險箱</string>
+    <string name="op_done_vault_export">已從保險箱還原 %1$s 個項目</string>
+    <string name="op_done_vault_delete">已從保險箱刪除 %1$s 個項目</string>
+    <string name="operation_cancelled_body">在完成前已停止</string>
+    <string name="error_wrong_password">密碼錯誤或未輸入密碼</string>
+    <string name="error_unsupported_archive">不支援此壓縮檔格式或版本</string>
+    <string name="error_no_space">儲存空間不足</string>
+    <string name="error_into_itself">無法將資料夾複製到其自身中</string>
+    <string name="error_access_denied">沒有此位置的存取權限</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">確認</string>
+
+    <!-- Recycle bin -->
+    <plurals name="trash_title">
+        <item quantity="other">確定將 %d 個項目移至資源回收筒嗎？</item>
+    </plurals>
+    <string name="trash_body">您可以在 30 天內從資源回收筒還原它們。</string>
+    <string name="delete_permanently">永久刪除</string>
+    <string name="action_move_to_bin">移至回收筒</string>
+    <string name="action_restore">還原</string>
+    <string name="action_empty_bin">清空回收筒</string>
+    <string name="undo">復原</string>
+    <plurals name="moved_to_bin">
+        <item quantity="other">已將 %d 個項目移至資源回收筒</item>
+    </plurals>
+    <string name="recycle_bin_hint">項目將在 30 天後永久刪除</string>
+    <string name="recycle_bin_empty">資源回收筒是空的</string>
+
+    <!-- File Inspector & Preview -->
+    <string name="details_dimensions">尺寸</string>
+    <string name="details_resolution">解析度</string>
+    <string name="details_duration">長度</string>
+    <string name="details_megapixels">%1$.1f MP</string>
+    <string name="details_artist">演出者</string>
+    <string name="details_album">專輯</string>
+    <string name="details_package">套件名稱</string>
+    <string name="details_version">版本</string>
+    <string name="details_checksums">總和檢查碼</string>
+    <string name="details_calculate_hash">計算總和檢查碼</string>
+    <string name="details_calculating">正在計算…</string>
+    <string name="details_copied_hash">總和檢查碼已複製到剪貼簿</string>
+    <string name="preview_fullscreen">全螢幕</string>
+    <string name="preview_zoom_hint">雙指撥動縮放 · 點兩下縮放</string>
+    <string name="action_open_in_another_app">以其他應用程式開啟</string>
+    <string name="action_rotate">旋轉</string>
+    <string name="action_reset_zoom">重設縮放</string>
+    <string name="viewer_item_position">第 %1$d 項，共 %2$d 項</string>
+    <string name="preview_copy_text">複製內容</string>
+    <string name="preview_text_copied">內容已複製到剪貼簿</string>
+    <string name="preview_lines_count">%1$d 行</string>
+    <string name="action_install">安裝</string>
+    <string name="action_play">播放</string>
+    <string name="action_pause">暫停</string>
+    <string name="action_open_folder">開啟資料夾</string>
+    <string name="details_overview">概覽</string>
+    <string name="details_exact_bytes">%1$s 位元組</string>
+
+    <!-- Search -->
+    <string name="search_hint">搜尋檔案與資料夾</string>
+    <string name="search_prompt">依名稱尋找儲存空間中的任何項目</string>
+    <string name="search_no_results">沒有符合「%1$s」的檔案</string>
+    <string name="cd_clear_search">清除搜尋</string>
+
+    <!-- Duplicate finder -->
+    <string name="nav_duplicates">重複檔案</string>
+    <string name="dup_title">重複檔案</string>
+    <string name="dup_desc">佔用空間的相同複本</string>
+    <string name="dup_none">找不到重複檔案</string>
+    <string name="dup_keep_hint">將保留每個檔案最舊的複本。至少一律會保留一份複本。</string>
+    <string name="dup_delete_button">刪除 %1$s</string>
+    <string name="dup_hashing">正在比對檔案內容…</string>
+    <plurals name="dup_copies">
+        <item quantity="other">%d 個複本</item>
+    </plurals>
+
+    <!-- Archive preview -->
+    <string name="action_browse">瀏覽內容</string>
+    <string name="archive_extract_all">全部解壓縮</string>
+    <string name="archive_empty">此壓縮檔是空的</string>
+    <string name="archive_unreadable">無法列出此壓縮檔內容。它可能已加密或損毀；請嘗試使用密碼「全部解壓縮」。</string>
+    <string name="archive_password_title">需要密碼</string>
+    <string name="archive_password_body">「%1$s」已加密。</string>
+    <string name="archive_unlock">解鎖</string>
+    <string name="archive_password_label">密碼</string>
+    <string name="archive_opening">正在開啟 %1$s…</string>
+
+    <!-- Network storage (SMB / SFTP / FTP / WebDAV) -->
+    <string name="network_title">網路儲存空間</string>
+    <string name="network_subtitle">網路上的 SMB、SFTP、FTP 與 WebDAV 伺服器</string>
+    <string name="network_empty_title">尚無伺服器</string>
+    <string name="network_empty_body">新增來自電腦、NAS 或伺服器的共用資料夾以在此瀏覽。</string>
+    <string name="network_add">新增伺服器</string>
+    <string name="network_add_title">新增網路伺服器</string>
+    <string name="network_protocol_label">通訊協定</string>
+    <string name="network_webdav_https">使用 HTTPS (TLS)</string>
+    <string name="network_field_name">顯示名稱（選填）</string>
+    <string name="network_field_host">主機或 IP 位址</string>
+    <string name="network_field_host_help">例如 192.168.1.20 或 my-nas.local</string>
+    <string name="network_field_port">連接埠（選填）</string>
+    <string name="network_field_port_default">預設 %1$d</string>
+    <string name="network_field_share">共用名稱</string>
+    <string name="network_field_share_help">共用資料夾，例如 Public</string>
+    <string name="network_field_path">遠端路徑（選填）</string>
+    <string name="network_field_path_help_sftp">留空表示家目錄，或輸入如 /mnt/media 的路徑</string>
+    <string name="network_field_path_help_ftp">留空表示根目錄，或輸入如 /pub 的路徑</string>
+    <string name="network_field_path_help_webdav">端點路徑，例如 /dav 或 /remote.php/dav/files/user</string>
+    <string name="network_field_user">使用者名稱</string>
+    <string name="network_field_user_help">留空以訪客身分連線</string>
+    <string name="network_field_user_help_sftp">伺服器上的 SSH 使用者名稱</string>
+    <string name="network_field_password">密碼</string>
+    <string name="network_field_domain">網域或工作群組（選填）</string>
+    <string name="network_connect">連線並儲存</string>
+    <string name="network_connecting">正在連線…</string>
+    <string name="network_password_note">使用保存在 Android Keystore 中的金鑰加密。留空則重複使用為此使用者名稱儲存的密碼。</string>
+    <string name="network_guest">訪客</string>
+    <string name="network_status_connected">已連線</string>
+    <string name="network_remember_password">記住密碼</string>
+    <string name="network_edit">編輯伺服器</string>
+    <string name="network_edit_title">編輯網路伺服器</string>
+    <string name="network_save">測試並儲存</string>
+    <string name="network_password_keep_note">留空以保留目前的密碼。</string>
+    <string name="network_password_not_saved_note">未儲存。每次開啟 Findex 時都會詢問您一次。</string>
+    <string name="network_error_password_required">需要密碼才能連線</string>
+    <string name="network_unlock">解鎖</string>
+    <string name="network_unlock_title">連線至「%1$s」</string>
+    <string name="network_unlock_body">%1$s 的密碼。將保留至您關閉 Findex。</string>
+    <string name="network_status_offline">已中斷連線。%1$s</string>
+    <string name="network_retry">重試連線</string>
+    <string name="network_remove">移除伺服器</string>
+    <string name="network_remove_title">確定移除「%1$s」嗎？</string>
+    <string name="network_remove_body">已儲存的登入資訊與任何已下載的複本都將被刪除。伺服器上的檔案不受影響。</string>
+    <string name="network_error_host">無法連線至伺服器。請檢查位址、連接埠以及是否位於同一網路。</string>
+    <string name="network_error_auth">登入失敗。請檢查使用者名稱與密碼。</string>
+    <string name="network_error_share">此伺服器上沒有該名稱的共用或遠端路徑。</string>
+    <string name="network_error_denied">此帳戶存取遭拒。</string>
+    <string name="network_error_unknown">與伺服器通訊時發生錯誤。</string>
+    <string name="rail_network">網路</string>
+    <string name="new_tab_title">開啟新分頁於</string>
+    <string name="error_network">無法存取網路共用</string>
+    <string name="error_not_supported_network">在網路共用上無法使用</string>
+    <string name="network_opening_remote">正在下載 %1$s…</string>
+
+    <!-- BEGIN foundation -->
+    <string name="drawer_section_more">更多</string>
+    <string name="nav_favorites">我的最愛</string>
+    <string name="nav_large_files">大型檔案</string>
+    <string name="nav_recent_changes">最近變更</string>
+    <string name="nav_vault">保險箱</string>
+    <string name="action_batch_rename">批次重新命名</string>
+    <string name="action_move_to_vault">移至保險箱</string>
+    <string name="action_compress_image">壓縮圖片</string>
+    <string name="action_tags">標籤</string>
+    <string name="action_pin_shortcut">新增至主畫面</string>
+    <string name="op_title_batch_rename">正在重新命名 %1$s 個項目</string>
+    <string name="op_title_image_transform">正在壓縮 %1$s 張圖片</string>
+    <string name="op_title_vault_import">正在將 %1$s 個項目移入保險箱</string>
+    <string name="op_title_vault_export">正在從保險箱還原 %1$s 個項目</string>
+    <string name="op_title_vault_delete">正在從保險箱刪除 %1$s 個項目</string>
+    <string name="error_vault_locked">保險箱已鎖定</string>
+    <string name="error_nested_selection">無法同時重新命名資料夾及其內部項目。請分開重新命名。</string>
+    <string name="error_name_conflict">已存在相同名稱的檔案</string>
+    <string name="error_op_invalid_name">不允許使用該名稱</string>
+    <string name="error_unsupported_image">不支援此圖片格式</string>
+    <string name="placeholder_coming_soon">即將推出</string>
+    <string name="selection_expired">選取已過期。請重新選取檔案。</string>
+    <!-- END foundation -->
+
+    <!-- BEGIN batch-rename -->
+    <string name="rename_title">批次重新命名</string>
+    <string name="rename_pattern_label">命名規則</string>
+    <string name="rename_token_name">名稱</string>
+    <string name="rename_token_ext">副檔名</string>
+    <string name="rename_token_counter">計數器</string>
+    <string name="rename_token_date">日期</string>
+    <string name="rename_token_parent">上層資料夾</string>
+    <string name="rename_find_label">尋找</string>
+    <string name="rename_replace_label">取代為</string>
+    <string name="rename_regex">使用正規表示式</string>
+    <string name="rename_ignore_case">忽略大小寫</string>
+    <string name="rename_case_none">保留大小寫</string>
+    <string name="rename_case_lower">全小寫</string>
+    <string name="rename_case_upper">全大寫</string>
+    <string name="rename_case_title">字首大寫</string>
+    <string name="rename_counter_start">起始值</string>
+    <string name="rename_counter_step">遞增值</string>
+    <string name="rename_counter_pad">位數</string>
+    <string name="rename_touch_extension">同時變更副檔名</string>
+    <string name="rename_status_unchanged">未變更</string>
+    <string name="rename_status_duplicate">名稱重複</string>
+    <string name="rename_status_exists">名稱已存在</string>
+    <string name="rename_status_invalid">名稱無效</string>
+    <string name="rename_status_bad_regex">規則無效</string>
+    <string name="rename_apply">重新命名</string>
+    <plurals name="rename_summary">
+        <item quantity="other">將重新命名 %d 個項目</item>
+    </plurals>
+    <!-- END batch-rename -->
+
+    <!-- BEGIN large-files -->
+    <string name="bigfiles_title">大型與舊檔案</string>
+    <string name="bigfiles_size_any">任何大小</string>
+    <string name="bigfiles_size_100mb">大於 100 MB</string>
+    <string name="bigfiles_size_500mb">大於 500 MB</string>
+    <string name="bigfiles_size_1gb">大於 1 GB</string>
+    <string name="bigfiles_age_any">任何時間</string>
+    <string name="bigfiles_age_30d">超過 30 天</string>
+    <string name="bigfiles_age_90d">超過 90 天</string>
+    <string name="bigfiles_age_6mo">超過 6 個月</string>
+    <string name="bigfiles_age_1y">超過 1 年</string>
+    <string name="bigfiles_category_any">任何類型</string>
+    <string name="bigfiles_include_hidden">包含隱藏檔案</string>
+    <string name="bigfiles_hint_modified">時間依據最後修改日期</string>
+    <string name="bigfiles_empty">沒有符合這些篩選條件的檔案</string>
+    <plurals name="bigfiles_selected">
+        <item quantity="other">已選取 %d 個檔案</item>
+    </plurals>
+    <!-- END large-files -->
+
+    <!-- BEGIN image-compress -->
+    <string name="imgc_title">壓縮圖片</string>
+    <string name="imgc_preset_small">小</string>
+    <string name="imgc_preset_medium">中</string>
+    <string name="imgc_preset_large">大</string>
+    <string name="imgc_preset_custom">自訂</string>
+    <string name="imgc_max_edge">最長邊 (px)</string>
+    <string name="imgc_scale_percent">縮放比例 (%)</string>
+    <string name="imgc_quality">畫質</string>
+    <string name="imgc_format_keep">保留原格式</string>
+    <string name="imgc_output_copy">另存為複本</string>
+    <string name="imgc_output_replace">取代原始檔案</string>
+    <string name="imgc_output_folder">儲存至資料夾</string>
+    <string name="imgc_keep_metadata">保留位置與相機資訊</string>
+    <string name="imgc_estimate">預估大小：%1$s</string>
+    <string name="imgc_replace_warning">原始檔案將被覆寫且無法復原。</string>
+    <plurals name="imgc_skipped">
+        <item quantity="other">已略過 %d 張圖片</item>
+    </plurals>
+    <!-- END image-compress -->
+
+    <!-- BEGIN vault -->
+    <string name="vault_title">保險箱</string>
+    <string name="vault_setup_title">設定您的保險箱</string>
+    <string name="vault_setup_password">保險箱密碼</string>
+    <string name="vault_setup_confirm">確認密碼</string>
+    <string name="vault_setup_mismatch">密碼不相符</string>
+    <string name="vault_setup_strength_weak">弱</string>
+    <string name="vault_setup_strength_fair">普通</string>
+    <string name="vault_setup_strength_strong">強</string>
+    <string name="vault_setup_biometric">使用指紋或臉部解鎖</string>
+    <string name="vault_setup_warning_no_recovery">沒有密碼復原功能。如果您忘記密碼，您的檔案將會遺失。</string>
+    <string name="vault_setup_warning_not_secure_erase">原始檔案將以一般方式移除，而非安全抹除。已刪除的資料仍可能從儲存空間中復原。</string>
+    <string name="vault_setup_acknowledge">我了解相關風險</string>
+    <string name="vault_setup_create">建立保險箱</string>
+    <string name="vault_unlock_title">解鎖保險箱</string>
+    <string name="vault_unlock_password">密碼</string>
+    <string name="vault_unlock_biometric">使用指紋或臉部辨識</string>
+    <string name="vault_unlock_wrong_password">密碼錯誤</string>
+    <string name="vault_unlock_lockout">嘗試次數過多。請在 %1$s 後再試一次。</string>
+    <string name="vault_biometric_prompt_title">解鎖保險箱</string>
+    <string name="vault_biometric_prompt_subtitle">請驗證您的身分</string>
+    <string name="vault_biometric_prompt_negative">使用密碼</string>
+    <string name="vault_biometric_invalidated">指紋或臉部資訊已變更。請使用密碼解鎖並重新設定生物辨識。</string>
+    <string name="vault_add_files">新增檔案</string>
+    <string name="vault_import_confirm">確定移至保險箱嗎？原始檔案將被永久刪除，不會移至資源回收筒。</string>
+    <string name="vault_export_original">還原至原始位置</string>
+    <string name="vault_export_choose_folder">選擇資料夾</string>
+    <string name="vault_open_external_warning">在保險箱外開啟將在裝置上留下未加密的複本。</string>
+    <string name="vault_menu_change_password">變更密碼</string>
+    <string name="vault_menu_biometric">指紋或臉部解鎖</string>
+    <string name="vault_menu_auto_lock">自動鎖定</string>
+    <string name="vault_menu_lock_now">立即鎖定</string>
+    <string name="vault_auto_lock_immediately">立即</string>
+    <string name="vault_auto_lock_1min">1 分鐘後</string>
+    <string name="vault_auto_lock_5min">5 分鐘後</string>
+    <string name="vault_auto_lock_screen_off">螢幕關閉時</string>
+    <string name="vault_restore_title">還原至原始位置嗎？</string>
+    <string name="vault_restore_body">檔案將被解密並移回其原始資料夾。缺少的資料夾將會重新建立。</string>
+    <string name="vault_restore_action">還原</string>
+    <string name="vault_empty">您的保險箱是空的</string>
+    <string name="vault_locked_banner">保險箱已鎖定。請解鎖以檢視您的檔案。</string>
+    <string name="cd_vault_lock">鎖定保險箱</string>
+    <string name="vault_setup_min_length">請使用至少 8 個字元</string>
+    <string name="vault_unlock_action">解鎖</string>
+    <string name="vault_password_current">目前密碼</string>
+    <string name="vault_password_new">新密碼</string>
+    <string name="vault_password_changed">密碼已變更</string>
+    <string name="vault_unreadable_title">無法讀取保險箱金鑰</string>
+    <string name="vault_unreadable_body">加密檔案位於 .FindexVault 資料夾中，但其 vault.key 檔案遺失或已損毀。請從備份還原 vault.key 以開啟它們。系統不會建立新的保險箱，因此檔案仍可復原。</string>
+    <string name="vault_rebuild_title">先前安裝留下的檔案</string>
+    <string name="vault_rebuild_body">在保險箱資料夾中發現了加密檔案。要將它們還原至清單中嗎？</string>
+    <string name="vault_rebuild_action">還原清單</string>
+    <string name="vault_add_files_hint">在檔案總管中，長按檔案或資料夾並選擇「移至保險箱」。</string>
+    <string name="vault_delete_confirm">確定從保險箱中刪除 %1$d 個項目嗎？它們將無法復原。</string>
+    <string name="vault_biometric_error">指紋或臉部解鎖無法使用</string>
+    <string name="vault_import_ready">%1$d 個項目將被加密。原始檔案將被永久刪除，不會移至資源回收筒。</string>
+    <!-- END vault -->
+
+    <!-- BEGIN viewers -->
+    <string name="viewer_text_save">儲存</string>
+    <string name="viewer_text_saved">已儲存</string>
+    <string name="viewer_text_unsaved_title">放棄變更嗎？</string>
+    <string name="viewer_text_unsaved_body">您的編輯將會遺失。</string>
+    <string name="viewer_text_discard">放棄</string>
+    <string name="viewer_text_conflict_title">檔案已在磁碟上變更</string>
+    <string name="viewer_text_conflict_body">自您開啟此檔案以來，另一個應用程式已修改它。</string>
+    <string name="viewer_text_overwrite">覆寫</string>
+    <string name="viewer_text_read_only">唯讀</string>
+    <string name="viewer_text_truncated">檔案過大。僅顯示開頭部分。</string>
+    <string name="viewer_text_not_text">此檔案不是純文字檔。</string>
+    <string name="viewer_text_find">尋找</string>
+    <string name="viewer_text_wrap">自動換行</string>
+    <string name="viewer_text_undo">復原</string>
+    <string name="viewer_text_redo">重做</string>
+    <string name="viewer_text_encoding">編碼</string>
+    <string name="viewer_pdf_page_of">第 %1$d 頁，共 %2$d 頁</string>
+    <string name="viewer_pdf_go_to_page">前往頁面</string>
+    <string name="viewer_pdf_protected">此 PDF 受密碼保護</string>
+    <string name="viewer_pdf_password">密碼</string>
+    <string name="viewer_pdf_downloading">正在下載 PDF…</string>
+    <string name="viewer_pdf_error">無法開啟此 PDF</string>
+    <string name="viewer_audio_play">播放</string>
+    <string name="viewer_audio_pause">暫停</string>
+    <string name="viewer_audio_next">下一首</string>
+    <string name="viewer_audio_previous">上一首</string>
+    <string name="viewer_audio_repeat">重複播放</string>
+    <string name="viewer_audio_shuffle">隨機播放</string>
+    <string name="viewer_audio_queue">播放佇列</string>
+    <string name="viewer_audio_error">無法播放此檔案</string>
+    <string name="viewer_text_error">無法讀取或儲存此檔案</string>
+    <!-- END viewers -->
+
+    <!-- BEGIN tags-favorites -->
+    <string name="tags_title">標籤</string>
+    <string name="tags_new">新增標籤</string>
+    <string name="tags_name_hint">標籤名稱</string>
+    <string name="tags_color_red">紅色</string>
+    <string name="tags_color_orange">橘色</string>
+    <string name="tags_color_yellow">黃色</string>
+    <string name="tags_color_green">綠色</string>
+    <string name="tags_color_teal">青色</string>
+    <string name="tags_color_blue">藍色</string>
+    <string name="tags_color_purple">紫色</string>
+    <string name="tags_color_pink">粉紅色</string>
+    <string name="tags_rename">重新命名標籤</string>
+    <string name="tags_delete_title">確定刪除標籤「%1$s」嗎？</string>
+    <string name="tags_delete_body">檔案會保留其資料，僅移除此標籤。</string>
+    <string name="tags_empty">尚無標籤</string>
+    <string name="favorites_title">我的最愛</string>
+    <string name="favorites_folders">資料夾</string>
+    <string name="favorites_files">檔案</string>
+    <string name="favorites_tags">標籤</string>
+    <string name="favorites_empty">尚未儲存任何項目</string>
+    <string name="tags_apply">套用</string>
+    <string name="tags_save">儲存</string>
+    <string name="tags_files_empty">沒有帶有此標籤的檔案</string>
+    <!-- END tags-favorites -->
+
+    <!-- BEGIN shortcuts -->
+    <string name="shortcut_pinned">已將捷徑新增至主畫面</string>
+    <string name="shortcut_unsupported">您的主畫面啟動器不支援捷徑</string>
+    <string name="shortcut_folder_missing">此資料夾已不存在</string>
+    <!-- END shortcuts -->
+
+    <!-- BEGIN recent-changes-growth -->
+    <string name="changes_title">最近變更</string>
+    <string name="changes_today">今天</string>
+    <string name="changes_yesterday">昨天</string>
+    <string name="changes_range_1d">過去 24 小時</string>
+    <string name="changes_range_7d">過去 7 天</string>
+    <string name="changes_range_30d">過去 30 天</string>
+    <string name="changes_empty">無最近變更</string>
+    <string name="changes_limit_hint">僅顯示最新的變更。</string>
+    <string name="growth_title">儲存空間成長</string>
+    <string name="growth_range_30d">30 天</string>
+    <string name="growth_range_90d">90 天</string>
+    <string name="growth_range_1y">1 年</string>
+    <string name="growth_delta_up">增加 %1$s</string>
+    <string name="growth_delta_down">減少 %1$s</string>
+    <string name="growth_empty">歷史紀錄尚不足。Findex 每天會記錄一次儲存空間。</string>
+    <string name="viewer_pdf_dark_pages">深色頁面</string>
+    <string name="settings_builtin_viewers">內建檢視器</string>
+    <string name="settings_builtin_viewers_desc">在 Findex 內開啟相片、影片、PDF、文字與音訊。關閉則使用您的預設應用程式</string>
+    <string name="widget_label">Findex 儲存空間</string>
+    <string name="widget_description">儲存空間使用狀況、快速清理與您加入書籤的資料夾</string>
+    <string name="widget_used">已使用 %1$d%%</string>
+    <string name="widget_free">可用 %1$s，共 %2$s</string>
+    <string name="settings_cleanup_reminder">清理提醒</string>
+    <string name="settings_cleanup_reminder_desc">每週在發現值得清理的垃圾檔案時通知我</string>
+    <string name="cleanup_reminder_channel">清理提醒</string>
+    <string name="cleanup_reminder_title">可釋放 %1$s</string>
+    <string name="cleanup_reminder_text">您可以清理縮圖、暫存檔與殘留檔案</string>
+    <string name="cleanup_reminder_action">清理</string>
+    <string name="settings_storage_history">儲存空間歷史紀錄</string>
+    <string name="settings_storage_history_desc">保留每日儲存空間快照以繪製成長圖表</string>
+    <!-- END recent-changes-growth -->
+
+    <!-- BEGIN share-phone -->
+    <string name="nav_share_phone">分享此手機</string>
+    <string name="share_tile_running">%1$s · PIN 碼 %2$s</string>
+    <string name="share_tile_starting">正在啟動…</string>
+    <string name="share_tile_no_network">無 Wi-Fi</string>
+    <string name="share_tile_off">關閉</string>
+    <string name="share_channel_name">分享此手機</string>
+    <string name="share_notification_title">正在分享此手機</string>
+    <string name="share_notification_text">開啟 %1$s · PIN 碼 %2$s</string>
+    <string name="share_stop">停止</string>
+    <string name="share_start">開始分享</string>
+    <string name="share_starting">正在啟動…</string>
+    <string name="share_intro_title">在電腦上開啟您的檔案</string>
+    <string name="share_intro_body">Findex 會在此手機上啟動一個小型網頁伺服器。同一 Wi-Fi 或熱點上的任何瀏覽器都能使用一次性 PIN 碼開啟它。</string>
+    <string name="share_no_network">請先連線至 Wi-Fi 或開啟熱點。</string>
+    <string name="share_open_url">在電腦瀏覽器中開啟</string>
+    <string name="share_pin">PIN 碼</string>
+    <string name="share_copy_url">複製網址</string>
+    <string name="share_copied">網址已複製</string>
+    <plurals name="share_clients">
+        <item quantity="other">%d 個瀏覽器已登入</item>
+    </plurals>
+    <string name="share_clients_none">尚無瀏覽器登入</string>
+    <string name="share_access">存取權限</string>
+    <string name="share_access_hint">變更會立即套用，包含已連線的瀏覽器。</string>
+    <string name="share_level_view">檢視</string>
+    <string name="share_level_download">下載</string>
+    <string name="share_level_full">完整權限</string>
+    <string name="share_perm_media">媒體分類</string>
+    <string name="share_perm_media_desc">相片、影片、音訊、文件等</string>
+    <string name="share_perm_files">檔案總管</string>
+    <string name="share_perm_files_desc">瀏覽內部儲存空間與 SD 卡上的每個資料夾</string>
+    <string name="share_perm_download">開啟與下載</string>
+    <string name="share_perm_download_desc">在電腦上預覽、串流及儲存檔案</string>
+    <string name="share_perm_upload">上傳</string>
+    <string name="share_perm_upload_desc">從電腦新增檔案及建立資料夾</string>
+    <string name="share_perm_modify">重新命名與刪除</string>
+    <string name="share_perm_modify_desc">已刪除的檔案會移至資源回收筒</string>
+    <string name="share_auto_stop">自動停止</string>
+    <string name="share_auto_stop_desc">在此時間內沒有任何請求後自動停止伺服器</string>
+    <string name="share_minutes">%d 分鐘</string>
+    <string name="share_never">永不</string>
+    <string name="share_security_note">傳輸未加密。請僅在您信任的網路上分享。</string>
+    <!-- END share-phone -->
+</resources>

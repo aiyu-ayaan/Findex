@@ -1,0 +1,789 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App & Branding -->
+    <string name="app_tagline">Material 3 Expressive ファイルエクスプローラー</string>
+
+    <!-- Navigation Drawer -->
+    <string name="drawer_subtitle">ファイルとクラウドストレージ</string>
+    <string name="nav_home">ホーム</string>
+    <string name="nav_storage_graph">ストレージグラフ</string>
+    <string name="nav_storage_cleaner">ストレージクリーナー</string>
+    <string name="nav_whatsapp_cleaner">WhatsApp クリーナー</string>
+    <string name="nav_telegram_cleaner">Telegram クリーナー</string>
+    <string name="nav_instagram_cleaner">Instagram クリーナー</string>
+    <string name="nav_app_cleaner">アプリクリーナー</string>
+    <string name="nav_dual_pane">2ペイン表示</string>
+    <string name="dual_compare">フォルダーを比較</string>
+    <string name="dual_swap">ペインを入れ替え</string>
+    <string name="dual_select_missing">反対側のペインにない項目を選択</string>
+    <string name="dual_copy_to">反対側のペインにコピー</string>
+    <string name="dual_move_to">反対側のペインに移動</string>
+    <string name="dual_up">1つ上のフォルダーへ</string>
+    <string name="cmp_only_here">こちらのみ</string>
+    <string name="cmp_newer">こちらが新しい</string>
+    <string name="cmp_older">こちらが古い</string>
+    <string name="cmp_different">異なる</string>
+    <string name="cmp_same">同じ</string>
+    <string name="nav_archive_manager">アーカイブマネージャー</string>
+    <string name="nav_network_storage">ネットワークストレージ</string>
+    <string name="nav_settings">設定</string>
+    <string name="nav_recycle_bin">ゴミ箱</string>
+    <string name="nav_tabs">タブ</string>
+    <string name="nav_search">検索</string>
+    <plurals name="tabs_open_count">
+        <item quantity="other">%d 個のタブが開いています</item>
+    </plurals>
+    <string name="tabs_close_all">すべてのタブを閉じる</string>
+    <string name="tabs_empty_title">開いているタブはありません</string>
+    <string name="tabs_empty_body">新しいタブを開いてファイルを参照します</string>
+    <string name="tabs_current">現在のタブ</string>
+    <string name="cd_close_tab">タブ %1$s を閉じる</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">ファイルを美しく整理</string>
+    <string name="onboarding_body">Findex がストレージの参照、コピー、圧縮、クリーンアップを行うには、すべてのファイルへのアクセス権限が必要です。</string>
+    <string name="onboarding_point_access">すべてのフォルダー、SDカード、USBドライブを参照</string>
+    <string name="onboarding_point_fast">バックグラウンドでコピー、移動、圧縮を実行</string>
+    <string name="onboarding_point_private">すべてデバイス内に保持されます</string>
+    <string name="onboarding_permissions">権限</string>
+    <string name="onboarding_storage_title">すべてのファイルへのアクセス</string>
+    <string name="onboarding_storage_body">ファイルの参照と管理に必要です</string>
+    <string name="onboarding_notify_title">通知</string>
+    <string name="onboarding_notify_body">他のアプリを使用している間も、コピー、移動、圧縮、クリーンアップの進行状況を表示します</string>
+    <string name="onboarding_allow">許可</string>
+    <string name="onboarding_granted">許可済み</string>
+    <string name="onboarding_continue">続行</string>
+    <string name="onboarding_storage_required">続行するにはすべてのファイルへのアクセスを許可してください</string>
+    <string name="onboarding_notify_hint">通知がオフの場合、進行状況は Findex 内でのみ表示されます</string>
+    <string name="error_no_app">このファイルを開けるアプリがありません</string>
+    <string name="save_to_findex">Findex に保存</string>
+    <string name="save_to_findex_hint">フォルダーを開いて「保存」をタップしてください</string>
+    <string name="error_open_unsupported">Findex はこのファイルを開けません</string>
+
+    <!-- Tabs -->
+    <string name="tab_device">デバイス</string>
+    <string name="tab_network">ネットワーク</string>
+
+    <!-- Storage Drives -->
+    <string name="storage_internal">内部ストレージ</string>
+    <string name="storage_sdcard">SDカード</string>
+    <string name="storage_network">ネットワークストレージ</string>
+    <string name="storage_usb">USBドライブ</string>
+    <string name="storage_used_of">%2$s 中 %1$s 使用済み</string>
+    <string name="storage_free_space">空き %1$s</string>
+    <string name="storage_scanning">ストレージをスキャン中…</string>
+    <string name="storage_no_network_drives">ネットワークドライブが接続されていません。+ をタップして SMB / WebDAV / FTP で接続します。</string>
+    <string name="storage_add_network">ネットワークドライブを追加</string>
+    <string name="storage_used_label">使用済み</string>
+
+    <!-- Home -->
+    <string name="home_subtitle">ファイルをすっきりと整理</string>
+    <string name="section_categories">カテゴリー</string>
+    <string name="section_bookmarks">ブックマーク</string>
+    <string name="section_recents">最近のファイル</string>
+    <string name="cd_open_drawer">ナビゲーションドロワーを開く</string>
+    <string name="cd_browse_drive">ストレージを参照</string>
+    <plurals name="item_count">
+        <item quantity="other">%d 項目</item>
+    </plurals>
+
+    <!-- File Categories -->
+    <string name="category_photos">写真</string>
+    <string name="category_videos">動画</string>
+    <string name="category_audio">音声</string>
+    <string name="category_documents">ドキュメント</string>
+    <string name="category_downloads">ダウンロード</string>
+    <string name="category_archives">アーカイブ</string>
+    <string name="category_apks">APK</string>
+
+    <!-- Quick Suggestions & Tools -->
+    <string name="section_suggestions">クイックツール</string>
+    <string name="cleaner_title">ストレージクリーナー</string>
+    <string name="cleaner_desc">不要ファイルや一時キャッシュを削除して空き容量を増やします</string>
+    <string name="whatsapp_cleaner_title">WhatsApp クリーナー</string>
+    <string name="whatsapp_cleaner_desc">送信済みメディア、音声メモ、スタンプ、バックアップをクリーンアップ</string>
+    <string name="storage_graph_title">ストレージアナライザー</string>
+    <string name="storage_graph_desc">大きなファイルやフォルダーの容量使用状況を可視化します</string>
+
+    <!-- File Actions -->
+    <string name="action_cut">切り取り</string>
+    <string name="action_copy">コピー</string>
+    <string name="action_paste">貼り付け</string>
+    <string name="action_delete">削除</string>
+    <string name="action_rename">名前を変更</string>
+    <string name="action_details">詳細</string>
+    <string name="action_compress">圧縮</string>
+    <string name="action_extract">展開</string>
+    <string name="action_share">共有</string>
+    <string name="action_select_all">すべて選択</string>
+    <string name="action_deselect_all">選択解除</string>
+    <string name="action_search">ファイルを検索</string>
+    <string name="action_clean">今すぐクリーンアップ</string>
+    <string name="action_new_folder">新しいフォルダー</string>
+    <string name="action_new_tab">新しいタブ</string>
+    <string name="action_close_tab">タブを閉じる</string>
+    <string name="action_open_in_new_tab">新しいタブで開く</string>
+    <string name="detail_empty_hint">ファイルを選択すると、ここにプレビューと詳細が表示されます</string>
+    <string name="cd_close_details">詳細を閉じる</string>
+    <string name="rail_graph">グラフ</string>
+    <string name="rail_cleaner">クリーナー</string>
+    <string name="rail_whatsapp">WhatsApp</string>
+    <string name="rail_bin">ゴミ箱</string>
+    <string name="action_copy_path">パスをコピー</string>
+    <string name="path_copied">パスをクリップボードにコピーしました</string>
+    <string name="preview_file">プレビュー</string>
+    <string name="preview_play_video">動画を再生</string>
+    <string name="preview_play_audio">音声を再生</string>
+    <string name="preview_lines_truncated">%1$d 行を表示中</string>
+    <string name="preview_empty_file">空のファイル</string>
+    <string name="details_item_info">項目の詳細</string>
+    <string name="action_open">開く</string>
+    <string name="action_create">作成</string>
+    <string name="action_bookmark">ブックマークに追加</string>
+    <string name="action_remove_bookmark">ブックマークを削除</string>
+    <string name="bookmark_added">ブックマークに追加しました</string>
+    <string name="bookmark_removed">ブックマークを削除しました</string>
+
+    <!-- Explorer -->
+    <string name="cd_back">戻る</string>
+    <string name="cd_more_options">その他のオプション</string>
+    <string name="cd_more_actions">%1$s のその他の操作</string>
+    <string name="cd_grid_view">グリッド表示</string>
+    <string name="cd_list_view">リスト表示</string>
+    <string name="cd_clear_selection">選択を解除</string>
+    <string name="cd_clear_clipboard">クリップボードをクリア</string>
+    <string name="cd_create_menu">作成</string>
+    <string name="cd_show_password">パスワードを表示</string>
+    <string name="cd_hide_password">パスワードを隠す</string>
+    <string name="empty_folder_title">このフォルダーは空です</string>
+    <string name="empty_folder_body">ここにファイルを貼り付けるか、新しいフォルダーを作成してください。</string>
+    <string name="label_name">名前</string>
+    <string name="label_archive_name">アーカイブ名</string>
+    <string name="error_invalid_name">名前に「/」は使用できません</string>
+    <string name="error_rename">名前を変更できませんでした — 同じ名前がすでに存在する可能性があります</string>
+    <string name="error_new_folder">フォルダーを作成できませんでした — 同じ名前がすでに存在する可能性があります</string>
+    <string name="sort_title">並べ替えと表示</string>
+    <string name="sort_name">名前</string>
+    <string name="sort_date">更新日時</string>
+    <string name="sort_size">サイズ</string>
+    <string name="sort_type">種類</string>
+    <string name="sort_ascending">昇順</string>
+    <string name="sort_descending">降順</string>
+    <string name="show_hidden_files">隠しファイルを表示</string>
+    <string name="details_path">場所</string>
+    <string name="details_modified">更新日時</string>
+    <string name="details_type">種類</string>
+    <string name="details_size">サイズ</string>
+    <string name="details_contains">内容</string>
+    <string name="delete_body">この操作は取り消せません。</string>
+    <plurals name="delete_title">
+        <item quantity="other">%d 項目を削除しますか？</item>
+    </plurals>
+    <plurals name="file_count">
+        <item quantity="other">%d 個のファイル</item>
+    </plurals>
+    <plurals name="folder_count">
+        <item quantity="other">%d 個のフォルダー</item>
+    </plurals>
+    <plurals name="paste_here">
+        <item quantity="other">%d 項目を貼り付け</item>
+    </plurals>
+    <plurals name="save_here">
+        <item quantity="other">%d 個のファイルをここに保存</item>
+    </plurals>
+    <plurals name="move_here">
+        <item quantity="other">%d 項目をここに移動</item>
+    </plurals>
+    <string name="action_show_in_folder">フォルダーに表示</string>
+    <string name="category_empty">まだ何もありません</string>
+
+    <!-- Tools -->
+    <string name="scanning">ストレージをスキャン中…</string>
+    <string name="tool_can_free">解放可能</string>
+    <string name="tool_selected_of">%2$s 中 %1$s を選択</string>
+    <string name="tool_all_clean_title">すべてクリーン</string>
+    <string name="tool_all_clean_body">現在削除できるものはありません。</string>
+    <string name="tool_clean_confirm_title">%1$s をクリーンアップしますか？</string>
+    <string name="tool_clean_confirm_body">選択したファイルは完全に削除されます。</string>
+    <string name="tool_clean_button">%1$s をクリーンアップ</string>
+    <string name="tool_rescan">再スキャン</string>
+    <string name="junk_thumbnails">サムネイルキャッシュ</string>
+    <string name="junk_thumbnails_desc">アプリが自動的に再生成するプレビュー画像</string>
+    <string name="junk_temp">一時ファイルとログファイル</string>
+    <string name="junk_temp_desc">.tmp、.log、.bak ファイルおよび未完了のダウンロード</string>
+    <string name="junk_apks">インストールファイル</string>
+    <string name="junk_apks_desc">インストール済みの可能性があるアプリの APK ファイル</string>
+    <string name="junk_empty">空のフォルダー</string>
+    <string name="junk_empty_desc">中身が空のフォルダー</string>
+    <string name="junk_zero">空のファイル</string>
+    <string name="junk_zero_desc">0 バイトのファイル（隠しマーカーファイルは保持されます）</string>
+    <string name="telegram_cleaner_title">Telegram クリーナー</string>
+    <string name="instagram_cleaner_title">Instagram クリーナー</string>
+    <string name="tg_hint">ダウンロードおよび送信されたメディアとファイル。</string>
+    <string name="ig_hint">Instagram がこのデバイスに保存した写真と動画。</string>
+    <string name="tg_not_found">このデバイスに Telegram のメディアが見つかりません。</string>
+    <string name="ig_not_found">このデバイスに Instagram のメディアが見つかりません。</string>
+    <string name="app_media_files">ドキュメントとその他のファイル</string>
+    <string name="app_cleaner_title">アプリクリーナー</string>
+    <string name="app_cleaner_hint">削除されたアプリの残留ファイルと Findex がアクセスできるキャッシュ。</string>
+    <string name="app_cleaner_empty">残留ファイルは見つかりませんでした。Android 11 以降では他のアプリのプライベートキャッシュにアクセスできません。</string>
+    <string name="app_leftovers">残留フォルダー</string>
+    <string name="app_leftovers_desc">Android/media、data、obb 内のアンインストール済みアプリのフォルダー</string>
+    <string name="app_cache">アプリキャッシュ</string>
+    <string name="app_cache_desc">インストール済みアプリの外部キャッシュ（必要に応じて再生成されます）</string>
+    <string name="wa_images">画像</string>
+    <string name="wa_videos">動画</string>
+    <string name="wa_audio">音声</string>
+    <string name="wa_voice">音声メモ</string>
+    <string name="wa_documents">ドキュメント</string>
+    <string name="wa_stickers">スタンプ</string>
+    <string name="wa_gifs">GIF</string>
+    <string name="wa_backups">バックアップとデータベース</string>
+    <string name="wa_not_found">このデバイスに WhatsApp のメディアが見つかりません。</string>
+    <string name="wa_hint">プライベートフォルダーを含む送受信メディア。</string>
+    <string name="analyzer_used">使用済み</string>
+    <string name="analyzer_other">その他のファイルとアプリ</string>
+    <string name="analyzer_free">空き</string>
+    <string name="analyzer_breakdown">内訳</string>
+    <string name="analyzer_largest">容量の大きいファイル</string>
+    <string name="analyzer_chart_desc">ストレージグラフ: %2$s 中 %1$s 使用済み</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">外観</string>
+    <string name="settings_theme">テーマ</string>
+    <string name="settings_theme_system">システム設定</string>
+    <string name="settings_theme_light">ライト</string>
+    <string name="settings_theme_dark">ダーク</string>
+    <string name="settings_dynamic_color">ダイナミックカラー</string>
+    <string name="settings_dynamic_color_desc">壁紙に合わせて配色を変更します</string>
+    <string name="settings_language">言語</string>
+    <string name="settings_language_system">システムデフォルト</string>
+    <string name="settings_files">ファイル</string>
+    <string name="settings_show_hidden_desc">ドットで始まるファイルとフォルダーを表示</string>
+    <string name="settings_grid">デフォルトでグリッド表示</string>
+    <string name="settings_grid_desc">フォルダーをサムネイルのグリッドとして表示</string>
+    <string name="settings_about">情報</string>
+    <string name="settings_version">バージョン</string>
+    <string name="settings_updates">アップデート</string>
+    <string name="settings_updates_subtitle">自動更新、リリースチャンネル、新バージョンの確認</string>
+    <string name="settings_auto_update">自動更新</string>
+    <string name="settings_auto_update_desc">バックグラウンドで毎日および Findex の起動時に GitHub を確認</string>
+    <string name="updates_title">アップデート</string>
+    <string name="updates_current">インストール済みバージョン %1$s</string>
+    <string name="settings_channel">リリースチャンネル</string>
+    <string name="channel_stable">安定版</string>
+    <string name="channel_beta">ベータ版</string>
+    <string name="channel_alpha">アルファ版</string>
+    <string name="settings_check_updates">アップデートを確認</string>
+    <string name="update_checking">確認中…</string>
+    <string name="update_up_to_date">最新バージョンを使用しています</string>
+    <string name="update_available_row">バージョン %1$s が利用可能です</string>
+    <string name="settings_about_subtitle">バージョン %1$s、開発者、謝辞</string>
+    <string name="update_title">アップデートが利用可能です</string>
+    <string name="update_subtitle">%1$s · 現在 %2$s を使用中</string>
+    <string name="update_whats_new">新機能</string>
+    <string name="update_install">インストール</string>
+    <string name="update_allow_install">インストールを許可</string>
+    <string name="update_downloading">ダウンロード中… %1$d%%</string>
+    <string name="update_not_now">後で</string>
+    <string name="update_failed">アップデートに失敗しました</string>
+    <string name="update_notification_channel_name">アプリのアップデート</string>
+    <string name="update_notification_title">アップデートが利用可能: %1$s</string>
+    <string name="update_notification_body">タップしてリリースノートを表示しインストール</string>
+    <string name="about_title">Findex について</string>
+    <string name="about_section_app">アプリ</string>
+    <string name="about_version_build">バージョン %1$s · ビルド %2$d</string>
+    <string name="about_source_code">ソースコード</string>
+    <string name="about_section_developer">開発者</string>
+    <string name="about_developer_tagline">1人の開発者によって設計・開発されました。</string>
+    <string name="about_portfolio">ポートフォリオ</string>
+    <string name="about_section_open_source">オープンソース</string>
+    <string name="about_acknowledgements">謝辞</string>
+    <string name="about_acknowledgements_subtitle">Findex が利用しているライブラリーとプロジェクト</string>
+
+    <!-- Compression & Extraction -->
+    <string name="compress_dialog_title">アーカイブを作成</string>
+    <string name="compress_format_label">形式</string>
+    <string name="compress_password_zip_only">パスワード保護は ZIP のみ利用できます。</string>
+    <string name="compress_password_hint">パスワード（任意）</string>
+    <string name="compress_password_help">パスワードを設定すると、アーカイブは AES-256 で暗号化されます。</string>
+    <string name="extract_password_hint">パスワード（保護されている場合）</string>
+    <string name="extract_dialog_body">「%1$s」を同じ場所の新しいフォルダーに展開します。</string>
+    <string name="compress_button">圧縮</string>
+    <string name="extract_dialog_title">アーカイブを展開</string>
+    <string name="extract_button">展開</string>
+
+    <!-- Multitasking & Selection -->
+    <string name="selected_count">%1$d 件選択中</string>
+    <string name="tabs_header">タブ</string>
+
+    <!-- Notifications & Services -->
+    <string name="notification_channel_name">ファイル操作</string>
+    <string name="notification_channel_description">コピー、移動、削除、アーカイブ処理の進行状況と結果</string>
+    <string name="operation_in_progress">処理を実行中…</string>
+    <string name="operation_completed">処理が完了しました</string>
+    <string name="operation_failed">処理に失敗しました</string>
+    <string name="operation_cancelled">処理がキャンセルされました</string>
+    <string name="operation_progress">%1$d%% · %2$s</string>
+    <plurals name="operation_queued">
+        <item quantity="other">%1$s · 他 %2$d 件待機中</item>
+    </plurals>
+    <string name="op_title_copy">%1$s 項目をコピー中</string>
+    <string name="op_title_move">%1$s 項目を移動中</string>
+    <string name="op_title_delete">%1$s 項目を削除中</string>
+    <string name="op_title_trash">%1$s 項目をゴミ箱に移動中</string>
+    <string name="op_title_restore">%1$s 項目を復元中</string>
+    <string name="op_title_clean">%1$s 項目をクリーンアップ中</string>
+    <string name="op_title_compress">%1$s に圧縮中</string>
+    <string name="op_title_extract">%1$s を展開中</string>
+    <string name="op_done_copy">%1$s 項目をコピーしました</string>
+    <string name="op_done_move">%1$s 項目を移動しました</string>
+    <string name="op_done_delete">%1$s 項目を削除しました</string>
+    <string name="op_done_trash">%1$s 項目をゴミ箱に移動しました</string>
+    <string name="op_done_restore">%1$s 項目を復元しました</string>
+    <string name="op_done_clean">%1$s 項目をクリーンアップしました</string>
+    <string name="op_done_compress">%1$s を作成しました</string>
+    <string name="op_done_extract">%1$s を展開しました</string>
+    <string name="op_done_batch_rename">%1$s 項目の名前を変更しました</string>
+    <string name="op_done_image_transform">%1$s 枚の画像を圧縮しました</string>
+    <string name="op_done_vault_import">%1$s 項目を保管庫に移動しました</string>
+    <string name="op_done_vault_export">%1$s 項目を保管庫から復元しました</string>
+    <string name="op_done_vault_delete">%1$s 項目を保管庫から削除しました</string>
+    <string name="operation_cancelled_body">完了前に停止しました</string>
+    <string name="error_wrong_password">パスワードが間違っているか入力されていません</string>
+    <string name="error_unsupported_archive">このアーカイブ形式またはバージョンには対応していません</string>
+    <string name="error_no_space">ストレージの空き容量が不足しています</string>
+    <string name="error_into_itself">フォルダーをそれ自体の中にコピーすることはできません</string>
+    <string name="error_access_denied">この場所へのアクセス権限がありません</string>
+    <string name="cancel">キャンセル</string>
+    <string name="confirm">確認</string>
+
+    <!-- Recycle bin -->
+    <plurals name="trash_title">
+        <item quantity="other">%d 項目をゴミ箱に移動しますか？</item>
+    </plurals>
+    <string name="trash_body">ゴミ箱から30日間復元できます。</string>
+    <string name="delete_permanently">完全に削除</string>
+    <string name="action_move_to_bin">ゴミ箱へ移動</string>
+    <string name="action_restore">復元</string>
+    <string name="action_empty_bin">ゴミ箱を空にする</string>
+    <string name="undo">元に戻す</string>
+    <plurals name="moved_to_bin">
+        <item quantity="other">%d 項目をゴミ箱に移動しました</item>
+    </plurals>
+    <string name="recycle_bin_hint">項目は30日後に完全に削除されます</string>
+    <string name="recycle_bin_empty">ゴミ箱は空です</string>
+
+    <!-- File Inspector & Preview -->
+    <string name="details_dimensions">サイズ（ピクセル）</string>
+    <string name="details_resolution">解像度</string>
+    <string name="details_duration">再生時間</string>
+    <string name="details_megapixels">%1$.1f MP</string>
+    <string name="details_artist">アーティスト</string>
+    <string name="details_album">アルバム</string>
+    <string name="details_package">パッケージ</string>
+    <string name="details_version">バージョン</string>
+    <string name="details_checksums">チェックサム</string>
+    <string name="details_calculate_hash">チェックサムを計算</string>
+    <string name="details_calculating">計算中…</string>
+    <string name="details_copied_hash">チェックサムをクリップボードにコピーしました</string>
+    <string name="preview_fullscreen">全画面</string>
+    <string name="preview_zoom_hint">ピンチまたはダブルタップで拡大・縮小</string>
+    <string name="action_open_in_another_app">別のアプリで開く</string>
+    <string name="action_rotate">回転</string>
+    <string name="action_reset_zoom">ズームをリセット</string>
+    <string name="viewer_item_position">%1$d / %2$d</string>
+    <string name="preview_copy_text">内容をコピー</string>
+    <string name="preview_text_copied">内容をクリップボードにコピーしました</string>
+    <string name="preview_lines_count">%1$d 行</string>
+    <string name="action_install">インストール</string>
+    <string name="action_play">再生</string>
+    <string name="action_pause">一時停止</string>
+    <string name="action_open_folder">フォルダーを開く</string>
+    <string name="details_overview">概要</string>
+    <string name="details_exact_bytes">%1$s バイト</string>
+
+    <!-- Search -->
+    <string name="search_hint">ファイルとフォルダーを検索</string>
+    <string name="search_prompt">ストレージ内のファイルを名前で検索</string>
+    <string name="search_no_results">「%1$s」に一致するファイルはありません</string>
+    <string name="cd_clear_search">検索をクリア</string>
+
+    <!-- Duplicate finder -->
+    <string name="nav_duplicates">重複ファイル</string>
+    <string name="dup_title">重複ファイル</string>
+    <string name="dup_desc">容量を消費している同一のコピー</string>
+    <string name="dup_none">重複ファイルは見つかりませんでした</string>
+    <string name="dup_keep_hint">各ファイルの最も古いコピーが保持されます。少なくとも1つのコピーは常に残ります。</string>
+    <string name="dup_delete_button">%1$s を削除</string>
+    <string name="dup_hashing">ファイルの内容を比較中…</string>
+    <plurals name="dup_copies">
+        <item quantity="other">%d 個のコピー</item>
+    </plurals>
+
+    <!-- Archive preview -->
+    <string name="action_browse">内容を参照</string>
+    <string name="archive_extract_all">すべて展開</string>
+    <string name="archive_empty">このアーカイブは空です</string>
+    <string name="archive_unreadable">このアーカイブの一覧を表示できません。暗号化されているか破損している可能性があります。パスワードを使用して「すべて展開」をお試しください。</string>
+    <string name="archive_password_title">パスワードが必要です</string>
+    <string name="archive_password_body">「%1$s」は暗号化されています。</string>
+    <string name="archive_unlock">ロック解除</string>
+    <string name="archive_password_label">パスワード</string>
+    <string name="archive_opening">%1$s を開いています…</string>
+
+    <!-- Network storage (SMB / SFTP / FTP / WebDAV) -->
+    <string name="network_title">ネットワークストレージ</string>
+    <string name="network_subtitle">ネットワーク上の SMB、SFTP、FTP、WebDAV サーバー</string>
+    <string name="network_empty_title">サーバーがまだありません</string>
+    <string name="network_empty_body">PC、NAS、またはサーバーの共有フォルダーを追加してここから参照できます。</string>
+    <string name="network_add">サーバーを追加</string>
+    <string name="network_add_title">ネットワークサーバーを追加</string>
+    <string name="network_protocol_label">プロトコル</string>
+    <string name="network_webdav_https">HTTPS (TLS) を使用</string>
+    <string name="network_field_name">表示名（任意）</string>
+    <string name="network_field_host">ホストまたは IP アドレス</string>
+    <string name="network_field_host_help">例: 192.168.1.20 または my-nas.local</string>
+    <string name="network_field_port">ポート（任意）</string>
+    <string name="network_field_port_default">デフォルト %1$d</string>
+    <string name="network_field_share">共有名</string>
+    <string name="network_field_share_help">共有フォルダー名（例: Public）</string>
+    <string name="network_field_path">リモートパス（任意）</string>
+    <string name="network_field_path_help_sftp">ホームフォルダーの場合は空欄、または /mnt/media などのパスを入力</string>
+    <string name="network_field_path_help_ftp">ルートフォルダーの場合は空欄、または /pub などのパスを入力</string>
+    <string name="network_field_path_help_webdav">エンドポイントのパス（例: /dav または /remote.php/dav/files/user）</string>
+    <string name="network_field_user">ユーザー名</string>
+    <string name="network_field_user_help">ゲストとして接続する場合は空欄にしてください</string>
+    <string name="network_field_user_help_sftp">サーバーの SSH ユーザー名</string>
+    <string name="network_field_password">パスワード</string>
+    <string name="network_field_domain">ドメインまたはワークグループ（任意）</string>
+    <string name="network_connect">接続して保存</string>
+    <string name="network_connecting">接続中…</string>
+    <string name="network_password_note">Android Keystore に保存された鍵で暗号化されます。このユーザー名に保存されたパスワードを再利用する場合は空欄にしてください。</string>
+    <string name="network_guest">ゲスト</string>
+    <string name="network_status_connected">接続済み</string>
+    <string name="network_remember_password">パスワードを記憶</string>
+    <string name="network_edit">サーバーを編集</string>
+    <string name="network_edit_title">ネットワークサーバーを編集</string>
+    <string name="network_save">テストして保存</string>
+    <string name="network_password_keep_note">現在のパスワードを保持する場合は空欄にしてください。</string>
+    <string name="network_password_not_saved_note">保存されません。Findex を開くたびに1回入力を求められます。</string>
+    <string name="network_error_password_required">接続にはパスワードが必要です</string>
+    <string name="network_unlock">ロック解除</string>
+    <string name="network_unlock_title">「%1$s」に接続</string>
+    <string name="network_unlock_body">%1$s のパスワード。Findex を閉じるまで保持されます。</string>
+    <string name="network_status_offline">切断済み。%1$s</string>
+    <string name="network_retry">再接続</string>
+    <string name="network_remove">サーバーを削除</string>
+    <string name="network_remove_title">「%1$s」を削除しますか？</string>
+    <string name="network_remove_body">保存されたログイン情報とダウンロード済みのコピーが削除されます。サーバー上のファイルは変更されません。</string>
+    <string name="network_error_host">サーバーに到達できません。アドレス、ポート、および同じネットワーク上にいることを確認してください。</string>
+    <string name="network_error_auth">サインインに失敗しました。ユーザー名とパスワードを確認してください。</string>
+    <string name="network_error_share">このサーバー上にその名前の共有またはリモートパスがありません。</string>
+    <string name="network_error_denied">このアカウントへのアクセスが拒否されました。</string>
+    <string name="network_error_unknown">サーバーとの通信中に問題が発生しました。</string>
+    <string name="rail_network">ネットワーク</string>
+    <string name="new_tab_title">新しいタブで開く場所</string>
+    <string name="error_network">ネットワーク共有に到達できませんでした</string>
+    <string name="error_not_supported_network">ネットワーク共有では利用できません</string>
+    <string name="network_opening_remote">%1$s をダウンロード中…</string>
+
+    <!-- BEGIN foundation (W1: drawer, entry actions, operation titles, failures) -->
+    <string name="drawer_section_more">その他</string>
+    <string name="nav_favorites">お気に入り</string>
+    <string name="nav_large_files">大きなファイル</string>
+    <string name="nav_recent_changes">最近の変更</string>
+    <string name="nav_vault">保管庫</string>
+    <string name="action_batch_rename">一括名前変更</string>
+    <string name="action_move_to_vault">保管庫に移動</string>
+    <string name="action_compress_image">画像を圧縮</string>
+    <string name="action_tags">タグ</string>
+    <string name="action_pin_shortcut">ホーム画面に追加</string>
+    <string name="op_title_batch_rename">%1$s 項目の名前を変更中</string>
+    <string name="op_title_image_transform">%1$s 枚の画像を圧縮中</string>
+    <string name="op_title_vault_import">%1$s 項目を保管庫に移動中</string>
+    <string name="op_title_vault_export">%1$s 項目を保管庫から復元中</string>
+    <string name="op_title_vault_delete">%1$s 項目を保管庫から削除中</string>
+    <string name="error_vault_locked">保管庫はロックされています</string>
+    <string name="error_nested_selection">フォルダーとその中の項目を同時に名前変更することはできません。別々に変更してください。</string>
+    <string name="error_name_conflict">その名前のファイルはすでに存在します</string>
+    <string name="error_op_invalid_name">その名前は使用できません</string>
+    <string name="error_unsupported_image">この画像形式には対応していません</string>
+    <string name="placeholder_coming_soon">近日公開</string>
+    <string name="selection_expired">選択の有効期限が切れました。ファイルをもう一度選択してください。</string>
+    <!-- END foundation -->
+
+    <!-- BEGIN batch-rename -->
+    <string name="rename_title">一括名前変更</string>
+    <string name="rename_pattern_label">名前のパターン</string>
+    <string name="rename_token_name">名前</string>
+    <string name="rename_token_ext">拡張子</string>
+    <string name="rename_token_counter">連番</string>
+    <string name="rename_token_date">日付</string>
+    <string name="rename_token_parent">親フォルダー</string>
+    <string name="rename_find_label">検索</string>
+    <string name="rename_replace_label">置換後</string>
+    <string name="rename_regex">正規表現を使用</string>
+    <string name="rename_ignore_case">大文字・小文字を区別しない</string>
+    <string name="rename_case_none">元のまま</string>
+    <string name="rename_case_lower">小文字</string>
+    <string name="rename_case_upper">大文字</string>
+    <string name="rename_case_title">単語の先頭を大文字</string>
+    <string name="rename_counter_start">開始番号</string>
+    <string name="rename_counter_step">増分</string>
+    <string name="rename_counter_pad">桁数</string>
+    <string name="rename_touch_extension">拡張子も変更する</string>
+    <string name="rename_status_unchanged">変更なし</string>
+    <string name="rename_status_duplicate">重複する名前</string>
+    <string name="rename_status_exists">すでに存在する名前</string>
+    <string name="rename_status_invalid">無効な名前</string>
+    <string name="rename_status_bad_regex">無効なパターン</string>
+    <string name="rename_apply">名前を変更</string>
+    <plurals name="rename_summary">
+        <item quantity="other">%d 項目の名前が変更されます</item>
+    </plurals>
+    <!-- END batch-rename -->
+
+    <!-- BEGIN large-files -->
+    <string name="bigfiles_title">大きくて古いファイル</string>
+    <string name="bigfiles_size_any">すべてのサイズ</string>
+    <string name="bigfiles_size_100mb">100 MB 以上</string>
+    <string name="bigfiles_size_500mb">500 MB 以上</string>
+    <string name="bigfiles_size_1gb">1 GB 以上</string>
+    <string name="bigfiles_age_any">すべての期間</string>
+    <string name="bigfiles_age_30d">30日以上前</string>
+    <string name="bigfiles_age_90d">90日以上前</string>
+    <string name="bigfiles_age_6mo">6か月以上前</string>
+    <string name="bigfiles_age_1y">1年以上前</string>
+    <string name="bigfiles_category_any">すべての種類</string>
+    <string name="bigfiles_include_hidden">隠しファイルを含める</string>
+    <string name="bigfiles_hint_modified">経過日数は最終更新日に基づきます</string>
+    <string name="bigfiles_empty">これらの条件に一致するファイルはありません</string>
+    <plurals name="bigfiles_selected">
+        <item quantity="other">%d 個のファイルを選択中</item>
+    </plurals>
+    <!-- END large-files -->
+
+    <!-- BEGIN image-compress -->
+    <string name="imgc_title">画像を圧縮</string>
+    <string name="imgc_preset_small">小</string>
+    <string name="imgc_preset_medium">中</string>
+    <string name="imgc_preset_large">大</string>
+    <string name="imgc_preset_custom">カスタム</string>
+    <string name="imgc_max_edge">長辺の最大値 (px)</string>
+    <string name="imgc_scale_percent">拡大縮小 (%)</string>
+    <string name="imgc_quality">品質</string>
+    <string name="imgc_format_keep">元の形式を維持</string>
+    <string name="imgc_output_copy">コピーとして保存</string>
+    <string name="imgc_output_replace">元のファイルを置き換え</string>
+    <string name="imgc_output_folder">フォルダーに保存</string>
+    <string name="imgc_keep_metadata">位置情報とカメラ情報を保持</string>
+    <string name="imgc_estimate">推定サイズ: %1$s</string>
+    <string name="imgc_replace_warning">元のファイルは上書きされ、元に戻すことはできません。</string>
+    <plurals name="imgc_skipped">
+        <item quantity="other">%d 枚の画像をスキップしました</item>
+    </plurals>
+    <!-- END image-compress -->
+
+    <!-- BEGIN vault -->
+    <string name="vault_title">保管庫</string>
+    <string name="vault_setup_title">保管庫を設定</string>
+    <string name="vault_setup_password">保管庫のパスワード</string>
+    <string name="vault_setup_confirm">パスワードを確認</string>
+    <string name="vault_setup_mismatch">パスワードが一致しません</string>
+    <string name="vault_setup_strength_weak">弱い</string>
+    <string name="vault_setup_strength_fair">普通</string>
+    <string name="vault_setup_strength_strong">強い</string>
+    <string name="vault_setup_biometric">指紋または顔認証でロック解除</string>
+    <string name="vault_setup_warning_no_recovery">パスワードの復元機能はありません。パスワードを忘れるとファイルは失われます。</string>
+    <string name="vault_setup_warning_not_secure_erase">元のファイルは通常の方法で削除され、完全消去はされません。削除されたデータはストレージから復元可能な場合があります。</string>
+    <string name="vault_setup_acknowledge">リスクを理解しました</string>
+    <string name="vault_setup_create">保管庫を作成</string>
+    <string name="vault_unlock_title">保管庫のロック解除</string>
+    <string name="vault_unlock_password">パスワード</string>
+    <string name="vault_unlock_biometric">指紋または顔認証を使用</string>
+    <string name="vault_unlock_wrong_password">パスワードが間違っています</string>
+    <string name="vault_unlock_lockout">試行回数が多すぎます。%1$s 後にもう一度お試しください。</string>
+    <string name="vault_biometric_prompt_title">保管庫のロック解除</string>
+    <string name="vault_biometric_prompt_subtitle">本人確認</string>
+    <string name="vault_biometric_prompt_negative">パスワードを使用</string>
+    <string name="vault_biometric_invalidated">指紋または顔データが変更されました。パスワードでロックを解除して生体認証を再設定してください。</string>
+    <string name="vault_add_files">ファイルを追加</string>
+    <string name="vault_import_confirm">保管庫に移動しますか？元のファイルはゴミ箱に移動せず完全に削除されます。</string>
+    <string name="vault_export_original">元の場所に復元</string>
+    <string name="vault_export_choose_folder">フォルダーを選択</string>
+    <string name="vault_open_external_warning">保管庫の外で開くと、暗号化されていないコピーがこのデバイスに残ります。</string>
+    <string name="vault_menu_change_password">パスワードを変更</string>
+    <string name="vault_menu_biometric">指紋または顔認証ロック解除</string>
+    <string name="vault_menu_auto_lock">自動ロック</string>
+    <string name="vault_menu_lock_now">今すぐロック</string>
+    <string name="vault_auto_lock_immediately">即時</string>
+    <string name="vault_auto_lock_1min">1分後</string>
+    <string name="vault_auto_lock_5min">5分後</string>
+    <string name="vault_auto_lock_screen_off">画面オフ時</string>
+    <string name="vault_restore_title">元の場所に復元しますか？</string>
+    <string name="vault_restore_body">ファイルは復号され、元のフォルダーに戻されます。存在しないフォルダーは再作成されます。</string>
+    <string name="vault_restore_action">復元</string>
+    <string name="vault_empty">保管庫は空です</string>
+    <string name="vault_locked_banner">保管庫はロックされています。ファイルを見るにはロックを解除してください。</string>
+    <string name="cd_vault_lock">保管庫をロック</string>
+    <string name="vault_setup_min_length">8文字以上入力してください</string>
+    <string name="vault_unlock_action">ロック解除</string>
+    <string name="vault_password_current">現在のパスワード</string>
+    <string name="vault_password_new">新しいパスワード</string>
+    <string name="vault_password_changed">パスワードを変更しました</string>
+    <string name="vault_unreadable_title">保管庫の鍵を読み取れません</string>
+    <string name="vault_unreadable_body">暗号化されたファイルは .FindexVault フォルダーにありますが、vault.key ファイルが見つからないか破損しています。開くにはバックアップから vault.key を復元してください。ファイルを復元可能な状態に保つため、新しい保管庫は作成されません。</string>
+    <string name="vault_rebuild_title">以前のインストールのファイル</string>
+    <string name="vault_rebuild_body">保管庫フォルダーに暗号化されたファイルが見つかりました。リストに復元しますか？</string>
+    <string name="vault_rebuild_action">リストを復元</string>
+    <string name="vault_add_files_hint">エクスプローラーでファイルまたはフォルダーを長押しし、「保管庫に移動」を選択します。</string>
+    <string name="vault_delete_confirm">%1$d 項目を保管庫から削除しますか？復元できなくなります。</string>
+    <string name="vault_biometric_error">指紋または顔認証によるロック解除は利用できません</string>
+    <string name="vault_import_ready">%1$d 項目が暗号化されます。元のファイルはゴミ箱に移動せず完全に削除されます。</string>
+    <!-- END vault -->
+
+    <!-- BEGIN viewers -->
+    <string name="viewer_text_save">保存</string>
+    <string name="viewer_text_saved">保存しました</string>
+    <string name="viewer_text_unsaved_title">変更を破棄しますか？</string>
+    <string name="viewer_text_unsaved_body">編集内容は失われます。</string>
+    <string name="viewer_text_discard">破棄</string>
+    <string name="viewer_text_conflict_title">ディスク上のファイルが変更されました</string>
+    <string name="viewer_text_conflict_body">開いた後に別のアプリがこのファイルを変更しました。</string>
+    <string name="viewer_text_overwrite">上書き</string>
+    <string name="viewer_text_read_only">読み取り専用</string>
+    <string name="viewer_text_truncated">ファイルが大きすぎます。最初の部分のみ表示しています。</string>
+    <string name="viewer_text_not_text">このファイルはプレーンテキストではありません。</string>
+    <string name="viewer_text_find">検索</string>
+    <string name="viewer_text_wrap">行を折り返す</string>
+    <string name="viewer_text_undo">元に戻す</string>
+    <string name="viewer_text_redo">やり直す</string>
+    <string name="viewer_text_encoding">文字コード</string>
+    <string name="viewer_pdf_page_of">%1$d / %2$d ページ</string>
+    <string name="viewer_pdf_go_to_page">ページに移動</string>
+    <string name="viewer_pdf_protected">この PDF はパスワードで保護されています</string>
+    <string name="viewer_pdf_password">パスワード</string>
+    <string name="viewer_pdf_downloading">PDF をダウンロード中…</string>
+    <string name="viewer_pdf_error">この PDF を開けませんでした</string>
+    <string name="viewer_audio_play">再生</string>
+    <string name="viewer_audio_pause">一時停止</string>
+    <string name="viewer_audio_next">次のトラック</string>
+    <string name="viewer_audio_previous">前のトラック</string>
+    <string name="viewer_audio_repeat">リピート</string>
+    <string name="viewer_audio_shuffle">シャッフル</string>
+    <string name="viewer_audio_queue">キュー</string>
+    <string name="viewer_audio_error">このファイルを再生できませんでした</string>
+    <string name="viewer_text_error">このファイルを読み取りまたは保存できませんでした</string>
+    <!-- END viewers -->
+
+    <!-- BEGIN tags-favorites -->
+    <string name="tags_title">タグ</string>
+    <string name="tags_new">新しいタグ</string>
+    <string name="tags_name_hint">タグ名</string>
+    <string name="tags_color_red">赤</string>
+    <string name="tags_color_orange">オレンジ</string>
+    <string name="tags_color_yellow">黄</string>
+    <string name="tags_color_green">緑</string>
+    <string name="tags_color_teal">青緑</string>
+    <string name="tags_color_blue">青</string>
+    <string name="tags_color_purple">紫</string>
+    <string name="tags_color_pink">ピンク</string>
+    <string name="tags_rename">タグ名を変更</string>
+    <string name="tags_delete_title">タグ「%1$s」を削除しますか？</string>
+    <string name="tags_delete_body">ファイルのデータはそのまま残ります。タグのみが削除されます。</string>
+    <string name="tags_empty">タグはまだありません</string>
+    <string name="favorites_title">お気に入り</string>
+    <string name="favorites_folders">フォルダー</string>
+    <string name="favorites_files">ファイル</string>
+    <string name="favorites_tags">タグ</string>
+    <string name="favorites_empty">まだ何も保存されていません</string>
+    <string name="tags_apply">適用</string>
+    <string name="tags_save">保存</string>
+    <string name="tags_files_empty">このタグが付いたファイルはありません</string>
+    <!-- END tags-favorites -->
+
+    <!-- BEGIN shortcuts -->
+    <string name="shortcut_pinned">ホーム画面にショートカットを追加しました</string>
+    <string name="shortcut_unsupported">お使いのランチャーはショートカットに対応していません</string>
+    <string name="shortcut_folder_missing">このフォルダーはもう存在しません</string>
+    <!-- END shortcuts -->
+
+    <!-- BEGIN recent-changes-growth -->
+    <string name="changes_title">最近の変更</string>
+    <string name="changes_today">今日</string>
+    <string name="changes_yesterday">昨日</string>
+    <string name="changes_range_1d">過去24時間</string>
+    <string name="changes_range_7d">過去7日間</string>
+    <string name="changes_range_30d">過去30日間</string>
+    <string name="changes_empty">最近の変更はありません</string>
+    <string name="changes_limit_hint">最新の変更のみ表示しています。</string>
+    <string name="growth_title">ストレージの増加</string>
+    <string name="growth_range_30d">30日間</string>
+    <string name="growth_range_90d">90日間</string>
+    <string name="growth_range_1y">1年間</string>
+    <string name="growth_delta_up">%1$s 増加</string>
+    <string name="growth_delta_down">%1$s 減少</string>
+    <string name="growth_empty">履歴がまだ十分ではありません。Findex は毎日ストレージを記録します。</string>
+    <string name="viewer_pdf_dark_pages">ダークページ</string>
+    <string name="settings_builtin_viewers">内蔵ビューアー</string>
+    <string name="settings_builtin_viewers_desc">写真、動画、PDF、テキスト、音声を Findex で開きます。オフにするとデフォルトアプリを使用します</string>
+    <string name="widget_label">Findex ストレージ</string>
+    <string name="widget_description">ストレージ使用量、クイッククリーン、ブックマークしたフォルダー</string>
+    <string name="widget_used">%1$d%% 使用済み</string>
+    <string name="widget_free">%2$s 中 %1$s 空き</string>
+    <string name="settings_cleanup_reminder">クリーンアップ通知</string>
+    <string name="settings_cleanup_reminder_desc">クリーンアップできる不要ファイルがあるとき週1回通知します</string>
+    <string name="cleanup_reminder_channel">クリーンアップ通知</string>
+    <string name="cleanup_reminder_title">%1$s を解放できます</string>
+    <string name="cleanup_reminder_text">クリーンアップできるサムネイル、一時ファイル、残留データ</string>
+    <string name="cleanup_reminder_action">クリーンアップ</string>
+    <string name="settings_storage_history">ストレージ履歴</string>
+    <string name="settings_storage_history_desc">増加グラフ用に毎日のストレージスナップショットを保存</string>
+    <!-- END recent-changes-growth -->
+
+    <!-- BEGIN share-phone -->
+    <string name="nav_share_phone">このスマートフォンを共有</string>
+    <string name="share_tile_running">%1$s · PIN %2$s</string>
+    <string name="share_tile_starting">開始中…</string>
+    <string name="share_tile_no_network">Wi-Fi なし</string>
+    <string name="share_tile_off">オフ</string>
+    <string name="share_channel_name">このスマートフォンを共有</string>
+    <string name="share_notification_title">このスマートフォンを共有中</string>
+    <string name="share_notification_text">%1$s を開く · PIN %2$s</string>
+    <string name="share_stop">停止</string>
+    <string name="share_start">共有を開始</string>
+    <string name="share_starting">開始中…</string>
+    <string name="share_intro_title">パソコンでファイルを開く</string>
+    <string name="share_intro_body">Findex がこのスマートフォン上で小さな Web サーバーを起動します。同じ Wi-Fi またはテザリング上のブラウザーからワンタイム PIN で開けます。</string>
+    <string name="share_no_network">先に Wi-Fi に接続するかテザリングをオンにしてください。</string>
+    <string name="share_open_url">パソコンのブラウザーで開く</string>
+    <string name="share_pin">PIN</string>
+    <string name="share_copy_url">アドレスをコピー</string>
+    <string name="share_copied">アドレスをコピーしました</string>
+    <plurals name="share_clients">
+        <item quantity="other">%d 台のブラウザーがサインイン中</item>
+    </plurals>
+    <string name="share_clients_none">サインインしているブラウザーはまだありません</string>
+    <string name="share_access">アクセス</string>
+    <string name="share_access_hint">変更は接続中のブラウザーにも即座に反映されます。</string>
+    <string name="share_level_view">閲覧</string>
+    <string name="share_level_download">ダウンロード</string>
+    <string name="share_level_full">フル</string>
+    <string name="share_perm_media">メディアセクション</string>
+    <string name="share_perm_media_desc">写真、動画、音声、ドキュメントなど</string>
+    <string name="share_perm_files">ファイルエクスプローラー</string>
+    <string name="share_perm_files_desc">内部ストレージと SDカードのすべてのフォルダーを参照</string>
+    <string name="share_perm_download">開く・ダウンロード</string>
+    <string name="share_perm_download_desc">パソコン上でファイルをプレビュー、ストリーミング、保存</string>
+    <string name="share_perm_upload">アップロード</string>
+    <string name="share_perm_upload_desc">パソコンからファイルを追加しフォルダーを作成</string>
+    <string name="share_perm_modify">名前変更・削除</string>
+    <string name="share_perm_modify_desc">削除したファイルはゴミ箱に入ります</string>
+    <string name="share_auto_stop">自動停止</string>
+    <string name="share_auto_stop_desc">リクエストがない状態がこの時間続くとサーバーを停止します</string>
+    <string name="share_minutes">%d 分</string>
+    <string name="share_never">しない</string>
+    <string name="share_security_note">通信は暗号化されません。信頼できるネットワークでのみ共有してください。</string>
+    <!-- END share-phone -->
+</resources>
