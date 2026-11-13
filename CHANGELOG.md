@@ -1,3 +1,13 @@
+## v0.0.1-alpha.5 (2026-11-13)
+
+- !alpha chore(L10n) : Trigger release for 27-language localization
+- docs(L10n) : Update README and development docs for multi-language support
+- app(Build) : Enable localeConfig generation and disable bundle language splits
+- ui(L10n) : Add translated strings for 26 languages
+- ui(Settings) : Add in-app language picker screen
+- ui(Strings) : Mark non-translatable strings and add language picker strings
+- core(Locale) : Add AppLocale helper for per-app language
+
 ## v0.0.1-alpha.4 (2026-11-05)
 
 - !alpha : Add open with, save to Findex, ES-style tabs, widget, tile and launcher shortcuts
