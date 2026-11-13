@@ -22,6 +22,7 @@ import kotlinx.serialization.Serializable
 @Serializable object AboutRoute
 @Serializable object AcknowledgementsRoute
 @Serializable object UpdatesRoute
+@Serializable object LanguageRoute
 
 // Next features (see development/docs/NEXT_FEATURES_DESIGN.md §0.4). Path lists travel via SelectionHandoff tokens.
 @Serializable data class BatchRenameRoute(val token: String)

@@ -20,6 +20,7 @@ import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Preview
 import androidx.compose.material.icons.rounded.CleaningServices
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.LightMode
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.Visibility
@@ -45,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -53,6 +55,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.aiyu.findex.core.model.AppSettings
 import com.aiyu.findex.core.model.ThemeMode
+import com.aiyu.findex.core.settings.AppLocale
 import com.aiyu.findex.core.settings.SettingsRepository
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.components.readableGutter
@@ -81,10 +84,18 @@ class SettingsViewModel @Inject constructor(private val repo: SettingsRepository
 }
 
 @Composable
-fun SettingsScreen(onBack: () -> Unit, onOpenAbout: () -> Unit, onOpenUpdates: () -> Unit, viewModel: SettingsViewModel = hiltViewModel()) {
+fun SettingsScreen(
+    onBack: () -> Unit,
+    onOpenAbout: () -> Unit,
+    onOpenUpdates: () -> Unit,
+    onOpenLanguage: () -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel()
+) {
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val dynamicSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val appearanceCount = if (dynamicSupported) 3 else 2
+    val currentLanguage = AppLocale.current(LocalContext.current)
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -105,7 +116,7 @@ fun SettingsScreen(onBack: () -> Unit, onOpenAbout: () -> Unit, onOpenUpdates: (
         ) {
             item { SectionHeader(stringResource(R.string.settings_appearance)) }
             item {
-                Surface(shape = groupedShape(0, if (dynamicSupported) 2 else 1), color = MaterialTheme.colorScheme.surfaceContainerLow) {
+                Surface(shape = groupedShape(0, appearanceCount), color = MaterialTheme.colorScheme.surfaceContainerLow) {
                     Column(Modifier.fillMaxWidth().padding(Dimens.lg)) {
                         Text(stringResource(R.string.settings_theme), style = MaterialTheme.typography.titleMedium)
                         Spacer(Modifier.height(Dimens.md))
@@ -137,8 +148,24 @@ fun SettingsScreen(onBack: () -> Unit, onOpenAbout: () -> Unit, onOpenUpdates: (
             }
             if (dynamicSupported) {
                 item {
-                    SwitchRow(Icons.Rounded.Palette, R.string.settings_dynamic_color, R.string.settings_dynamic_color_desc, settings.dynamicColor, viewModel::setDynamic, groupedShape(1, 2))
+                    SwitchRow(Icons.Rounded.Palette, R.string.settings_dynamic_color, R.string.settings_dynamic_color_desc, settings.dynamicColor, viewModel::setDynamic, groupedShape(1, appearanceCount))
                 }
+            }
+            item {
+                SettingItem(
+                    headlineContent = { Text(stringResource(R.string.settings_language)) },
+                    supportingContent = {
+                        Text(
+                            if (currentLanguage.isEmpty()) {
+                                stringResource(R.string.settings_language_system)
+                            } else {
+                                AppLocale.nativeName(currentLanguage)
+                            }
+                        )
+                    },
+                    leadingContent = { Icon(Icons.Rounded.Language, null) },
+                    modifier = Modifier.clip(groupedShape(appearanceCount - 1, appearanceCount)).clickable(onClick = onOpenLanguage)
+                )
             }
             item { SectionHeader(stringResource(R.string.settings_files)) }
             item { SwitchRow(Icons.Rounded.Visibility, R.string.show_hidden_files, R.string.settings_show_hidden_desc, settings.showHidden, viewModel::setHidden, groupedShape(0, 5)) }

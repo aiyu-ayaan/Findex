@@ -72,9 +72,11 @@ import com.aiyu.findex.ui.navigation.AnalyzerRoute
 import com.aiyu.findex.ui.navigation.CategoryRoute
 import com.aiyu.findex.ui.navigation.CleanerRoute
 import com.aiyu.findex.ui.navigation.ExplorerRoute
+import com.aiyu.findex.ui.navigation.LanguageRoute
 import com.aiyu.findex.ui.navigation.SettingsRoute
 import com.aiyu.findex.ui.navigation.WhatsAppRoute
 import com.aiyu.findex.ui.category.CategoryScreen
+import com.aiyu.findex.ui.settings.LanguageScreen
 import com.aiyu.findex.ui.settings.SettingsScreen
 import com.aiyu.findex.ui.tools.AnalyzerScreen
 import com.aiyu.findex.ui.tools.CleanerScreen
@@ -359,7 +361,15 @@ private fun androidx.navigation.NavGraphBuilder.appDestinations(navController: N
     composable<InstagramRoute> { InstagramScreen(onBack = back) }
     composable<AppCleanerRoute> { AppCleanerScreen(onBack = back) }
     composable<DualPaneRoute> { DualPaneScreen(onBack = back) }
-    composable<SettingsRoute> { SettingsScreen(onBack = back, onOpenAbout = { navController.navigate(AboutRoute) }, onOpenUpdates = { navController.navigate(UpdatesRoute) }) }
+    composable<SettingsRoute> {
+        SettingsScreen(
+            onBack = back,
+            onOpenAbout = { navController.navigate(AboutRoute) },
+            onOpenUpdates = { navController.navigate(UpdatesRoute) },
+            onOpenLanguage = { navController.navigate(LanguageRoute) }
+        )
+    }
+    composable<LanguageRoute> { LanguageScreen(onBack = back) }
     composable<UpdatesRoute> { UpdatesScreen(onBack = back) }
     composable<AboutRoute> { AboutScreen(onBack = back, onOpenAcknowledgements = { navController.navigate(AcknowledgementsRoute) }) }
     composable<AcknowledgementsRoute> { AcknowledgementsScreen(onBack = back) }
