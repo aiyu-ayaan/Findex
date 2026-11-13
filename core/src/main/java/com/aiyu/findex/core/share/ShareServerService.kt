@@ -19,6 +19,7 @@ import com.aiyu.findex.core.model.AppSettings
 import com.aiyu.findex.core.operation.FileOperationExecutor
 import com.aiyu.findex.core.operation.OperationStrings
 import com.aiyu.findex.core.repository.StorageRepository
+import com.aiyu.findex.core.settings.AppLocale
 import com.aiyu.findex.core.settings.SettingsRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -68,6 +69,8 @@ class ShareServerService : Service() {
     private var wakeLock: PowerManager.WakeLock? = null
 
     private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
+
+    override fun attachBaseContext(base: Context) = super.attachBaseContext(AppLocale.wrap(base))
 
     override fun onCreate() {
         super.onCreate()

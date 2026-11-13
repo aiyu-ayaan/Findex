@@ -23,6 +23,7 @@ import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.operation.FileOperationExecutor
 import com.aiyu.findex.core.operation.OperationManager
 import com.aiyu.findex.core.operation.OperationStrings
+import com.aiyu.findex.core.settings.AppLocale
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -60,6 +61,8 @@ class FileOperationForegroundService : Service() {
     private var lastNotifyAt = 0L
 
     private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
+
+    override fun attachBaseContext(base: Context) = super.attachBaseContext(AppLocale.wrap(base))
 
     override fun onCreate() {
         super.onCreate()

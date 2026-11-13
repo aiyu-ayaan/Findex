@@ -5,6 +5,7 @@ import com.aiyu.findex.core.model.FailureReason
 import com.aiyu.findex.core.model.FileOperation
 import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.operation.OperationStrings
+import com.aiyu.findex.core.settings.AppLocale
 import com.aiyu.findex.ui.R
 import dagger.Binds
 import dagger.Module
@@ -17,36 +18,38 @@ import javax.inject.Inject
 class ResourceOperationStrings @Inject constructor(
     @ApplicationContext private val context: Context
 ) : OperationStrings {
-    override val channelName: String get() = context.getString(R.string.notification_channel_name)
-    override val channelDescription: String get() = context.getString(R.string.notification_channel_description)
-    override val cancel: String get() = context.getString(R.string.cancel)
-    override val updateChannelName: String get() = context.getString(R.string.update_notification_channel_name)
-    override val updateNotificationBody: String get() = context.getString(R.string.update_notification_body)
+    private val localized: Context get() = AppLocale.wrap(context)
 
-    override fun updateNotificationTitle(version: String): String = context.getString(R.string.update_notification_title, version)
+    override val channelName: String get() = localized.getString(R.string.notification_channel_name)
+    override val channelDescription: String get() = localized.getString(R.string.notification_channel_description)
+    override val cancel: String get() = localized.getString(R.string.cancel)
+    override val updateChannelName: String get() = localized.getString(R.string.update_notification_channel_name)
+    override val updateNotificationBody: String get() = localized.getString(R.string.update_notification_body)
 
-    override fun title(operation: FileOperation): String = context.getString(operationTitleRes(operation), operationCount(operation))
+    override fun updateNotificationTitle(version: String): String = localized.getString(R.string.update_notification_title, version)
+
+    override fun title(operation: FileOperation): String = localized.getString(operationTitleRes(operation), operationCount(operation))
 
     override fun progress(currentItem: String, percent: Int, queued: Int): String {
-        val base = context.getString(R.string.operation_progress, percent, currentItem)
-        return if (queued > 0) context.resources.getQuantityString(R.plurals.operation_queued, queued, base, queued) else base
+        val base = localized.getString(R.string.operation_progress, percent, currentItem)
+        return if (queued > 0) localized.resources.getQuantityString(R.plurals.operation_queued, queued, base, queued) else base
     }
 
     override fun resultTitle(result: OperationResult): String = when (result) {
-        is OperationResult.Success -> context.getString(operationDoneRes(result.operation), operationCount(result.operation))
+        is OperationResult.Success -> localized.getString(operationDoneRes(result.operation), operationCount(result.operation))
         else -> title(result.operation)
     }
 
     override fun result(result: OperationResult): String = when (result) {
-        is OperationResult.Success -> context.getString(R.string.operation_completed)
-        is OperationResult.Cancelled -> context.getString(R.string.operation_cancelled_body)
-        is OperationResult.Failed -> context.getString(failureRes(result.reason))
+        is OperationResult.Success -> localized.getString(R.string.operation_completed)
+        is OperationResult.Cancelled -> localized.getString(R.string.operation_cancelled_body)
+        is OperationResult.Failed -> localized.getString(failureRes(result.reason))
     }
 
-    override val shareChannelName: String get() = context.getString(R.string.share_channel_name)
-    override val shareTitle: String get() = context.getString(R.string.share_notification_title)
-    override val shareStop: String get() = context.getString(R.string.share_stop)
-    override fun shareText(url: String, pin: String): String = context.getString(R.string.share_notification_text, url, pin)
+    override val shareChannelName: String get() = localized.getString(R.string.share_channel_name)
+    override val shareTitle: String get() = localized.getString(R.string.share_notification_title)
+    override val shareStop: String get() = localized.getString(R.string.share_stop)
+    override fun shareText(url: String, pin: String): String = localized.getString(R.string.share_notification_text, url, pin)
 }
 
 fun operationTitleRes(operation: FileOperation): Int = when (operation) {

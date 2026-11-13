@@ -1,9 +1,11 @@
 package com.aiyu.findex.ui.share
 
 import android.app.PendingIntent
+import android.content.Context
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import com.aiyu.findex.core.settings.AppLocale
 import com.aiyu.findex.core.share.ShareServerManager
 import com.aiyu.findex.core.share.ShareState
 import com.aiyu.findex.ui.R
@@ -26,6 +28,8 @@ class ShareTileService : TileService() {
 
     private val scope = CoroutineScope(Dispatchers.Main.immediate)
     private var watch: Job? = null
+
+    override fun attachBaseContext(base: Context) = super.attachBaseContext(AppLocale.wrap(base))
 
     override fun onStartListening() {
         super.onStartListening()

@@ -17,6 +17,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.aiyu.findex.core.scanner.StorageScanner
+import com.aiyu.findex.core.settings.AppLocale
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.shortcuts.AppShortcut
 import com.aiyu.findex.ui.shortcuts.screenIntent
@@ -73,22 +74,23 @@ class CleanupReminderWorker(appContext: Context, params: WorkerParameters) : Cor
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
             ) return
-            val manager = context.getSystemService(NotificationManager::class.java)
+            val localized = AppLocale.wrap(context)
+            val manager = localized.getSystemService(NotificationManager::class.java)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 manager.createNotificationChannel(
-                    NotificationChannel(CHANNEL_ID, context.getString(R.string.cleanup_reminder_channel), NotificationManager.IMPORTANCE_LOW)
+                    NotificationChannel(CHANNEL_ID, localized.getString(R.string.cleanup_reminder_channel), NotificationManager.IMPORTANCE_LOW)
                 )
             }
-            val open = context.screenIntent(AppShortcut.CLEAN)?.let {
-                PendingIntent.getActivity(context, NOTIFICATION_ID, it, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+            val open = localized.screenIntent(AppShortcut.CLEAN)?.let {
+                PendingIntent.getActivity(localized, NOTIFICATION_ID, it, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
             }
-            val size = Formatter.formatShortFileSize(context, bytes)
-            val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            val size = Formatter.formatShortFileSize(localized, bytes)
+            val notification = NotificationCompat.Builder(localized, CHANNEL_ID)
                 .setSmallIcon(com.aiyu.findex.core.R.drawable.ic_stat_file_operation)
-                .setContentTitle(context.getString(R.string.cleanup_reminder_title, size))
-                .setContentText(context.getString(R.string.cleanup_reminder_text))
+                .setContentTitle(localized.getString(R.string.cleanup_reminder_title, size))
+                .setContentText(localized.getString(R.string.cleanup_reminder_text))
                 .setContentIntent(open)
-                .addAction(0, context.getString(R.string.cleanup_reminder_action), open)
+                .addAction(0, localized.getString(R.string.cleanup_reminder_action), open)
                 .setAutoCancel(true)
                 .build()
             manager.notify(NOTIFICATION_ID, notification)

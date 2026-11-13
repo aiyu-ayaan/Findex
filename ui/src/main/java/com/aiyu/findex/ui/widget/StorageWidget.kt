@@ -12,6 +12,7 @@ import android.text.format.Formatter
 import android.view.View
 import android.widget.RemoteViews
 import com.aiyu.findex.core.db.BookmarkDao
+import com.aiyu.findex.core.settings.AppLocale
 import com.aiyu.findex.ui.R
 import com.aiyu.findex.ui.shortcuts.AppShortcut
 import com.aiyu.findex.ui.shortcuts.folderIntent
@@ -63,30 +64,31 @@ class StorageWidget : AppWidgetProvider() {
         }
 
         private suspend fun build(context: Context): RemoteViews {
-            val views = RemoteViews(context.packageName, R.layout.widget_storage)
+            val localized = AppLocale.wrap(context)
+            val views = RemoteViews(localized.packageName, R.layout.widget_storage)
             val root = Environment.getExternalStorageDirectory()
             val stat = StatFs(root.path)
             val total = stat.totalBytes
             val free = stat.availableBytes
             val percent = if (total > 0) ((total - free) * 100 / total).toInt() else 0
-            views.setTextViewText(R.id.widget_percent, context.getString(R.string.widget_used, percent))
+            views.setTextViewText(R.id.widget_percent, localized.getString(R.string.widget_used, percent))
             views.setTextViewText(
                 R.id.widget_free,
-                context.getString(R.string.widget_free, Formatter.formatShortFileSize(context, free), Formatter.formatShortFileSize(context, total))
+                localized.getString(R.string.widget_free, Formatter.formatShortFileSize(localized, free), Formatter.formatShortFileSize(localized, total))
             )
             views.setProgressBar(R.id.widget_progress, 100, percent, false)
-            views.setOnClickPendingIntent(R.id.widget_root, activity(context, 0, context.folderIntent(root.path)))
-            views.setOnClickPendingIntent(R.id.widget_clean, activity(context, 1, context.screenIntent(AppShortcut.CLEAN)))
+            views.setOnClickPendingIntent(R.id.widget_root, activity(localized, 0, localized.folderIntent(root.path)))
+            views.setOnClickPendingIntent(R.id.widget_clean, activity(localized, 1, localized.screenIntent(AppShortcut.CLEAN)))
 
             // Bookmarked folders first (files stay in the app), then quick screens fill the free slots.
             val dao = EntryPointAccessors.fromApplication(context, StorageWidgetEntryPoint::class.java).bookmarks()
             val folders = runCatching { dao.observeAll().first() }.getOrDefault(emptyList())
                 .filter { "://" in it.path || File(it.path).isDirectory }
-                .map { it.name to context.folderIntent(it.path) }
+                .map { it.name to localized.folderIntent(it.path) }
             val quick = listOf(
-                context.getString(R.string.category_downloads) to context.screenIntent(AppShortcut.DOWNLOADS),
-                context.getString(R.string.nav_search) to context.screenIntent(AppShortcut.SEARCH),
-                context.getString(R.string.nav_recent_changes) to context.screenIntent(AppShortcut.RECENT)
+                localized.getString(R.string.category_downloads) to localized.screenIntent(AppShortcut.DOWNLOADS),
+                localized.getString(R.string.nav_search) to localized.screenIntent(AppShortcut.SEARCH),
+                localized.getString(R.string.nav_recent_changes) to localized.screenIntent(AppShortcut.RECENT)
             )
             val chips = (folders + quick).take(BOOKMARK_VIEWS.size)
             BOOKMARK_VIEWS.forEachIndexed { i, id ->
