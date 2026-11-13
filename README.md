@@ -80,6 +80,7 @@ A modern, native Android file explorer built with **Jetpack Compose** and **Mate
 - **Material 3 Expressive**: dynamic color, shape morphing (`Cookie`, `Scallop`, `Clover`, `Pill`), wavy progress, push drawer with spring physics.
 - **Foreground operation queue**: copy, move, compress, extract, delete and clean run in `FileOperationForegroundService`, cancellable, with notification progress.
 - **Adaptive tablet layout**: navigation rail, permanent drawer, list-detail with inspector pane.
+- **Multi-language**: 27 languages with an in-app language picker in **Settings → Language**, backed by Android 13+ per-app `LocaleManager` and a `SharedPreferences` + context-wrap fallback on Android 8–12.
 - **In-app updates**: daily background check, release notes, Updates screen.
 
 ---
@@ -143,9 +144,9 @@ Findex follows Clean Architecture principles with decoupled Gradle modules:
 
 | Module | Responsibility | Localization Rule |
 | :--- | :--- | :--- |
-| `:app` | App manifest, Hilt injection root, application lifecycle | No strings (merges from `:ui`) |
-| `:core` | Storage engines, SQLite Room DB, background operations | No strings (delegates via `OperationStrings` interface) |
-| `:ui` | Compose screens, expressive components, navigation | **Single source of truth**: all strings live in `ui/src/main/res/values/strings.xml` |
+| `:app` | App manifest, Hilt injection root, application lifecycle | No strings (merges from `:ui`; generates `localeConfig` for all 27 locales) |
+| `:core` | Storage engines, SQLite Room DB, background operations | No strings (`AppLocale` handles per-app locale; delegates via `OperationStrings`) |
+| `:ui` | Compose screens, expressive components, navigation | **Single source of truth**: `ui/src/main/res/values/strings.xml` + 26 `values-*` translations |
 
 ---
 

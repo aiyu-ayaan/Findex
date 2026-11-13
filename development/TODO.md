@@ -158,7 +158,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] Empty folders and zero-byte files scanner (nested empty trees, topmost folder only; empty files opt-in, dot-files kept)
 
 ### Polish
-- [ ] Localization (strings already centralized in `ui`)
+- [x] Localization (27 languages in `ui/src/main/res/values*`, `AppLocale` per-app language picker in Settings, `localeConfig` enabled)
 - [ ] Unit tests for `FileOperationExecutor` and `OperationManager`
 
 ### Needs console setup (parked)

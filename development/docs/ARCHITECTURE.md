@@ -16,7 +16,7 @@ graph TD
     end
 
     subgraph ":ui"
-        UIStrings[res/values/strings.xml<br/>single source of strings]
+        UIStrings[res/values*/strings.xml<br/>27 languages]
         Theme[FindexTheme<br/>MaterialExpressiveTheme]
         Nav[FindexNavHost]
         Screens[Home · Explorer · Category · Tools · Settings]
@@ -63,7 +63,7 @@ graph TD
 | Module | Type | Purpose | Localization Rule |
 | :--- | :--- | :--- | :--- |
 | `:app` | `com.android.application` | Application entry point (`FindexApp` with `@HiltAndroidApp`), `MainActivity`, Android Manifest, system permissions. | **NO `strings.xml`** (pulls merged resources from `:ui`). |
-| `:ui` | `com.android.library` | Compose UI components, Material 3 Expressive theming, navigation drawer, screen layouts, ViewModels. | **Centralized `strings.xml`** holding all app strings for future localization. |
+| `:ui` | `com.android.library` | Compose UI components, Material 3 Expressive theming, navigation drawer, screen layouts, ViewModels. | **Centralized `strings.xml`** in `values/` plus 26 `values-*` translations (27 languages total). |
 | `:baselineprofile` | `com.android.test` | Macrobenchmark module: `BaselineProfileGenerator` records startup + browse paths into `app/src/release/generated/baselineProfiles`; `StartupBenchmark` compares cold start with and without the profile. Regenerate: `./gradlew :app:generateReleaseBaselineProfile` (emulator/device connected). | **NO `strings.xml`**. |
 | `:core` | `com.android.library` | Models, repositories, Room database, DataStore settings, operation queue, foreground service, Hilt bindings. | **NO `strings.xml`**. Notification texts come from `OperationStrings`, implemented in `:ui`. |
 
@@ -815,3 +815,23 @@ flowchart LR
 - `TagRepository` + `TagDao` persist up to 8-tone tags (`TagTones`) and `file_tags`; `TagDots` render in both `FileList` and `FileGrid`.
 - `FolderShortcuts` pins launcher shortcuts targeting `MainActivity` (`ACTION_OPEN_FOLDER` -> `LaunchRequests.folder`).
 - `StorageHistoryScheduler` + `StorageSnapshotWorker` record daily volume snapshots into `storage_snapshots`, rendered by `GrowthCard` on `AnalyzerScreen`.
+
+### Localization & per-app language
+
+- All translatable strings live in `ui/src/main/res/values/strings.xml` with 26 `values-*` translations (27 languages total).
+- `:app` enables `androidResources.generateLocaleConfig = true` (with `localeFilters` for all 27 tags) and `bundle.language.enableSplit = false` so Play AABs ship all locales for runtime switching and Android 13+ Settings → App languages stays in sync.
+- `AppLocale` (`core/settings/AppLocale.kt`) abstracts per-app language selection:
+  - **API 33+**: reads/writes `LocaleManager.applicationLocales` (system handles activity recreation).
+  - **API < 33**: persists the tag in `SharedPreferences("app_locale")`, recreates the activity, and applies the locale via `AppLocale.wrap(base)` in `attachBaseContext` (`FindexApp`, `MainActivity`, `FileOperationForegroundService`, `ShareServerService`, `ShareTileService`) and context-wrapped helpers (`UiModule`, `CleanupReminder`, `StorageWidget`).
+- `LanguageScreen` (`ui/settings/LanguageScreen.kt`, `LanguageRoute`) is opened from **Settings → Language** and lists System default plus all 27 `AppLocale.tags` using `AppLocale.nativeName(tag)`.
+
+```mermaid
+flowchart LR
+    Settings[SettingsScreen] -->|LanguageRoute| LangUI[LanguageScreen :ui]
+    LangUI -->|AppLocale.set| AL[AppLocale :core]
+    AL -->|API 33+| LM[[LocaleManager<br/>system App languages]]
+    AL -->|API < 33| Prefs[(SharedPreferences<br/>app_locale)]
+    Prefs -->|AppLocale.wrap| Ctx[attachBaseContext<br/>FindexApp · MainActivity · FGS · Tile · Widget]
+    AppCfg[":app build.gradle.kts<br/>generateLocaleConfig · enableSplit=false"] -.-> LM
+    UIRes[":ui res/values*/strings.xml<br/>27 languages"] -.-> LangUI
+```
