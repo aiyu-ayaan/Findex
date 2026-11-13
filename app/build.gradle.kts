@@ -45,6 +45,23 @@ android {
         buildConfig = true
     }
 
+    // Ship only the languages Findex is translated into (see AppLocale.tags); drops other library translations.
+    androidResources {
+        localeFilters += listOf(
+            "en", "hi", "es", "pt-rBR", "in", "ar", "fr", "ru", "de",
+            "tr", "ja", "ko", "it", "vi", "th", "zh-rCN", "zh-rTW", "pl", "bn",
+            "ta", "te", "mr", "gu", "kn", "ml", "pa", "ur"
+        )
+        generateLocaleConfig = true // manifest localeConfig built from the values-* folders: powers Settings → App languages
+    }
+
+    // The app switches language at runtime, so Play must ship every language in one APK set, not split by device locale.
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
     val keystorePropertiesFile = rootProject.file("keystore.properties")
     val keystoreProperties = Properties()
     if (keystorePropertiesFile.exists()) {
