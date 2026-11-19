@@ -917,6 +917,8 @@ internal fun SelectionToolbar(
         var more by remember { mutableStateOf(false) }
         HorizontalFloatingToolbar(
             expanded = true,
+            // Claims the whole pill for hit testing: a tap between icons must not toggle the row underneath.
+            modifier = Modifier.pointerInput(Unit) { awaitPointerEventScope { while (true) awaitPointerEvent() } },
             // Selected rows are primaryContainer; a vibrant (primaryContainer) pill melts into them.
             colors = FloatingToolbarDefaults.standardFloatingToolbarColors(
                 toolbarContainerColor = MaterialTheme.colorScheme.secondaryContainer,
