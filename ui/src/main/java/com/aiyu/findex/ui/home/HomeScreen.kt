@@ -175,7 +175,8 @@ fun HomeScreen(
     var sendingText by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
     var unpairing by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
     val snackbar = com.aiyu.findex.ui.LocalSnackbarHostState.current
-    var scanning by remember { androidx.compose.runtime.mutableStateOf(false) }
+    // In the view model: rotating to the rail layout rebuilds Home's composition, and the scanner must stay open.
+    val scanning by linkViewModel.scanning.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
         linkViewModel.messageRes.collect { (res, arg) -> snackbar.showSnackbar(context.getString(res, arg)) }
     }
@@ -311,7 +312,7 @@ fun HomeScreen(
                     com.aiyu.findex.ui.link.NearbyRow(d, i, nearby.size, onPair = { linkViewModel.pair(d.host, d.port) })
                 }
                 item(key = "scanQr") {
-                    FilledTonalButton(onClick = { scanning = true }, modifier = Modifier.fillMaxWidth().heightIn(min = Dimens.minTouch)) {
+                    FilledTonalButton(onClick = { linkViewModel.setScanning(true) }, modifier = Modifier.fillMaxWidth().heightIn(min = Dimens.minTouch)) {
                         Icon(Icons.Rounded.QrCodeScanner, contentDescription = null, modifier = Modifier.padding(end = Dimens.sm))
                         Text(stringResource(R.string.link_scan_qr))
                     }
@@ -440,8 +441,8 @@ fun HomeScreen(
 
     if (scanning) {
         com.aiyu.findex.ui.link.QrScannerDialog(
-            onResult = { scanning = false; linkViewModel.pairQr(it) },
-            onDismiss = { scanning = false }
+            onResult = { linkViewModel.setScanning(false); linkViewModel.pairQr(it) },
+            onDismiss = { linkViewModel.setScanning(false) }
         )
     }
     com.aiyu.findex.ui.link.PairDialogs(

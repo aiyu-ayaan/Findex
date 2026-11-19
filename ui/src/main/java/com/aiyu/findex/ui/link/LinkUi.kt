@@ -115,6 +115,11 @@ class LinkViewModel @Inject constructor(
 
     fun askAddress() { _pair.value = PairUi.Address }
 
+    private val _scanning = MutableStateFlow(false)
+    /** The QR scanner is open; kept here so it survives the layout change on rotation. */
+    val scanning: StateFlow<Boolean> = _scanning.asStateFlow()
+    fun setScanning(open: Boolean) { _scanning.value = open }
+
     /** `ip` or `ip:port` (default port 47100). */
     fun pair(address: String) {
         val t = address.trim()

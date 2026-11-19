@@ -91,13 +91,20 @@ fun QrScannerDialog(onResult: (String) -> Unit, onDismiss: () -> Unit) {
                         Modifier.align(Alignment.Center).size(260.dp)
                             .border(3.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.extraLarge)
                     )
-                    Text(
-                        stringResource(R.string.link_scan_prompt),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.inverseOnSurface,
-                        textAlign = TextAlign.Center,
+                    // On a solid pill: the preview behind can be any brightness.
+                    androidx.compose.material3.Surface(
+                        color = MaterialTheme.colorScheme.inverseSurface,
+                        contentColor = MaterialTheme.colorScheme.inverseOnSurface,
+                        shape = MaterialTheme.shapes.large,
                         modifier = Modifier.align(Alignment.BottomCenter).safeDrawingPadding().padding(Dimens.xl)
-                    )
+                    ) {
+                        Text(
+                            stringResource(R.string.link_scan_prompt),
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(horizontal = Dimens.lg, vertical = Dimens.md)
+                        )
+                    }
                 }
             }
             FilledTonalIconButton(onClick = onDismiss, modifier = Modifier.align(Alignment.TopStart).safeDrawingPadding().padding(Dimens.md)) {
