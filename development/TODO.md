@@ -135,7 +135,7 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 
 ### Network
 - [x] Findex Link with the desktop app: Computers tab, pairing (6-digit code, Keystore identity, pinned TLS), browse and stream the PC, Send to computer, phone server for the PC (`development/docs/ECOSYSTEM.md`)
-- [x] Findex Link: pair by scanning the desktop's QR code (ZXing Android Embedded, `LinkQr`)
+- [x] Findex Link: pair by scanning the desktop's QR code (own CameraX scanner + ZXing core, `QrScannerDialog`, `LinkQr`)
 - [ ] Findex Link: translate the new `link_*` strings into the 26 locales (English only for now)
 - [ ] Findex Link: thumbnails of PC files over the link, clipboard sync (Universal Clipboard style)
 - [ ] Folder sync / backup to a share (one-way, scheduled via WorkManager)

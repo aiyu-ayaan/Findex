@@ -175,10 +175,7 @@ fun HomeScreen(
     var sendingText by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
     var unpairing by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
     val snackbar = com.aiyu.findex.ui.LocalSnackbarHostState.current
-    // The scanner asks for the camera itself; a cancel or a denied permission comes back with no contents.
-    val scanQr = androidx.activity.compose.rememberLauncherForActivityResult(com.journeyapps.barcodescanner.ScanContract()) { result ->
-        result.contents?.let(linkViewModel::pairQr)
-    }
+    var scanning by remember { androidx.compose.runtime.mutableStateOf(false) }
     LaunchedEffect(Unit) {
         linkViewModel.messageRes.collect { (res, arg) -> snackbar.showSnackbar(context.getString(res, arg)) }
     }
@@ -314,7 +311,7 @@ fun HomeScreen(
                     com.aiyu.findex.ui.link.NearbyRow(d, i, nearby.size, onPair = { linkViewModel.pair(d.host, d.port) })
                 }
                 item(key = "scanQr") {
-                    FilledTonalButton(onClick = { scanQr.launch(com.aiyu.findex.ui.link.qrScanOptions(context.getString(R.string.link_scan_prompt))) }, modifier = Modifier.fillMaxWidth().heightIn(min = Dimens.minTouch)) {
+                    FilledTonalButton(onClick = { scanning = true }, modifier = Modifier.fillMaxWidth().heightIn(min = Dimens.minTouch)) {
                         Icon(Icons.Rounded.QrCodeScanner, contentDescription = null, modifier = Modifier.padding(end = Dimens.sm))
                         Text(stringResource(R.string.link_scan_qr))
                     }
@@ -441,6 +438,12 @@ fun HomeScreen(
         }
     }
 
+    if (scanning) {
+        com.aiyu.findex.ui.link.QrScannerDialog(
+            onResult = { scanning = false; linkViewModel.pairQr(it) },
+            onDismiss = { scanning = false }
+        )
+    }
     com.aiyu.findex.ui.link.PairDialogs(
         state = pairState,
         onAddress = linkViewModel::pair,

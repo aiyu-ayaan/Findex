@@ -418,11 +418,3 @@ fun SendToComputerSheet(paths: List<String>, onDone: () -> Unit, viewModel: Link
         }
     }
 }
-
-/** Scanner settings for the pairing QR code: QR only, follows the screen orientation, no beep. */
-fun qrScanOptions(prompt: String): com.journeyapps.barcodescanner.ScanOptions =
-    com.journeyapps.barcodescanner.ScanOptions()
-        .setDesiredBarcodeFormats(com.journeyapps.barcodescanner.ScanOptions.QR_CODE)
-        .setPrompt(prompt)
-        .setBeepEnabled(false)
-        .setOrientationLocked(false)

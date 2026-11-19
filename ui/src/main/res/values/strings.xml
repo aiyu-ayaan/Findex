@@ -824,6 +824,8 @@
     <string name="link_pair_by_address">Pair by address</string>
     <string name="link_scan_qr">Scan QR code</string>
     <string name="link_scan_prompt">Point at the QR code in Findex on your PC (⋯ &gt; Pair a phone)</string>
+    <string name="link_camera_denied">Findex needs the camera to scan the pairing code. Allow it in Settings, or pair by address.</string>
+    <string name="link_camera_error">The camera couldn\'t start. Pair by address instead.</string>
     <string name="link_qr_invalid">That QR code isn\'t a Findex pairing code.</string>
     <string name="link_address_label">Computer address (IP or IP:port)</string>
     <string name="link_pair">Pair</string>

@@ -36,7 +36,11 @@ kotlin {
 }
 
 dependencies {
-    implementation(libs.zxing.android.embedded) // QR scanner for pairing with Findex for desktop
+    // Pairing QR scanner: CameraX preview + analysis, ZXing decoder.
+    implementation(libs.camerax.camera2)
+    implementation(libs.camerax.lifecycle)
+    implementation(libs.camerax.view)
+    implementation(libs.zxing.core)
     implementation(project(":core"))
     implementation(libs.androidx.work.runtime.ktx) // cleanup reminder worker
 
