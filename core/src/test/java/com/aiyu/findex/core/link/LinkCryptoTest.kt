@@ -38,4 +38,18 @@ class LinkCryptoTest {
         assertNull(LinkPaths.split("/Internal storage/./x"))
         assertNull(LinkPaths.split("/a\\b"))
     }
+
+    @Test
+    fun parsesDesktopQr() {
+        val id = "ab".repeat(32)
+        val secret = "cd".repeat(16)
+        // As `findex-link` writes it (name percent-encoded).
+        val qr = LinkQr.parse("findex://pair?v=1&id=$id&h=192.168.1.5,10.0.0.2&p=47100&s=$secret&n=My%20PC%20%26%20co")
+        assertEquals(LinkQr(id, listOf("192.168.1.5", "10.0.0.2"), 47100, secret, "My PC & co"), qr)
+        assertNull(LinkQr.parse("https://example.com"))
+        assertNull(LinkQr.parse("findex://pair?v=2&id=$id&h=1.2.3.4&p=1&s=$secret"))
+        assertNull(LinkQr.parse("findex://pair?v=1&id=abcd&h=1.2.3.4&p=1&s=$secret"))
+        assertNull(LinkQr.parse("findex://pair?v=1&id=$id&h=&p=1&s=$secret"))
+        assertNull(LinkQr.parse("findex://pair?v=1&id=$id&h=1.2.3.4&p=99999&s=$secret"))
+    }
 }

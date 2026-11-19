@@ -822,6 +822,9 @@
     <string name="link_searching">Looking for computers running Findex on this network…</string>
     <string name="link_none_paired">No computers yet. Install Findex on your PC, then pair it here.</string>
     <string name="link_pair_by_address">Pair by address</string>
+    <string name="link_scan_qr">Scan QR code</string>
+    <string name="link_scan_prompt">Point at the QR code in Findex on your PC (⋯ &gt; Pair a phone)</string>
+    <string name="link_qr_invalid">That QR code isn\'t a Findex pairing code.</string>
     <string name="link_address_label">Computer address (IP or IP:port)</string>
     <string name="link_pair">Pair</string>
     <string name="link_pairing">Connecting…</string>

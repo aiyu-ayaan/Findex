@@ -25,7 +25,7 @@ A modern, native Android file explorer built with **Jetpack Compose** and **Mate
 | Streaming | Videos and music on the PC play from the phone with seeking (ranged reads) | Phone files open on the PC |
 | Text | Send text or a link from the phone: it lands on the PC clipboard | The same, from the PC to the phone clipboard |
 
-**How to pair.** Install Findex on both devices and put them on the same Wi-Fi. On the phone, open **Home > Computers**. Turn on **Let computers connect**, or tap the PC under **Nearby** (or **Pair by address**). Both screens show the same 6-digit code: accept on both. You pair once.
+**How to pair.** Install Findex on both devices and put them on the same Wi-Fi. On the PC choose **⋯ > Pair a phone**, then on the phone open **Home > Computers > Scan QR code**. Done: the QR code carries the PC's identity, so nothing needs comparing. Without the camera, tap the PC under **Nearby** or use **Pair by address**: both screens then show the same 6-digit code, and you accept on both. You pair once. Turn on **Let computers connect** when the PC should browse this phone.
 
 **How it is secured** (modelled on Apple's AirDrop and Continuity, see [`development/docs/ECOSYSTEM.md`](development/docs/ECOSYSTEM.md)):
 - Each device has a long-term identity certificate. On Android its private key lives in the Android Keystore.

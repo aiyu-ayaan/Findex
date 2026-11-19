@@ -114,6 +114,11 @@
             android:exported="false"
             android:grantUriPermissions="true" />
 
+        <!-- QR scanner for pairing with Findex for desktop: follow the device orientation instead of landscape. -->
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation" />
     </application>
 
 </manifest>

@@ -149,13 +149,41 @@ class LinkRepository @Inject constructor(
      * Pairs with the Findex server at [host]:[port]. [confirm] gets the computer's name and the 6-digit
      * code and returns true when the user saw the same code on the computer. Returns the computer's name.
      */
-    suspend fun pair(host: String, port: Int, confirm: suspend (name: String, code: String) -> Boolean): String = withContext(Dispatchers.IO) {
+    suspend fun pair(host: String, port: Int, confirm: suspend (name: String, code: String) -> Boolean): String =
+        pair(host, port, null, null, confirm)
+
+    /**
+     * Pairs from a scanned desktop QR code: the computer's certificate is pinned from the code, and its
+     * one-time secret makes the computer accept without a prompt. Tries each address in turn.
+     */
+    suspend fun pairQr(qr: LinkQr): String {
+        val pin = LinkCrypto.unhex(qr.id) ?: throw LinkPairException(LinkPairException.Reason.IDENTITY_MISMATCH)
+        var last: LinkPairException? = null
+        for (host in qr.hosts) {
+            try {
+                return pair(host, qr.port, pin, qr.secret) { _, _ -> true }
+            } catch (e: LinkPairException) {
+                last = e
+                if (e.reason != LinkPairException.Reason.UNREACHABLE) break
+            }
+        }
+        throw last ?: LinkPairException(LinkPairException.Reason.UNREACHABLE)
+    }
+
+    private suspend fun pair(
+        host: String,
+        port: Int,
+        pin: ByteArray?,
+        secret: String?,
+        confirm: suspend (name: String, code: String) -> Boolean
+    ): String = withContext(Dispatchers.IO) {
         val nonceC = LinkCrypto.random32()
-        val open = LinkClient(host, port, null, null)
+        val open = LinkClient(host, port, pin, null)
         val start = try {
             open.pairStart(
                 JSONObject().put("id", identity.id).put("name", deviceName).put("platform", PLATFORM)
                     .put("port", LinkServerService.PORTS.first).put("commit", LinkCrypto.hex(LinkCrypto.sha256(nonceC)))
+                    .apply { secret?.let { put("secret", it) } }
             )
         } catch (e: Exception) {
             throw LinkPairException(LinkPairException.Reason.UNREACHABLE, e)

@@ -81,6 +81,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.rounded.Computer
 import androidx.compose.material.icons.rounded.Dns
+import androidx.compose.material.icons.rounded.QrCodeScanner
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.PhoneAndroid
@@ -174,6 +175,10 @@ fun HomeScreen(
     var sendingText by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
     var unpairing by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
     val snackbar = com.aiyu.findex.ui.LocalSnackbarHostState.current
+    // The scanner asks for the camera itself; a cancel or a denied permission comes back with no contents.
+    val scanQr = androidx.activity.compose.rememberLauncherForActivityResult(com.journeyapps.barcodescanner.ScanContract()) { result ->
+        result.contents?.let(linkViewModel::pairQr)
+    }
     LaunchedEffect(Unit) {
         linkViewModel.messageRes.collect { (res, arg) -> snackbar.showSnackbar(context.getString(res, arg)) }
     }
@@ -307,6 +312,12 @@ fun HomeScreen(
                 items(nearby.size, key = { "near${nearby[it].id}" }) { i ->
                     val d = nearby[i]
                     com.aiyu.findex.ui.link.NearbyRow(d, i, nearby.size, onPair = { linkViewModel.pair(d.host, d.port) })
+                }
+                item(key = "scanQr") {
+                    FilledTonalButton(onClick = { scanQr.launch(com.aiyu.findex.ui.link.qrScanOptions(context.getString(R.string.link_scan_prompt))) }, modifier = Modifier.fillMaxWidth().heightIn(min = Dimens.minTouch)) {
+                        Icon(Icons.Rounded.QrCodeScanner, contentDescription = null, modifier = Modifier.padding(end = Dimens.sm))
+                        Text(stringResource(R.string.link_scan_qr))
+                    }
                 }
                 item(key = "pairAddress") {
                     OutlinedButton(onClick = linkViewModel::askAddress, modifier = Modifier.fillMaxWidth().heightIn(min = Dimens.minTouch)) {

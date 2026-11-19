@@ -73,6 +73,7 @@ private val libraries = listOf(
     Library("JSch", "https://github.com/mwiede/jsch", "BSD-3-Clause"),
     Library("Apache Commons Net", "https://commons.apache.org/proper/commons-net/"),
     Library("NanoHTTPD (Share this phone web server)", "https://github.com/NanoHttpd/nanohttpd", "BSD-3-Clause"),
+    Library("ZXing Android Embedded (pairing QR scanner)", "https://github.com/journeyapps/zxing-android-embedded"),
 )
 
 @Composable

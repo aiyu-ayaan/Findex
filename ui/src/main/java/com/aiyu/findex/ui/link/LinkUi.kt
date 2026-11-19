@@ -124,6 +124,25 @@ class LinkViewModel @Inject constructor(
         pair(host, port)
     }
 
+    /** Text scanned from a QR code; anything but a Findex pairing code shows a message. */
+    fun pairQr(text: String) {
+        val qr = com.aiyu.findex.core.link.LinkQr.parse(text)
+        if (qr == null) {
+            viewModelScope.launch { _messageRes.send(R.string.link_qr_invalid to "") }
+            return
+        }
+        _pair.value = PairUi.Connecting
+        viewModelScope.launch {
+            try {
+                val name = repo.pairQr(qr)
+                _pair.value = PairUi.Idle
+                _messageRes.send(R.string.link_paired_with to name)
+            } catch (e: LinkPairException) {
+                _pair.value = PairUi.Failed(e.reason)
+            }
+        }
+    }
+
     fun pair(host: String, port: Int) {
         _pair.value = PairUi.Connecting
         viewModelScope.launch {
@@ -399,3 +418,11 @@ fun SendToComputerSheet(paths: List<String>, onDone: () -> Unit, viewModel: Link
         }
     }
 }
+
+/** Scanner settings for the pairing QR code: QR only, follows the screen orientation, no beep. */
+fun qrScanOptions(prompt: String): com.journeyapps.barcodescanner.ScanOptions =
+    com.journeyapps.barcodescanner.ScanOptions()
+        .setDesiredBarcodeFormats(com.journeyapps.barcodescanner.ScanOptions.QR_CODE)
+        .setPrompt(prompt)
+        .setBeepEnabled(false)
+        .setOrientationLocked(false)

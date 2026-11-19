@@ -52,6 +52,21 @@ Shared test vector, checked by `sas::tests` in Rust and `LinkCryptoTest` on Andr
 
 The client commits to `nc` before it sees `ns`, so an attacker cannot pick its certificate or nonce to force equal codes. Tokens are 256-bit random hex strings and are compared in constant time. Each side issues the token it will accept. The token travels only inside TLS whose server certificate is pinned.
 
+### QR pairing (out of band)
+
+**⋯ > Pair a phone** on the desktop shows a QR code:
+
+```
+findex://pair?v=1&id=<server fingerprint hex>&h=<ip>,<ip>&p=<port>&s=<one-time secret hex>&n=<percent-encoded name>
+```
+
+The phone scans it (Home > Computers > **Scan QR code**). It then runs the same pairing with two changes:
+
+- It pins `id` from the first connection. A man in the middle can't present that certificate, so no code needs comparing. This is the camera as an out-of-band channel, like Apple's devices trusting what iCloud tells them.
+- It sends `secret` in `/v1/pair/start`. When the secret matches the one on screen (constant-time compare), the server accepts without a prompt and voids the secret, so the code works once. It also expires after 5 minutes or when the panel closes. A wrong or used secret falls back to the normal prompt.
+
+Each address in `h` is tried in turn. Rust: `findex-link/src/qr.rs`, `client::pair_qr`. Android: `LinkQr`, `LinkRepository.pairQr`.
+
 ## 3. Transport and API
 
 HTTP/1.1 over TLS, one request per connection (`Connection: close`). The default port is **47100**; if it is taken, a free port is advertised. Every route except `/v1/pair/*` needs `Authorization: Bearer <token>`. Errors come back as `{"error": "<code>"}` with status 400, 401, 403, 404, 409, 413, 416, 429 or 500.

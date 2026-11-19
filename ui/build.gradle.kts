@@ -36,6 +36,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(libs.zxing.android.embedded) // QR scanner for pairing with Findex for desktop
     implementation(project(":core"))
     implementation(libs.androidx.work.runtime.ktx) // cleanup reminder worker
 
