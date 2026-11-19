@@ -1,5 +1,7 @@
 package com.aiyu.findex.ui.tags
 
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -69,6 +71,15 @@ fun TagPickerSheet(
 ) {
     var checked by rememberSaveable { mutableStateOf(initial.toList()) }
     var creating by rememberSaveable { mutableStateOf(false) }
+    // A tag made here is meant for this selection: tick it once it shows up in [tags].
+    var awaitingNew by rememberSaveable { mutableStateOf(false) }
+    var knownIds by remember { mutableStateOf(tags.mapTo(HashSet()) { it.id }) }
+    LaunchedEffect(tags) {
+        val ids = tags.mapTo(HashSet()) { it.id }
+        val fresh = ids - knownIds
+        if (awaitingNew && fresh.isNotEmpty()) { checked = (checked + fresh).distinct(); awaitingNew = false }
+        knownIds = ids
+    }
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(Modifier.navigationBarsPadding().padding(horizontal = Dimens.xl).padding(bottom = Dimens.xl)) {
             Text(stringResource(R.string.tags_title), style = MaterialTheme.typography.titleLarge)
@@ -94,7 +105,7 @@ fun TagPickerSheet(
             Button(onClick = { onApply(checked.toSet()) }, modifier = Modifier.align(Alignment.End)) { Text(stringResource(R.string.tags_apply)) }
         }
     }
-    if (creating) TagEditDialog(null, onDismiss = { creating = false }, onConfirm = { n, c -> creating = false; onCreate(n, c) })
+    if (creating) TagEditDialog(null, onDismiss = { creating = false }, onConfirm = { n, c -> creating = false; awaitingNew = true; onCreate(n, c) })
 }
 
 /** Create ([tag] null) or edit a tag: name plus one of the eight tones. */
