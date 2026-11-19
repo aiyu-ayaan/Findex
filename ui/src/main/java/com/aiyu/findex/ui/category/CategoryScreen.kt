@@ -32,13 +32,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumFlexibleTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -108,9 +108,11 @@ fun CategoryScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             AnimatedContent(state.selection.isNotEmpty(), transitionSpec = { fadeIn(fastEffects) togetherWith fadeOut(fastEffects) }, label = "bar") { selecting ->
+                // Same bar type both ways: a shorter selection bar would shift the list under the finger mid drag-select.
                 if (selecting) {
-                    TopAppBar(
-                        title = { Text(stringResource(R.string.selected_count, state.selection.size)) },
+                    MediumFlexibleTopAppBar(
+                        title = { Text(stringResource(R.string.selected_count, state.selection.size), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        subtitle = { Text(stringResource(state.category.titleRes), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         navigationIcon = { IconButton(onClick = viewModel::clearSelection) { Icon(Icons.Rounded.Close, stringResource(R.string.cd_clear_selection)) } },
                         actions = {
                             IconButton(onClick = viewModel::selectAll) { Icon(Icons.Rounded.SelectAll, stringResource(R.string.action_select_all)) }
@@ -119,7 +121,11 @@ fun CategoryScreen(
                             IconButton(onClick = viewModel::cutSelection) { Icon(Icons.Rounded.ContentCut, stringResource(R.string.action_cut)) }
                             IconButton(onClick = { deletePaths = state.selection.toList() }) { Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete)) }
                         },
-                        colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer
+                        ),
+                        scrollBehavior = scrollBehavior
                     )
                 } else {
                     MediumFlexibleTopAppBar(
