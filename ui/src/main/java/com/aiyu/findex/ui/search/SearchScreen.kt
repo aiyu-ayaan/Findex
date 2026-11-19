@@ -1,5 +1,10 @@
 package com.aiyu.findex.ui.search
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
+import androidx.compose.material3.FloatingToolbarDefaults
+import com.aiyu.findex.ui.explorer.SelectionActions
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -78,10 +83,15 @@ fun SearchScreen(
     var viewerInitialPath by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
+    val selecting = state.selection.isNotEmpty()
+    LaunchedEffect(selecting) { if (selecting) keyboard?.hide() }
+    BackHandler(enabled = viewerInitialPath == null && selecting) { viewModel.clearSelection() }
 
     fun open(item: StorageItem) {
         keyboard?.hide()
         when {
+            // Read live state: a tap right after the long-press can land before this composition sees the selection.
+            viewModel.uiState.value.selection.isNotEmpty() -> viewModel.toggle(item.path)
             item.isDirectory -> onOpenFolder(item.path)
             item.isArchive -> onOpenArchive(item.path)
             InAppViewers.opensMedia(item.extension) -> {
@@ -142,19 +152,32 @@ fun SearchScreen(
                 state.results.isEmpty() -> SearchMessage(Icons.Rounded.SearchOff, stringResource(R.string.search_no_results, state.query.trim()))
                 else -> FileList(
                     items = state.results,
-                    selection = emptySet(),
+                    selection = state.selection,
                     state = rememberLazyListState(),
                     contentPadding = PaddingValues(
                         start = readableGutter(), end = readableGutter(), top = Dimens.xs,
-                        bottom = padding.calculateBottomPadding() + Dimens.xxl
+                        // Room for the floating selection toolbar over the last rows.
+                        bottom = padding.calculateBottomPadding() + 120.dp
                     ),
                     onClick = ::open,
                     onMore = { keyboard?.hide(); actionsFor = it },
-                    onSelectionChange = {},
+                    onSelectionChange = viewModel::setSelection,
                     header = {},
                     subtitle = { File(it.path).parent.orEmpty() }
                 )
             }
+            SelectionActions(
+                selected = state.results.filter { it.path in state.selection },
+                onClear = viewModel::clearSelection,
+                onRoute = onOpenFile,
+                onOpenArchive = onOpenArchive,
+                onOpenFolder = onOpenFolder,
+                onChanged = viewModel::refresh,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .navigationBarsPadding()
+                    .offset(y = -FloatingToolbarDefaults.ScreenOffset)
+            )
         }
     }
 
