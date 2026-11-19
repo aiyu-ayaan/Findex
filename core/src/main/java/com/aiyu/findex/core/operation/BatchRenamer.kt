@@ -43,7 +43,7 @@ data class RenamePreview(val item: StorageItem, val newName: String, val status:
 
 /** Pure planning logic: no I/O, unit-tested. */
 object RenamePlanner {
-    private val tokenRx = Regex("""\{(name|ext|parent|n|date)(?::([^}]*))?}""")
+    private val tokenRx = Regex("""\{(name|ext|parent|n|date)(?::([^}]*))?\}""")
 
     fun parentOf(path: String): String = path.trimEnd('/').substringBeforeLast('/', "")
 
