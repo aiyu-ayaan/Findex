@@ -11,7 +11,27 @@
 ![Material 3 Expressive](https://img.shields.io/badge/design-Material%203%20Expressive-0D9488?logo=materialdesign&logoColor=white)
 ![Min SDK](https://img.shields.io/badge/minSdk-26-3DDC84?logo=android&logoColor=white)
 
-A modern, native Android file explorer built with **Jetpack Compose** and **Material 3 Expressive** design. Findex combines fluid motion, expressive shape morphing, multi-tab multitasking, deep storage analytics, an encrypted vault, network storage (SMB, WebDAV, FTP, SFTP), and powerful archive utilities into a fast, privacy-respecting file manager. It can also share your phone's files with a computer's browser over Wi-Fi.
+A modern, native Android file explorer built with **Jetpack Compose** and **Material 3 Expressive** design. Findex combines fluid motion, expressive shape morphing, multi-tab multitasking, deep storage analytics, an encrypted vault, network storage (SMB, WebDAV, FTP, SFTP), and powerful archive utilities into a fast, privacy-respecting file manager. It can also share your phone's files with a computer's browser over Wi-Fi, and pairs with **[Findex for desktop](https://github.com/aiyu-ayaan/Findex-Rust)** (Linux and Windows): the two apps browse each other and send files over an encrypted link.
+
+---
+
+## 🔗 Findex ecosystem
+
+| | Android (this repo) | Desktop |
+|---|---|---|
+| App | **Findex** for Android | **[Findex for Linux and Windows](https://github.com/aiyu-ayaan/Findex-Rust)** (Rust, Windows 11 Explorer look) |
+| Sees the other device | **Computers** tab on Home: paired PCs open in the Explorer like a network share | **Phones** in the navigation pane and This PC: phone storage with usage bars, folders open in normal tabs |
+| Copy both ways | Copy, paste or **Send to computer**; files land in the PC's `Downloads/Findex` | Copy, paste or **Send to phone**; files land in `Download/Findex` on the phone |
+| Streaming | Videos and music on the PC play from the phone with seeking (ranged reads) | Phone files open on the PC |
+| Text | Send text or a link from the phone: it lands on the PC clipboard | The same, from the PC to the phone clipboard |
+
+**How to pair.** Install Findex on both devices and put them on the same Wi-Fi. On the phone, open **Home > Computers**. Turn on **Let computers connect**, or tap the PC under **Nearby** (or **Pair by address**). Both screens show the same 6-digit code: accept on both. You pair once.
+
+**How it is secured** (modelled on Apple's AirDrop and Continuity, see [`development/docs/ECOSYSTEM.md`](development/docs/ECOSYSTEM.md)):
+- Each device has a long-term identity certificate. On Android its private key lives in the Android Keystore.
+- Everything goes over TLS. After pairing, each side pins the other's certificate and presents a 256-bit token, so nobody else on the network can connect.
+- Pairing compares the 6-digit codes with hash commitments, like Bluetooth Secure Simple Pairing, so a man in the middle cannot fake a match.
+- Deletes from the other device go to the Recycle Bin. Paths are confined to your storage; the Vault and Recycle Bin folders are never served.
 
 ---
 
@@ -70,6 +90,7 @@ A modern, native Android file explorer built with **Jetpack Compose** and **Mate
 
 ### Network & sharing
 - **Network storage**: SMB, WebDAV, FTP, SFTP. Shares open as normal Explorer tabs, with live status, thumbnails and video streaming. Passwords are Keystore-encrypted, or session-only.
+- **Computers (Findex Link)**: pair with [Findex for desktop](https://github.com/aiyu-ayaan/Findex-Rust). Browse the PC like a network drive, browse the phone from the PC, send files and text both ways, stream media. Encrypted and pinned; see [Findex ecosystem](#-findex-ecosystem).
 - **Share this phone**: local web server with address and random 6-digit PIN. Browse, preview, download, upload, rename and delete from a computer's browser. Access presets (View / Download / Full) apply live. Stops itself after an idle timeout. Plain HTTP: trusted networks only.
 
 ### Privacy & viewers
@@ -125,6 +146,9 @@ graph LR
     Net --> SMB & WebDAV & FTP & SFTP
     Explorer --> Vault[(Encrypted Vault)]
     Browser[Computer browser] -- LAN + PIN --> Share[Share this phone server] --> Explorer
+    Net --> FL[Findex Link]
+    PC[Findex for desktop] <-- TLS, pinned cert + token --> FL
+    PC -- TLS --> LinkServer[Link server on the phone] --> Explorer
 ```
 
 More diagrams: [ARCHITECTURE.md](development/docs/ARCHITECTURE.md).
@@ -137,7 +161,7 @@ Findex follows Clean Architecture principles with decoupled Gradle modules:
 
 ```
 ├── app/    # Application entry point, Hilt Android App, MainActivity, Permissions
-├── core/   # File engines, Room DB (SQLite), DataStore, network clients, share server, Foreground Services, Repositories
+├── core/   # File engines, Room DB (SQLite), DataStore, network clients, share server, Findex Link, Foreground Services, Repositories
 ├── ui/     # Jetpack Compose UI, Material 3 Expressive Theme, ViewModels, centralized strings.xml
 └── baselineprofile/  # Baseline + startup profile generation (not shipped)
 ```

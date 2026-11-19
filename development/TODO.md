@@ -134,6 +134,9 @@ MVP scope and decisions: [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md). Visual rules: [
 - [x] Image compress and resize as a foreground-service operation
 
 ### Network
+- [x] Findex Link with the desktop app: Computers tab, pairing (6-digit code, Keystore identity, pinned TLS), browse and stream the PC, Send to computer, phone server for the PC (`development/docs/ECOSYSTEM.md`)
+- [ ] Findex Link: translate the new `link_*` strings into the 26 locales (English only for now)
+- [ ] Findex Link: thumbnails of PC files over the link, clipboard sync (Universal Clipboard style)
 - [ ] Folder sync / backup to a share (one-way, scheduled via WorkManager)
 - [ ] Local network discovery of SMB hosts and servers
 - [x] Share this phone: LAN HTTP server (NanoHTTPD) with 6-digit PIN, M3 web app (media sections, file explorer, preview, download, upload, rename, delete to Recycle Bin), live per-permission access, idle auto-stop (default 5 min), foreground service

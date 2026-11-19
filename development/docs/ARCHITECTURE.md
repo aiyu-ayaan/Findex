@@ -257,6 +257,38 @@ flowchart LR
 - **Lifetime**: `ShareServerService` stops after `shareIdleMinutes` (default 5, 0 = never) with no request and no running transfer, when the LAN address disappears, from the notification's Stop action, or on Android 15's `dataSync` `onTimeout`.
 - **Web app**: one file, `ui/src/main/assets/share/index.html` (no external requests, CSP `'self'`). Tokens copy `Color.kt` and `CategoryTones.kt`, light/dark by `prefers-color-scheme`. Its texts are English-only for now; app strings stay in `ui/res`.
 
+## 3c. Findex Link (desktop ecosystem)
+
+Pairs this phone with [Findex for desktop](https://github.com/aiyu-ayaan/Findex-Rust). The protocol contract, the security model and the comparison with Apple's AirDrop/Continuity are in [`ECOSYSTEM.md`](ECOSYSTEM.md); the desktop keeps the same file as `development/docs/10-ecosystem.md`.
+
+```mermaid
+flowchart LR
+    subgraph UI[":ui"]
+        Home[Home &gt; Computers tab<br/>ThisPhoneCard, Nearby, Pair by address] --> LVM[LinkViewModel]
+        Sel[Selection menu &gt; Send to computer] --> LVM
+        Req[LinkRequestHost<br/>global pairing dialog] --> LVM
+    end
+    subgraph Core[":core link/"]
+        LVM --> LR[LinkRepository<br/>pairing, peers, NSD, server state]
+        LR --> ID[LinkIdentity<br/>Keystore EC P-256 + self-signed cert]
+        LR --> DB[(Room v9<br/>link_peers + network_servers FINDEX)]
+        LR -->|startForegroundService| Svc[LinkServerService<br/>FGS dataSync, idle 30 min]
+        Svc --> HS[LinkHttpServer<br/>NanoHTTPD + TLS, port 47100]
+        HS --> Ex[FileOperationExecutor<br/>Trash into Recycle Bin]
+        LVM -->|Copy to smb://id/Received| OM[OperationManager]
+        OM --> SR[SmbRepository] --> LS[FindexLinkSession] --> LC[LinkClient<br/>HttpsURLConnection, pinned]
+    end
+    PC[Findex for desktop] -- "TLS, pinned cert, bearer token" --> HS
+    LC -- "TLS, pinned cert, bearer token" --> PC
+```
+
+- **Identity**: `LinkIdentity` creates an EC P-256 key in the Android Keystore with a self-signed certificate. The key never leaves secure hardware; Conscrypt signs the TLS handshake through it. SHA-256 of the certificate is the device id.
+- **Pairing**: numeric comparison with commitments (`LinkCrypto.code`, shared test vector with the desktop). As client: `LinkRepository.pair` → `PairUi.Code` dialog. As server: `LinkHttpServer.pairFinish` blocks on `LinkRepository.approve`, which `LinkRequestHost` answers from any screen (60 s, then declined).
+- **Storage of a pairing**: `link_peers` keeps the token the computer presents to us (Keystore-encrypted). The computer's own `network_servers` row (protocol `FINDEX`) holds its address, `username` = pinned fingerprint and `passwordCipher` = the token we present. That row is what makes a paired computer browse, copy and stream like any share.
+- **Computer → phone**: `LinkServerService` serves every storage volume as a root (`Internal storage`, SD card…), never `.FindexVault` / `.FindexTrash`. Pushed files land in `Download/Findex`; pushed text goes to the clipboard plus a notification.
+- **Phone → computer**: `FindexLinkSession` maps the `NetworkSession` calls to `/v1/*`. Writes stream chunked; `openRandomAccess` keeps one ranged stream open while reads are sequential, so video playback does not re-handshake per chunk. "Send to computer" is a normal `FileOperation.Copy` into the desktop's `Received` root, so it runs in `FileOperationForegroundService`.
+- **Discovery**: NSD `_findex._tcp`, browsed only while the Computers tab is visible. A resolved paired computer at a new address updates its row. Emulator ↔ host discovery does not work (NAT): pair by address (`10.0.2.2:<port>`).
+
 ## 4. Standalone Runner (`run.sh`)
 
 For developers without Android Studio installed, `run.sh` provides a complete headless CLI build-and-run workflow:
