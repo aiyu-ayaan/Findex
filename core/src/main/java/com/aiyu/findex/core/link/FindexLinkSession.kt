@@ -22,6 +22,9 @@ internal class FindexLinkSession(private val client: LinkClient) : NetworkSessio
 
     override val isConnected: Boolean = true
 
+    /** Contacts the computer once, so an offline or unpaired computer fails here (and shows offline). */
+    fun verify() = net { client.info() }
+
     private inline fun <T> net(block: () -> T): T = try {
         block()
     } catch (e: LinkHttpException) {

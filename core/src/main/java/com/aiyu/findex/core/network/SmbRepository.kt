@@ -385,7 +385,11 @@ class SmbRepository @Inject constructor(
     /** Connects (or reuses the live session) to tell whether [id] is reachable, with its capacity when known. */
     suspend fun probe(id: Long): NetworkStatus = withContext(Dispatchers.IO) {
         try {
-            withSession(id) { NetworkStatus.Online(runCatching { it.space() }.getOrNull()) }
+            withSession(id) { session ->
+                // A Findex Link session holds no connection, so only a real request tells whether the computer is up.
+                if (session is com.aiyu.findex.core.link.FindexLinkSession) NetworkStatus.Online(session.space())
+                else NetworkStatus.Online(runCatching { session.space() }.getOrNull())
+            }
         } catch (e: Exception) {
             NetworkStatus.Offline((e as? NetworkException)?.error ?: NetworkError.UNKNOWN)
         }
@@ -525,7 +529,7 @@ class SmbRepository @Inject constructor(
             // username holds the pinned certificate fingerprint, the password the bearer token.
             NetworkProtocol.FINDEX -> com.aiyu.findex.core.link.FindexLinkSession(
                 com.aiyu.findex.core.link.LinkClient(entity.host, effectivePort, com.aiyu.findex.core.link.LinkCrypto.unhex(entity.username), password)
-            )
+            ).also { it.verify() }
             NetworkProtocol.WEBDAV, NetworkProtocol.WEBDAVS -> {
                 WebDavSession(
                     host = entity.host,

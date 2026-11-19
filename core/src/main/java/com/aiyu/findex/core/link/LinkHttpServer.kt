@@ -58,16 +58,40 @@ internal class LinkHttpServer(
 
     override fun useGzipWhenAccepted(r: Response): Boolean = false
 
+    /** Whether this request's body was (partly) read; NanoHTTPD serves each connection on its own thread. */
+    private val bodyRead = ThreadLocal.withInitial { false }
+
     override fun serve(session: IHTTPSession): Response {
         lastActivity = System.currentTimeMillis()
+        bodyRead.set(false)
         return try {
             route(session)
         } catch (e: ApiException) {
+            drain(session)
             json(e.status, JSONObject().put("error", e.code)).apply { closeConnection(true) }
         } catch (e: Exception) {
             json(Response.Status.INTERNAL_ERROR, JSONObject().put("error", "io")).apply { closeConnection(true) }
         } finally {
             lastActivity = System.currentTimeMillis()
+        }
+    }
+
+    /**
+     * Reads an unread request body (up to [MAX_DRAIN]) before an error answer, so the client gets the
+     * error instead of a reset connection. Bigger bodies are cut off by closing.
+     */
+    private fun drain(s: IHTTPSession) {
+        if (bodyRead.get()) return
+        val length = s.headers["content-length"]?.toLongOrNull() ?: return
+        if (length > MAX_DRAIN) return
+        runCatching {
+            val buffer = ByteArray(16 * 1024)
+            var left = length
+            while (left > 0) {
+                val n = s.inputStream.read(buffer, 0, minOf(buffer.size.toLong(), left).toInt())
+                if (n < 0) break
+                left -= n
+            }
         }
     }
 
@@ -179,7 +203,7 @@ internal class LinkHttpServer(
 
     private fun list(path: String): Response {
         val items = if (LinkPaths.split(path)?.isEmpty() == true) {
-            roots.keys.map { JSONObject().put("name", it).put("dir", true).put("size", 0).put("mtime", 0) }
+            roots.map { (name, dir) -> JSONObject().put("name", name).put("dir", true).put("size", 0).put("mtime", dir.lastModified()) }
         } else {
             val dir = resolve(path)
             if (!dir.isDirectory) throw ApiException(Response.Status.NOT_FOUND, "not_found")
@@ -212,6 +236,7 @@ internal class LinkHttpServer(
         val dir = target.parentFile ?: throw ApiException(Response.Status.BAD_REQUEST, "path")
         if (length > dir.usableSpace) throw ApiException(Response.Status.lookup(507) ?: Response.Status.INTERNAL_ERROR, "no_space")
         val part = File(dir, ".${target.name}.findex-part")
+        bodyRead.set(true)
         transfers.incrementAndGet()
         try {
             part.outputStream().use { out ->
@@ -293,6 +318,7 @@ internal class LinkHttpServer(
     private fun body(s: IHTTPSession, max: Int): ByteArray {
         val length = s.headers["content-length"]?.toIntOrNull() ?: throw ApiException(Response.Status.LENGTH_REQUIRED, "length")
         if (length > max) throw ApiException(Response.Status.PAYLOAD_TOO_LARGE, "too_large")
+        bodyRead.set(true)
         val bytes = ByteArray(length)
         var read = 0
         while (read < length) {
@@ -331,6 +357,7 @@ internal class LinkHttpServer(
         private const val MIME = "application/octet-stream"
         private const val MAX_JSON = 64 * 1024
         private const val MAX_TEXT = 1 shl 20
+        private const val MAX_DRAIN = 8L shl 20
         private const val PENDING_MS = 120_000L
         private val BLOCKED_DIRS = setOf(VaultKeyManager.DIR_NAME, FileOperationExecutor.TRASH_DIR)
     }
