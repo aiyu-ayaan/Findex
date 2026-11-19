@@ -68,5 +68,8 @@ abstract class CoreModule {
 
         @Provides
         fun provideClipboardDao(db: FindexDatabase): ClipboardDao = db.clipboardDao()
+
+        @Provides
+        fun provideLinkPeerDao(db: FindexDatabase): com.aiyu.findex.core.db.LinkPeerDao = db.linkPeerDao()
     }
 }

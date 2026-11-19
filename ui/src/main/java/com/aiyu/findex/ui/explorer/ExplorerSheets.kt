@@ -89,12 +89,12 @@ import com.aiyu.findex.ui.theme.Dimens
 import com.aiyu.findex.ui.util.formatDate
 import com.aiyu.findex.ui.util.formatSize
 
-enum class ItemAction { OPEN, OPEN_WITH, OPEN_IN_NEW_TAB, SHARE, SHOW_IN_FOLDER, RESTORE, COPY, CUT, RENAME, COMPRESS, EXTRACT, BOOKMARK, DETAILS, DELETE, TAGS, PIN_SHORTCUT, MOVE_TO_VAULT, COMPRESS_IMAGE, BATCH_RENAME }
+enum class ItemAction { OPEN, OPEN_WITH, OPEN_IN_NEW_TAB, SHARE, SHOW_IN_FOLDER, RESTORE, COPY, CUT, RENAME, COMPRESS, EXTRACT, BOOKMARK, DETAILS, DELETE, TAGS, PIN_SHORTCUT, MOVE_TO_VAULT, COMPRESS_IMAGE, BATCH_RENAME, SEND_TO_COMPUTER }
 
 val ExplorerItemActions = ItemAction.entries.toSet() - ItemAction.SHOW_IN_FOLDER - ItemAction.RESTORE
 
 /** On an SMB share: no archives (they need local files), no recycle bin restore, no vault or image tools. */
-val NetworkItemActions = ExplorerItemActions - ItemAction.COMPRESS - ItemAction.EXTRACT - ItemAction.MOVE_TO_VAULT - ItemAction.COMPRESS_IMAGE
+val NetworkItemActions = ExplorerItemActions - ItemAction.COMPRESS - ItemAction.EXTRACT - ItemAction.MOVE_TO_VAULT - ItemAction.COMPRESS_IMAGE - ItemAction.SEND_TO_COMPUTER
 
 /** Long-press-free per-item actions, opened from the row's overflow button. */
 @Composable

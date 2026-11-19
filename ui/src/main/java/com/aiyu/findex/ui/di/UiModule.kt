@@ -50,6 +50,12 @@ class ResourceOperationStrings @Inject constructor(
     override val shareTitle: String get() = localized.getString(R.string.share_notification_title)
     override val shareStop: String get() = localized.getString(R.string.share_stop)
     override fun shareText(url: String, pin: String): String = localized.getString(R.string.share_notification_text, url, pin)
+    override val linkChannelName: String get() = localized.getString(R.string.link_channel_name)
+    override val linkTitle: String get() = localized.getString(R.string.link_notification_title)
+    override val linkStop: String get() = localized.getString(R.string.link_stop)
+    override fun linkText(address: String): String = localized.getString(R.string.link_visible_on, address)
+    override fun linkReceived(from: String, name: String): String = localized.getString(R.string.link_received, from, name)
+    override fun linkTextReceived(from: String): String = localized.getString(R.string.link_text_received, from)
 }
 
 fun operationTitleRes(operation: FileOperation): Int = when (operation) {

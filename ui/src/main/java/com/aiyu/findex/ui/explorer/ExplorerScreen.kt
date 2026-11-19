@@ -52,6 +52,7 @@ import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.BookmarkBorder
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Computer
 import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.ContentCut
 import androidx.compose.material.icons.rounded.ContentPaste
@@ -165,6 +166,7 @@ private sealed interface ExplorerModal {
     data class Details(val item: StorageItem) : ExplorerModal
     data class MediaViewer(val initialPath: String) : ExplorerModal
     data class Tags(val paths: List<String>) : ExplorerModal
+    data class SendToComputer(val paths: List<String>) : ExplorerModal
     data object NewFolder : ExplorerModal
     data object Sort : ExplorerModal
 }
@@ -453,6 +455,11 @@ fun ExplorerScreen(
                 allImages = state.selectedItems.isNotEmpty() && state.selectedItems.all { !it.isDirectory && isImageExtension(it.extension) },
                 onFeature = { action ->
                     if (action == ItemAction.TAGS) { modal = ExplorerModal.Tags(state.selection.toList()); return@SelectionToolbar }
+                    if (action == ItemAction.SEND_TO_COMPUTER) {
+                        modal = ExplorerModal.SendToComputer(state.selection.toList())
+                        viewModel.clearSelection()
+                        return@SelectionToolbar
+                    }
                     val token = SelectionHandoff.put(state.selection.toList())
                     viewModel.clearSelection()
                     when (action) {
@@ -561,9 +568,11 @@ fun ExplorerScreen(
                     ItemAction.BATCH_RENAME -> onFeatureRoute(BatchRenameRoute(SelectionHandoff.put(listOf(item.path))))
                     ItemAction.PIN_SHORTCUT -> say(if (context.pinFolderShortcut(item.path, item.name)) R.string.shortcut_pinned else R.string.shortcut_unsupported)
                     ItemAction.TAGS -> modal = ExplorerModal.Tags(listOf(item.path))
+                    ItemAction.SEND_TO_COMPUTER -> modal = ExplorerModal.SendToComputer(listOf(item.path))
                 }
             }
         )
+        is ExplorerModal.SendToComputer -> com.aiyu.findex.ui.link.SendToComputerSheet(m.paths, onDone = { modal = null })
         is ExplorerModal.Tags -> {
             val initial by produceState<Set<Long>?>(null, m.paths) { value = viewModel.commonTagIds(m.paths) }
             initial?.let { start ->
@@ -987,6 +996,11 @@ internal fun SelectionToolbar(
                         )
                     }
                     if (!network) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.action_send_to_computer)) },
+                            leadingIcon = { Icon(Icons.Rounded.Computer, null) },
+                            onClick = { more = false; onFeature(ItemAction.SEND_TO_COMPUTER) }
+                        )
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.action_move_to_vault)) },
                             leadingIcon = { Icon(Icons.Rounded.Lock, null) },

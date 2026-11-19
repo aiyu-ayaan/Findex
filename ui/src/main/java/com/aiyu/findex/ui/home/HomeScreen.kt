@@ -79,6 +79,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material.icons.rounded.Computer
 import androidx.compose.material.icons.rounded.Dns
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.Refresh
@@ -131,6 +132,7 @@ import com.aiyu.findex.ui.network.ServerActionsSheet
 import com.aiyu.findex.ui.network.RemoveServerDialog
 import com.aiyu.findex.ui.network.labelRes
 import com.aiyu.findex.ui.network.messageRes
+import com.aiyu.findex.core.network.NetworkProtocol
 import com.aiyu.findex.core.network.NetworkServer
 import com.aiyu.findex.core.network.NetworkStatus
 import com.aiyu.findex.core.network.NetworkError
@@ -164,6 +166,24 @@ fun HomeScreen(
     var addingServer by remember { androidx.compose.runtime.mutableStateOf(false) }
     var removingServer by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
     val networkViewModel: NetworkViewModel = hiltViewModel()
+    val linkViewModel: com.aiyu.findex.ui.link.LinkViewModel = hiltViewModel()
+    val linkServer by linkViewModel.server.collectAsStateWithLifecycle()
+    val nearby by linkViewModel.nearby.collectAsStateWithLifecycle()
+    val pairState by linkViewModel.pair.collectAsStateWithLifecycle()
+    var computerMenu by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
+    var sendingText by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
+    var unpairing by remember { androidx.compose.runtime.mutableStateOf<NetworkServer?>(null) }
+    val snackbar = com.aiyu.findex.ui.LocalSnackbarHostState.current
+    LaunchedEffect(Unit) {
+        linkViewModel.messageRes.collect { (res, arg) -> snackbar.showSnackbar(context.getString(res, arg)) }
+    }
+    // Look for computers only while the Computers tab is on screen.
+    if (uiState.selectedTabIndex == TAB_COMPUTERS) {
+        androidx.compose.runtime.DisposableEffect(Unit) {
+            linkViewModel.startDiscovery()
+            onDispose { linkViewModel.stopDiscovery() }
+        }
+    }
     LaunchedEffect(Unit) {
         networkViewModel.added.collect {
             addingServer = false
@@ -213,23 +233,28 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(Dimens.md),
             modifier = Modifier.fillMaxSize()
         ) {
-            if (uiState.hasNetworkDrives) {
+            run {
                 item(key = "tabs") {
                     // M3 Expressive connected button group: the selected side morphs to a full pill.
-                    val options = listOf(
-                        R.string.tab_device to Icons.Rounded.PhoneAndroid,
-                        R.string.tab_network to Icons.Rounded.Dns
+                    // Network shows only with saved shares; Computers is always there to pair a PC.
+                    val options = listOfNotNull(
+                        Triple(TAB_DEVICE, R.string.tab_device, Icons.Rounded.PhoneAndroid),
+                        Triple(TAB_NETWORK, R.string.tab_network, Icons.Rounded.Dns).takeIf { uiState.hasNetworkDrives },
+                        Triple(TAB_COMPUTERS, R.string.tab_computers, Icons.Rounded.Computer)
                     )
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
                         modifier = Modifier.fillMaxWidth().selectableGroup()
                     ) {
-                        options.forEachIndexed { index, (label, icon) ->
+                        options.forEachIndexed { index, (tab, label, icon) ->
                             ToggleButton(
-                                checked = uiState.selectedTabIndex == index,
-                                onCheckedChange = { viewModel.selectTab(index) },
-                                shapes = if (index == 0) ButtonGroupDefaults.connectedLeadingButtonShapes()
-                                else ButtonGroupDefaults.connectedTrailingButtonShapes(),
+                                checked = uiState.selectedTabIndex == tab,
+                                onCheckedChange = { viewModel.selectTab(tab) },
+                                shapes = when (index) {
+                                    0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+                                    options.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                                    else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+                                },
                                 modifier = Modifier
                                     .weight(1f)
                                     .heightIn(min = Dimens.minTouch)
@@ -253,7 +278,46 @@ fun HomeScreen(
                 }
             }
 
-            if (uiState.selectedTabIndex == 1 && uiState.hasNetworkDrives) {
+            if (uiState.selectedTabIndex == TAB_COMPUTERS) {
+                item(key = "thisPhone") {
+                    com.aiyu.findex.ui.link.ThisPhoneCard(linkServer, linkViewModel.deviceName, onToggle = linkViewModel::setVisible)
+                }
+                item(key = "pairedHeader") { SectionHeader(stringResource(R.string.link_paired)) }
+                if (uiState.computers.isEmpty()) {
+                    item(key = "noComputers") {
+                        Text(stringResource(R.string.link_none_paired), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+                items(uiState.computers, key = { "pc${it.id}" }) { server ->
+                    NetworkDriveCard(
+                        server = server,
+                        status = uiState.networkStatus[server.id] ?: NetworkStatus.Checking,
+                        onClick = { onNavigate(ExplorerRoute(server.rootPath)) },
+                        onRetry = { viewModel.probe(server.id) },
+                        onUnlock = {},
+                        onLongClick = { computerMenu = server }
+                    )
+                }
+                item(key = "nearbyHeader") { SectionHeader(stringResource(R.string.link_nearby)) }
+                if (nearby.isEmpty()) {
+                    item(key = "searching") {
+                        Text(stringResource(R.string.link_searching), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+                items(nearby.size, key = { "near${nearby[it].id}" }) { i ->
+                    val d = nearby[i]
+                    com.aiyu.findex.ui.link.NearbyRow(d, i, nearby.size, onPair = { linkViewModel.pair(d.host, d.port) })
+                }
+                item(key = "pairAddress") {
+                    OutlinedButton(onClick = linkViewModel::askAddress, modifier = Modifier.fillMaxWidth().heightIn(min = Dimens.minTouch)) {
+                        Icon(Icons.Rounded.Add, contentDescription = null, modifier = Modifier.padding(end = Dimens.sm))
+                        Text(stringResource(R.string.link_pair_by_address))
+                    }
+                }
+                return@LazyColumn
+            }
+
+            if (uiState.selectedTabIndex == TAB_NETWORK && uiState.hasNetworkDrives) {
                 items(uiState.networkDrives, key = { "smb${it.id}" }) { server ->
                     NetworkDriveCard(
                         server = server,
@@ -366,6 +430,34 @@ fun HomeScreen(
         }
     }
 
+    com.aiyu.findex.ui.link.PairDialogs(
+        state = pairState,
+        onAddress = linkViewModel::pair,
+        onConfirm = linkViewModel::confirmCode,
+        onDismiss = linkViewModel::dismissPair
+    )
+    computerMenu?.let { server ->
+        com.aiyu.findex.ui.link.ComputerActionsSheet(
+            name = server.label,
+            onSendText = { computerMenu = null; sendingText = server },
+            onUnpair = { computerMenu = null; unpairing = server },
+            onDismiss = { computerMenu = null }
+        )
+    }
+    sendingText?.let { server ->
+        com.aiyu.findex.ui.link.SendTextDialog(
+            name = server.label,
+            onSend = { linkViewModel.sendText(server.id, server.label, it); sendingText = null },
+            onDismiss = { sendingText = null }
+        )
+    }
+    unpairing?.let { server ->
+        com.aiyu.findex.ui.link.UnpairDialog(
+            name = server.label,
+            onConfirm = { linkViewModel.unpair(server.username); unpairing = null },
+            onDismiss = { unpairing = null }
+        )
+    }
     serverMenu?.let { server ->
         ServerActionsSheet(
             server = server,
@@ -567,6 +659,7 @@ private fun NetworkDriveCard(
                 icon = when {
                     locked -> Icons.Rounded.Lock
                     offline -> Icons.Rounded.CloudOff
+                    server.protocol == NetworkProtocol.FINDEX -> Icons.Rounded.Computer
                     else -> Icons.Rounded.Dns
                 },
                 shape = MaterialShapes.Pill,
@@ -577,7 +670,9 @@ private fun NetworkDriveCard(
             Column(Modifier.weight(1f).alpha(if (online) 1f else DisabledAlpha)) {
                 Text(server.label, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(
-                    stringResource(server.protocol.labelRes()) + " · " + server.username.ifEmpty { stringResource(R.string.network_guest) } + " · " + server.displayAddress,
+                    // A paired computer's username is its certificate fingerprint: show only the address.
+                    if (server.protocol == NetworkProtocol.FINDEX) "Findex · " + server.displayAddress
+                    else stringResource(server.protocol.labelRes()) + " · " + server.username.ifEmpty { stringResource(R.string.network_guest) } + " · " + server.displayAddress,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,

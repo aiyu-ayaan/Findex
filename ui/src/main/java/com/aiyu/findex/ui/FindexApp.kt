@@ -204,6 +204,8 @@ fun FindexApp(
                     onInstall = viewModel::installUpdate,
                     onDismiss = viewModel::dismissUpdate
                 )
+                // A computer asking to pair is answered from any screen.
+                com.aiyu.findex.ui.link.LinkRequestHost()
                 FindexNavigation(onboardingDone = current.onboardingDone, onOnboardingFinished = viewModel::completeOnboarding, tabCount = tabCount, externalIntents = externalIntents, onImport = viewModel::importShared)
                 SnackbarHost(
                     hostState = snackbarHostState,

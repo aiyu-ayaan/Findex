@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.Code
+import androidx.compose.material.icons.rounded.Computer
 import androidx.compose.material.icons.rounded.Description
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Language
@@ -48,6 +49,7 @@ import com.aiyu.findex.ui.components.readableGutter
 import com.aiyu.findex.ui.theme.Dimens
 
 private const val REPO_URL = "https://github.com/aiyu-ayaan/Findex"
+private const val DESKTOP_URL = "https://github.com/aiyu-ayaan/Findex-Rust"
 private const val GITHUB_URL = "https://github.com/aiyu-ayaan"
 private const val PORTFOLIO_URL = "https://aiyu.co.in"
 
@@ -89,8 +91,9 @@ fun AboutScreen(onBack: () -> Unit, onOpenAcknowledgements: () -> Unit) {
 
     AboutScaffold(R.string.about_title, onBack) {
         item { SectionHeader(stringResource(R.string.about_section_app)) }
-        item { Row(stringResource(R.string.app_name), stringResource(R.string.about_version_build, version, build), Icons.Rounded.Info, groupedShape(0, 2)) }
-        item { Row(stringResource(R.string.about_source_code), "github.com/aiyu-ayaan/Findex", Icons.Rounded.Code, groupedShape(1, 2), external = true) { open(REPO_URL) } }
+        item { Row(stringResource(R.string.app_name), stringResource(R.string.about_version_build, version, build), Icons.Rounded.Info, groupedShape(0, 3)) }
+        item { Row(stringResource(R.string.about_source_code), "github.com/aiyu-ayaan/Findex", Icons.Rounded.Code, groupedShape(1, 3), external = true) { open(REPO_URL) } }
+        item { Row(stringResource(R.string.about_desktop), stringResource(R.string.about_desktop_subtitle), Icons.Rounded.Computer, groupedShape(2, 3), external = true) { open(DESKTOP_URL) } }
 
         item { SectionHeader(stringResource(R.string.about_section_developer)) }
         item {

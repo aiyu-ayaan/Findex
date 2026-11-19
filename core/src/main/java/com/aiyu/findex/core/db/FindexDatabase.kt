@@ -193,6 +193,43 @@ interface NetworkServerDao {
 
     @Query("DELETE FROM network_servers WHERE id = :id")
     suspend fun delete(id: Long)
+
+    /** The browsable entry of a paired Findex computer; [fingerprint] is kept in `username`. */
+    @Query("SELECT * FROM network_servers WHERE protocol = 'FINDEX' AND username = :fingerprint LIMIT 1")
+    suspend fun byLinkFingerprint(fingerprint: String): NetworkServerEntity?
+}
+
+/**
+ * A device paired over Findex Link. [tokenInCipher] is the bearer token that device presents to this
+ * phone, encrypted with the Keystore (`CredentialCipher`). The token this phone presents to it, its
+ * address and port live in its `network_servers` row (protocol FINDEX), which the Explorer browses.
+ */
+@Entity(tableName = "link_peers")
+data class LinkPeerEntity(
+    /** Hex SHA-256 of the device's certificate. */
+    @PrimaryKey val id: String,
+    val name: String,
+    val platform: String,
+    val tokenInCipher: String,
+    val createdAt: Long = System.currentTimeMillis()
+)
+
+@Dao
+interface LinkPeerDao {
+    @Query("SELECT * FROM link_peers ORDER BY createdAt ASC")
+    fun observeAll(): Flow<List<LinkPeerEntity>>
+
+    @Query("SELECT * FROM link_peers")
+    suspend fun all(): List<LinkPeerEntity>
+
+    @Query("SELECT * FROM link_peers WHERE id = :id")
+    suspend fun byId(id: String): LinkPeerEntity?
+
+    @Upsert
+    suspend fun upsert(peer: LinkPeerEntity)
+
+    @Query("DELETE FROM link_peers WHERE id = :id")
+    suspend fun delete(id: String)
 }
 
 @Database(
@@ -203,9 +240,11 @@ interface NetworkServerDao {
         VaultMetaEntity::class, VaultItemEntity::class,
         StorageSnapshotEntity::class,
         // v8
-        ClipboardEntity::class
+        ClipboardEntity::class,
+        // v9
+        LinkPeerEntity::class
     ],
-    version = 8,
+    version = 9,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
@@ -214,7 +253,8 @@ interface NetworkServerDao {
         AutoMigration(from = 4, to = 5),
         AutoMigration(from = 5, to = 6),
         AutoMigration(from = 6, to = 7),
-        AutoMigration(from = 7, to = 8)
+        AutoMigration(from = 7, to = 8),
+        AutoMigration(from = 8, to = 9)
     ]
 )
 abstract class FindexDatabase : RoomDatabase() {
@@ -228,4 +268,5 @@ abstract class FindexDatabase : RoomDatabase() {
     abstract fun storageSnapshotDao(): StorageSnapshotDao
     abstract fun pathIndexDao(): PathIndexDao
     abstract fun clipboardDao(): ClipboardDao
+    abstract fun linkPeerDao(): LinkPeerDao
 }

@@ -17,6 +17,10 @@
             android:name=".share.ShareServerService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+        <service
+            android:name=".link.LinkServerService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
         <provider
             android:name=".vault.VaultContentProvider"
             android:authorities="${applicationId}.vaultprovider"

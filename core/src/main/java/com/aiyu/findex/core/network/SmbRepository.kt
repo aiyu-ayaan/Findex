@@ -49,7 +49,9 @@ enum class NetworkProtocol(val defaultPort: Int, val displayName: String) {
     SFTP(22, "SFTP"),
     FTP(21, "FTP"),
     WEBDAV(80, "WebDAV"),
-    WEBDAVS(443, "WebDAVS");
+    WEBDAVS(443, "WebDAVS"),
+    /** A computer paired over Findex Link; added by `LinkRepository`, never typed in by hand. */
+    FINDEX(47100, "Findex");
 
     val isWebDav: Boolean get() = this == WEBDAV || this == WEBDAVS
 
@@ -89,6 +91,7 @@ data class NetworkServer(
                 NetworkProtocol.FTP -> if (cleanShare.isEmpty()) "ftp://$host$customPort" else "ftp://$host$customPort/$cleanShare"
                 NetworkProtocol.WEBDAV -> if (cleanShare.isEmpty()) "http://$host$customPort" else "http://$host$customPort/$cleanShare"
                 NetworkProtocol.WEBDAVS -> if (cleanShare.isEmpty()) "https://$host$customPort" else "https://$host$customPort/$cleanShare"
+                NetworkProtocol.FINDEX -> "$host:$effectivePort"
             }
         }
 
@@ -287,6 +290,11 @@ class SmbRepository @Inject constructor(
             }
             override fun onLost(network: Network) = dropAllSessions()
         })
+    }
+
+    /** Drops the live session of [id], so the next call reconnects (a paired computer moved to a new address). */
+    fun dropSession(id: Long) {
+        sessions.remove(id)?.runCatching { close() }
     }
 
     private fun dropAllSessions() {
@@ -514,6 +522,10 @@ class SmbRepository @Inject constructor(
             NetworkProtocol.SMB -> openSmb(entity, password, effectivePort)
             NetworkProtocol.SFTP -> SftpSession.connect(entity.host, effectivePort, entity.share, entity.username, password)
             NetworkProtocol.FTP -> FtpSession.connect(entity.host, effectivePort, entity.share, entity.username, password)
+            // username holds the pinned certificate fingerprint, the password the bearer token.
+            NetworkProtocol.FINDEX -> com.aiyu.findex.core.link.FindexLinkSession(
+                com.aiyu.findex.core.link.LinkClient(entity.host, effectivePort, com.aiyu.findex.core.link.LinkCrypto.unhex(entity.username), password)
+            )
             NetworkProtocol.WEBDAV, NetworkProtocol.WEBDAVS -> {
                 WebDavSession(
                     host = entity.host,

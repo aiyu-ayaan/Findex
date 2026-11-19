@@ -23,4 +23,11 @@ interface OperationStrings {
     val shareTitle: String
     val shareStop: String
     fun shareText(url: String, pin: String): String
+    val linkChannelName: String
+    val linkTitle: String
+    val linkStop: String
+    /** "Reachable at 192.168.1.5:47100". */
+    fun linkText(address: String): String
+    fun linkReceived(from: String, name: String): String
+    fun linkTextReceived(from: String): String
 }

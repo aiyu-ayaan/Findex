@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aiyu.findex.core.model.DriveType
 import com.aiyu.findex.core.network.NetworkError
+import com.aiyu.findex.core.network.NetworkProtocol
 import com.aiyu.findex.core.network.NetworkStatus
 import com.aiyu.findex.ui.network.unlockOrError
 import com.aiyu.findex.core.network.SmbRepository
@@ -38,9 +39,16 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch { libraryRepository.bookmarks.collect { b -> _uiState.update { it.copy(bookmarks = b) } } }
         viewModelScope.launch { libraryRepository.recentFiles(6).collect { r -> _uiState.update { it.copy(recents = r) } } }
         viewModelScope.launch {
-            smbRepository.servers.collect { s ->
-                _uiState.update { it.copy(networkDrives = s, selectedTabIndex = if (s.isEmpty()) 0 else it.selectedTabIndex) }
-                s.filter { it.id !in _uiState.value.networkStatus }.forEach { probe(it.id) }
+            smbRepository.servers.collect { all ->
+                val (computers, shares) = all.partition { it.protocol == NetworkProtocol.FINDEX }
+                _uiState.update {
+                    it.copy(
+                        networkDrives = shares,
+                        computers = computers,
+                        selectedTabIndex = if (shares.isEmpty() && it.selectedTabIndex == TAB_NETWORK) TAB_DEVICE else it.selectedTabIndex
+                    )
+                }
+                all.filter { it.id !in _uiState.value.networkStatus }.forEach { probe(it.id) }
             }
         }
         viewModelScope.launch { operationManager.active.collect { a -> _uiState.update { it.copy(activeOperation = a) } } }
@@ -65,7 +73,8 @@ class HomeViewModel @Inject constructor(
     fun selectTab(index: Int) {
         _uiState.update { it.copy(selectedTabIndex = index) }
         // Re-check on every visit so a share that dropped (Wi-Fi change, server off) shows as offline.
-        if (index == 1) _uiState.value.networkDrives.forEach { probe(it.id) }
+        if (index == TAB_NETWORK) _uiState.value.networkDrives.forEach { probe(it.id) }
+        if (index == TAB_COMPUTERS) _uiState.value.computers.forEach { probe(it.id) }
     }
 
     suspend fun unlock(id: Long, password: String): NetworkError? =

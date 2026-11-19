@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,6 +35,7 @@ fun NetworkProtocol.labelRes(): Int = when (this) {
     NetworkProtocol.FTP -> R.string.network_protocol_ftp
     NetworkProtocol.WEBDAV -> R.string.network_protocol_webdav
     NetworkProtocol.WEBDAVS -> R.string.network_protocol_webdavs
+    NetworkProtocol.FINDEX -> R.string.tab_computers
 }
 
 private fun Throwable.networkError() = (this as? NetworkException)?.error ?: NetworkError.UNKNOWN
@@ -53,7 +55,8 @@ class NetworkViewModel @Inject constructor(
     private val smb: SmbRepository
 ) : ViewModel() {
 
-    val servers: StateFlow<List<NetworkServer>?> = smb.servers.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+    // Paired computers are managed in Home > Computers, not edited here.
+    val servers: StateFlow<List<NetworkServer>?> = smb.servers.map { all -> all.filter { it.protocol != NetworkProtocol.FINDEX } }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     private val _add = MutableStateFlow(AddServerState())
     val add: StateFlow<AddServerState> = _add.asStateFlow()

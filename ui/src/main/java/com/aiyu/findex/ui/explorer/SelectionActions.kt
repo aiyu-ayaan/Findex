@@ -99,6 +99,7 @@ private sealed interface SelectionModal {
     data class Delete(val paths: List<String>) : SelectionModal
     data class Details(val item: StorageItem) : SelectionModal
     data class Tags(val paths: List<String>) : SelectionModal
+    data class SendToComputer(val paths: List<String>) : SelectionModal
 }
 
 /**
@@ -149,6 +150,7 @@ fun SelectionActions(
         allImages = selected.isNotEmpty() && selected.all { !it.isDirectory && isImageExtension(it.extension) },
         onFeature = { action ->
             if (action == ItemAction.TAGS) { modal = SelectionModal.Tags(paths); return@SelectionToolbar }
+            if (action == ItemAction.SEND_TO_COMPUTER) { modal = SelectionModal.SendToComputer(paths); onClear(); return@SelectionToolbar }
             val token = SelectionHandoff.put(paths)
             onClear()
             when (action) {
@@ -186,6 +188,7 @@ fun SelectionActions(
             onDismiss = { modal = null }
         )
         is SelectionModal.Details -> DetailsSheet(m.item, load = ::loadFileDetails, onDismiss = { modal = null })
+        is SelectionModal.SendToComputer -> com.aiyu.findex.ui.link.SendToComputerSheet(m.paths, onDone = { modal = null })
         is SelectionModal.Tags -> {
             val allTags by viewModel.allTags.collectAsStateWithLifecycle()
             val initial by produceState<Set<Long>?>(null, m.paths) { value = viewModel.commonTagIds(m.paths) }

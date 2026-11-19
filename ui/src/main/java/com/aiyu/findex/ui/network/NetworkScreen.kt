@@ -452,7 +452,7 @@ fun AddServerSheet(viewModel: NetworkViewModel, editing: NetworkServer? = null, 
                 NetworkProtocol.SMB -> R.string.network_field_share_help
                 NetworkProtocol.SFTP -> R.string.network_field_path_help_sftp
                 NetworkProtocol.FTP -> R.string.network_field_path_help_ftp
-                NetworkProtocol.WEBDAV, NetworkProtocol.WEBDAVS -> R.string.network_field_path_help_webdav
+                NetworkProtocol.WEBDAV, NetworkProtocol.WEBDAVS, NetworkProtocol.FINDEX -> R.string.network_field_path_help_webdav
             }
             Field(
                 value = share,

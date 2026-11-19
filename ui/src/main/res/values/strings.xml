@@ -808,4 +808,46 @@
     <!-- END share-phone -->
     <string name="clipboard_copied_hint">Copied. Open a folder and tap Paste.</string>
     <string name="clipboard_cut_hint">Cut. Open a folder and tap Move here.</string>
+
+    <!-- Findex Link: computers (desktop Findex) -->
+    <string name="tab_computers">Computers</string>
+    <string name="link_this_phone">This phone</string>
+    <string name="link_visible">Let computers connect</string>
+    <string name="link_visible_off">Paired computers can browse this phone and send it files while this is on.</string>
+    <string name="link_visible_starting">Starting…</string>
+    <string name="link_visible_on">Reachable at %1$s</string>
+    <string name="link_no_network">Connect to Wi-Fi or turn on the hotspot first.</string>
+    <string name="link_paired">Paired computers</string>
+    <string name="link_nearby">Nearby</string>
+    <string name="link_searching">Looking for computers running Findex on this network…</string>
+    <string name="link_none_paired">No computers yet. Install Findex on your PC, then pair it here.</string>
+    <string name="link_pair_by_address">Pair by address</string>
+    <string name="link_address_label">Computer address (IP or IP:port)</string>
+    <string name="link_pair">Pair</string>
+    <string name="link_pairing">Connecting…</string>
+    <string name="link_check_code_title">Check the code</string>
+    <string name="link_check_code">Pair only if %1$s shows the same code. Then accept on the computer too.</string>
+    <string name="link_waiting">Waiting for the computer to accept…</string>
+    <string name="link_paired_with">Paired with %1$s</string>
+    <string name="link_err_unreachable">Couldn\'t reach the computer. Check that Findex is open on it and on the same network.</string>
+    <string name="link_err_declined">The computer declined, or the codes didn\'t match. Nothing was paired.</string>
+    <string name="link_err_identity">The computer\'s identity didn\'t check out. Nothing was paired.</string>
+    <string name="link_request_title">Pairing request</string>
+    <string name="link_request_text">%1$s wants to pair with this phone. Paired computers can browse your files and send you files. Pair only if it shows this code:</string>
+    <string name="link_decline">Decline</string>
+    <string name="link_send_text">Send text</string>
+    <string name="link_send_text_hint">Text or link</string>
+    <string name="link_text_sent">Sent to %1$s</string>
+    <string name="link_unpair">Unpair</string>
+    <string name="link_unpair_confirm">Unpair %1$s? It can no longer browse this phone, and this phone can no longer open it.</string>
+    <string name="link_received">%1$s sent %2$s · in Download/Findex</string>
+    <string name="link_text_received">%1$s sent text (copied)</string>
+    <string name="link_channel_name">Findex Link</string>
+    <string name="link_notification_title">Computers can connect</string>
+    <string name="link_stop">Stop</string>
+    <string name="action_send_to_computer">Send to computer</string>
+    <string name="link_choose_computer">Send to which computer?</string>
+    <string name="link_send">Send</string>
+    <string name="about_desktop">Findex for desktop</string>
+    <string name="about_desktop_subtitle">Linux and Windows · pair it to browse this phone from your PC</string>
 </resources>
