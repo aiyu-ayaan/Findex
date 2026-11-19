@@ -1,3 +1,24 @@
+## v0.0.1-alpha.6 (2026-11-19)
+
+- !alpha release(Link) : Ship Findex Link pairing by QR code
+- fix(Link) : Keep the QR scanner open on rotation and make its prompt readable
+- ui(Link) : Scan the pairing QR code with our own CameraX scanner
+- feat(Link) : Pair with a computer by scanning its QR code
+- fix(Link) : Bind the Link server to the Wi-Fi or hotspot address only
+- docs(Link) : Use the phone's own volume names for Link roots
+- fix(Link) : Show an offline computer as offline and answer failed uploads with their error
+- docs(Link) : Document the Findex ecosystem and link the desktop app in the README
+- feat(Link) : Pair with Findex for desktop and browse computers from the Computers tab
+- ui(Tags) : Tick a tag created from the picker for the current selection
+- core(Clipboard) : Persist the cut/copy clipboard in Room so it survives process death
+- fix(Explorer) : Let the selection toolbar claim taps on its whole pill
+- ui(Search) : Add multi-select with the selection toolbar
+- ui(Category) : Use the Explorer selection toolbar with all actions and copy/cut feedback
+- fix(Category) : Keep top bar height when selection starts so drag-select hits the touched items
+- ui(ImageCompress) : Fit preset labels in segmented buttons
+- ui(Explorer) : Use secondary container for selection toolbar so it stands out from selected rows
+- fix(BatchRename) : Escape closing brace in token regex so Android does not crash
+
 ## v0.0.1-alpha.5 (2026-11-13)
 
 - !alpha chore(L10n) : Trigger release for 27-language localization
