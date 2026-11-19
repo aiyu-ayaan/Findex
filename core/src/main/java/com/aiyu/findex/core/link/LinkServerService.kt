@@ -97,7 +97,7 @@ class LinkServerService : Service() {
         val started = withContext(Dispatchers.IO) {
             val sockets = repo.identity.serverSocketFactory()
             PORTS.firstNotNullOfOrNull { port ->
-                val s = LinkHttpServer(port, applicationContext, repo, drives, executor, ::onReceived, ::onText)
+                val s = LinkHttpServer(host, port, applicationContext, repo, drives, executor, ::onReceived, ::onText)
                 s.makeSecure(sockets, null)
                 try { s.start(SOCKET_TIMEOUT_MS, true); s } catch (e: IOException) { null }
             }

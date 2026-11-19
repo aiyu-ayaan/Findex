@@ -21,11 +21,13 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * The phone side of Findex Link: HTTPS (this phone's Keystore identity) on the LAN, serving the storage
+ * The phone side of Findex Link: HTTPS (this phone's Keystore identity) bound to the Wi-Fi / hotspot IPv4
+ * only (never mobile data or IPv6), serving the storage
  * volumes to paired computers. Same API as the desktop server (`development/docs/ECOSYSTEM.md`).
  * Only the two pairing routes work without a bearer token; deletes go to the Findex recycle bin.
  */
 internal class LinkHttpServer(
+    host: String,
     port: Int,
     private val context: Context,
     private val repo: LinkRepository,
@@ -33,7 +35,7 @@ internal class LinkHttpServer(
     private val executor: FileOperationExecutor,
     private val onReceived: (from: String, file: File) -> Unit,
     private val onText: (from: String, text: String) -> Unit
-) : NanoHTTPD(port) {
+) : NanoHTTPD(host, port) {
 
     /** Root name on the wire to folder; names are made unique. */
     private val roots: Map<String, File> = buildMap {
