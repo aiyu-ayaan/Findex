@@ -917,7 +917,11 @@ private fun SelectionToolbar(
         var more by remember { mutableStateOf(false) }
         HorizontalFloatingToolbar(
             expanded = true,
-            colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors()
+            // Selected rows are primaryContainer; a vibrant (primaryContainer) pill melts into them.
+            colors = FloatingToolbarDefaults.standardFloatingToolbarColors(
+                toolbarContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                toolbarContentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            )
         ) {
             IconButton(onClick = onCopy) { Icon(Icons.Rounded.ContentCopy, stringResource(R.string.action_copy)) }
             IconButton(onClick = onCut) { Icon(Icons.Rounded.ContentCut, stringResource(R.string.action_cut)) }
