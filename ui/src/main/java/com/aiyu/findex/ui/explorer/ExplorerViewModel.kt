@@ -89,6 +89,19 @@ data class ExplorerUiState(
 
 data class FileDetails(val item: StorageItem, val totalBytes: Long, val fileCount: Int, val folderCount: Int)
 
+/** Folder totals for the details sheet; shared by every screen that shows it. */
+suspend fun loadFileDetails(item: StorageItem): FileDetails = withContext(Dispatchers.IO) {
+    // Walking a share for folder totals would mean many round trips; show what the listing gave.
+    if (SmbPath.parse(item.path) != null) return@withContext FileDetails(item, item.size, if (item.isDirectory) 0 else 1, 0)
+    val file = File(item.path)
+    if (!file.isDirectory) return@withContext FileDetails(item, file.length(), 1, 0)
+    var bytes = 0L
+    var files = 0
+    var folders = 0
+    file.walkTopDown().forEach { if (it.isFile) { files++; bytes += it.length() } else if (it != file) folders++ }
+    FileDetails(item, bytes, files, folders)
+}
+
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class ExplorerViewModel @Inject constructor(
@@ -415,17 +428,7 @@ class ExplorerViewModel @Inject constructor(
         viewModelScope.launch { tagRepository.create(name, colorIndex) }
     }
 
-    suspend fun details(item: StorageItem): FileDetails = withContext(Dispatchers.IO) {
-        // Walking a share for folder totals would mean many round trips; show what the listing gave.
-        if (SmbPath.parse(item.path) != null) return@withContext FileDetails(item, item.size, if (item.isDirectory) 0 else 1, 0)
-        val file = File(item.path)
-        if (!file.isDirectory) return@withContext FileDetails(item, file.length(), 1, 0)
-        var bytes = 0L
-        var files = 0
-        var folders = 0
-        file.walkTopDown().forEach { if (it.isFile) { files++; bytes += it.length() } else if (it != file) folders++ }
-        FileDetails(item, bytes, files, folders)
-    }
+    suspend fun details(item: StorageItem): FileDetails = loadFileDetails(item)
 
     // endregion
 

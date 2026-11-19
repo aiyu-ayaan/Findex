@@ -834,4 +834,6 @@
     <string name="share_never">Никогда</string>
     <string name="share_security_note">Трафик не шифруется. Делитесь только в доверенных сетях.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">Скопировано. Откройте папку и нажмите «Вставить».</string>
+    <string name="clipboard_cut_hint">Вырезано. Откройте папку и нажмите «Переместить сюда».</string>
 </resources>

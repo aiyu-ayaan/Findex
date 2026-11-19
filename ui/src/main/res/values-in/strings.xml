@@ -786,4 +786,6 @@
     <string name="share_never">Tidak pernah</string>
     <string name="share_security_note">Lalu lintas tidak dienkripsi. Bagikan hanya di jaringan yang Anda percaya.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">Disalin. Buka folder lalu ketuk Tempel.</string>
+    <string name="clipboard_cut_hint">Dipotong. Buka folder lalu ketuk Pindahkan ke sini.</string>
 </resources>

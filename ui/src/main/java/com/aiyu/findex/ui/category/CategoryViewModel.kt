@@ -8,7 +8,6 @@ import com.aiyu.findex.core.model.FileCategory
 import com.aiyu.findex.core.model.FileOperation
 import com.aiyu.findex.core.model.OperationResult
 import com.aiyu.findex.core.model.StorageItem
-import com.aiyu.findex.core.operation.FileClipboard
 import com.aiyu.findex.core.operation.OperationManager
 import com.aiyu.findex.core.repository.LibraryRepository
 import com.aiyu.findex.core.repository.StorageRepository
@@ -39,7 +38,6 @@ class CategoryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val storageRepository: StorageRepository,
     private val libraryRepository: LibraryRepository,
-    private val clipboard: FileClipboard,
     private val operationManager: OperationManager
 ) : ViewModel() {
 
@@ -67,8 +65,6 @@ class CategoryViewModel @Inject constructor(
     fun selectAll() = _uiState.update { s -> s.copy(selection = s.items.mapTo(HashSet()) { it.path }) }
     fun clearSelection() = _uiState.update { it.copy(selection = emptySet()) }
 
-    fun copySelection() { clipboard.copy(_uiState.value.selection.toList()); clearSelection() }
-    fun cutSelection() { clipboard.cut(_uiState.value.selection.toList()); clearSelection() }
 
     fun delete(paths: List<String>, permanent: Boolean) {
         operationManager.enqueue(if (permanent) FileOperation.Delete(paths) else FileOperation.Trash(paths))

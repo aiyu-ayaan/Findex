@@ -785,4 +785,6 @@
     <string name="share_never">永不</string>
     <string name="share_security_note">傳輸未加密。請僅在您信任的網路上分享。</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">已複製。開啟資料夾並輕觸「貼上」。</string>
+    <string name="clipboard_cut_hint">已剪下。開啟資料夾並輕觸「移到這裡」。</string>
 </resources>

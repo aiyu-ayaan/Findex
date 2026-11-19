@@ -804,4 +804,6 @@
     <string name="share_never">Asla</string>
     <string name="share_security_note">Trafik şifrelenmez. Yalnızca güvendiğiniz ağlarda paylaşın.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">Kopyalandı. Bir klasör açıp Yapıştır\'a dokunun.</string>
+    <string name="clipboard_cut_hint">Kesildi. Bir klasör açıp Buraya taşı\'ya dokunun.</string>
 </resources>

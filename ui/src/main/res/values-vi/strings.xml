@@ -788,4 +788,6 @@
     <string name="share_never">Không bao giờ</string>
     <string name="share_security_note">Lưu lượng không được mã hóa. Chỉ chia sẻ trên các mạng bạn tin cậy.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">Đã sao chép. Mở một thư mục rồi nhấn Dán.</string>
+    <string name="clipboard_cut_hint">Đã cắt. Mở một thư mục rồi nhấn Di chuyển tới đây.</string>
 </resources>

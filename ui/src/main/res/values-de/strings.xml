@@ -802,4 +802,6 @@
     <string name="share_never">Nie</string>
     <string name="share_security_note">Der Datenverkehr ist unverschlüsselt. Nur in vertrauenswürdigen Netzwerken teilen.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">Kopiert. Öffne einen Ordner und tippe auf Einfügen.</string>
+    <string name="clipboard_cut_hint">Ausgeschnitten. Öffne einen Ordner und tippe auf Hierher verschieben.</string>
 </resources>

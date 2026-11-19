@@ -1,5 +1,9 @@
 package com.aiyu.findex.ui.category
 
+import com.aiyu.findex.ui.explorer.SelectionActions
+import androidx.compose.material3.FloatingToolbarDefaults
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -18,12 +22,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.ContentCopy
-import androidx.compose.material.icons.rounded.ContentCut
-import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.SelectAll
-import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.ViewAgenda
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -116,10 +116,6 @@ fun CategoryScreen(
                         navigationIcon = { IconButton(onClick = viewModel::clearSelection) { Icon(Icons.Rounded.Close, stringResource(R.string.cd_clear_selection)) } },
                         actions = {
                             IconButton(onClick = viewModel::selectAll) { Icon(Icons.Rounded.SelectAll, stringResource(R.string.action_select_all)) }
-                            IconButton(onClick = { context.shareFiles(state.selection.toList()) }) { Icon(Icons.Rounded.Share, stringResource(R.string.action_share)) }
-                            IconButton(onClick = viewModel::copySelection) { Icon(Icons.Rounded.ContentCopy, stringResource(R.string.action_copy)) }
-                            IconButton(onClick = viewModel::cutSelection) { Icon(Icons.Rounded.ContentCut, stringResource(R.string.action_cut)) }
-                            IconButton(onClick = { deletePaths = state.selection.toList() }) { Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete)) }
                         },
                         colors = TopAppBarDefaults.topAppBarColors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainer,
@@ -153,8 +149,10 @@ fun CategoryScreen(
         val contentPadding = PaddingValues(
             start = readableGutter(), end = readableGutter(),
             top = padding.calculateTopPadding() + Dimens.sm,
-            bottom = padding.calculateBottomPadding() + Dimens.xxl
+            // Room for the floating selection toolbar over the last rows.
+            bottom = padding.calculateBottomPadding() + 120.dp
         )
+        Box(Modifier.fillMaxSize()) {
         when {
             state.isLoading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { LoadingIndicator() }
             state.items.isEmpty() -> Column(
@@ -192,6 +190,19 @@ fun CategoryScreen(
                 onSelectionChange = viewModel::setSelection,
                 header = {}
             )
+        }
+        SelectionActions(
+            selected = state.items.filter { it.path in state.selection },
+            onClear = viewModel::clearSelection,
+            onRoute = onOpenFile,
+            onOpenArchive = onOpenArchive,
+            onOpenFolder = onOpenFolder,
+            onChanged = viewModel::load,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .navigationBarsPadding()
+                .offset(y = -FloatingToolbarDefaults.ScreenOffset)
+        )
         }
     }
 

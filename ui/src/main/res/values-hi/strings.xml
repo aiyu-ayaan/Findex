@@ -802,4 +802,6 @@
     <string name="share_never">कभी नहीं</string>
     <string name="share_security_note">ट्रैफ़िक एन्क्रिप्टेड नहीं है। केवल विश्वसनीय नेटवर्क पर ही साझा करें।</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">कॉपी हो गया। कोई फ़ोल्डर खोलें और पेस्ट दबाएँ।</string>
+    <string name="clipboard_cut_hint">कट हो गया। कोई फ़ोल्डर खोलें और यहाँ ले जाएँ दबाएँ।</string>
 </resources>

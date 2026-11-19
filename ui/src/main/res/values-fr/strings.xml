@@ -802,4 +802,6 @@
     <string name="share_never">Jamais</string>
     <string name="share_security_note">Le trafic n\'est pas chiffré. Partagez uniquement sur des réseaux de confiance.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">Copié. Ouvrez un dossier et appuyez sur Coller.</string>
+    <string name="clipboard_cut_hint">Coupé. Ouvrez un dossier et appuyez sur Déplacer ici.</string>
 </resources>

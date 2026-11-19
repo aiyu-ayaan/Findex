@@ -786,4 +786,6 @@
     <string name="share_never">しない</string>
     <string name="share_security_note">通信は暗号化されません。信頼できるネットワークでのみ共有してください。</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">コピーしました。フォルダを開いて「貼り付け」をタップしてください。</string>
+    <string name="clipboard_cut_hint">切り取りました。フォルダを開いて「ここに移動」をタップしてください。</string>
 </resources>

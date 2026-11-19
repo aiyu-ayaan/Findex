@@ -802,4 +802,6 @@
     <string name="share_never">ಎಂದಿಗೂ ಬೇಡ</string>
     <string name="share_security_note">ಟ್ರಾಫಿಕ್ ಎನ್‌ಕ್ರಿಪ್ಟ್ ಆಗಿಲ್ಲ. ನೀವು ನಂಬುವ ನೆಟ್‌ವರ್ಕ್‌ಗಳಲ್ಲಿ ಮಾತ್ರ ಹಂಚಿಕೊಳ್ಳಿ.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">ನಕಲಿಸಲಾಗಿದೆ. ಫೋಲ್ಡರ್ ತೆರೆದು ಅಂಟಿಸಿ ಒತ್ತಿ.</string>
+    <string name="clipboard_cut_hint">ಕತ್ತರಿಸಲಾಗಿದೆ. ಫೋಲ್ಡರ್ ತೆರೆದು ಇಲ್ಲಿಗೆ ಸರಿಸಿ ಒತ್ತಿ.</string>
 </resources>

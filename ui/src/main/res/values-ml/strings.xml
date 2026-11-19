@@ -801,4 +801,6 @@
     <string name="share_never">ഒരിക്കലുമില്ല</string>
     <string name="share_security_note">ട്രാഫിക് എൻക്രിപ്റ്റ് ചെയ്തിട്ടില്ല. നിങ്ങൾ വിശ്വസിക്കുന്ന നെറ്റ്‌വർക്കുകളിൽ മാത്രം പങ്കിടുക.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">പകർത്തി. ഒരു ഫോൾഡർ തുറന്ന് ഒട്ടിക്കുക അമർത്തുക.</string>
+    <string name="clipboard_cut_hint">മുറിച്ചു. ഒരു ഫോൾഡർ തുറന്ന് ഇവിടേക്ക് നീക്കുക അമർത്തുക.</string>
 </resources>

@@ -801,4 +801,6 @@
     <string name="share_never">ਕਦੇ ਨਹੀਂ</string>
     <string name="share_security_note">ਟ੍ਰੈਫਿਕ ਐਨਕ੍ਰਿਪਟਡ ਨਹੀਂ ਹੈ। ਸਿਰਫ਼ ਭਰੋਸੇਯੋਗ ਨੈੱਟਵਰਕਾਂ \'ਤੇ ਸਾਂਝਾ ਕਰੋ।</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">ਕਾਪੀ ਹੋ ਗਿਆ। ਕੋਈ ਫੋਲਡਰ ਖੋਲ੍ਹੋ ਅਤੇ ਪੇਸਟ ਦਬਾਓ।</string>
+    <string name="clipboard_cut_hint">ਕੱਟ ਹੋ ਗਿਆ। ਕੋਈ ਫੋਲਡਰ ਖੋਲ੍ਹੋ ਅਤੇ ਇੱਥੇ ਭੇਜੋ ਦਬਾਓ।</string>
 </resources>

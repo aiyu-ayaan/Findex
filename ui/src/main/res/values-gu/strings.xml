@@ -802,4 +802,6 @@
     <string name="share_never">ક્યારેય નહીં</string>
     <string name="share_security_note">ટ્રાફિક એન્ક્રિપ્ટેડ નથી. માત્ર વિશ્વાસપાત્ર નેટવર્ક પર જ શેર કરો.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">કૉપિ થયું. ફોલ્ડર ખોલો અને પેસ્ટ દબાવો.</string>
+    <string name="clipboard_cut_hint">કટ થયું. ફોલ્ડર ખોલો અને અહીં ખસેડો દબાવો.</string>
 </resources>

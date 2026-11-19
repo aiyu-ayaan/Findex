@@ -802,4 +802,6 @@
     <string name="share_never">কখনও নয়</string>
     <string name="share_security_note">ট্রাফিক এনক্রিপ্ট করা নয়। শুধুমাত্র আপনার বিশ্বস্ত নেটওয়ার্কে শেয়ার করুন।</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">কপি হয়েছে। একটি ফোল্ডার খুলে পেস্ট চাপুন।</string>
+    <string name="clipboard_cut_hint">কাট হয়েছে। একটি ফোল্ডার খুলে এখানে সরান চাপুন।</string>
 </resources>

@@ -786,4 +786,6 @@
     <string name="share_never">안 함</string>
     <string name="share_security_note">트래픽이 암호화되지 않습니다. 신뢰할 수 있는 네트워크에서만 공유하세요.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">복사했습니다. 폴더를 열고 붙여넣기를 누르세요.</string>
+    <string name="clipboard_cut_hint">잘라냈습니다. 폴더를 열고 여기로 이동을 누르세요.</string>
 </resources>

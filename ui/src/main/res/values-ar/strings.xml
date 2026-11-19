@@ -866,4 +866,6 @@
     <string name="share_never">أبدًا</string>
     <string name="share_security_note">حركة البيانات غير مشفّرة. شارك فقط على الشبكات التي تثق بها.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">تم النسخ. افتح مجلدًا واضغط لصق.</string>
+    <string name="clipboard_cut_hint">تم القص. افتح مجلدًا واضغط نقل هنا.</string>
 </resources>

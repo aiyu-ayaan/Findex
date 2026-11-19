@@ -801,4 +801,6 @@
     <string name="share_never">कधीही नाही</string>
     <string name="share_security_note">ट्रॅफिक एनक्रिप्ट केलेला नाही. फक्त विश्वासू नेटवर्कवर शेअर करा.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">कॉपी केले. फोल्डर उघडा आणि पेस्ट दाबा.</string>
+    <string name="clipboard_cut_hint">कट केले. फोल्डर उघडा आणि इथे हलवा दाबा.</string>
 </resources>

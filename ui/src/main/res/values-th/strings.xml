@@ -788,4 +788,6 @@
     <string name="share_never">ไม่เลย</string>
     <string name="share_security_note">การรับส่งข้อมูลไม่ได้เข้ารหัส โปรดแชร์เฉพาะบนเครือข่ายที่คุณไว้วางใจ</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">คัดลอกแล้ว เปิดโฟลเดอร์แล้วแตะวาง</string>
+    <string name="clipboard_cut_hint">ตัดแล้ว เปิดโฟลเดอร์แล้วแตะย้ายมาที่นี่</string>
 </resources>

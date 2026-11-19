@@ -802,4 +802,6 @@
     <string name="share_never">ஒருபோதும் இல்லை</string>
     <string name="share_security_note">போக்குவரத்து குறியாக்கம் செய்யப்படவில்லை. நீங்கள் நம்பும் பிணையங்களில் மட்டும் பகிரவும்.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">நகலெடுக்கப்பட்டது. ஒரு கோப்புறையைத் திறந்து ஒட்டு என்பதைத் தட்டவும்.</string>
+    <string name="clipboard_cut_hint">வெட்டப்பட்டது. ஒரு கோப்புறையைத் திறந்து இங்கே நகர்த்து என்பதைத் தட்டவும்.</string>
 </resources>

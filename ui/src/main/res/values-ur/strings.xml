@@ -804,4 +804,6 @@
     <string name="share_never">کبھی نہیں</string>
     <string name="share_security_note">ٹریفک انکرپٹڈ نہیں ہے۔ صرف ان نیٹ ورکس پر شیئر کریں جن پر آپ اعتماد کرتے ہیں۔</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">کاپی ہو گیا۔ کوئی فولڈر کھولیں اور پیسٹ دبائیں۔</string>
+    <string name="clipboard_cut_hint">کٹ ہو گیا۔ کوئی فولڈر کھولیں اور یہاں منتقل کریں دبائیں۔</string>
 </resources>

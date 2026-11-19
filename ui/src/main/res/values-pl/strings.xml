@@ -833,4 +833,6 @@
     <string name="share_never">Nigdy</string>
     <string name="share_security_note">Ruch nie jest szyfrowany. Udostępniaj tylko w zaufanych sieciach.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">Skopiowano. Otwórz folder i kliknij Wklej.</string>
+    <string name="clipboard_cut_hint">Wycięto. Otwórz folder i kliknij Przenieś tutaj.</string>
 </resources>

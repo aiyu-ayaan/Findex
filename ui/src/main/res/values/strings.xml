@@ -806,4 +806,6 @@
     <string name="share_never">Never</string>
     <string name="share_security_note">Traffic is not encrypted. Share only on networks you trust.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">Copied. Open a folder and tap Paste.</string>
+    <string name="clipboard_cut_hint">Cut. Open a folder and tap Move here.</string>
 </resources>

@@ -802,4 +802,6 @@
     <string name="share_never">Nunca</string>
     <string name="share_security_note">O tráfego não é criptografado. Compartilhe apenas em redes confiáveis.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">Copiado. Abra uma pasta e toque em Colar.</string>
+    <string name="clipboard_cut_hint">Recortado. Abra uma pasta e toque em Mover para cá.</string>
 </resources>

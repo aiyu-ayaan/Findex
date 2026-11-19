@@ -802,4 +802,6 @@
     <string name="share_never">Nunca</string>
     <string name="share_security_note">El tráfico no está cifrado. Comparte solo en redes de confianza.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">Copiado. Abre una carpeta y toca Pegar.</string>
+    <string name="clipboard_cut_hint">Cortado. Abre una carpeta y toca Mover aquí.</string>
 </resources>

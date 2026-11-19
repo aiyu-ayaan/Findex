@@ -886,7 +886,7 @@ private fun ExplorerFab(
 }
 
 @Composable
-private fun SelectionToolbar(
+internal fun SelectionToolbar(
     visible: Boolean,
     singleSelected: StorageItem?,
     onCopy: () -> Unit,

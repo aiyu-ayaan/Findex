@@ -802,4 +802,6 @@
     <string name="share_never">ఎప్పుడూ కాదు</string>
     <string name="share_security_note">ట్రాఫిక్ ఎన్‌క్రిప్ట్ చేయబడదు. మీరు విశ్వసించే నెట్‌వర్క్‌లలో మాత్రమే భాగస్వామ్యం చేయండి.</string>
     <!-- END share-phone -->
+    <string name="clipboard_copied_hint">కాపీ చేయబడింది. ఫోల్డర్ తెరిచి అతికించు నొక్కండి.</string>
+    <string name="clipboard_cut_hint">కట్ చేయబడింది. ఫోల్డర్ తెరిచి ఇక్కడికి తరలించు నొక్కండి.</string>
 </resources>
