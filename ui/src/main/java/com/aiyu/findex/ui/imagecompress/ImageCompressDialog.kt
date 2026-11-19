@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilterChip
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -81,8 +82,11 @@ fun ImageCompressDialog(onDismiss: () -> Unit, viewModel: ImageCompressViewModel
                         SegmentedButton(
                             selected = s.preset == p,
                             onClick = { viewModel.update { it.copy(preset = p) } },
-                            shape = SegmentedButtonDefaults.itemShape(i, Preset.entries.size)
-                        ) { Text(stringResource(p.label()), maxLines = 1) }
+                            shape = SegmentedButtonDefaults.itemShape(i, Preset.entries.size),
+                            // Four segments in a dialog: the check icon and default padding cut "Medium" to "Mediu".
+                            icon = {},
+                            contentPadding = PaddingValues(horizontal = Dimens.xs)
+                        ) { Text(stringResource(p.label()), maxLines = 1, style = MaterialTheme.typography.labelMedium) }
                     }
                 }
                 if (s.preset == Preset.CUSTOM) {
