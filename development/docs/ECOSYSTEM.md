@@ -72,7 +72,7 @@ HTTP/1.1 over TLS, one request per connection (`Connection: close`). The default
 Paths are virtual: `/<root name>/<relative path>`. Components `.`, `..`, empty names and names containing `/ \ : NUL` are refused. On the desktop, the resolved path must stay inside its root after symlinks are followed (canonicalised). Roots:
 
 - Desktop: `Home` and `Received` (the inbox, `Downloads/Findex`). A `PUT` into `Received` counts as a send and is announced like `/v1/send`; Android's "Send to computer" uses it, so the copy runs in the normal operation queue. Shortcut: other drives are not exposed yet.
-- Android: `Internal storage` plus one root per SD card or USB volume.
+- Android: one root per storage volume, named as the phone names it (for example `Internal shared storage`, or the SD card label). Names are made unique.
 
 ## 4. Where the code is
 
