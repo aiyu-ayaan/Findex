@@ -27,10 +27,11 @@ graph TD
     subgraph ":core"
         StorageRepo[StorageRepository<br/>File + MediaStore]
         LibraryRepo[LibraryRepository]
-        DB[(Room / SQLite<br/>bookmarks · recent_files · trash · open_tabs)]
+        DB[(Room / SQLite<br/>bookmarks · recent_files · trash · open_tabs · clipboard)]
         Settings[(DataStore<br/>config only)]
         OpMgr[OperationManager]
         Clip[FileClipboard]
+        Clip -->|persist / restore| DB
         Exec[FileOperationExecutor<br/>copy · move · delete · trash · restore · zip4j]
         FGS[FileOperationForegroundService]
         OpStringsIf[[OperationStrings interface]]
@@ -292,6 +293,11 @@ flowchart TD
 - **Selection** lives in `ExplorerUiState.selection` (paths). Long-press + drag selects a range
   (`dragToSelect` in `ExplorerContent.kt`) with edge auto-scroll; tap toggles while selecting.
 - **Clipboard** is app-wide (`FileClipboard`), so copy in one tab and paste in another.
+  It is saved to the `clipboard` table (Room v8, `AutoMigration(7, 8)`) on every change and restored on start,
+  so a pending paste survives process death. Restore drops local paths that no longer exist; shared imports
+  (`content://`) are never saved.
+- **Multi-folder selection** (Categories, Search) uses `SelectionActions` (`ui/explorer/SelectionActions.kt`):
+  Explorer's `SelectionToolbar` plus its dialogs, backed by `SelectionActionsViewModel`.
 
 ## 5b. Universal Content Thumbnails & Built-in Media Viewer
 

@@ -2,6 +2,7 @@ package com.aiyu.findex.core.di
 
 import android.content.Context
 import androidx.room.Room
+import com.aiyu.findex.core.db.ClipboardDao
 import com.aiyu.findex.core.db.BookmarkDao
 import com.aiyu.findex.core.db.FindexDatabase
 import com.aiyu.findex.core.db.NetworkServerDao
@@ -64,5 +65,8 @@ abstract class CoreModule {
 
         @Provides
         fun providePathIndexDao(db: FindexDatabase): PathIndexDao = db.pathIndexDao()
+
+        @Provides
+        fun provideClipboardDao(db: FindexDatabase): ClipboardDao = db.clipboardDao()
     }
 }

@@ -133,6 +133,32 @@ interface OpenTabDao {
     }
 }
 
+/** The cut/copy clipboard, one row per path, so a paste survives the process being killed. */
+@Entity(tableName = "clipboard")
+data class ClipboardEntity(
+    @PrimaryKey val position: Int,
+    val path: String,
+    val isCut: Boolean
+)
+
+@Dao
+interface ClipboardDao {
+    @Query("SELECT * FROM clipboard ORDER BY position ASC")
+    suspend fun all(): List<ClipboardEntity>
+
+    @Query("DELETE FROM clipboard")
+    suspend fun clear()
+
+    @Insert
+    suspend fun insert(rows: List<ClipboardEntity>)
+
+    @Transaction
+    suspend fun replaceAll(rows: List<ClipboardEntity>) {
+        clear()
+        insert(rows)
+    }
+}
+
 /**
  * A saved network storage server (SMB, SFTP, FTP, or WebDAV). [passwordCipher] is the password
  * encrypted with an Android Keystore key (`CredentialCipher`); it is never stored in plain text.
@@ -175,9 +201,11 @@ interface NetworkServerDao {
         // v7
         TagEntity::class, FileTagEntity::class,
         VaultMetaEntity::class, VaultItemEntity::class,
-        StorageSnapshotEntity::class
+        StorageSnapshotEntity::class,
+        // v8
+        ClipboardEntity::class
     ],
-    version = 7,
+    version = 8,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
@@ -185,7 +213,8 @@ interface NetworkServerDao {
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5),
         AutoMigration(from = 5, to = 6),
-        AutoMigration(from = 6, to = 7)
+        AutoMigration(from = 6, to = 7),
+        AutoMigration(from = 7, to = 8)
     ]
 )
 abstract class FindexDatabase : RoomDatabase() {
@@ -198,4 +227,5 @@ abstract class FindexDatabase : RoomDatabase() {
     abstract fun vaultDao(): VaultDao
     abstract fun storageSnapshotDao(): StorageSnapshotDao
     abstract fun pathIndexDao(): PathIndexDao
+    abstract fun clipboardDao(): ClipboardDao
 }
